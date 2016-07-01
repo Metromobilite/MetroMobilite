@@ -1,0 +1,188 @@
+<!--
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<link rel="stylesheet" href="js/lib/ol/ol.css" type="text/css" />
+<link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
+<link href="js/lib/bs/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<style type='text/css'>
+	@media (min-width: 768px) {
+		body {
+			background-image:url("img/pages/bandeauevts.jpg");
+			background-attachment: fixed;
+			background-repeat:no-repeat;
+			background-position:top center;
+		}
+	}
+
+	#navbarDesc {
+		background-color: #ff0000;
+		opacity:0.9;
+	}
+	.container-page h6, .container-page h5, .container-page h4, .container-page h3, .container-page  > div > .row a, .container-page .glyphicon-plus-sign:before   {
+		color:#ff0000;
+	}
+	.container-page hr {
+		 background-color: #ff0000;
+	}
+	.container-page .nav > li > a:hover, .nav > li > a:focus{
+		background-color: #df0000;
+		border-color: #df0000;
+		opacity:0.9;
+	}
+
+	.evtLoc {
+		text-decoration:none;
+		color:#000!important;
+	}
+	.evtLoc:hover {
+		text-decoration:none;
+		color:#000!important;
+	}
+	#dates {
+		text-align: right;
+	}
+	#dates > div {
+		display: inline-table;
+		padding-top: 5px;
+	}
+</style>
+<h1 style="display:none">Evènements perturbations Trafic routier Transport en commun</h1>
+<div class="row rowHeader bgTransp hidden-xs">
+	<div class="container">
+		<h1>PERTURBATIONS<br>des transports en commun et perturbations routières en région Grenobloise</h1>
+		<br>
+	</div>
+	<div id="navbarDesc" data-spy="affix" data-offset-top="240">
+		<div class="container">
+			<div class="row">
+				<ul class="nav navbar-nav collapse navbar-collapse">
+					<li><a href="#SEM">TAG</a></li>
+					<li><a href="#SNC">TER</a></li>
+					<li><a href="#C38">Transisère</a></li>
+					<li><a href="#TR">Trafic routier</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>	
+</div>
+
+<div class="row">
+	<div class="container">
+		<div class="row">
+		
+		<form id="dates" role="form">
+					<div id="titre"><h5 id="titreh4">A partir du </h5></div>
+					<div id="datepickerEvts">
+						<input type='text' class="datepicker-readonly" data-date-format="DD/MM/YYYY" readonly="true"/>
+					</div>
+					<div id="timesync">
+						<button class="btn btn-default btn-xs glyphicon glyphicon-refresh" alt="Mise à la date courante" title="Mise à la date courante"></button>
+					</div>
+		</form>
+		<div class="listeEvts evtsTC anchor" id="SEM">
+			<h4><img src="img/logo_SEM.png" class="logoSEM"/></h4>
+			<hr>
+		</div>
+		<br>
+		<div class="listeEvts evtsTC anchor" id="SNC">
+			<h4><img src="img/logo_SNC.png" class="logoSNC"/></h4>
+			<hr>
+		</div>
+		<br>
+		<div class="listeEvts evtsTC anchor" id="C38">
+			<h4><img src="img/logo_C38.png" class="logoC38"/></h4>
+			<hr>
+		</div>
+		<br>
+		<div class="listeEvts evtsTR anchor" id="TR">
+			<h4>Trafic routier</h4>
+			<hr>
+		</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="js/lib/bs/js/moment-with-locales.min.js"></script>
+<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
+<script type="text/javascript" src="js/lib/bs/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="js/lib/ol/ol.js"></script>
+	
+<script type="text/javascript">
+	updateEvtsTR();
+	
+		$('#datepickerEvts').datetimepicker({
+						locale: 'fr',
+						format: 'DD/MM/YYYY',
+						allowInputToggle:true,
+						defaultDate:urlParams.date,
+						ignoreReadonly:true
+					});
+
+		$('#datepickerEvts').on('dp.hide',function(){
+			urlParams.heure = $('#datepickerEvts').data("DateTimePicker").date().toDate();
+			urlParams.date = $('#datepickerEvts').data("DateTimePicker").date().toDate();
+			updateEvtsTR();
+			updateEvtsTC(dataLignesTC);
+		});
+		
+		$('#timesync').click(function() {
+			$('#datepickerEvts').data("DateTimePicker").date(new Date);
+			urlParams.heure = new Date;
+			urlParams.date = new Date;
+			updateEvtsTR();
+			updateEvtsTC(dataLignesTC);
+			return false; //évite le rechargement de la page.
+		});
+	
+	function updateEvtsTR() {
+	try {
+
+		var urlSearch = (url.saisieChoisie=='local'?url.hostnameLocal+url.portWSTest:url.hostnameData);
+		urlSearch += '/api/dyn/evtTR/json';
+
+		function successEvtsTR(response) {
+			$('#TR :nth-child(n+3)').remove();
+			for (var codeEvt in response) {
+				var loc=response[codeEvt].texte.split('|')[0];
+				var ddeb = moment(response[codeEvt].dateDebut,'DD/MM/YYYY HH:mm:ss');
+				var dfin = moment(response[codeEvt].dateFin,'DD/MM/YYYY HH:mm:ss');
+				
+				if(urlParams.page=='Evts' && isEvenementEnCours(ddeb,dfin)) {
+					//console.info('successEvtsTR ' + loc + " " + ddeb + " " + dfin);
+					$('#TR').append('<h4 id="'+codeEvt+'"><span><img src="img/Carto/images_evt/' + response[codeEvt].type + '.png"/></span> '+'&nbsp'+loc+'</h4>');
+					$('#TR').append('<p>'+urlify(response[codeEvt].texte.replace(loc,'').replace(/\|/g,'<br>'))+'</p>');
+					$('#TR').append('<a class="evtLoc" href="trafic.html?id=' + response[codeEvt].id + '&date=' + moment(urlParams.heure).format('DD/MM/YYYY')+ '&heure=' + moment(urlParams.heure).format('HH:mm') + '"><span class="glyphicon glyphicon-screenshot"></span> ' + lang.localisationEvenement + '</a>');
+				}
+			}
+		}
+
+		$.ajax({
+			type: "GET",
+			url: urlSearch,
+			success: successEvtsTR,
+			dataType:'json'
+		}).error(function(response) {});
+
+		} catch(e) {
+			console.error(e.lineNumber+' : '+e.message);
+		}
+	}
+</script>

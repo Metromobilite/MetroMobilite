@@ -1,0 +1,492 @@
+<!doctype html>
+<!--
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta content="initial-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+    <title>Métromobilité – Horaires de passage en temps réel</title>
+	<meta name="description" content="Sur les lignes TAG et transisère, les temps de prochains passages en temps réels à votre arrêt de bus ou de tram." />
+	<link rel="stylesheet" href="js/lib/ol/ol.css" type="text/css" />
+    <link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="Stylesheet" type="text/css" href="css/horaires.css">
+	<link rel="Stylesheet" type="text/css" href="css/panel.css">
+	<style type='text/css'>
+		#listeLignes {
+			height: calc(100% - 90px);
+			overflow-y: auto;
+			position: relative;
+		}
+		.ligneSelected .svgFond {
+			stroke-width:6px;
+		}
+		#listeLignes.withPub {
+			height:calc(100% - 150px);
+		}
+
+		#pub.row {
+			padding: 3px;
+			cursor: pointer;
+			display: inline-block;
+		}
+		#pub img{
+			width: 40px;
+		}
+		#pub div {
+			font-family: "GothamRounded-Medium",Arial,Verdana,Geneva,Lucida,Helvetica,sans-serif;
+			display: inline;
+			color:#019ebc;
+			font-size: 13px;
+			background-color: #fff;
+			border-radius: 4px;
+			padding: 0px 10px 0px 10px;
+			margin-left: -2px;
+			opacity: 0.7;
+			filter: alpha(opacity=70);
+		}
+		#datepicker {
+			visibility:hidden;
+		}
+		.form-control.datepicker-readonly {
+			cursor:default;
+		}
+		#mainView {
+			background-color : #fdc92f;
+		}
+		#titre > h1{
+			margin-left: 30px;
+			font-family: "GothamRounded-Medium", "Arial", "Helvetica", sans-serif;
+			font-size: 18px;
+			margin-top:10px;
+		}
+		@media (min-width: 1200px) {
+			#mainView {
+				padding-left: 25%;
+				padding-left: calc(25% + 8px);
+			}
+		}
+		@media (min-width: 992px) and (max-width: 1200px) {
+			#mainView {
+				padding-left: 33.3333%;
+				padding-left: calc(33.3333% + 8px);
+			}
+		}
+		@media (min-width: 768px) and (max-width: 991px) {
+			#mainView {
+				padding-left: 50%;
+				padding-left: calc(50% + 8px);
+			}
+		}
+		.pictosPP {
+			/*display:inline-block;*/
+			width:100%;
+		}
+		.pictosPP > div{
+			width:calc(50% - 5px);
+			display:block;
+			float:left;
+		}
+		.logoRss {
+			margin-left: calc(50% - 15px);
+			width: 10px;
+			margin-right:5px;
+			float:right;
+		}
+	</style>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->	
+  </head>
+  <body>
+	<div id='head'></div>
+	<div class="container-fluid main">
+		<div class="row">
+			<div id="mainView">
+				<div id="titre"><h1 id="titrePPassage">Prochains passages </h1></div><br>
+				<form id="dates" role="form">
+					<div id="datepicker">
+							<label for="dateInput" class="sr-only">Date</label>
+							<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+							<input id="dateInput" type='text' class="form-control datepicker-readonly" data-date-format="DD/MM/YYYY" readonly />
+					</div>
+					<div id="timepicker">
+							<label for="heureInput" class="sr-only">Heure</label>
+							<span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+							<input id="heureInput" type='text' class="form-control datepicker-readonly" data-date-format="HH:mm" readonly disabled="disabled"/>
+					</div>
+					<div id="timesync">
+						<button class="btn btn-default btn-xm glyphicon glyphicon-refresh" title="Mise à l'heure courante"><span class="sr-only">Rafraichir</span></button>
+					</div>
+				</form>
+				<div id="horairesOnglets"></div>
+				<div id="horaires">
+					<span id="horairesText">Sélectionnez la ligne dans le panneau de gauche</span>
+				</div>
+				<!--<span>Informations issues de nos partenaires.</span>-->
+			</div>
+			<div id="modele" style="display:none;">
+				<ul>
+					<li><a id='id' class="svgLigne pull-left">
+					</a></li>
+				</ul>
+			</div>
+			<div id="menu" class="toggleListe pull-right listeAffichee" title="Affichage du panneau de sélection des lignes" role="button" aria-label="Affichage du panneau de sélection des lignes"><span class="glyphicon glyphicon-menu-hamburger"></span></div>
+			<div id="panel" class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+				<div id="listeMain" class="container-fluid">
+					<div id="listeTop" class="row">
+						<a id="unselect" href='#'><span class="pull-left">Annuler la sélection</span></a>
+						<div id="menuListe" class="toggleListe pull-right visible-xs listeAffichee" title="Masquage du panneau de sélection des lignes" role="button" aria-label="Masquage du panneau de sélection des lignes"><span class="glyphicon glyphicon-menu-hamburger"></span></div>
+					</div>
+					<div id="listeLignes" class="row">
+						<div><p id="listeLignesDesc" class="panelDesc">Cliquez sur votre ligne TAG ou Transisère, puis sélectionnez l’arrêt auquel vous allez prendre votre bus ou votre tram. Métromobilité vous fournit, en temps réel, l’attente avant le prochain passage dans les deux sens de circulation.</p></div>
+						<div id="TRAM" class="row titreReseau">
+							<h2>Tram</h2>
+							<div id="descReseauTram" class="descReseau">De 4h30 à 1h, fréquence de 4 à 10 min (heures de pointe)</div>
+						</div>
+						<div class="row TRAM"></div>
+						<div id="CHRONO" class="row titreReseau">
+							<h2>Chrono</h2>
+							<div id="descReseauChrono" class="descReseau">De 5h à 1h, fréquence de 4 à 10 min (heures de pointe)</div>
+						</div>
+						<div class="row CHRONO"></div>
+						<div id="PROXIMO" class="row titreReseau">
+							<h2>Proximo</h2>
+							<div id="descReseauProximo" class="descReseau">De 5h à 21h, fréquence de 7 à 15 min (heures de pointe)</div>
+						</div>
+						<div class="row PROXIMO"></div>
+						<div id="FLEXO" class="row titreReseau">
+							<h2>Flexo</h2>
+							<div id="descReseauFlexo" class="descReseau">De 6h30 à 20h, offre régulière et service sur réservation</div>
+						</div>
+						<div class="row FLEXO"></div>
+						<div id="C38" class="row titreReseau"><h2>Transisère</h2></div>
+						<div class="row C38"></div>
+					</div>
+					<a id="pub" style="display:none;" href="http://www.metromobilite.fr" target='_blank'>
+							<img src="img/metromobilite.svg" alt="">
+							<div></div>
+					</a>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<img id="wait" src="img/wait.gif" alt="recherche en cours" />
+	<div id='footer'></div>
+
+	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="stats/piwik.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/moment.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/outils.js"></script>
+	<script type="text/javascript" src="js/fr.js"></script>
+	<script type="text/javascript" src="js/prochainsPassages.js"></script>
+	<script type="text/javascript">
+		urlParams.horairestempsreel=true;
+
+		if (urlParams.lang != 'fr') {
+			$.getScript("js/" + (urlParams.lang=='fr'?'':urlParams.lang + "/") + urlParams.lang + ".js", function()	{
+				$.getScript("js/horaires-Translate.js",function() {translate();} );
+				initPage();
+			}); 
+		} else {
+			initPage();
+		}
+		trackPiwik("MetroMobilité : HorairesTempsReel" + (urlParams.lang=='fr'?'':' ' + urlParams.lang));
+		function showLigne(code) {
+			$('#horairesOnglets .active').removeClass('active');
+			$('#horairesOnglets > div[data-code='+code+']').addClass('active');
+			$('#horaires > div').hide();
+			$('#horaires > div[data-code='+code+']').show();
+		}
+		function ajouteLigne(code) {
+
+			if (attente) return;
+		
+			var _this = $('#'+code)[0];
+			var ligne = {code:_this.id,libelle:_this.title};
+			//var time = getDateHeureSaisie().getTime();
+			if($('#horaires div[data-code='+_this.id+']').length ==0) {
+				$('#horaires').append('<div data-code="'+_this.id+'" class="ligne"><div class="tableau"></div></div>');
+				var onglet = $('<div data-code="'+_this.id+'" class="ligne"></div>').append($(_this).find('svg').clone());
+				var close = $('<span class="horairesOnglets-Close pull-right glyphicon glyphicon-remove" data-code="'+_this.id+'"></span>');
+				onglet.append(close);
+				$('#horairesOnglets').append(onglet);
+			}
+			showLigne(_this.id);
+			getListeArretsLigne(_this.id);
+			
+			var nombreOnglet = $('#horairesOnglets .ligne').length;
+			if (isTaille('xxs') && (nombreOnglet>2)) { supprimePremiereLigne(); }
+			else if (isTaille('xs') && (nombreOnglet>5)) { supprimePremiereLigne(); }
+			else if (isTaille('sm') && (nombreOnglet>5)) { supprimePremiereLigne(); }
+			else if (isTaille('md') && (nombreOnglet>9)) { supprimePremiereLigne(); }
+			else if (isTaille('lg') && (nombreOnglet>12)) { supprimePremiereLigne(); }
+			
+			if(isTaille('xs')) togglePanneau(false);
+		}
+		function supprimePremiereLigne() {
+			$('#horairesOnglets div.ligne')[0].remove();
+				$('#horaires div.ligne')[0].remove();
+		}
+		function error(xhr, status, error) {
+			try {
+				var err = eval("(" + (xhr.responseText=="timeout"?lang.alertHoraire[0]:xhr.responseText) + ")");
+				if (typeof(err.Message) != "undefined")
+					console.log(err.Message);
+			} catch(e) {
+				console.log(e.msg+' : '+e.lineNumber);
+			}
+			fct_attente_horaires(false);
+		}
+		
+		function togglePanneau() {
+			if(!$('#panel').is(':visible')) {
+				$('.toggleListe').addClass('listeAffichee');
+			} else {
+				$('.toggleListe').removeClass('listeAffichee');
+			}
+			$('#panel').toggle();
+		}
+		function getLisLgn(data) {
+			for (r in data) {
+				var route = data[r];
+				var modele = $('#modele > ul > li > a');
+				var li = modele.clone();
+				//li.addClass(nomLayer.replace(' ','_'));
+				var code = route.code;
+				var color = '#'+route.routeColor;
+				var numero = route.routeShortName;
+				var libelle = route.routeLongName;
+
+				li.attr('id',code).attr('title',numero+' - '+libelle).attr('href','#'); //pour Chrome
+				var logo = getLogoLgn(code,numero,color,0,'logo','logoRect');
+				$(logo).find('title').text(numero+' - '+libelle); //pour vieux Firefox
+				li.append(logo);
+
+				$('#listeLignes').find('.'+route.type).append(li);
+			}
+			tri('#panel .TRAM','a','','id');
+			tri('#panel .CHRONO','a','','id');
+			tri('#panel .PROXIMO','a','','id');
+			tri('#panel .FLEXO','a','','id');
+			tri('#panel .C38','a','','id');
+			
+			$('#panel').show();
+		}
+		function initPage() {
+			if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+				isMobile =true;
+			}
+			$( document ).on( "evtLignesChargees", {}, function( event, data ) {
+				initMain();
+				initPanneau();
+				if (urlParams.codeLigne) {
+					$('#'+urlParams.codeLigne).trigger('click');
+				}
+			});
+			if (urlParams.iFrame){
+				$(".main").attr('style','top:0px');
+				$.support.cors = true;
+				chargeLignes();
+				$('#listeLignes').addClass('withPub');
+				$('#pub').show();
+				$( "#pub" ).attr({ alt: lang.pub.alt,  title: lang.pub.alt });
+				$( "#pub > div" ).text(lang.pub.text);
+			} else {
+				$('#head').load('head.html');
+			}
+		}
+		function initPanneau(){
+			getLisLgn(dataLignesTC);
+			
+			$('.toggleListe').click(function(){
+				togglePanneau();
+			});
+			
+			$('#listeLignes').on('click','.svgLigne',function(e){
+				var code = this.id;
+				//$('#listeLignes #'+code).toggleClass('ligneSelected');
+				//var bActif = ($('#listeLignes #'+code).hasClass('ligneSelected')?true:false);
+				ajouteLigne(code);
+				$('#horaires>span').hide();
+			});
+			$('#unselect').click(function(){
+				$('#horairesOnglets').empty();
+				$('#horaires div').remove(); 
+				$('#horaires>span').show();
+			});
+		}
+		function initMain(){
+			try {
+				$( document ).on( 'evtProchainsPassagesCharges',function(evt, type, codeArret, codeLigne, passages){
+					var rows='';
+					var bAucunPassage = true;
+					var codeLgn = codeLigne.replace(':','_');
+					var arretName = $( "#arretSelect" + codeLgn + " option:selected" ).text();
+					$('#horaires div[data-code='+codeLgn+'] .tableau .contenu').remove();
+					var contenu = $('<div class="contenu"></div>');
+					if(passages[codeLgn]) {
+						for (var d in passages[codeLgn]) {
+							var bAucunPassageDestination = true;
+							var dir = passages[codeLgn][d];
+							
+							if(dir && (arretName != dir.name.trim().toUpperCase().latinise())) {
+								var cells='';
+								cells+='<td><span class="libdir">' + lang.horaires.Direction + '</span><br>'+dir.name+'</td>';
+								dir.times.forEach(function(e){
+									if(!e.bTropLong) {
+										cells+=(e.dest==dir.name?'<td>':'<td tabindex="0" title="Destination" data-trigger="focus" data-toggle="popover" data-content="'+e.dest+'">');
+										cells+='<div class="pictosPP">';
+										cells+=(e.dest==dir.name?'':'<span class="glyphicon glyphicon-info-sign"></span>');
+										cells+=(e.realtime?'<img class="logoRss" alt="'+lang.horairesTheoriques+'" src="img/rss.png"/>':'');
+										cells+='<div style="clear:both;"></div>'
+										cells+='</div>';
+										cells+=formatDelaiPP(moment(e.time));
+										cells+='</td>';
+										bAucunPassage=false;
+										bAucunPassageDestination=false;
+									}
+								});
+								if(!bAucunPassageDestination)
+									rows+='<tr class="tempsreel">'+cells+'</tr>';
+							}
+						}
+						if(!bAucunPassage) {
+							var table = $('<table><tbody>'+rows+'</tbody></table><span aria-hidden="true"><img alt="'+lang.horairesTheoriques+'" src="img/rss.png"/>' + lang.horairesTheoriques+'</span>');
+							contenu.append(table);
+						} else {
+							contenu.append('<span>'+lang.aucunHoraireTR+'</span>');
+						}
+					} else {
+						contenu.append('<span>'+lang.donneesManquantes+'</span>');
+					}
+					$('#horaires div[data-code='+codeLgn+'] .tableau').append(contenu);
+					$('#horaires table').css('border-collapse','separate');
+					$('#horaires table').css('border-spacing','0 1em');
+					
+					$('[data-toggle="popover"]').popover({
+						//html:true,
+						viewport:{ selector: 'body', padding: 0 },
+						container:'body',
+						placement: 'left auto'
+					}).click(function(e) {
+						/*e.preventDefault();*/ $(this).focus(); return false;
+					}); //pour chrome;
+
+				});
+				$( document ).on( 'evtArretsLigneCharges',function(evt,ligne,zones){
+					var opts = "";
+					
+					$('#horaires div[data-code='+ligne+'] .tableau .contenu').remove();
+					$('#horaires div[data-code='+ligne+'] .tableau div select.arrets').remove();
+					var orderedList = [];
+					for(arr in zones) {
+						var name;
+						if(ligne.substr(0,3)!='C38')
+							name = getShortStopName(zones[arr]);
+						else
+							name = zones[arr].split(',').reverse().join(' - ');
+						orderedList.push({arr:arr,name:name});
+					}
+					orderedList = orderedList.sort(function (a, b) {
+						if (a.name > b.name) return 1;
+						if (a.name < b.name) return -1;
+						return 0;
+					});
+					
+					for (var j=0;j<orderedList.length;j++) {
+						var selected = '';
+						if ((urlParams.nomArretsTR || urlParams.idsArretsTR) && (
+							decodeURI(urlParams.nomArretsTR) == orderedList[j].name
+							|| urlParams.idsArretsTR == orderedList[j].arr)
+						) {selected=' selected="selected"'}
+						opts+='<option'+selected+' value="'+orderedList[j].arr+'">'+orderedList[j].name+'</option>';
+					}
+					var arrets = $('<div class="divArr"><span><label for="arretSelect'+ligne+'">' + lang.horaires.arret + '</label></span><select id="arretSelect'+ligne+'" class="arrets"><option value="">' + lang.horaires.choixArret + '</option>'+opts+'</select></div>');
+					$('#horaires div[data-code='+ligne+'] .tableau .divArr').remove();
+					$('#horaires div[data-code='+ligne+'] .tableau').append(arrets);
+					
+					$('#horaires div[data-code='+ligne+'] .arrets').change(onChangeArretTR);
+					if(urlParams.idsArretsTR || urlParams.nomArretsTR) {
+						$('#horaires div[data-code='+ligne+'] .arrets').trigger('change');
+					}
+				});
+				function onChangeArretTR(e,val) {
+					if (!val) val = $(this).val();
+					if (val != "") {
+						var ligne = {code:$('#horairesOnglets > div.active').attr('data-code'),libelle:$('#horairesOnglets > div.active title').text()};
+						var arr = val;
+						getProchainsPassages('arret',val.replace('_',':'),ligne.code.replace('_',':'),5);
+					}
+					return;
+				}
+				
+				$('#horairesOnglets').on('click','div',function(e){
+					var code = $(this).attr('data-code');
+					showLigne(code);
+				});
+				$('#horaires').on('change','select.onglets',function(e){
+					$(this).parent().next().find('table').hide();
+					var selectedIndex = $(this)[0].selectedIndex+1;
+					$(this).parent().next().find(':nth-child('+selectedIndex+')').show();
+					$(':nth-child('+selectedIndex+') .glyphicon-screenshot').hide();
+				});
+
+				$('#horairesOnglets').on('click','.horairesOnglets-Close',function(e){
+					var code = $(this).attr('data-code');
+					$('#horairesOnglets > div[data-code='+code+']').remove();
+					$('#horaires div[data-code='+code+']').remove();
+					if ($('#horaires').children().length>1) {
+						showLigne($('#horairesOnglets > .ligne:nth-of-type(1)').attr('data-code'));
+					}
+					else if (isTaille('xs')) {
+						$('#horaires>span').show();
+						togglePanneau();
+					}
+					else {
+						$('#horaires>span').show();
+					}
+					return false;
+				});
+				
+				$('#timepicker input').val(moment().format("HH:mm"));
+				$('#timesync').click(function(e) {
+					e.preventDefault();
+					$('#timepicker input').val(moment().format("HH:mm"));
+					var codeLigne = $('#horairesOnglets div.ligne.active').attr('data-code');
+					$('#horaires div[data-code='+codeLigne+'] .arrets').trigger('change');
+					return false; //évite le rechargement de la page.
+				});
+
+			} catch (e) {
+				console.log(e.msg+' : '+e.lineNumber);
+			}
+		}
+		
+	</script>
+	
+  </body>
+</html>

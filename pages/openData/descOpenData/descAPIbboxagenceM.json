@@ -1,0 +1,22 @@
+{
+	"description" : "Fichier de description des agences de Mobilité",
+	"type" : "FeatureCollection",
+	"features" : [{
+			"type" : "Feature",
+			"properties" : {
+				"NOM" : "Nom de l'agence",
+				"RUE" : "Adresse de l'agence",
+				"CODEPOSTAL" : "Adresse de l'agence, exemple '38000'",
+				"COMMUNE" : "ville",
+				"TYPE" : "Agence Mobilité",
+				"type" : "agenceM",
+				"CODE" : 0,
+				"id" : 0
+			},
+			"geometry" : {
+				"type" : "Point",
+				"coordinates" : "Long-Latitude, exemple '[5.74658, 45.192649]'"
+			}
+		}
+	]
+}

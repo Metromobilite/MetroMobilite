@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="fr">
+	<head>
+		<base href="../" />
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="initial-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+		<title>MétroMobilité - Services du Plan de Mobilité</title>
+		<meta name="description" content="TODO" />
+		<link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/actus.css" rel="stylesheet">
+		<link href="css/head.css" rel="stylesheet">
+		<link href="css/index.css" rel="stylesheet">
+		<style type='text/css'>
+			@media (min-width: 768px) {
+				body {
+					background-image:url("img/pages/bandeauPdmServices.jpg");
+					background-attachment: fixed;
+					background-repeat:no-repeat;
+					background-position:top center;
+				}
+			}
+			h2 {
+			font-size:18px!important;
+			margin-bottom:0px!important;
+			margin-top:20px!important;
+			text-transform:uppercase!important;
+			font-weight: 500!important;
+			line-height: 1.1!important;
+			}
+            h3 {
+                text-decoration:none;
+                margin-top:0px;
+            }
+			h4 {
+			font-size:12px!important;
+			}
+			#navbarDesc {
+				background-color: #8334a7;
+			}
+			.container-page h2,.container-page h6,.container-page h5,
+            .container-page h4,.container-page h3,.container-page  > div > .row a,
+            .container-page .glyphicon-plus-sign:before,
+            .container-page .glyphicon-circle-arrow-right:before {
+				color:#8334a7;
+			}
+			.container-page hr {
+				 background-color: #8334a7;
+			}
+			.container-page .nav > li > a:hover, .nav > li > a:focus{
+				background-color: #691A8D;
+				border-color: #691A8D;
+				opacity:0.9;
+			}
+            #temoignage {
+                margin-left : 15px;
+                color:#8334a7;
+            }
+            .avantages {
+                margin-bottom:15px;
+                font-size:11px;
+            }
+            .pdmFondMauve { background-color:#8334a7; color:#fff; }
+            div:not(:last-child) > div > .pdmFondMauve { margin-right:15px;}
+            .chiffres {
+                font-size:18px;
+            }
+            .pdmFondRose {
+                background-color:#AC8EBB;
+                padding:15px;
+            }
+            .pdmFondContacts {
+                background-color:#f0037f;
+                color:#fff;
+                padding: 0 15px;
+            }
+            .pdmFondContacts > a,.pdmFondContacts .glyphicon-circle-arrow-right:before {color:#fff!important;}
+
+            .pdmServicesWrap { display:none }
+            .pdmResumeService {
+                border:1px solid #c0c0c0;
+            }
+            .pdmDetailService {
+                max-height:0px;
+                overflow-y: hidden;
+                position:relative;
+               -webkit-transition: max-height 0.5s linear 0.1s;
+	           -moz-transition: max-height 0.5s linear 0.1s;
+	           transition: max-height 0.5s linear 0.1s;
+               border-left:1px solid #c0c0c0;
+               border-right:1px solid #c0c0c0;
+               border-bottom:1px solid #c0c0c0;
+            }
+            #pdmServices > .pdmServicesWrap:target + div {
+               /*height:auto;*/
+               max-height:999px;
+               border:1px solid #c0c0c0;
+               border-top:0px;
+            }
+            #pdmServices > .pdmServicesWrap:target + div.pdmDetailService + a.pdmEnSavoirPlus {
+                visibility:hidden;
+            }
+            #pdmServices > .pdmServicesWrap:target + div.pdmDetailService {
+                overflow-y:visible;
+            }
+            a.pdmEnSavoirPlus, a.pdmReduire {
+                display: block;
+                border: 1px solid #c0c0c0;
+                border-radius:3px;
+                position:relative;
+                height:30px;
+                line-height:30px;
+                width:150px;
+                color:#000!important;
+                text-decoration:none;
+                text-align:center;
+                background-color:#fff;
+                margin:auto;
+                z-index:1;
+            }
+            a.pdmEnSavoirPlus{
+                top:-15px;
+            }
+            a.pdmReduire {
+                bottom:-15px;
+            }
+		</style>
+	</head>
+	<body>
+	<div id='head'></div>
+	<div class="container-fluid container-page">
+		<div id="rowPage">
+			<div class="row rowHeader bgTransp hidden-xs">
+				<div class="container">
+					<br>
+                    <h1>Les services</h1>
+					<br>
+				</div>
+				<div id="navbarDesc" class="container-fluid" data-spy="affix" data-offset-top="240">
+					<div class="container">
+						<div class="row">
+							<ul class="nav navbar-nav collapse navbar-collapse">
+								<li><a href="#pdmAvantages">Avantages tarifaires</a></li>
+								<li><a href="#pdmAnimations">Animations</a></li>
+								<li><a href="#pdmEvenements">Les Evenements</a></li>
+								<li><a href="#pdmClub">Club mobilité</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="container">
+                    <div id="cibleReduire" class="pdmServicesWrap"></div>
+					<div id="pdmServices">
+                        <br>
+                        <p>
+                            Le SMTC et la Métropole « GRENOBLE–ALPES METROPOLE » en partenariat avec les acteurs de la mobilité sur le territoire métropolitain, proposent un ensemble de services (avantages tarifaires, animations, assistance technique, etc.) à destination des établissements pour faciliter la mise en œuvre des plans de mobilité.
+                        </p>
+                        <div class="pdmResumeService">
+                            <div class="col-sm-3"><div class="row">
+
+                            </div></div>
+                            <div class="col-sm-9"><div class="row">
+                                <h2 id="pdmAvantages" class="anchor">Avantages tarifaires</h2>
+                                <div class="col-sm-4"><div class="row">
+                                    <b>C'est quoi ?</b><br>
+                                    <br>
+                                    Des réductions et des tarifs avantageux...
+                                </div></div>
+                                <div class="col-sm-4"><div class="row">
+                                    <b>Pour qui ?</b>
+                                    <ul>
+                                        <li>salariés</li>
+                                        <li>entreprises</li>
+                                        <li>...</li>
+                                    </ul>
+                                </div></div>
+                                <div class="col-sm-4"><div class="row">
+                                    <b>Les offres</b>
+                                    <ul>
+                                        <li>pass soleil</li>
+                                        <li>...</li>
+                                        <li>...</li>
+                                    </ul>
+                                </div></div>
+                            </div></div>
+                            <div class="clearfix"><br></div>
+                        </div>
+                        <div class="pdmServicesWrap" id="pdmService1Details"></div>
+                        <div class="pdmDetailService">
+                            <div class="col-sm-12">
+                                <br>
+                                <p>
+                                    fghfkgfkdgdg
+                                    dhdhdghdjd
+                                </p>
+                            </div>
+                            <div class="col-sm-4">
+                                <h3>1</h3>
+                            </div>
+                            <div class="col-sm-4">
+                                <h3>2</h3>
+                            </div>
+                            <div class="col-sm-4">
+                                <h3>3</h3>
+                            </div>
+                            <div class="clearfix"><br></div>
+                            <a class="pdmReduire" href="#cibleReduire">Réduire</a>
+                        </div>
+                        <a class="pdmEnSavoirPlus" href="#pdmService1Details">En savoir plus</a>
+
+                        <div class="pdmResumeService">
+                            <div class="col-sm-3"><div class="row">
+
+                            </div></div>
+                            <div class="col-sm-9"><div class="row">
+                                <h2 id="pdmAnimations" class="anchor">Animations</h2>
+                                <div class="col-sm-4"><div class="row">
+                                    <b>C'est quoi ?</b><br>
+                                    <br>
+                                    Des animations pour découvrir la mobilité
+                                </div></div>
+                                <div class="col-sm-4"><div class="row">
+                                    <b>Pour qui ?</b>
+                                    <ul>
+                                        <li>salariés</li>
+                                        <li>entreprises</li>
+                                        <li>...</li>
+                                    </ul>
+                                </div></div>
+                                <div class="col-sm-4"><div class="row">
+                                    <b>Les offres</b>
+                                    <ul>
+                                        <li>village de la mobilité</li>
+                                        <li>conseil en mobilité</li>
+                                        <li>...</li>
+                                    </ul>
+                                </div></div>
+
+                            </div></div>
+                            <div class="clearfix"><br></div>
+                        </div>
+                        <div class="pdmServicesWrap" id="pdmService2Details"></div>
+                        <div class="pdmDetailService">
+                            <div class="col-sm-12">
+                                <br>
+                                <p>
+                                    Le SMTC, GRENOBLE-ALPES METROPOLE et les partenaires de la mobilité, vous proposent l’organisation de différentes animations « Mobilité » en fonction de vos besoins. Ces animations seront planifiées et organisées au sein de chaque établissement signataire de la convention, sur simple demande.
+                                </p>
+                            </div>
+                            <div class="col-sm-4">
+                                <h3>Village de la mobilité</h3>
+                                <p>
+                                    Présentation des différents modes de déplacements alternatifs à la voiture solo et des différents thèmes liés à la mobilité (Sécurité routière ; etc.) :
+                                    <ul>
+                                        <li>Animation qui regroupe différents stands (Métrovélo / VAE / Point info transport / Sécurité routière / etc.).</li>
+                                        <li>Animation qui a lieu sur site, et sur des horaires adaptés aux salariés (entre 12h et 14h).</li>
+                                        <li>Documentation présentant le réseau des transports en commun, les différents modes de déplacements, la tarification, offres promotionnelles, etc.</li>
+                                    </ul>
+                                </p>
+                            </div>
+                            <div class="col-sm-4">
+                                <h3>Conseil en mobilité</h3>
+                                <p>
+                                    Accompagnement individuel à destination de tous les salariés souhaitant changer de mode de déplacements.
+                                    <ul>
+                                        <li>Présentation des différentes solutions concernant le trajet domicile travail.</li>
+                                        <li>Accueil situé à l’agence Mobilité / Durée : 30 minutes à 1 heure.</li>
+                                    </ul>
+                                </p>
+                            </div>
+                            <div class="col-sm-4">
+                                <h3>Animation Métromobilité</h3>
+                                <p>
+                                    Présentation des différents modes de déplacements;
+                                    <ul>
+                                        <li>Animation organisée sur site présentant les alternatives à la voiture,</li>
+                                        <li>Répondre aux demandes et questionnements concernant les modes de déplacements disponibles / proposer des conseils / présenter des documents de communication / etc.</li>
+                                    </ul>
+                                </p>
+                            </div>
+                            <div class="col-sm-12">
+                                <span class="glyphicon glyphicon-circle-arrow-right"></span><a href="#" target="_self"> Programmer une animation</a><br>
+                                <span class="glyphicon glyphicon-circle-arrow-right"></span><a href="#" target="_self"> Documents utile (brochure,etc.)</a><br>
+                            </div>
+                            <div class="clearfix"><br></div>
+
+                            <a class="pdmReduire" href="#cibleReduire">Réduire</a>
+                        </div>
+                        <a class="pdmEnSavoirPlus" href="#pdmService2Details">En savoir plus</a>
+
+                        <div class="pdmResumeService">
+                            <div class="col-sm-3"><div class="row">
+
+                            </div></div>
+                            <div class="col-sm-9"><div class="row">
+                                <h2 id="pdmEvenements" class="anchor">Les évènements</h2>
+                                <div class="col-sm-4"><div class="row">
+                                    <b>C'est quoi ?</b><br>
+                                    <br>
+                                    Des animations pour découvrir la mobilité
+                                </div></div>
+                                <div class="col-sm-4"><div class="row">
+                                    <b>Pour qui ?</b>
+                                    <ul>
+                                        <li>salariés</li>
+                                        <li>entreprises</li>
+                                        <li>...</li>
+                                    </ul>
+                                </div></div>
+                                <div class="col-sm-4"><div class="row">
+                                    <b>Les offres</b>
+                                    <ul>
+                                        <li>village de la mobilité</li>
+                                        <li>conseil en mobilité</li>
+                                        <li>...</li>
+                                    </ul>
+                                </div></div>
+
+                            </div></div>
+                            <div class="clearfix"><br></div>
+                        </div>
+                        <div class="pdmServicesWrap" id="pdmService3Details"></div>
+                        <div class="pdmDetailService">
+                            <div class="col-sm-12">
+                                <br>
+                                <p>
+                                    Chaque année, le SMTC, la SEMITAG et « Grenoble-Alpes Métropole » soutiennent l’organisation du challenge Mobilité Auvergne-Rhône alpes  “ Au travail , j’y vais autrement”. Il s’agit d’un évènement d’une journée qui vise à récompenser les établissements qui auront su convaincre le plus de salariés à utiliser un mode de transport alternatif à la voiture individuelle.
+                                </p>
+                                <p>
+                                    Lors d’une cérémonie de remise des prix recevront des lots de différentes natures : Abonnement offert à CITELIB ; Cartes anonyme voyageurs offertes ; Abonnements MétroVélo offerts ; Organisation d’ateliers vélo offerts ; Organisation de formation remise en selle gratuites ; etc.
+                                </p>
+                            </div>
+                            <div class="clearfix"><br></div>
+                            <a class="pdmReduire" href="#cibleReduire">Réduire</a>
+                        </div>
+                        <a class="pdmEnSavoirPlus" href="#pdmService3Details">En savoir plus</a>
+
+                        <div class="pdmResumeService">
+                            <div class="col-sm-3"><div class="row">
+
+                            </div></div>
+                            <div class="col-sm-9"><div class="row">
+                                <h2 id="pdmClub" class="anchor">Club mobilité</h2>
+                                <div class="col-sm-4"><div class="row">
+                                    <b>C'est quoi ?</b><br>
+                                    <br>
+                                    Des animations pour découvrir la mobilité
+                                </div></div>
+                                <div class="col-sm-4"><div class="row">
+                                    <b>Pour qui ?</b>
+                                    <ul>
+                                        <li>salariés</li>
+                                        <li>entreprises</li>
+                                        <li>...</li>
+                                    </ul>
+                                </div></div>
+                                <div class="col-sm-4"><div class="row">
+                                    <b>Les offres</b>
+                                    <ul>
+                                        <li>village de la mobilité</li>
+                                        <li>conseil en mobilité</li>
+                                        <li>...</li>
+                                    </ul>
+                                </div></div>
+
+                            </div></div>
+                            <div class="clearfix"><br></div>
+                        </div>
+                        <div class="pdmServicesWrap" id="pdmService4Details"></div>
+                        <div class="pdmDetailService">
+                            <div class="col-sm-12">
+                                <br>
+                                <p>
+                                    Le SMTC, la SEMITAG et « Grenoble-Alpes Métropole » organisent un club de la mobilité à destination des référents PM. La volonté de la démarche est de créer un lieu d’échange et de travail au sein duquel différents sujets seront abordés comme les projets structurant concernant la mobilité, les différents services de mobilité, les projets innovants, etc.
+                                    L’objectif est de faciliter les échanges et les retours d’expériences entre les référents PDM et établissements labellisés.
+                                    Ce club sera organisé autour de plusieurs temps et outils :
+                                    <ul>
+                                        <li>Des réunions thématiques (1 réunion par trimestre).</li>
+                                        <li>Un extranet permettant d’assurer le suivi du plan de mobilité.</li>
+                                        <li>Des formations à destination des référents PDE.</li>
+                                    </ul>
+                                </p>
+                            </div>
+                            <div class="clearfix"><br></div>
+                            <a class="pdmReduire" href="#cibleReduire">Réduire</a>
+                        </div>
+                        <a class="pdmEnSavoirPlus" href="#pdmService4Details">En savoir plus</a>
+                    </div>
+                    <br>
+				</div>
+			</div>
+
+		</div>
+		<div id="btn_up" title="Haut de page">
+			<a href="#" class="glyphicon glyphicon-arrow-up"></a>
+		</div>
+	</div>
+	<div id='footer'></div>
+	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/moment.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
+	<script type="text/javascript" src="stats/piwik.js"></script>
+	<script type="text/javascript" src="js/outils.js"></script>
+	<script type="text/javascript" src="js/fr.js"></script>
+	<script type="text/javascript">var pageStatique = true;</script>
+	<script type="text/javascript" src="js/index.js"></script>
+	<script type="text/javascript">
+		$('#footer').load('index.html #footer',function(){});
+		$('#head').load('head.html',function(){});
+		addBackToTop();
+		trackPiwik("MetroMobilité : decouvrirM.html"); //<!--modif -->
+		var anchor = window.location.hash;
+		window.location.hash = anchor;
+
+        [].map.call(document.querySelectorAll('#processusPdm > a'), function(a) {
+            a.addEventListener('click', function(e) {
+                [].map.call(document.querySelectorAll('#processusPdm > a.selectionne'), function(el) {
+                    el.classList.remove('selectionne');
+                });
+                this.classList.add('selectionne');
+            });
+        });
+
+		//faire marcher les href="#toto" avec la balise <base>
+		$().ready(function() {
+		  $("a[href^='\#']").each(function(){
+			this.href=location.href.split("#")[0]+'#'+this.href.substr(this.href.indexOf('#')+1);
+		  });
+		});
+	</script>
+  </body>
+</html>
+
+
+
+
+
+
+

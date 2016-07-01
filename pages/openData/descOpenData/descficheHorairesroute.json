@@ -1,0 +1,16 @@
+{
+	"description" : "Fiche horaires d'une ligne pour chaque arrêt ",
+	"description" : "Liste des arrêts",
+	"0" : {
+		"arrets" : [{
+				"stopId" : "Identifiant, par exemple 'SEM:2222'",
+				"trips" : "Heures de passage en seconde depuis minuit, par exemple: '[60360, 60660, 60900, 61140]'",
+				"stopName" : "Nom de l'arrêt, par exemple : 'SEYSSINS, LE PRISME'",
+				"lat" : "Latitude de l'arrêt, exemple : '45.16641'",
+				"lon" : "Latitude de l'arrêt, exemple : '5.69047'"
+			}
+		],
+		"prevTime" : "Créneau horaire précédent à demander, en Unix TimeStamp en miliseconde, exemple '1449591900000'",
+		"nextTime" : "Créneau horaire suivant à demander, Unix TimeStamp en miliseconde, exemple '1449594180000'"
+	}
+}

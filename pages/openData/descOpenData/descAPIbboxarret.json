@@ -1,0 +1,21 @@
+{
+	"description" : "Liste de description des arrêts TC",
+	"type" : "FeatureCollection",
+	"features" : [{
+			"type" : "Feature",
+			"properties" : {
+				"CODE" : "Code de l'arrêt, exemple : 'C38_GEN04230'",
+				"LIBELLE" : "Nom de l'arrêt, exemple : 'COLLEGE-ECOLES'",
+				"COMMUNE" : "Ville de l'arrêt, exemple : 'MONESTIER-DE-CLERMONT'",
+				"arr_visible" : "'1' si Arrêt visible sur la cartographie, '0' sinon",
+				"type" : "arret",
+				"id" : "Identifiant de l'arrêt, exemple : 'C38_GEN04230'"
+			},
+			"description" : "Position de l'arrêt",
+			"geometry" : {
+				"type" : "Point",
+				"coordinates" : "Long-Latitude, exemple '[5.74658, 45.192649]'"
+			}
+		}
+	]
+}

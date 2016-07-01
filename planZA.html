@@ -1,0 +1,808 @@
+<!doctype html>
+<!--
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta content="initial-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+    <title>Métromobilité – Plan interactif des réseaux TAG et Transisère</title>
+	<meta name="description" content="Visualisez sur un seul plan interactif l’ensemble des lignes de bus et de tram de la TAG ainsi que les lignes de car Transisère afin de préparer au mieux vos déplacements" />
+	<link rel="stylesheet" href="js/lib/ol/ol.css" type="text/css" />
+    <link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="Stylesheet" type="text/css" href="css/map.css"/>
+	<!--<link rel="Stylesheet" type="text/css" href="css/planTC.css"/>-->
+	
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	 <style type='text/css'>
+		#search .dropdown-menu{
+			max-height:200px;
+			overflow-y:auto;
+		}
+.typeahead { z-index: 1051;}
+
+.typeahead span[data-type="RUE"]::before, .typeahead span[data-type="LIEU"]::before, .typeahead span[data-type="ARRET"]::before, .typeahead span[data-type="AXE"]::before{
+	background-size: 100% 100%;
+	content: "\00a0";
+	height: 16px;
+    width: 16px;
+	margin-right:5px;
+	display:inline-block;
+}
+
+.typeahead span[data-type="RUE"]::before{
+	background: url(img/rue.png) no-repeat;
+}
+
+.typeahead span[data-type="LIEU"]::before{
+	background: url(img/lieu.png) no-repeat;
+}
+
+.typeahead span[data-type="ARRET"]::before{
+	background: url(img/arret.png) no-repeat;
+}
+
+.typeahead span[data-type="AXE"]::before{
+	font-family: "Glyphicons HalfLings", "Arial", "Helvetica", sans-serif;
+	content: "\e024";
+	color:#cd5c1d;			
+}
+.typeahead  .categorie {
+    font-weight: bold;
+    margin-left: -21px;
+}
+.typeahead  .bestResult {
+	/*pour mettre en valeur le meilleur resultat*/
+	background-color: #d0d0d0;
+}
+.dropup .dropdown-menu {
+    bottom: 100%;
+    margin-bottom: 1px;
+    top: auto!important;
+}
+.dropdown-menu li a {
+	padding:0px 0px;
+}
+.dropdown-menu li a span {
+	padding:0px 0px;
+	width:100%;
+	padding:3px 20px;
+	display:block;
+}
+.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
+	background-color:#fff;
+	color:#000;
+}
+.dropdown-menu > .active > a span[data-type], .dropdown-menu > .active > a span[data-type]:hover, .dropdown-menu > .active > a span[data-type]:focus {
+    background-color: #428bca;
+    color: #fff;
+}
+#panel h1 {
+	font-size:14px;
+	margin:0px;
+	padding:0px;
+	padding-bottom: 10px;
+}
+
+#panel .titreReseau {
+	background-color: #646464;
+	color:#fff;
+	margin: 0px -15px;
+	padding: 0px 15px;
+	cursor:pointer;
+	min-height: 36px;
+}
+#panel .descReseau {
+	font-size: 12px;
+}
+
+#panel .titreReseau h2 {
+	font-family: "GothamRounded-Medium",Arial,Verdana,Geneva,Lucida,Arial,Helvetica,sans-serif;
+	margin:0px;
+	padding:0px;
+	font-size: 18px;
+}
+#panel h2 > div:first-of-type {
+	font-weight:bold;
+	max-width:80%;
+	max-width:calc(100% - 50px);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: inline-block;
+}
+#panel h2[data-layer] .check{
+    border-radius: 14px;
+    box-shadow: -1px 1px 1px 1px rgba(0, 0, 0, 0.42) inset;
+    height: 28px;
+    padding: 2px;
+    width: 46px;
+	margin: 3px 0;
+}
+#panel h2[data-layer] .check .switch {
+    background-color: #c0c0c0;
+    border-radius: 12px;
+    display: block;
+    height: 24px;
+    width: 24px;
+	border: 2px solid #6f6f6f;
+	box-shadow: -1px 3px 1px 0 rgba(0, 0, 0, 0.42);
+}
+#panel h2[data-layer].layerVisible .check {
+	background-color:#50AE2F;
+}
+#panel h2[data-layer].layerVisible .check .switch {
+	margin-left:18px;
+}
+#panel h2[data-layer]:hover {
+	background-color: #505050;
+}
+		.ol-control .glyphicon {
+			top:0px;
+		}
+#listeLignes {
+    height: calc(100% - 90px);
+    overflow-y: auto;
+    position: relative;
+}
+#popup .PopupDetailsEntetearret, #popup .PopupDetailsEntetepointArret, #popup .PopupDetailsEntetearretSel {
+    background-color: #00a453;
+    color: #fff;
+    height: 30px;
+    line-height: 30px;
+}
+#popup .PopupDetails-detailsCallback .header {
+	height:30px;
+	line-height:30px;
+	background-color:#00a453;
+	color:#fff;
+}
+#popup .PopupDetails-detailsCallback .logoLigne {
+    display: block;
+    float: left;
+    height: 34px;
+    width: 60px;
+}
+/*#popup .PopupDetails-detailsCallback [class*=" SEM_"] .logoLigne  {
+	height: 60px;
+}*/
+
+#popup .PopupDetails-detailsCallback .logoLigne .svgLigne .logo  {
+	margin-left: 15px;
+    margin-right: 15px;
+}
+#popup .PopupDetails-detailsCallback .logoLigne .svgLigne .logoRect  {
+	margin:0px;
+}
+#popup .PopupDetails-detailsCallback .icones {
+	height:30px;
+	background-color:#f0f0f0;
+}
+#popup .PopupDetails-detailsCallback .icones > span{
+	line-height:30px;
+	cursor:pointer;
+}
+#popup .PopupDetails-detailsCallback .icones .libelle{
+	display:inline-block;
+	line-height:14px;
+}
+#popup .PopupDetails-detailsCallback .dep .glyphicon{
+	color:#52ae32;
+	font-size:23px;
+}
+#popup .PopupDetails-detailsCallback .arr .glyphicon {
+	color:#ff0032;
+	font-size:23px;
+}
+#popup .PopupDetails-detailsCallback .ligne {
+	margin-bottom:10px;
+}
+#popup .PopupDetails-detailsCallback .dir1, #popup .PopupDetails-detailsCallback .dir2 {
+	float:left;
+	width: 80%;
+	width: calc(100% - 65px);
+	height:30px;
+	line-height:30px;
+	border-left: 1px solid #777777;
+	padding-left:5px;
+}
+/*#popup .PopupDetails-detailsCallback .ligne:not([class*=" SEM_"]) .dir2 {*/
+#popup .PopupDetails-detailsCallback .ligne .dir2:not(.nonReduit) {
+	height:4px;
+}
+/*#popup .PopupDetails-detailsCallback .ligne:not([class*=" SEM_"]) .dir2 *{*/
+#popup .PopupDetails-detailsCallback .ligne .dir2:not(.nonReduit) *{
+	display:none;
+}
+#popup .PopupDetails-detailsCallback .libDir {
+    display: block;
+    float: left;
+    max-width: 170px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+#popup .PopupDetails-detailsCallback .evt {
+	float:left;
+	line-height:30px;
+	padding-left:70px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow-x:hidden;
+	text-align:left;
+	width:100%;
+}
+#popup .PopupDetails-detailsCallback .dir1 {
+	border-bottom: 1px solid #777777;
+}
+#popup .PopupDetails-detailsCallback .delai {
+   font-family: Arial;
+    font-size: 10px;
+    font-style: italic;
+	line-height:14px;
+	text-align:right;
+}
+#popup .PopupDetails-detailsCallback .ligne  .glyphicon {
+	font-size:20px;
+	line-height:30px;
+}
+#popup .PopupDetails-detailsCallback .evt  .glyphicon {
+	color:red;
+}
+.PopupDetailsLayerLgn{
+	cursor:pointer;
+}
+.PopupDetailsLayerLgn:hover{
+	cursor:pointer;
+	color:#c0c0c0;
+}
+.ligneSelected .svgFond {
+	stroke-width:6px;
+}
+#listeLignes.withPub {
+	height:calc(100% - 150px);
+}
+
+#pub.row {
+	padding: 3px;
+	cursor: pointer;
+	display: inline-block;
+}
+#pub img{
+	width: 40px;
+}
+#pub div {
+	font-family: "GothamRounded-Medium",Arial,Verdana,Geneva,Lucida,Helvetica,sans-serif;
+	display: inline;
+	color:#019ebc;
+	font-size: 13px;
+	background-color: #fff;
+	border-radius: 4px;
+	padding: 0px 10px 0px 10px;
+	margin-left: -2px;
+	opacity: 0.7;
+	filter: alpha(opacity=70);
+}
+	 </style>
+  </head>
+  <body>
+	<div id='head'></div>
+	<div class="container-fluid main">
+		<div class="row">
+			<div id="modele" style="display:none;">
+				<ul>
+					<a href='#' id='id' class="svgLigne pull-left">
+					</a>
+				</ul>
+			</div>
+			<div id="menu" class="toggleListe pull-right listeAffichee" title="Affichage du panneau de sélection des éléments cartographiques" alt="Affichage du panneau de sélection des éléments cartographiques"><span class="glyphicon glyphicon-menu-hamburger"></span></div>
+			<div id="map" class="map"></div>
+			<div id="popup"></div>
+			<div id="popupZA" class="template hidden">
+				<!--<div class="row"><span class="col-xs-12 header nom">nom de l'arret</span></div>-->
+				<div class="row icones text-nowrap">
+					<span class="col-xs-4 arret"><span class="glyphicon glyphicon-screenshot"></span><span class="libelle">&nbsp;arrêts</span></span>
+					<span class="col-xs-4 dep"><span class="glyphicon glyphicon-map-marker"></span><span class="libelle"> départ<br>itinéraire</span></span>
+					<span class="col-xs-4 arr"><span class="glyphicon glyphicon-map-marker"></span><span class="libelle"> arrivée<br>itinéraire</span></span>
+				</div>
+				<div class="passages dyn dynVide">
+					<div class="row"><span class="col-xs-12 header">Prochains passages</span></div>
+					<div class="row ligne">
+						<div class="logoLigne"></div>
+						<div class="dir1"><span class="libDir"></span><div class="pull-right"><div class="delai pull-left"><span></span><br><span></span></div><a href="#" target="_blank" class="pull-right"><span class="glyphicon glyphicon-list-alt"></span></a></div></div>
+						<div class="dir2"><span class="libDir"></span><div class="pull-right"><div class="delai pull-left"><span></span><br><span></span></div><a href="#" target="_blank" class="pull-right"><span class="glyphicon glyphicon-list-alt"></span></a></div></div>
+						<div class="evt"></div>
+					</div>
+				</div>
+			</div>
+			<div class="layerSwitcher">
+				<div class="layersPanel">
+					<div class="close-switcher pull-right"><span class="glyphicon glyphicon-minus"></span></div>
+					<div class="pull-left">Afficher : </div><br>
+					<div class="bases list-unstyled text-left"></div>
+					<ul class="layers list-unstyled text-left"></ul>
+				</div>
+			</div>
+			<div id="panel" class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+				<div id="listeMain" class="container-fluid">
+					<div id="listeTop" class="row">
+						<a id="unselect" href='#'><span class="pull-left">Annuler la sélection</span></a>
+						<div id="menuListe" class="toggleListe pull-right" title="Affichage du panneau de sélection des éléments cartographiques" alt="Affichage du panneau de sélection des éléments cartographiques"><span class="glyphicon glyphicon-menu-hamburger"></span></div>
+					</div>
+					
+					<div id="listeLignes" class="row">
+						<h1 style="">Reseaux de transport en commun TAG et Transisère</h1>
+						<div id="TRAM" class="row titreReseau">
+							<h2>Tram</h2>
+							<div class="descReseau">De 4h30 à 1h, fréquence de 4 à 10 min (heures de pointe)</div>
+						</div>
+						<div class="row TRAM"></div>
+						<div id="CHRONO" class="row titreReseau">
+							<h2>Chrono</h2>
+							<div class="descReseau">De 5h à 1h, fréquence de 4 à 10 min (heures de pointe)</div>
+						</div>
+						<div class="row CHRONO"></div>
+						<div id="PROXIMO" class="row titreReseau">
+							<h2>Proximo</h2>
+							<div class="descReseau">De 5H à 21h, fréquence de 7 à 15 min (heures de pointe)</div>
+						</div>
+						<div class="row PROXIMO"></div>
+						<div id="FLEXO" class="row titreReseau">
+							<h2>Flexo</h2>
+							<div class="descReseau">De 6h30 à 20h, offre régulière et service sur réservation</div>
+						</div>
+						<div class="row FLEXO"></div>
+						<div id="C38" class="row titreReseau"><h2>Transisère</h2></div>
+						<div class="row C38"></div>
+					</div>
+					<div id="pub" class="row" style="display:none;">
+						<a href="http://www.metromobilite.fr" target='_blank'>
+							<img src="img/metromobilite.svg">
+							<div></div>
+						</a>
+					</div>
+					<div id="search" class="row">
+						<div class="input-group input-group-sm dropup">
+							<input type="text" placeholder="Recherche" id="panelFilter" class="form-control"/>
+							<div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="js/lib/ol/ol.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/moment.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
+	<script type="text/javascript" src="stats/piwik.js"></script>
+	<script type="text/javascript" src="js/outils.js"></script>
+	<script type="text/javascript" src="js/fr.js"></script>
+	<script type="text/javascript" src="js/carte.js"></script>
+	<script type="text/javascript">
+		var sourceSel;
+
+		function showLigne(idcarte,code,bShow){
+			var map = getMap(idcarte);
+			var f = sourceSel.getFeatureById(code);
+			if(!f) {
+				f = sourceLgn.getFeatureById(code);
+				if (f) {
+					sourceSel.addFeature(f);
+					chargeZALigne(idcarte,code,f.get('ZONES_ARRET'),{fctDetails:getDetails,source:sourceSel});
+				}
+			}
+			if(f) {
+				f.set('bVisible',bShow);
+				f.get('ZONES_ARRET').forEach(function(zId){
+					var feature = sourceSel.getFeatureById('arret_'+zId);
+					if (feature) {
+						feature.set('bVisible',bShow);
+					}
+				});
+			} else if(!bShow) {
+				return ;
+			} else {
+				chargeGeomLigne(idcarte,code,null,{fctDetails:getDetails,source:sourceSel,chargeZA:true});
+			}
+			
+			// on reaffiche au besoin les zones d'arrets communes des autres lignes
+			$('#listeLignes .ligneSelected').each(function(){
+				var f = sourceSel.getFeatureById(this.id);
+				if(f && f.get('bVisible')) {
+					f.get('ZONES_ARRET').forEach(function(zId){
+						var feature = sourceSel.getFeatureById('arret_'+zId);
+						if (feature) {
+							feature.set('bVisible',true);
+						}
+					});
+				}
+			});
+		}
+		function getDetails(feature) {
+			var divLignes='';
+			if(feature.getGeometry().getType() == 'Point') {
+				var featureType = feature.get('type');
+				if (featureType== 'arret' || featureType== 'pointArret' || featureType== 'arretSel') return getDetailPA2(feature);
+				/*if (featureType== 'arret' || featureType== 'pointArret' || featureType== 'arretSel') return getDetailZA(feature);
+				var coord= ol.proj.transform(feature.getGeometry().getCoordinates(), sm, gg);
+				var lonlat = coord[1]+','+coord[0];
+				divLignes = getLignesProches(lonlat,afficheListeLgn);
+				return feature.get(stylesTypes[feature.get('type')].text)+ divLignes;*/
+			} else {
+				return feature.get('NUMERO')+' - '+feature.get('LIBELLE');
+			}
+		}
+		function getDetailPA2(feature) {
+			// voir pb data:[] dans reponse serveur a chavant
+			var pop = $('#popupZA').clone();
+
+			var divIcones = pop.find( '> .icones');
+			divIcones.attr('data-featureId',feature.get('id'));
+			divIcones.attr('data-featureLayer','arret');
+			
+			//gethoraires
+			//var passages = [{"pattern":{"id":"SEM:12:1","desc":"EYBENS-MAISONS NEUVES","shortDesc":"EYBENS-MAISONS "},"times":[{"stopId":"SEM:0785","stopName":"GRENOBLE, BIR HAKEIM","scheduledArrival":48180,"scheduledDeparture":48180,"realtimeArrival":48180,"realtimeDeparture":48180,"arrivalDelay":0,"departureDelay":0,"timepoint":true,"realtime":false,"serviceDay":1443132000,"tripId":""},{"stopId":"SEM:0785","stopName":"GRENOBLE, BIR HAKEIM","scheduledArrival":48720,"scheduledDeparture":48720,"realtimeArrival":48720,"realtimeDeparture":48720,"arrivalDelay":0,"departureDelay":0,"timepoint":true,"realtime":true,"serviceDay":1443132000,"tripId":""},{"stopId":"SEM:0785","stopName":"GRENOBLE, BIR HAKEIM","scheduledArrival":49140,"scheduledDeparture":49140,"realtimeArrival":49140,"realtimeDeparture":49140,"arrivalDelay":0,"departureDelay":0,"timepoint":true,"realtime":true,"serviceDay":1443132000,"tripId":""}]},{"pattern":{"id":"SEM:15:2","desc":"VERDUN PREFECTURE","shortDesc":"VERDUN PREFECTU"},"times":[{"stopId":"SEM:0785","stopName":"GRENOBLE, BIR HAKEIM","scheduledArrival":48420,"scheduledDeparture":48420,"realtimeArrival":48420,"realtimeDeparture":48420,"arrivalDelay":0,"departureDelay":0,"timepoint":true,"realtime":true,"serviceDay":1443132000,"tripId":""},{"stopId":"SEM:0785","stopName":"GRENOBLE, BIR HAKEIM","scheduledArrival":49200,"scheduledDeparture":49200,"realtimeArrival":49200,"realtimeDeparture":49200,"arrivalDelay":0,"departureDelay":0,"timepoint":true,"realtime":true,"serviceDay":1443132000,"tripId":""}]},{"pattern":{"id":"SEM:14:3","desc":"VERDUN PREFECTURE","shortDesc":"VERDUN PREFECTU"},"times":[{"stopId":"SEM:0785","stopName":"GRENOBLE, BIR HAKEIM","scheduledArrival":48600,"scheduledDeparture":48600,"realtimeArrival":48600,"realtimeDeparture":48600,"arrivalDelay":0,"departureDelay":0,"timepoint":true,"realtime":true,"serviceDay":1443132000,"tripId":""}]},{"pattern":{"id":"C38:6020:449078","desc":"GRENOBLE"},"times":[{"stopId":"C38:12912","stopName":"GRENOBLE, BIR-HAKEIM","scheduledArrival":49200,"scheduledDeparture":49200,"realtimeArrival":49200,"realtimeDeparture":49200,"arrivalDelay":0,"departureDelay":0,"timepoint":true,"realtime":true,"serviceDay":1443132000,"tripId":"C38:5775323"},{"stopId":"C38:12912","stopName":"GRENOBLE, BIR-HAKEIM","scheduledArrival":50940,"scheduledDeparture":50940,"realtimeArrival":50940,"realtimeDeparture":50940,"arrivalDelay":0,"departureDelay":0,"timepoint":true,"realtime":false,"serviceDay":1443132000,"tripId":"C38:5775382"},{"stopId":"C38:12912","stopName":"GRENOBLE, BIR-HAKEIM","scheduledArrival":52740,"scheduledDeparture":52740,"realtimeArrival":52740,"realtimeDeparture":52740,"arrivalDelay":0,"departureDelay":0,"timepoint":true,"realtime":false,"serviceDay":1443132000,"tripId":"C38:5775381"},{"stopId":"C38:12912","stopName":"GRENOBLE, BIR-HAKEIM","scheduledArrival":54540,"scheduledDeparture":54540,"realtimeArrival":54540,"realtimeDeparture":54540,"arrivalDelay":0,"departureDelay":0,"timepoint":true,"realtime":false,"serviceDay":1443132000,"tripId":"C38:5775380"},{"stopId":"C38:12912","stopName":"GRENOBLE, BIR-HAKEIM","scheduledArrival":56340,"scheduledDeparture":56340,"realtimeArrival":56340,"realtimeDeparture":56340,"arrivalDelay":0,"departureDelay":0,"timepoint":true,"realtime":false,"serviceDay":1443132000,"tripId":"C38:5775379"},{"stopId":"C38:12912","stopName":"GRENOBLE, BIR-HAKEIM","scheduledArrival":58320,"scheduledDeparture":58320,"realtimeArrival":58320,"realtimeDeparture":58320,"arrivalDelay":0,"departureDelay":0,"timepoint":true,"realtime":false,"serviceDay":1443132000,"tripId":"C38:5775378"}]}];
+			var searchUrl;
+			if(feature.get('type')=='pointArret') {
+				searchUrl = (url.saisieChoisie=='local'?url.hostnameLocal+url.portWSTest:url.hostnameData);
+				searchUrl += '/api/routers/default/index/stops/'+feature.get('CODE').replace('_',':')+'/stoptimes';
+			} else {
+				searchUrl = (url.saisieChoisie=='local'?url.hostnameLocal+url.portWSTest:url.hostnameData);
+				searchUrl += '/api/routers/default/index/clusters/'+feature.get('CODE').replace('_',':')+'/stoptimes';
+			}
+			fct_attente_horaires(true);
+			$.ajax({
+				type: "GET",
+				url: searchUrl,
+				error:error,
+				dataType: 'jsonp'
+			}).then(function(res) {
+				fct_attente_horaires(false);
+				var passages = {};
+				res.forEach(function(r){
+					if(r.pattern) {
+						var code = r.pattern.id.split(':',2).join('_');
+						if(!passages[code]) passages[code] = {dir1:{name:'',times:[]},dir2:{name:'',times:[]}}
+						p = passages[code];
+						//quelle direction on remplit
+						var dir = (r.pattern.dir?p['dir'+r.pattern.dir]:(p.dir1.times.length>0?p.dir2:p.dir1));
+						dir.name = r.pattern.desc;
+						//recup des horaires
+						for (var i=0;i<r.times.length && i<2;i++) {
+							var time = (r.times[i].realtimeDeparture? r.times[i].realtimeDeparture : r.times[i].scheduledDeparture);
+							dir.times.push({ dest:r.pattern.desc,
+											 time:(time*1000)+(r.times[i].serviceDay*1000),
+											 realtime:r.times[i].realtime,
+											 bTropLong:(time*1000)+(r.times[i].serviceDay*1000) > (new Date().getTime())+(65*60*1000)
+											});
+						}
+					}
+				});
+				var popup = $('#popup .PopupDetails-detailsCallback');
+				//affichage du resultat
+				var ligneModele = $('#popupZA').find('> .passages > .ligne');
+				for (var code in passages) {
+					
+					var maligne = ligneModele.clone();
+					var p = passages[code];
+					maligne.addClass(code);
+					maligne.attr('data-code',code);
+					maligne.find('> .logoLigne').append($('#'+code).clone());
+					//destination
+
+					for (var d=1;d<3;d++) {
+						var maDir = maligne.find('> .dir'+d);
+						var dir;
+						if(d==1) dir = (p.dir1.times.length>0?p.dir1:p.dir2);
+						if(d==2 && p.dir1.times.length>0) dir = p.dir2;
+						if(d==2 && p.dir1.times.length==0) break;
+						
+						dir.times.sort(function(a,b){
+							return a.time - b.time;
+						});
+						
+						maDir.find('> .libDir').text(dir.name);
+						for (var i=0;i<dir.times.length && i<2;i++) {
+							var text = '--:--';
+							if(!dir.times[i].bTropLong){
+								text = formatDelaiPP(moment(dir.times[i].time))+(!dir.times[i].realtime?'*':'');
+							}
+							maDir.find('> div > .delai > span:nth-of-type('+(i+1)+')').text(text);
+						}
+						maDir.find('> div > a').attr('href','horaires.html?codeLigne='+code);
+						
+						if(d==2 && p.dir2.times.length>0) maDir.addClass('nonReduit');
+					}
+					for (var e in dataEvtsTC[code]) {
+						maligne.find('> .evt').append('<span class="glyphicon glyphicon-warning-sign"></span><a href="index.html?page=Evts#'+e+'" target="_blank"> '+dataEvtsTC[code][e].loc+'</a><br>');
+					}
+					popup.find('> .passages').append(maligne);
+				}
+				//tri
+				popup.find('> .passages > div.ligne').sort(function(a,b){
+					return compareCodeLigne($(a).attr('data-code'),$(b).attr('data-code'));
+				}).detach().appendTo(popup.find('> .passages'));
+
+				popup.find('> .passages').removeClass('dynVide');
+			});
+			pop.find('> .passages > .ligne').remove();
+			return pop.html();
+		}
+
+		function clickDepArr(depOuArr) {
+			
+			var featureLayer = getLayer('map',$('#popup .icones').attr('data-featureLayer'));
+			var featureId = $('#popup .icones').attr('data-featureId');
+			var sourcePoints = getLayer('map','depArr').getSource();
+			var feature = featureLayer.getSource().getFeatureById(featureId);
+			var layerDepArrPrec = sourcePoints.getFeatureById(depOuArr);
+			if (layerDepArrPrec)
+				sourcePoints.removeFeature(layerDepArrPrec);
+			
+			var fe = new ol.Feature({
+				'geometry': feature.getGeometry(),
+				'typeDep':depOuArr,
+				'type':depOuArr,
+				'libelle': feature.get('LIBELLE_ZONE')
+			});
+			
+			var map =getMap('map');
+			
+			fe.setId(depOuArr);
+			sourcePoints.addFeature(fe);
+			
+			//si depart ou arrivée -> rootage vers iti
+			var featureDep = sourcePoints.getFeatureById('dep');
+			var featureArr = sourcePoints.getFeatureById('arr');
+			var libelle = feature.get('LIBELLE_ZONE');
+			if (!libelle)
+				libelle = feature.get('LIBELLE');
+			
+			if (featureDep && depOuArr == 'dep')
+			{
+				var loc = 'iti.html'
+				var coordDep = ol.proj.transform(featureDep.getGeometry().getCoordinates(),sm , gg);
+				loc += '?dep=' + libelle;
+				loc += '&lonlatDep=' + coordDep[1] + ',' +coordDep[0];
+
+				if (urlParams.otp!='prod') loc+="&otp="+urlParams.otp;
+				if(urlParams.debug) loc+="&debug=true";
+
+				window.open(loc);
+			} else if (featureArr)
+			{
+				var loc = 'iti.html'
+				var coordArr = ol.proj.transform(featureArr.getGeometry().getCoordinates(),sm , gg);
+				loc += '?arr=' + libelle;
+				loc += '&lonlatArr=' + coordArr[1] + ',' +coordArr[0];
+
+				if (urlParams.otp!='prod') loc+="&otp="+urlParams.otp;
+				if(urlParams.debug) loc+="&debug=true";
+
+				window.open(loc);
+			}
+
+		}
+		function clickArret() {
+			var featureLayer = getLayer('map',$('#popup .icones').attr('data-featureLayer'));
+			var featureId = $('#popup .icones').attr('data-featureid');
+			var feature = featureLayer.getSource().getFeatureById(featureId);
+			var view = getMap('map').getView();
+			view.setZoom(18);
+			view.setCenter(feature.getGeometry().getCoordinates());
+			$('#popup .PopupDetails-Close').trigger('click');
+		}
+		function getLisLgn(data) {
+			for (r in data) {
+				var route = data[r];
+				var modele = $('#modele > ul > a');
+				var li = modele.clone();
+				var code = route.code;
+				var color = '#'+route.routeColor;
+				var numero = route.routeShortName;
+				var libelle = route.routeLongName;
+				li.attr('id',code).attr('title',numero+' - '+libelle); //pour Chrome
+				var logo = getLogoLgn(code,numero,color,0,'logo','logoRect');
+				$(logo).find('title').text(numero+' - '+libelle); //pour vieux Firefox
+				li.append(logo);
+
+				$('#listeLignes').find('.'+route.type).append(li);
+			}
+			tri('#panel .TRAM','a','','id');
+			tri('#panel .CHRONO','a','','id');
+			tri('#panel .PROXIMO','a','','id');
+			tri('#panel .FLEXO','a','','id');
+			tri('#panel .C38','a','','id');
+			
+			//une fois chargée la liste de ligne on charge trams et chrono uniquement
+			var codes = $('#listeLignes').find('.TRAM a, .CHRONO a').map(function(){return this.id;}).get().join();
+			chargeGeomLigne('map',codes,null,{fctDetails:getDetails,source:sourceLgn,chargeZA:false});
+			
+			$('#panel').show();
+			
+		}
+
+		function initPage() {
+			if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+				isMobile =true;
+			}
+			$( document ).on( "evtLignesChargees", {}, function( event, data ) {
+				initCarte();
+				initPanneau();
+			});
+			if (urlParams.iFrame){
+				$(".main").attr('style','top:0px');
+				$.support.cors = true;
+				chargeLignes();
+				$('#listeLignes').addClass('withPub');
+				$('#pub').show();
+				$( "#pub div" ).text(lang.pub.text);
+			} else {
+				$('#head').load('head.html');
+			}
+		}
+		function initPanneau(){
+			getLisLgn(dataLignesTC);
+			
+			$('.toggleListe').click(function(){
+				togglePanneau();
+			});
+			
+			$('#listeLignes,#popup').on('click','.svgLigne',function(e){
+				var code = this.id;
+				$('#listeLignes #'+code).toggleClass('ligneSelected');
+				var bActif = ($('#listeLignes #'+code).hasClass('ligneSelected')?true:false);
+				showLigne('map',code,bActif);
+			});
+
+			ajouteAutocomplete('#panelFilter',{
+				arrets:true,
+				lieux:true,
+				rues:true,
+				fnSaisieReussie:saisieReussie/*function(item){ return fctSaisieReussie('#panelFilter',item)}*/,
+				fnSaisieRatee:function(item){ 
+					urlParams.lonlatDep='0,0'; 
+					$('#inputSearch').attr('data-lonlat','0,0');
+				}
+			});
+			$('#unselect').click(function(){
+				sourceSel.getFeatures().forEach(function(f){f.set('bVisible',false)});
+				$('#listeLignes .ligneSelected').removeClass('ligneSelected');
+			});
+		}
+		function saisieReussie(item) {
+			//activeLayer(item.type);
+			var map =getMap('map');
+			var pos = ol.proj.transform([item.lon,item.lat], gg, sm);
+			map.getView().setCenter(pos);
+			//map.getView().setZoom(18);
+			if(isTaille('xs')) togglePanneau();
+			
+			var sourcePoints = getLayer('map','depArr').getSource();
+			var f = sourcePoints.getFeatureById('search');
+			var geom = new ol.geom.Point(pos);
+			if (!f) {
+				var fe = new ol.Feature({
+					'geometry': geom,
+					'typeDep':'search',
+					'type':'search'
+				});
+				fe.setId('search');
+				sourcePoints.addFeature(fe);
+			} else {
+				f.setGeometry(geom);
+			}
+			if(item.type=='ARRET') {
+				var f = sourcePoints.getFeatureById('arret_'+item.code);
+				if(f) showPopupDetails(getMap('map'),null,f);
+			}
+		}
+		function togglePanneau() {
+			if(!$('#panel').is(':visible')) {
+				$('.toggleListe').addClass('listeAffichee');
+			} else {
+				$('.toggleListe').removeClass('listeAffichee');
+			}
+			$('#panel').toggle();
+		}
+		function getStylesLignes(feature,resolution){
+			return getStylesLgn(feature,resolution,feature.get('CODE').substr(0,3));
+		}
+		function getStylesSelect(feature,resolution){
+			return getStylesOverlay(feature,resolution,false);
+		}
+
+function getStyles(feature,resolution,color){
+	if (feature.get('type')=='arret') {
+		var styleOpt = {
+			image: new ol.style.Circle({
+				radius: 2*2000/(resolution*Math.PI),
+				fill: new ol.style.Fill({
+					color: '#1f78b4'
+				}),
+				stroke: new ol.style.Stroke({
+					color: '#000000',
+					width: 1
+				})
+			})
+		};
+		return [new ol.style.Style(styleOpt)];
+	} else {
+		return getStylesTypes(feature,resolution,color);
+	}
+}
+		function initCarte(){
+			var optMap = {};
+			if (urlParams.lonlatDep!='0,0')  {
+				if(isTaille('xs')) togglePanneau();
+				var zoom = 16;
+				if(urlParams.codeArr) zoom = 18;
+				optMap = {
+					lon:parseFloat(urlParams.lonlatDep.split(',')[1]),
+					lat:parseFloat(urlParams.lonlatDep.split(',')[0]),
+					zoom:zoom
+				}
+				$( document ).on( "evtSourceChargee", {}, function( event, type ) {
+					if (type=='pointArret' && urlParams.codeArr) {
+						var f = getLayer('map','pointArret').getSource().getFeatureById('pointArret_'+urlParams.codeArr);
+						if(f) showPopupDetails(getMap('map'),null,f);
+					}
+				});
+			}
+			var idcarte = 'map';
+			var map=initMap(idcarte,optMap);
+			ajouteControle('map','layerSwitcher');
+
+			ajouteLignes(idcarte,getDetails);
+			//activeLayer('lignes_TRAM');
+			//activeLayer('lignes_CHRONO');
+
+			//stylesTypes['arret'].iconMaxres=100000;
+			//stylesTypes['arret'].text='';
+			
+			var layerSel = ajouteLayerManuel('lignesSel','map',{fctStyle:getStylesSelect});
+			sourceSel = layerSel.getSource();
+			layerSel.set('visible',true);
+
+			sourcePoints = creeSourceType(idcarte,'arret',{detailsCallback:getDetails});/*,pointArret*/
+			ajouteLayerType(idcarte,'arret','arret',{fctStyle:getStyles,source:sourcePoints,layerSwitcherName:'Arrêts'});
+			//ajouteLayerType(idcarte,'pointArret','pointArret',{fctStyle:getStyles,source:sourcePoints,layerSwitcherName:'Poteaux'}); 
+			activeLayer('arret');
+			//activeLayer('pointArret');
+
+			ajouteLayerManuel('depArr','map',{source:sourcePoints,fctStyle:function(feature,resolution){if(feature.get('type')!='depArr') return [];return getStylesTypes(feature,resolution)}}).set('visible',true);
+			$('#popup').on('click','.arret',function() {clickArret();});
+			$('#popup').on('click','.dep',function() {clickDepArr('dep');});
+			$('#popup').on('click','.arr',function() {clickDepArr('arr');});
+		}
+		initPage();
+		trackPiwik("MetroMobilité : planTC.html");
+	</script>
+  </body>
+</html>

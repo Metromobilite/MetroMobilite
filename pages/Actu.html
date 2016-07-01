@@ -1,0 +1,157 @@
+<!doctype html>
+<!--
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html lang="fr">
+	<head>
+		<base href="../" />
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="initial-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+		<title>MétroMobilité - Actu</title>
+		<meta name="description" content="Métromobilité, c'est le service unique qui regroupe toutes vos informations de déplacement sur la métropole grenobloise." />
+		<link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/actus.css" rel="stylesheet">
+		<link href="css/head.css" rel="stylesheet">
+		<link href="css/index.css" rel="stylesheet">
+		<!-- debut modif image-->
+		<style type='text/css'>
+			@media (min-width: 768px) {
+				body {
+					background-image:url("img/pages/bandeauActu.jpg");
+					background-attachment: fixed;
+					background-repeat:no-repeat;
+					background-position:top center;
+				}
+			}
+
+			#navbarDesc {
+				background-color: #e3007e;
+				opacity:0.9;
+			}
+			.container-page h6, .container-page h5, .container-page h4, .container-page h3, .container-page  > div > .row a, .container-page .glyphicon-plus-sign:before   {
+				color:#e3007e;
+			}
+			hr {
+				 background-color: #e3007e;
+				 height: 4px;
+			}
+			.container-page .nav > li > a:hover, .nav > li > a:focus{
+				background-color: #aa0052;
+				border-color: #aa0052;
+				opacity:0.9;
+			}
+
+			.centrerTexte{
+				text-align:center;
+			}
+			.photo {
+				display:inline-block;
+				background-size: 100% 100%;	
+			}
+			
+			.vert {
+				color: green;
+			}
+			.rouge {
+				color: red;
+			}
+			.orange {
+				color: Orange;
+			}
+		</style>
+		<!--Fin modif -->
+	</head>
+	<body>
+		<div id='head'></div>
+		<div class="container-fluid container-page">
+		<!-- debut modif image--> 
+			<div id="rowPage">
+				<div class="row rowHeader bgTransp hidden-xs">
+					<div class="container">
+						<h1>ACTUALITES <br><br>
+						Toute l'actualité sur la mobilité
+						dans la région grenobloise</h1>
+						<br>
+					</div>
+					<div id="navbarDesc" class="container-fluid" data-spy="affix" data-offset-top="240">
+						<div class="container">
+							<div class="row">
+
+								<ul class="nav navbar-nav collapse navbar-collapse">
+									<li><a href="#StadedesAlpes">FCG vs BORDEAUX</a></li>
+									<li><a href="#Appli_jeu">Jouez avec Métromobilité</a></li>
+									<li><a href="#mobilite">RDV Mobilité</a></li>
+									<li><a href="#CABLE">Câble</a></li>
+									<li><a href="#TravauxDigues">Travaux digues</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>	
+				</div>
+				<div class="row">
+					<div class="container">	
+						<div id="listeActu">
+							<div id="StadedesAlpes" data-file="Stade_des_Alpes.html"></div>
+							<div id="Appli_jeu" data-file="Appli_mobile_jeu.html"></div>
+							<div id="mobilite" data-file="RDV-Mobilité.html"></div>
+							<div id="CABLE" data-file="Cable.html"></div>
+							<div id="TravauxDigues" data-file="Travaux-digues.html"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!--Fin modif <div id="btn_up" title="Haut de page" alt="Haut de page"> -->
+		<div id="btn_up" title="Haut de page">
+			<a href="#" class="glyphicon glyphicon-arrow-up"></a>
+		</div>
+
+		<div id='footer'></div>
+		<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+		<script type="text/javascript" src="js/lib/bs/js/moment.min.js"></script>
+		<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
+		<script type="text/javascript" src="stats/piwik.js"></script>
+		<script type="text/javascript" src="js/outils.js"></script>
+		<script type="text/javascript" src="js/fr.js"></script>
+		<script type="text/javascript">var pageStatique = true;</script>
+		<script type="text/javascript" src="js/index.js"></script>
+		<script type="text/javascript">
+			$('#footer').load('index.html #footer',function(){});
+			$('#head').load('head.html',function(){});
+			addBackToTop();
+			trackPiwik("MetroMobilité : Actu.html"); //<!--modif -->
+			var anchor = window.location.hash;
+			window.location.hash = anchor;
+			
+			//faire marcher les href="#toto" avec la balise <base>
+			$().ready(function() {
+				$("a[href^='\#']").each(function(){ 
+					this.href=location.href.split("#")[0]+'#'+this.href.substr(this.href.indexOf('#')+1);
+				});
+				$('#listeActu > div').each(function () {
+					$(this).load('pages/actus/' + $(this).attr('data-file'));
+				});
+			});
+		</script>
+	</body>	

@@ -1,0 +1,22 @@
+{
+	"description" : "Liste de description des distributeurs automatique de billet TAG",
+	"type" : "FeatureCollection",
+	"features" : [{
+			"type" : "Feature",
+			"properties" : {
+				"ARRET" : "Nom de l'arrêt du DAB, par exemple : 'VALLIER-LIBERATION'",
+				"direction" : "Sens de l'arrêt, par exemple : '1', '2' ou 'null'",
+				"NOMBRE" : "Nombre DAB, par exemple : '2'",
+				"en_service" : "Etat de marche du DAB, par exemple : 'oui' ou 'non'",
+				"type" : "dat",
+				"CODE" : "Code du DAB, par exemple : '0'",
+				"id" : "Identifiant du DAB, par exemple : '0'"
+			},
+			"description" : "Position du distributeurs automatique de billet TAG",
+			"geometry" : {
+				"type" : "Point",
+				"coordinates" : "Long-Latitude, exemple '[5.74658, 45.192649]'"
+			}
+		}
+	]
+}

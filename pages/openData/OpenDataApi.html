@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="fr">
+	<head>
+			<base href="../../" />
+			<meta charset="utf-8">
+			<meta http-equiv="X-UA-Compatible" content="IE=edge">
+			<meta content="initial-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+			<title>MétroMobilité - OpenData</title>
+			<meta name="description" content="Métromobilité, c'est le service unique qui regroupe toutes vos informations de déplacement sur la métropole grenobloise." />
+			<link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
+			<link href="css/actus.css" rel="stylesheet">
+			<link href="css/head.css" rel="stylesheet">
+			<link href="css/index.css" rel="stylesheet">
+			<style type='text/css'>
+				@media (min-width: 768px) {
+					body {
+						background-image:url("img/pages/bandeauActu.jpg");
+						background-attachment: fixed;
+						background-repeat:no-repeat;
+						background-position:top center;
+					}
+				}
+
+				#navbarDesc {
+					background-color: #dc3c1b;
+					opacity:0.9;
+				}
+				.container-page h6, .container-page h5, .container-page h4, .container-page h3, .container-page  > div > .row a, .container-page .glyphicon-plus-sign:before, .container-page .glyphicon-minus-sign:before {
+					color:#dc3c1b;
+				}
+				hr {
+					 background-color: #dc3c1b;
+					 height: 4px;
+				}
+				.hr1 {
+					 height: 1px!important;
+				}
+				.container-page .nav > li > a:hover, .nav > li > a:focus{
+					background-color: #ae2315;
+					border-color: #ae2315;
+					opacity:0.9;
+				}
+
+				.centrerTexte{
+					text-align:center;
+				}
+				.photo {
+					display:inline-block;
+					background-size: 100% 100%;
+				}
+				li{
+					list-style-type: square;
+					margin-left: 22px;
+				}
+				table tr td, table tr th {
+					border : solid 1px;
+					padding:5px;
+				}
+				
+				.marge {
+					margin-left: 5em;
+				}
+				
+				.cursorPointor, .PopupDetails-Close{
+					cursor : pointer;
+				}
+				
+				.container .popover {
+					max-width : none!important;
+
+				}
+				.container .popover-content pre{
+					max-height: 500px;
+				}
+				.popover-title {
+					text-align: center;
+					text-decoration-line: none;
+				}
+				
+			</style>
+	</head>
+<body>
+<div id='head'></div>
+	<div class="container-fluid container-page">
+		<div id="rowPage">
+			<div class="row rowHeader bgTransp hidden-xs">
+				<div class="container">
+					<h1>DONNEES OUVERTES<br>
+					Documentation de l'interface de programmation (API)</h1>
+					<br>
+				</div>
+				<div id="navbarDesc" class="container-fluid" data-spy="affix" data-offset-top="240">
+					<div class="container">
+						<div class="row">
+							<ul class="nav navbar-nav collapse navbar-collapse">
+								<li><a href="#Desc">Description</a></li>
+								<li><a href="#Ref">Réferentiel</a></li>
+								<li><a href="#Hor">Horaires</a></li>
+								<li><a href="#Dyn">Donnees dynamiques</a></li>
+								<li><a href="#Otp">Horaires OTP</a></li>
+								<li><a href="#Contact">Contact</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="container">
+					<h4 id="Desc" class="anchor">Description</h4>
+					<hr>
+					<p id="descOpenData">L'interface de programmation (ou API) utilisée par le site Métromobilité fournit une grande partie des données de transport comme la description des différents réseaux, et les horaires des lignes de transport en commun de la Métropole grenobloise.<br> <br>
+					Toutes les données sont accessibles au format json (geojson pour les données à caractère géographique), pour être plus facilement exploitable depuis JavaScript ou toute autre technologie web.<br>
+					Mais pour un plus grand confort d'utilisation, chaque jeu de données de type 'Point' est accessible aux formats csv ou xls. Le format csv est encodé en UTF8 et peut être ouvert dans tout éditeur de texte.</p>
+					<br>
+					<h4 id="Ref" class="anchor">Réferentiel</h4>
+					<hr>
+					<p id="specOpenData">
+						<h5><span class="glyphicon glyphicon-tags">&nbsp;</span>Description des objets du référentiel à localisation ponctuelle</h5>
+						<h6>URL : http://data.metromobilite.fr/api/bbox/{json,xls,csv}</h6><br>
+						<p>
+							Permet de connaître la description d'objets de type 'point' tels que les arrêts, les agence M, les consigne MétroVélo etc... Ces objets étant localisés par leurs coordonnées GPS (WGS 84).<br>
+							Cette fonctionnalité est, par exemple, utilisée sur ce site à l'adresse : <a href="http://www.metromobilite.fr/velo.html" title="Exemple d'utilisation d'objets de type point - Nouvelle fenêtre" target="_blank">http://www.metromobilite.fr/velo.html</a><br>
+						</p>
+						<a class="bbox cursorPointor">En savoir <span class="glyphicon glyphicon-plus-sign"></span><br></a>
+						<div class="bboxPlus" style="display:none">
+						<table>
+							<thead>
+								<tr><th>Paramètre</th><th>Explication</th><th>Type</th><th>Obligatoire</th></tr>
+							</thead>
+							<tbody>
+								<tr><td>types</td><td>Liste des types disponibles :<br><br>
+									<li class="marge"><strong>agenceM</strong> - Agences Métromobilité <a class="openpopup bboxagenceM cursorPointor" data-fileName="descAPIbboxagenceM.json" data-title="Description des agences Métromobilité"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a></li>
+									<li class="marge"><strong>arret</strong> - Zones d'arrêt, toutes lignes confondues <a class="openpopup bboxarret cursorPointor" data-fileName="descAPIbboxarret.json" data-title="Description zones d'arrêt, toutes lignes confondues"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a></li>
+									<li class="marge"><strong>citelib</strong> - Emplacements des stations Cité Lib <a class="openpopup bboxcitelib cursorPointor" data-fileName="descAPIbboxcitelib.json" data-title="Description des emplacements des stations Cité Lib"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a></li>
+									<li class="marge"><strong>dat</strong> - Distributeurs Automatiques de Titre <a class="openpopup bboxdat cursorPointor" data-fileName="descAPIbboxdat.json" data-title="Description des distributeurs automatiques de titre"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a></li>
+									<li class="marge"><strong>depositaire</strong> - Emplacements des dépositaires de titres de transport <a class="openpopup bboxdepositaire cursorPointor" data-fileName="descAPIbboxdepositaire.json" data-title="Description des emplacements des dépositaires de titres de transport"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a></li>
+									<li class="marge"><strong>hamo</strong> - Emplacements des stations Citélib by Ha:Mo <a class="openpopup bboxHamo cursorPointor" data-fileName="descAPIbboxHAMO.json" data-title="Description des emplacements des stations Citélib by Ha:Mo"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a></li>
+									<li class="marge"><strong>lieux</strong> - Lieux remarquables, bâtiments publics, etc… <a class="openpopup bboxlieux cursorPointor" data-fileName="descAPIbboxlieux.json" data-title="Description des lieux remarquables, bâtiments publics, etc…"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a></li>
+									<li class="marge"><strong>MVA</strong> - Emplacements des agences MétroVélo <a class="openpopup bboxMVA cursorPointor" data-fileName="descAPIbboxMVA.json" data-title="Description des emplacements des agences MétroVélo"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a></li>
+									<li class="marge"><strong>MVC</strong> - Emplacements des consignes MétroVélo <a class="openpopup bboxMVC cursorPointor" data-fileName="descAPIbboxMVC.json" data-title="Description des emplacements des consignes MétroVélo"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a></li>
+									<li class="marge"><strong>PAR</strong> - Parkings Relais <a class="openpopup bboxPAR cursorPointor" data-fileName="descAPIbboxPAR.json" data-title="Description des parkings Relais"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a></li>
+									<li class="marge"><strong>PKG</strong> - Parkings <a class="openpopup bboxPKG cursorPointor" data-fileName="descAPIbboxPKG.json" data-title="Description des parkings"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a></li>
+									<li class="marge"><strong>PMV</strong> - Emplacements des panneaux à messages variables <a class="openpopup bboxPMV cursorPointor" data-fileName="descAPIbboxPMV.json" data-title="Description des emplacements des panneaux à messages variables"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a></li>
+									<li class="marge"><strong>pointArret</strong> - Poteaux de ligne, selon le sens de l’arrêt <a class="openpopup bboxpointArret cursorPointor" data-fileName="descAPIbboxpointArret.json" data-title="Description des poteaux de ligne"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a></li>
+									<li class="marge"><strong>pointService</strong> - Point de vente de ticket <a class="openpopup bboxpointService cursorPointor" data-fileName="descAPIbboxpointService.json" data-title="Description des points de ventes de tickets"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a></li><br>
+									
+									On peut requêter plusieurs types en une seule fois en les séparant par des virgules.</td><td>string</td><td>non<br>par défaut retourne tous les types</td>
+								</tr>
+								<tr><td>xmin</td><td>Longitude minimale du rectangle englobant<br>Doit être accompagné des 3 autres paramètres de position, sinon utilisation du rectangle englobant par défaut.</td><td>float</td><td>non</td></tr>
+								<tr><td>xmax</td><td>Longitude maximale du rectangle englobant<br>Doit être accompagné des 3 autres paramètres de position, sinon utilisation du rectangle englobant par défaut.</td><td>float</td><td>non</td></tr>
+								<tr><td>ymin</td><td>Latitude minimale du rectangle englobant<br>Doit être accompagné des 3 autres paramètres de position, sinon utilisation du rectangle englobant par défaut.</td><td>float</td><td>non</td></tr>
+								<tr><td>ymax</td><td>Latitude maximale du rectangle englobant<br>Doit être accompagné des 3 autres paramètres de position, sinon utilisation du rectangle englobant par défaut.</td><td>float</td><td>non</td></tr>
+							</tbody>
+						</table><br>
+						<h5><span class="glyphicon glyphicon-flash">&nbsp;</span>Exemples :</h5><br>
+						<li><a href="http://data.metromobilite.fr/api/bbox/csv?types=lieux" title="Exemple pour obtenir tous les lieux - Nouvelle fenêtre" target="_blank">http://data.metromobilite.fr/api/bbox/csv?types=lieux</a> -- permet d'obtenir tous les lieux.</li>
+						<li><a href="http://data.metromobilite.fr/api/bbox/json?types=METRO-VELO BOX,CONSIGNE METRO-VELO" title="Exemple pour obtenir plusieurs types de données - Nouvelle fenêtre" target="_blank">http://data.metromobilite.fr/api/bbox/json?types=METRO-VELO BOX,CONSIGNE METRO-VELO</a> -- permet d'obtenir plusieurs types de données.</li>
+						<li><a href="http://data.metromobilite.fr/api/bbox/xls?xmin=5.7029&xmax=5.71146&ymin=45.10554&ymax=45.223&types=arret" title="Exemple pout obtenir les arrêts dans un rectangle donné - Nouvelle fenêtre" target="_blank">http://data.metromobilite.fr/api/bbox/xls?xmin=5.7029&xmax=5.71146&ymin=45.10554&ymax=45.223&types=arret</a> -- permet d'obtenir tous les arrêts dans un rectangle donné.</li>
+						<!--<pre id="DescagenceM"></pre>-->
+						<br><a class="bboxMoins cursorPointor">Masquer <span class="glyphicon glyphicon-minus-sign"></span><br></a>
+						</div>
+						<br><br>
+						<hr class="hr1">
+						<h5><span class="glyphicon glyphicon-tags">&nbsp;</span>Recherche d'objets du référentiel à localisation ponctuelle</h5>
+						<h6>URL : http://data.metromobilite.fr/api/findType/json</h6><br>
+						<p>
+							Permet de rechercher des objets de type 'point' tels que les arrêts, les agence M, les consigne MétroVélo etc... Et ce, en effectuant une recherche simple sur un nom et type.<br>
+							Cette fonctionnalité est, par exemple, utilisée sur ce site à l'adresse : <a href="http://www.metromobilite.fr/planTitresTag.html" title="Exemple d'utilisation d'objets de type point - Nouvelle fenêtre" target="_blank">http://www.metromobilite.fr/planTitresTag.html</a><br>
+						</p>
+						
+						<a class="findType cursorPointor">En savoir <span class="glyphicon glyphicon-plus-sign"></span><br></a>
+						<div class="findTypePlus" style="display:none">
+							<table>
+								<thead>
+									<tr><th>Paramètre</th><th>Explication</th><th>Type</th><th>Obligatoire</th></tr>
+								</thead>
+								<tbody>
+									<tr><td>types</td><td>Liste des types disponibles :<br><br>
+										<li class="marge"><strong>agenceM</strong> - Agences Métromobilité <a class="openpopup bboxagenceM cursorPointor" data-fileName="descAPIbboxagenceM.json" data-title="Description des agences Métromobilité"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a></li>
+										<li class="marge"><strong>arret</strong> - Zones d'arrêt, toutes lignes confondues <a class="openpopup bboxarret cursorPointor" data-fileName="descAPIbboxarret.json" data-title="Description zones d'arrêt, toutes lignes confondues"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a></li>
+										<li class="marge"><strong>citelib</strong> - Emplacements des stations Cité Lib <a class="openpopup bboxcitelib cursorPointor" data-fileName="descAPIbboxcitelib.json" data-title="Description des emplacements des stations Cité Lib"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a></li>
+										<li class="marge"><strong>dat</strong> - Distributeurs Automatiques de Titre <a class="openpopup bboxdat cursorPointor" data-fileName="descAPIbboxdat.json" data-title="Description des distributeurs automatiques de titre"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a></li>
+										<li class="marge"><strong>depositaire</strong> - Emplacements des dépositaires de titres de transport <a class="openpopup bboxdepositaire cursorPointor" data-fileName="descAPIbboxdepositaire.json" data-title="Description des emplacements des dépositaires de titres de transport"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a></li>
+										<li class="marge"><strong>hamo</strong> - Emplacements des stations Citélib by Ha:Mo <a class="openpopup bboxHamo cursorPointor" data-fileName="descAPIbboxHAMO.json" data-title="Description des emplacements des stations Citélib by Ha:Mo"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a></li>
+										<li class="marge"><strong>lieux</strong> - Lieux remarquables, bâtiments publics, etc… <a class="openpopup bboxlieux cursorPointor" data-fileName="descAPIbboxlieux.json" data-title="Description des lieux remarquables, bâtiments publics, etc…"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a></li>
+										<li class="marge"><strong>MVA</strong> - Emplacements des agences MétroVélo <a class="openpopup bboxMVA cursorPointor" data-fileName="descAPIbboxMVA.json" data-title="Description des emplacements des agences MétroVélo"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a></li>
+										<li class="marge"><strong>MVC</strong> - Emplacements des consignes MétroVélo <a class="openpopup bboxMVC cursorPointor" data-fileName="descAPIbboxMVC.json" data-title="Description des emplacements des consignes MétroVélo"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a></li>
+										<li class="marge"><strong>PAR</strong> - Parking Relais <a class="openpopup bboxPAR cursorPointor" data-fileName="descAPIbboxPAR.json" data-title="Description des parking Relais"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a></li>
+										<li class="marge"><strong>PKG</strong> - Parking <a class="openpopup bboxPKG cursorPointor" data-fileName="descAPIbboxPKG.json" data-title="Description des parking"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a></li>
+										<li class="marge"><strong>PMV</strong> - Emplacements des panneaux à messages variables <a class="openpopup bboxPMV cursorPointor" data-fileName="descAPIbboxPMV.json" data-title="Description des emplacements des panneaux à messages variables"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a></li>
+										<li class="marge"><strong>pointArret</strong> - Poteaux d’arrêt de ligne, selon le sens de l’arrêt <a class="openpopup bboxpointArret cursorPointor" data-fileName="descAPIbboxpointArret.json" data-title="Description des agences M"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a></li>
+										<li class="marge"><strong>pointService</strong> - Point de vente de ticket <a class="openpopup bboxpointService cursorPointor" data-fileName="descAPIbboxpointService.json" data-title="Description des poteaux d’arrêt de ligne"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a></li><br>
+											
+										On peut requêter plusieurs types en une seule fois en les séparant par des virgules.
+									</td><td>string</td><td>oui</td></tr>
+									<tr><td>query</td><td>Nom à rechercher</td><td>string</td><td>non<br>Si non, retour tous les éléments du type</td></tr>
+								</tbody>
+							</table><br>
+							<h5><span class="glyphicon glyphicon-flash">&nbsp;</span>Exemple :</h5><br>
+							<li><a href="http://data.metromobilite.fr/api/findType/json?types=arret&query=chavant" title="Exemple d'utilisation pour obtenir tous les arrêts Chavant - Nouvelle fenêtre" target="_blank">http://data.metromobilite.fr/api/findType/json?types=arret&query=chavant</a> -- permet d'obtenir tous les arrêts Chavant.</li>
+							<br><a class="findTypeMoins cursorPointor">Masquer <span class="glyphicon glyphicon-minus-sign"></span><br></a>
+						</div>
+						<br><br>
+						<hr class="hr1">
+						<h5><span class="glyphicon glyphicon-tags">&nbsp;</span>Liste des lignes de transport</h5>
+						<h6>URL : http://data.metromobilite.fr/api/routers/default/index/routes</h6><br>
+						<p>
+							Permet de connaître la liste des lignes de transport ainsi que leurs descriptions (nom court, nom long, type, couleur...).  Un filtre sur des codes lignes peuvent être appliqué afin de ne pas retourner les caratéristiques de toutes les lignes.<br>
+							Cette fonctionnalité est, par exemple, utilisée sur ce site à l'adresse : <a href="http://www.http://metromobilite.fr/horaires.html" title="Exemple d'utilisation des lignes de transport - Nouvelle fenêtre" target="_blank">http://www.http://metromobilite.fr/horaires.html</a><br>
+						</p>
+						<a class="routes cursorPointor">En savoir <span class="glyphicon glyphicon-plus-sign"></span></a>
+						<div class="routesPlus" style="display:none">
+						
+						<div class="linesPlus" style="display:none">
+							<table>
+								<thead>
+									<tr><th>Paramètre</th><th>Explication</th><th>Type</th><th>Obligatoire</th></tr>
+								</thead>
+								<tbody>
+									<tr><td>codes</td><td>Liste des types disponibles :<br><br>
+											<span class="marge"><strong>ligne</strong> - Tracé des lignes de transports</span><br>
+									</td><td>string</td><td>oui</td></tr>
+									
+								</tbody>
+							</table><br>
+							<a class="openpopup desclines cursorPointor" data-fileName="descAPIlines.json" data-title="Description des lignes de transport"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a><br><br>
+							<h5><span class="glyphicon glyphicon-flash">&nbsp;</span>Exemple :</h5><br>
+							<li><a href="http://data.metromobilite.fr/api/lines/json?types=ligne&codes=SEM_C1" target="_blank">http://data.metromobilite.fr/api/lines/json?types=ligne&codes=SEM_C1</a> -- permet d'obtenir la géométrie de la ligne C1.</li>
+							<br><a class="linesMoins cursorPointor">Masquer <span class="glyphicon glyphicon-minus-sign"></span><br></a>
+						</div>
+						
+						
+							<a class="openpopup indexroutes cursorPointor" data-fileName="descAPIroutes.json" data-title="Liste des lignes de transport"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a><br><br>
+							<h5><span class="glyphicon glyphicon-flash">&nbsp;</span>Exemple :</h5><br>
+							<li><a href="http://data.metromobilite.fr/api/routers/default/index/routes?codes=SEM:12" title="Exemple d'utilisation des lignes de transport, ligne 12 - Nouvelle fenêtre" target="_blank">http://data.metromobilite.fr/api/routers/default/index/routes?codes=SEM:12</a> -- permet d'obtenir la liste des lignes de transport sur la ligne SEM:12.</li>
+							<br><a class="routesMoins cursorPointor">Masquer <span class="glyphicon glyphicon-minus-sign"></span><br></a>
+						</div>
+						<br><br><br>
+						<hr class="hr1">
+						<h5><span class="glyphicon glyphicon-tags">&nbsp;</span>Liste des lignes de transport à proximité d'un point</h5>
+						<h6>URL : http://data.metromobilite.fr/api/linesNear/json?x={X}&y={Y}&dist={Z}&details={bool}</h6><br>
+						<p>
+							Permet de connaître la liste des lignes de transport à proximité d'un point décrit par ses coordonnées GPS (WGS 84).<br>
+							Cette fonctionnalité est, par exemple, utilisée par les applications mobiles Métromobilité, fonctionnalité "A Proximité". Par défaut la distance du rayon de la recherche est de 300m. Il est possible de la modifier<br>
+							Un paramètre permet d'avoir une description plus précise des éléments retournés.<br>
+						</p>
+						<a class="linesNear cursorPointor">En savoir <span class="glyphicon glyphicon-plus-sign"></span><br></a>
+						<div class="linesNearPlus" style="display:none">
+							<table>
+								<thead>
+									<tr><th>Paramètre</th><th>Explication</th><th>Type</th><th>Obligatoire</th></tr>
+								</thead>
+								<tbody>
+									<tr><td>x={X}</td><td>Longitude du point de référence, centre du cercle de recherche (en mode 'details' uniquement)</td><td>float</td><td>oui</td></tr>
+									<tr><td>y={Y}</td><td>Latitude du point de référence, centre du cercle de recherche (en mode 'details' uniquement)</td><td>float</td><td>oui</td></tr>
+									<tr><td>dist</td><td>Distance, en mètre, du centre de recherche (en mode 'details' uniquement)</td><td>int</td><td>non<br>Si non, 300 par défaut</td></tr>
+									<tr><td>details</td><td>Détail dans la liste de ligne retourné (en mode 'details' uniquement)</td><td>bool</td><td>non<br>Si non, non, par défaut</td></tr>
+								</tbody>
+							</table><br>
+						
+							<a class="openpopup indexroutes cursorPointor" data-fileName="descAPILinesNear.json" data-title="Liste des lignes de transport"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a><br><br>
+							<h5><span class="glyphicon glyphicon-flash">&nbsp;</span>Exemple :</h5><br>
+							<li><a href="http://data.metromobilite.fr/api/linesNear/json?x=5.709360123&y=45.176494599999984&dist=400&details=true" title="Exemple d'utilisation pour obtenir la liste des lignes à proximité d'un point - Nouvelle fenêtre" target="_blank">http://data.metromobilite.fr/api/linesNear/json?x=5.709360123&y=45.176494599999984&dist=400&details=true</a> -- permet d'obtenir la liste des lignes à proximité d'un point dans un rayon de 400m, avec un détail maximal.</li>
+							<br><a class="linesNearMoins cursorPointor">Masquer <span class="glyphicon glyphicon-minus-sign"></span><br></a>
+						</div>
+						<br><br>
+						<hr class="hr1">
+						<h5><span class="glyphicon glyphicon-tags">&nbsp;</span>Description des lignes de transport</h5>
+						<h6>URL : http://data.metromobilite.fr/api/lines/json ou URL : http://data.metromobilite.fr/api/lines/poly</h6><br>
+						<p>
+							Permet de connaître la description des lignes de transport... Ces objets étant representés par une collection de coordonnées GPS (WGS 84) correspondant à leurs tracés. Si l'URL finie par 
+							'json' le champ 'geometry' est renseigné, sinon le champ 'shape' est une representation de données de polylignes encodées, cf. : <a href="https://developers.google.com/maps/documentation/utilities/polylinealgorithm" title="Plus d'explications sur les polylignes encodées - Nouvelle fenêtre" target="_blank">https://developers.google.com/maps/documentation/utilities/polylinealgorithm</a>.<br>
+							Cette fonctionnalité est, par exemple, utilisée sur ce site à l'adresse : <a href="http://www.metromobilite.fr/planTC.html" title="Exemple d'utilisation de description des lignes de transport - Nouvelle fenêtre" target="_blank">http://www.metromobilite.fr/planTC.html</a><br>
+					
+						</p>
+						<a class="lines cursorPointor">En savoir <span class="glyphicon glyphicon-plus-sign"></span><br></a>
+						<div class="linesPlus" style="display:none">
+							<table>
+								<thead>
+									<tr><th>Paramètre</th><th>Explication</th><th>Type</th><th>Obligatoire</th></tr>
+								</thead>
+								<tbody>
+									<tr><td>types</td><td>Liste des types disponibles :<br><br>
+											<span class="marge"><strong>ligne</strong> - Tracé des lignes de transports</span><br>
+											
+									</td><td>string</td><td>oui</td></tr>
+									<tr><td>reseaux</td><td>Liste des réseaux disponibles :<br><br>
+											<span class="marge"><strong>SEM</strong> - Tracé des lignes du réseau TAG</span><br>
+											
+									</td><td>string</td><td>oui<br>si paramètre 'codes' non renseigné</td></tr>
+									<tr><td>codes</td><td>Identifiant de la ligne au format :<br><br>
+											<span class="marge"><strong>SEM_{XXX}</strong></span><br><br>
+											Les identifiants de ligne sont accessibles en utilisant l'API Points et Recherche avec le paramètre 'reseaux'
+											
+									</td><td>string</td><td>oui<br>si paramètre 'reseaux' non renseigné</td></tr>
+									
+									<tr><td>xmin</td><td>Longitude minimale du rectangle englobant<br>Doit être accompagné des 3 autres paramètres de position, sinon utilisation du rectangle englobant par défaut.</td><td>float</td><td>non</td></tr>
+									<tr><td>xmax</td><td>Longitude maximale du rectangle englobant<br>Doit être accompagné des 3 autres paramètres de position, sinon utilisation du rectangle englobant par défaut.</td><td>float</td><td>non</td></tr>
+									<tr><td>ymin</td><td>Latitude minimale du rectangle englobant<br>Doit être accompagné des 3 autres paramètres de position, sinon utilisation du rectangle englobant par défaut.</td><td>float</td><td>non</td></tr>
+									<tr><td>ymax</td><td>Latitude maximale du rectangle englobant<br>Doit être accompagné des 3 autres paramètres de position, sinon utilisation du rectangle englobant par défaut.</td><td>float</td><td>non</td></tr>
+								</tbody>
+							</table><br>
+							<a class="openpopup desclines cursorPointor" data-fileName="descAPIlines.json" data-title="Description des lignes de transport"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a><br><br>
+							<h5><span class="glyphicon glyphicon-flash">&nbsp;</span>Exemple :</h5><br>
+							<li><a href="http://data.metromobilite.fr/api/lines/json?types=ligne&codes=SEM_C1" title="Exemple d'utilisation pour obtenir la géométrie ligne C1 - Nouvelle fenêtre" target="_blank">http://data.metromobilite.fr/api/lines/json?types=ligne&codes=SEM_C1</a> -- permet d'obtenir la géométrie de la ligne C1.</li>
+							<br><a class="linesMoins cursorPointor">Masquer <span class="glyphicon glyphicon-minus-sign"></span><br></a>
+						</div>
+						<br><br>
+						<hr class="hr1">
+						<h5><span class="glyphicon glyphicon-tags">&nbsp;</span>Description des tronçons routier</h5>
+						<h6>URL : http://data.metromobilite.fr/api/troncons/json ou http://data.metromobilite.fr/api/troncons/poly</h6><br>
+						<p>Permet de connaître la description des tronçons routier par niveau de zoom (haut et bas). Les tronçons routier sont representés par une collection de coordonnées GPS (WGS 84) correspondant à leurs tracés. Ces tronçons sont utilisés par le traficolor, leurs niveaux de service sont mis jour en temps réel dans l'API.
+						Si l'URL finie par 'json' le champ 'geometry' est renseigné, sinon le champ 'shape' est une representation de données de polylignes encodées, cf. : <a href="https://developers.google.com/maps/documentation/utilities/polylinealgorithm" title="Plus d'explications sur les polylignes encodées, en anglais - Nouvelle fenêtre" target="_blank">https://developers.google.com/maps/documentation/utilities/polylinealgorithm</a><br>
+						Cette fonctionnalité est, par exemple, utilisée sur ce site à l'adresse : <a href="http://www.metromobilite.fr/trafic.html" title="Exemple d'utilisation des troncçons routiers - Nouvelle fenêtre" target="_blank">http://www.metromobilite.fr/trafic.html</a><br>
+						</p>
+						<a class="troncons cursorPointor">En savoir <span class="glyphicon glyphicon-plus-sign"></span><br></a>
+						<div class="tronconsPlus" style="display:none">
+							<table>
+								<thead>
+									<tr><th>Paramètre</th><th>Explication</th><th>Type</th><th>Obligatoire</th></tr>
+								</thead>
+								<tbody>
+									<tr><td>niveau</td><td>Niveau de zoom (0 : le plus éloigné)</td><td>int</td><td>non<br>Si non, retourne les niveaux 0 et 1</td></tr>
+								</tbody>
+							</table><br>
+							<a class="openpopup desctroncons cursorPointor" data-fileName="descAPItroncons.json" data-title="Description des tronçons routier"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a><br><br>
+							<h5><span class="glyphicon glyphicon-flash">&nbsp;</span>Exemple :</h5><br>
+							<li><a href="http://data.metromobilite.fr/api/troncons/json?niveau=0" title="Exemple d'utilisation des tronçons de niveau 0 - Nouvelle fenêtre"  target="_blank">http://data.metromobilite.fr/api/troncons/json?niveau=0</a> -- permet d'obtenir tous les tronçons de niveau 0 avec leur niveau de service pour le traficolor.</li>
+							<br><a class="tronconsMoins cursorPointor">Masquer <span class="glyphicon glyphicon-minus-sign"></span><br></a>
+						</div>
+						<br><br>
+						<h4 id="Hor" class="anchor">Horaires</h4>
+						<hr>
+						<h5><span class="glyphicon glyphicon-tags">&nbsp;</span>Fiche horaire d'une lignes de transport</h5>
+						<h6>URL : http://data.metromobilite.fr/api/ficheHoraires/json?route={SEM,C38,SNC}:{X}&time={Y}</h6><br>
+						<p>
+							Permet de connaître les horaires d'une ligne de transport en commun à partir d'une heure donnée.<br>
+							Cette fonctionnalité est, par exemple, utilisée sur ce site à l'adresse : <a href="http://www.http://metromobilite.fr/horaires.html" title="Exemple d'utilisation des horaires d'une ligne - Nouvelle fenêtre" target="_blank">http://www.http://metromobilite.fr/horaires.html</a><br>
+						</p>
+						<a class="ficheHoraires cursorPointor">En savoir <span class="glyphicon glyphicon-plus-sign"></span><br></a>
+						<div class="ficheHorairesPlus" style="display:none">
+							<table>
+								<thead>
+									<tr><th>Paramètre</th><th>Explication</th><th>Type</th><th>Obligatoire</th></tr>
+								</thead>
+								<tbody>
+									<tr><td>route</td><td>Identifiant de la ligne :<br><br>
+											<span class="marge"><strong>SEM:{X} pour la TAG, C38:{X} pour TransIsère, ou SNC:{X} pour la SNCF</strong></span></td><td>string</td><td>oui</td></tr>
+									<tr><td>time</td><td>Heure de début de la recherche, au format <a href="http://www.unixtimestamp.com/" target="_blank">timestamp</a> en milliseconde</td><td>int</td><td>non<br>Si non, retourne la fiche horaire par rapport l'heure courante</td></tr>
+								</tbody>
+							</table><br>
+							<a class="openpopup ficheHorairesroute cursorPointor" data-fileName="descficheHorairesroute.json" data-title="Fiche horaire d'une lignes de transport"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a><br><br>
+							<h5><span class="glyphicon glyphicon-flash">&nbsp;</span>Exemple :</h5><br>
+							<li><a href="http://data.metromobilite.fr/api/ficheHoraires/json?route=SEM:C&time=1449593400000" title="Exemple d'utlisation fiche horaire - Nouvelle fenêtre"  target="_blank">http://data.metromobilite.fr/api/ficheHoraires/json?route=SEM:C&time=1449593400000</a> -- la fiche horaire de la ligne C de la TAG pour 08 décembre 2015 à 16h50 (attention ces horaires risquent de ne pas être disponibles lors d'une consultation ultérieure).</li>
+							<br><a class="ficheHorairesMoins cursorPointor">Masquer <span class="glyphicon glyphicon-minus-sign"></span><br></a>
+						</div>
+						<br><br>
+						<hr class="hr1">
+						<h5><span class="glyphicon glyphicon-tags">&nbsp;</span>Horaires pour une zone d'arrêt</h5>
+						<h6>URL : http://data.metromobilite.fr/api/routers/default/index/clusters/{SEM,C38}:{X}/stoptimes</h6><br>
+							<p>
+							<!--<h6>URL : http://data.metromobilite.fr/api/routers/default/index/clusters/{SEM,C38}:{X}/stoptimes?route</h6><br>-->
+							Permet de connaître les horaires d'un ou de tous les véhicules de transport en commun (bus, tram, car) passant par une zone arrêt en précisant son identifiant TAG (SEM) ou TransIsère (C38). Les véhicules TransIsère sont inclus dans les zone d'arrêts TAG et inversement.<br><br>
+							Cette fonctionnalité est, par exemple, utilisée sur ce site à l'adresse : <a href="http://www.metromobilite.fr/planTC.html" title="Exemple d'utilisation des horaires pour une zone d'arrêt - Nouvelle fenêtre" target="_blank">http://www.metromobilite.fr/planTC.html</a><br>
+						</p>
+						<a class="clusters cursorPointor">En savoir <span class="glyphicon glyphicon-plus-sign"></span><br></a>
+						<div class="clustersPlus" style="display:none">
+							<b>Les horaires affichés sont les horaires en "temps réel"</b>, quand ils sont disponibles, théoriques sinon (parametre de sortie realtime à "true").<br><br>
+							Les identifiants de zone d'arrêt sont accessibles en utilisant l'API Points et Recherche avec le type 'arret'<br><br>
+							
+							<table>
+								<thead>
+									<tr><th>Paramètre</th><th>Explication</th><th>Type</th><th>Obligatoire</th></tr>
+								</thead>
+								<tbody>
+									<tr><td>{SEM,C38}:{X}</td><td>Identifiant de la zone d'arrêt au format :<br><br>
+											<span class="marge"><strong>SEM:{X} pour la TAG ou C38:{X} pour TransIsère</strong></span></td><td>string</td><td>oui</td></tr>
+								</tbody>
+							</table><br>
+							<a class="openpopup descroutersclusters cursorPointor" data-fileName="descAPIroutersclusters.json" data-title="Horaires pour une zone d'arrêt"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a><br><br>
+							<h5><span class="glyphicon glyphicon-flash">&nbsp;</span>Exemple :</h5><br>
+							<li><a href="http://data.metromobilite.fr/api/routers/default/index/clusters/SEM:GENCONDORCE/stoptimes" title="Exemple d'utilisation des horaires pour zone d'arrêt Condorcet - Nouvelle fenêtre" target="_blank">http://data.metromobilite.fr/api/routers/default/index/clusters/SEM:GENCONDORCE/stoptimes</a> -- permet d'obtenir les horaires des lignes TAG et Transisère passant pas la zone d'arrêt Condorcet</li>
+							<br><a class="clustersMoins cursorPointor">Masquer <span class="glyphicon glyphicon-minus-sign"></span><br></a>
+						</div>
+						<br><br>
+						<hr class="hr1">
+						<h5><span class="glyphicon glyphicon-tags">&nbsp;</span>Horaires au poteau</h5>
+						<h6>URL : http://data.metromobilite.fr/api/routers/default/index/stops/{SEM,C38}:id/stoptimes/</h6><br>
+							<p>
+							Permet de connaître les horaires d'un ou de tous les véhicules de transport en commun (bus, tram, car) passant par un arrêt en précisant son identifiant TAG (SEM) ou TransIsère (C38).Les véhicules TransIsère sont inclus dans arrêts TAG et inversement.<br><br>
+							Cette fonctionnalité est, par exemple, utilisée sur ce site à l'adresse : <a href="http://www.metromobilite.fr/planTC.html" title="Exemple d'utilisation des horaires au poteau - Nouvelle fenêtre" target="_blank">http://www.metromobilite.fr/planTC.html</a><br>
+						</p>
+						<a class="stops cursorPointor">En savoir <span class="glyphicon glyphicon-plus-sign"></span><br></a>
+						<div class="stopsPlus" style="display:none">
+							<b>Les horaires affichés sont les horaires en "temps réel"</b>, quand ils sont disponibles, théoriques sinon (parametre de sortie realtime à "true").<br><br>
+							Les identifiants des points d'arrêt sont accessibles en utilisant l'API Points et Recherche avec le type 'pointArret'.<br><br>
+							<table>
+								<thead>
+									<tr><th>Paramètre</th><th>Explication</th><th>Type</th><th>Obligatoire</th></tr>
+								</thead>
+								<tbody>
+									<tr><td>id</td><td>Identifiant du point d'arrêt au format :<br><br>
+											<span class="marge"><strong>SEM:{X} pour la TAG ou C38:{X} pour TransIsère</strong></span><br><br>
+									</td><td>string</td><td>oui</td></tr>
+								</tbody>
+							</table><br>
+							<a class="openpopup indexstop cursorPointor" data-fileName="descAPIstoptimes.json" data-title="Horaires au poteau"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a><br><br>
+							<h5><span class="glyphicon glyphicon-flash">&nbsp;</span>Exemple :</h5><br>
+							<li><a href="http://data.metromobilite.fr/api/routers/default/index/stops/SEM:3207/stoptimes" title="Exemple d'utilisation des horaires zone d'arrêt Condorcet et ligne E - Nouvelle fenêtre" target="_blank">http://data.metromobilite.fr/api/routers/default/index/stops/SEM:3207/stoptimes</a> -- permet d'obtenir les horaires des lignes TAG et Transisère passant à l'arrêt Condorcet pour la ligne E direction Le Paluel</li>
+							<br><a class="stopsMoins cursorPointor">Masquer <span class="glyphicon glyphicon-minus-sign"></span><br></a>
+						</div>
+						<br><br>
+						<h4 id="Otp" class="anchor">Horaires OTP</h4>
+						<hr>
+						<h5><span class="glyphicon glyphicon-tags">&nbsp;</span>API Horaires OTP</h5>
+						<h6>URL : http://data.metromobilite.fr/otp/routers/default/index/</h6><br>
+							<p>
+							Le calculateur OTP permet la mise à disposition des horaires via sa propre API. A la différence des appels précédents, cet appel ne concerne que les <b>horaires théoriques</b>.<br>
+							Les spécifications de cette API sont disponibles, en anglais, sur le site d'OpenTripPlanner à l'adresse suivante : <a href="http://dev.opentripplanner.org/apidoc/0.15.0/resource_IndexAPI.html" title="Spécifications API horaires, en anglais - Nouvelle fenêtre" target="_blank">http://dev.opentripplanner.org/apidoc/0.15.0/resource_IndexAPI.html</a>.<br><br>
+						</p>
+						<hr class="hr1">
+						<h5><span class="glyphicon glyphicon-tags">&nbsp;</span>API Calculateur OTP</h5>
+						<h6>URL : http://data.metromobilite.fr/otp/routers/default/plan</h6><br>
+						<p>
+							Cette API permet l'interrogation du calculateur Metromobilité basé sur OpenTripPlanner.<br>
+							Pour le moment, cette API est donnée à titre expérimental, nous la finaliserons prochainement.<br>
+							Les spécifications de cette API sont disponibles, en anglais, sur le site d'OpentripPlanner à l'adresse suivante : <a href="http://dev.opentripplanner.org/apidoc/0.15.0/resource_PlannerResource.html" title="Spécifications API calculateur, en anglais - Nouvelle fenêtre" target="_blank">http://dev.opentripplanner.org/apidoc/0.15.0/resource_PlannerResource.html</a>.
+							<br><br>
+						</p>
+						<h4 id="Dyn" class="anchor">Donnees dynamiques</h4>
+						<hr>
+						<h5><span class="glyphicon glyphicon-tags">&nbsp;</span>Donnees dynamiques</h5>
+						<h6>URL : http://data.metromobilite.fr/api/dyn/{X}/json</h6><br>
+							<p>
+							Permet de connaître les données dynamiques de différents objets.<br><br>
+							Cette fonctionnalité est, par exemple, utilisée sur ce site à l'adresse : <a href="http://www.metromobilite.fr/planTC.html" title="Exemple d'utilisation de données dynamiques - Nouvelle fenêtre" target="_blank">http://www.metromobilite.fr/planTC.html</a><br>
+							</p>
+						<a class="dyn cursorPointor">En savoir <span class="glyphicon glyphicon-plus-sign"></span><br></a>
+						<div class="dynPlus" style="display:none">
+							<table>
+							<thead>
+								<tr><th>Paramètre</th><th>Explication</th><th>Type</th><th>Obligatoire</th></tr>
+							</thead>
+							<tbody>
+								<tr><td>types</td><td>Liste des types disponibles :<br><br>
+									<li class="marge"><strong>indiceTr</strong> - Indices du trafic routier <a class="openpopup descdynindiceTr cursorPointor" data-fileName="descAPIdynindiceTr.json" data-title="Indices du trafic routier"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a><br></li>
+									<li class="marge"><strong>indiceTc</strong> - Indices du trafic des transports en commun <a class="openpopup descdynindiceTc cursorPointor" data-fileName="descAPIdynindiceTc.json" data-title="Indices du trafic des transports en commun"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a><br></li>
+									<li class="marge"><strong>indiceAtmo</strong> - Indice Atmosphérique <a class="openpopup descdynindiceAtmo cursorPointor" data-fileName="descAPIdynindiceAtmo.json" data-title="Indice Atmosphériquet"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a><br></li>
+									<li class="marge"><strong>indiceAtmoFull</strong> - Nouvel indice atmosphérique <a class="openpopup descdynindiceAtmoFull cursorPointor" data-fileName="descAPIdynindiceAtmoFull.json" data-title="Nouvel indice atmosphérique"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a><br></li>
+									<li class="marge"><strong>hamo</strong> - Disponibilités des citélib by Ha:mo <a class="openpopup descdynHaMo cursorPointor" data-fileName="descAPIdynHamo.json" data-title="Disponibilités des citélib by Ha:mo"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a><br></li>
+									<li class="marge"><strong>PMV</strong> - Messages sur les panneaux à message variable <a class="openpopup descdynPMV cursorPointor" data-fileName="descAPIdynPMV.json" data-title="Messages sur les panneaux à message variable"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a><br></li>
+									<li class="marge"><strong>PAR</strong> - Nombre de places disponibles dans les parking P+R <a class="openpopup descdynPAR cursorPointor" data-fileName="descAPIdynPAR.json" data-title="Nombre de places disponibles dans les parking P+R"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a><br></li>
+									<li class="marge"><strong>ligne</strong> - Données de lignes de transport <a class="openpopup descdynligne cursorPointor" data-fileName="descAPIdynligne.json" data-title="Données de lignes de transport"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a><br></li>
+									<li class="marge"><strong>trr</strong> - Données de tronçons routiers <a class="openpopup descdyntrr cursorPointor" data-fileName="descAPIdyntrr.json" data-title="Données de tronçons routiers"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a><br></li>
+									<li class="marge"><strong>evt</strong> - Evènements <a class="openpopup descdynevt cursorPointor" data-fileName="descAPIdynevt.json" data-title="Evènements"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a><br></li>
+									<li class="marge"><strong>evtTC</strong> - Evènements transport en commun <a class="openpopup descdynevtTC cursorPointor" data-fileName="descAPIdynevtTC.json" data-title="Evènements transport en commun"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a><br></li>
+									<li class="marge"><strong>evtTR</strong> - Evènements routiers <a class="openpopup descdynevtTR cursorPointor" data-fileName="descAPIdynevtTR.json" data-title="DEvènements routiers"> Voir les données <span class="glyphicon glyphicon-play-circle"></span></a><br></li><br>
+									<td>string</td><td>oui<br>un et un seul paramétre parmis la liste </td>
+								</tr>
+							</tbody>
+							</table><br>
+							<h5><span class="glyphicon glyphicon-flash">&nbsp;</span>Exemple :</h5><br>
+							<li><a href="http://data.metromobilite.fr/api/dyn/trr/json" title="Exemple d'utilisation dpour obtenir les niveaux de service routiers - Nouvelle fenêtre" target="_blank">http://data.metromobilite.fr/api/dyn/trr/json</a> -- permet d'obtenir les niveaux de services temps réel de tronçons routiers.</li>
+							<br><a class="dynMoins cursorPointor">Masquer <span class="glyphicon glyphicon-minus-sign"></span><br></a>
+						</div>
+					<h4 id="Contact" class="anchor">Une remarque, une question ? </h4>
+					<hr>
+						<p id="contactOpenData">Vous voulez utiliser l'API Métromobilité, et vous avez des remarques, des interrogations ?<br>
+						Que ce soit sur le fonctionnement, les données, ou simplement pour nous signaler une réutilisation des données, vous pouvez nous contacter par le formulaire en bas de cette page.<br>
+						Nous sommes à votre écoute, pour permettre de faire évoluer le système afin de l'adapter et l'améliorer. N'hésitez pas !
+						</p>
+					<br>
+				</div>
+			</div>
+			<div id="btn_up" title="Haut de page" alt="Haut de page">
+				<a href="#" class="glyphicon glyphicon-arrow-up"></a>
+			</div>
+	</div>
+</div>
+<div id='footer'></div>
+	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/moment.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
+	<script type="text/javascript" src="stats/piwik.js"></script>
+	<script type="text/javascript" src="js/outils.js"></script>
+	<script type="text/javascript" src="js/fr.js"></script>
+	<script type="text/javascript">var pageStatique = true;</script>
+	<script type="text/javascript" src="js/index.js"></script>
+	<script type="text/javascript">
+		$('#footer').load('index.html #footer',function(){});
+		$('#head').load('head.html',function(){});
+		addBackToTop();
+		trackPiwik("MetroMobilité : OpendataAPI.html");
+		var anchor = window.location.hash;
+		window.location.hash = anchor;
+		
+		$().ready(function() {
+		  $("a[href^='\#']").each(function(){ 
+			this.href=location.href.split("#")[0]+'#'+this.href.substr(this.href.indexOf('#')+1);
+		  });
+		  
+		  $(".bbox, .findType, .routes,.linesNear, .lines, .ficheHoraires, .troncons, .clusters, .stops, .dyn").click(function(e) {
+			var nameOfClass = e.target.attributes['class'].nodeValue.split(' ')[0];
+			var nameOfClass = e.target.attributes['class'].nodeValue.split(' ')[0];
+			$("."+nameOfClass).toggle();
+			$("."+nameOfClass+"Plus").toggle();
+			return false;
+		  });
+		  
+		  $(".bboxMoins, .findTypeMoins, .routesMoins, .linesNearMoins, .linesMoins, .ficheHorairesMoins, .tronconsMoins, .clustersMoins, .stopsMoins, .dynMoins").click(function(e) {
+			var nameOfClass = e.target.attributes['class'].nodeValue.split(' ')[0].replace("Moins","");
+			$("."+nameOfClass+"Plus").toggle();
+			$("."+nameOfClass).toggle();
+			return false;
+		  });
+		  
+		  $(".openpopup").click(function(e) {
+		  var urlOpenDataDesc = url.descOpenData + this.attributes['data-fileName'].nodeValue;
+			var title = this.attributes['data-title'].nodeValue;
+			var nameOfClass = "." + this.attributes['class'].nodeValue.split(' ')[1];
+			
+			function error(xhr, status, error) {
+				console.info('Error dans le fichier : ' + urlOpenDataDesc);
+			};
+			
+			function successOpenDataDesc(data, textStatus, request) {
+				$(nameOfClass).popover('destroy');
+				$(nameOfClass).popover({
+						content:'<pre>'+unEscapeHtml(JSON.stringify(data, null, "\t"))+'</pre>',
+						template: '<div class="popover" role="tooltip"><div class="arrow"></div><span class="PopupDetails-Close pull-right"><span class="glyphicon glyphicon-remove"></span></span><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+						title: title,
+						trigger: 'click',
+						html:true,
+						viewport:{ selector: $("body"), padding: 0 },
+						delay: { "show": 100, "hide": 100 },
+						placement: 'auto'
+				}).click(function(e) {e.preventDefault(); $(this).focus();});
+				
+				$('.container').on('click','.PopupDetails-Close',function(){$(nameOfClass).popover('destroy');return false;});
+				
+				$(nameOfClass).popover('show');
+			};
+
+			$.ajax({
+				type: "GET",
+				url: urlOpenDataDesc,
+				success: function(data, textStatus, request) {successOpenDataDesc(data, textStatus, request);},
+				error:error,
+				dataType:'json'
+			}).error(error);
+		});
+		});
+	</script>
+</body>
+</html>

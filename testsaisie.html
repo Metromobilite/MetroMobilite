@@ -1,0 +1,169 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Test</title>
+	
+	<!-- http://www.metromobilite.fr:8087 à remplacer par http://www.metromobilite.fr lors de la mise en production -->
+	
+	<link href="http://192.168.245.1:8087/js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
+	
+	<script type="text/javascript" src="http://192.168.245.1:8087/js/lib/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="http://192.168.245.1:8087/js/lib/bs/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="http://192.168.245.1:8087/js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
+	<script type="text/javascript" src="http://192.168.245.1:8087/js/outils.js"></script>
+	<script type="text/javascript" src="http://192.168.245.1:8087/js/fr.js"></script>
+	<style type="text/css">
+		.typeahead { 
+			z-index: 1051;
+		}
+
+		.typeahead span[data-type="RUE"]::before, .typeahead span[data-type="LIEU"]::before, .typeahead span[data-type="ARRET"]::before, .typeahead span[data-type="AXE"]::before {
+			background-size: 100% 100%;
+			content: "\00a0";
+			height: 16px;
+			width: 16px;
+			margin-right:5px;
+			display:inline-block;
+		}
+
+		.typeahead span[data-type="RUE"]::before{
+			background: url(http://www.metromobilite.fr:8087/img/rue.png) no-repeat;
+		}
+
+		.typeahead span[data-type="LIEU"]::before{
+			background: url(http://www.metromobilite.fr:8087/img/lieu.png) no-repeat;
+		}
+
+		.typeahead span[data-type="ARRET"]::before{
+			background: url(http://www.metromobilite.fr:8087/img/arret.png) no-repeat;
+		}
+
+		.typeahead span[data-type="AXE"]::before{
+			font-family: "Glyphicons HalfLings", "Arial", "Helvetica", sans-serif;
+			content: "\e024";
+			color:#cd5c1d;
+		}
+		.typeahead  .categorie {
+			font-weight: bold;
+			margin-left: -21px;
+		}
+		.typeahead  .bestResult {
+			/*pour mettre en valeur le meilleur resultat*/
+			background-color: #d0d0d0;
+		}
+		.dropdown-menu li a span {
+			padding:0px 0px;
+			width:100%;
+			padding:3px 20px;
+			display:block;
+		}
+		.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
+			background-color:#fff;
+			color:#000;
+		}
+		.dropdown-menu > .active > a span[data-type], .dropdown-menu > .active > a span[data-type]:hover, .dropdown-menu > .active > a span[data-type]:focus {
+			background-color: #428bca;
+			color: #fff;
+		}
+		
+
+
+		</style> 
+	
+	<script type="text/javascript">
+	
+		function fctSaisieReussie(idInput,item) {
+		
+			$(idInput).attr('data-lonlat',item.lat+','+item.lon);
+			$(idInput).attr('data-commune',item.commune);
+			$(idInput).attr('data-type',item.type);
+			$(idInput).val(item.label);
+			$(idInput).parents('.input-group').toggleClass('has-error',false);
+			if(item.numeroNonTrouve) {
+				$(idInput).parent().after('<span class="help-block help-'+idInput.substr(1)+'">'+lang.numeroNonTrouve+'</span>');
+			} else {
+				$('.help-'+idInput.substr(1)).remove();
+			}
+			
+			return true;
+		}
+		
+		function fctSaisieAxe(idInput,item) {
+			alert(item.noms);
+			return true;
+		}
+		function fctSaisieLigneReussie(idInput,item) {$(idInput).attr('data-value',item.id.id);return true;}
+		
+		$(document).ready(function(){
+			
+			$('#calculer').click(function(){
+				if (($('#dep').attr('data-lonlat') == $('#arr').attr('data-lonlat')) && ($('#dep').attr('data-lonlat') != "0,0")) {
+					alert(lang.alert[1]);
+					return;
+				}
+
+				//var loc='http://www.metromobilite.fr:8087/iti.html'; 
+				var loc='http://www.stationmobile.fr/stationmobilecore/testiFrame.html'; <!-- A remplacer par le lien vers iFrame client -->
+				loc+='?dep='+$('#dep').val();
+				loc+='&arr='+$('#arr').val();
+				loc+='&lonlatDep='+$('#dep').attr('data-lonlat');
+				loc+='&lonlatArr='+$('#arr').attr('data-lonlat');
+				loc+='&communeDep='+$('#dep').attr('data-commune');
+				loc+='&communeArr='+$('#arr').attr('data-commune');
+				loc+='&iFrame=true';
+				loc+='&velo=true';// en cas de besoin de velo seul par defaut
+										
+				window.location=loc;
+			});
+			
+			ajouteAutocomplete('#dep',{
+				arrets:true,
+				lieux:true,
+				rues:true,
+				fnSaisieReussie:function(item){ return fctSaisieReussie('#dep',item);},
+				fnSaisieRatee:function(item){ 
+					urlParams.lonlatDep='0,0'; 
+					$('#dep').attr('data-lonlat','0,0');
+				}
+			});	
+			ajouteAutocomplete('#arr',{
+				arrets:true,
+				lieux:true,
+				rues:true,
+				fnSaisieReussie:function(item){ return fctSaisieReussie('#arr',item);},
+				fnSaisieRatee:function(item){ 
+					urlParams.lonlatDep='0,0'; 
+					$('#arr').attr('data-lonlat','0,0');
+				}
+			});
+			ajouteAutocomplete('#axe',{
+				arrets:false,
+				lieux:false,
+				rues:true,
+				axes:true,
+				fnSaisieReussie:function(item){ return fctSaisieAxe('#axe',item);},
+				fnSaisieRatee:function(item){ 
+					urlParams.lonlatDep='0,0'; 
+					$('#dep').attr('data-lonlat','0,0');
+				}
+			});
+			$('#rechercherHoraires').click(function(){
+				var code = $('#horaires').attr('data-value');
+				window.location='http://www.metromobilite.fr/horaires.html?iFrame=true&codeLigne='+code;<!-- l'url à appeler dans l'iframe ressemble a ça -->
+			});
+			ajouteSaisieLignes('#horaires',{fctSaisieReussie:function(item){ $('#horaires').attr('data-value',item.id.id);return true;}});
+		});
+	</script>
+</head>
+<body>
+		<br>
+		<span>1) Départ   : </span><input id="dep" data-lonlat="0,0" type="text" autocomplete="off" placeholder="Adresse de départ"/><br><br>
+		<span>2) Arrivée  : </span><input id="arr" data-lonlat="0,0" type="text" autocomplete="off" placeholder="Adresse d'arrivée"/><br><br>
+		<span>3) Calculer : </span><button type="button" id="calculer">Calculer</button><br><br>
+		<span>4) Axes  : </span><input id="axe" data-lonlat="0,0" type="text" autocomplete="off" placeholder="axes"/><br><br>
+		<span>5) Lignes  : </span><input id="horaires" type="text" autocomplete="off" placeholder="ligne"/><br><br>
+		<span>6) Rechercher : </span><button type="button" id="rechercherHoraires">Rechercher</button><br><br>
+		
+</body>
+</html>

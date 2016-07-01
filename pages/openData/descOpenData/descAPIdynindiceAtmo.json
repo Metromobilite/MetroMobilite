@@ -1,0 +1,10 @@
+{
+	"description" : "Indice atmosphérique actuel et son historique",
+	"1" : [{
+			"indice" : "'0' : 'n.c.', '1' et '2' : 'Très bon','3' et '4' : 'Bon','5' : 'Moyen', '6' et '7' : 'Médiocre', '8' : 'Mauvais', '9' et '10' : 'Très mauvais'",
+			"indiceJourLendemain" : "Indice de prévision",
+			"time" : "Unix TimeStamp en miliseconde, exemple '1450241108000'",
+			"commentaire" : "Commentaire d'explication"
+		}
+	]
+}

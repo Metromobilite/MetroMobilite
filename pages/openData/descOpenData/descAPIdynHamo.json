@@ -1,0 +1,12 @@
+{
+	"description" : "Disponibilité des citélib by Ha:mo",
+	"description" : "Identifiant de station",
+	"E27" : [{
+			"time" : "Unix TimeStamp en miliseconde, exemple '1449560230000'",
+			"comsAvailable" : "Disponibilité des Comms et emplacements, 0 : non disponible, 1 : Véhicule disponible, emplacement indisponible, 2 : Véhicule indisponible, emplacement disponible,  3 : Véhicule et emplacement disponible",
+			"iRoadAvailable" : "Disponibilité des iRoad et emplacement, 0 : non disponible, 1 : Véhicule disponible, emplacement indisponible, 2 : Véhicule indisponible, emplacement disponible,  3 : Véhicule et emplacement disponible",
+			"parking_space_free" : "Nombre total de place de parking disponible, exemple '0'",
+			"available_car" : "Nombre total de véhicule disponible, exemple '1'"
+		}
+	]
+}

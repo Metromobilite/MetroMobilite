@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="fr">
+	<head>
+			<base href="../../" />
+			<meta charset="utf-8">
+			<meta http-equiv="X-UA-Compatible" content="IE=edge">
+			<meta content="initial-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+			<title>MétroMobilité - OpenData</title>
+			<meta name="description" content="Métromobilité, c'est le service unique qui regroupe toutes vos informations de déplacement sur la métropole grenobloise." />
+			<link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
+			<link href="css/actus.css" rel="stylesheet">
+			<link href="css/head.css" rel="stylesheet">
+			<link href="css/index.css" rel="stylesheet">
+			<style type='text/css'>
+				@media (min-width: 768px) {
+					body {
+						background-image:url("img/pages/bandeauActu.jpg");
+						background-attachment: fixed;
+						background-repeat:no-repeat;
+						background-position:top center;
+					}
+				}
+
+				#navbarDesc {
+					background-color: #dc3c1b;
+					opacity:0.9;
+				}
+				.container-page h6, .container-page h5, .container-page h4, .container-page h3, .container-page  > div > .row a, .container-page .glyphicon-plus-sign:before   {
+					color:#dc3c1b;
+				}
+				hr {
+					 background-color: #dc3c1b;
+					 height: 4px;
+				}
+				.container-page .nav > li > a:hover, .nav > li > a:focus{
+					background-color: #ae2315;
+					border-color: #ae2315;
+					opacity:0.9;
+				}
+
+				.centrerTexte{
+					text-align:center;
+				}
+				.photo {
+					display:inline-block;
+					background-size: 100% 100%;	
+				}
+				#puce-open-data {
+					height:40px;
+					max-width:100%;
+					margin:10px;
+				}
+			</style>
+	</head>
+	<body>
+		<div id='head'></div>
+			<div class="container-fluid container-page">
+			<div id="rowPage">
+				<div class="row rowHeader bgTransp hidden-xs">
+					<div class="container">
+						<h1>DONNEES OUVERTES<br>
+						Relais TAG (dépositaires)</h1>
+						<br>
+					</div>
+					<div id="navbarDesc" class="container-fluid" data-spy="affix" data-offset-top="240">
+						<div class="container">
+							<div class="row">
+								<ul class="nav navbar-nav collapse navbar-collapse">
+									<li><a href="#Desc">Description des données</a></li>
+									<li><a href="#Spec">Format</a></li>
+									<li><a href="#File">Licence</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>	
+				</div>
+				<div class="row">
+					<div class="container">
+						<h4 id="Desc" class="anchor">Description des données</h4>
+						<hr>
+						<p id="descOpenData">Désolé, nous n'avons pas de description.</p>
+						<br>
+						<h4 id="Spec" class="anchor">Spécifications du format</h4>
+						<hr>
+						<pre id="specOpenData">Désolé, nous n'avons pas de spécification.</pre>
+						<br>
+						<br>
+						<h4 id="File" class="anchor">La licence</h4>
+						<hr>
+						<div id="divLienOpenData">
+							<form action="">
+								MétroMobilité a fait le choix de placer par défaut ses jeux de données sous <a href="pdf/ODbL_fr_VF_1.pdf" target="_blank">Licence ODbL (pdf, 215 ko)</a>. <br><br>
+								Cette licence libre répond à deux objectifs essentiels de Grenoble-Alpes Métropole et du SMTC, à savoir : permettre l'échange et le développement de services qu'une diffusion libre et gratuite est en mesure d'offrir.<br><br>
+								 
+								En résumé, cela signifie que :<br><br>
+								<!--http://vvlibri.org/fr/licence/odbl/10/fr-->
+								<h5>Vous êtes libres de :</h5>
+								<img id="puce-open-data" src="img/opendata/share.png"><i>Partager : </i>Copier, distribuer et utiliser la base de données.<br>
+								<img id="puce-open-data" src="img/opendata/create.png"><i>Créer : </i>Produire des créations à partir de cette base de données.<br>
+								<img id="puce-open-data" src="img/opendata/adapt.png"><i>Adapter : </i>Modifier, transformer et construire à partir de cette base de données.<br><br>
+								<h5>Aussi longtemps que vous :</h5>
+								<img id="puce-open-data" src="img/opendata/attribute.png"><i>Mentionnez la paternité : </i>Vous devez mentionner la source de la base de données pour toute utilisation publique de la base de données, ou pour toute création produite à partir de la base de données, de la manière indiquée dans l'ODbL.<br>
+								<img id="puce-open-data" src="img/opendata/share_alike2.png"><i>Partagez aux conditions identiques : </i>Que vous utilisiez publiquement une version adaptée de cette base de données, ou que vous produisiez une création à partir d'une base de données adaptée, vous devez aussi offrir cette base de données adaptée selon les termes de la licence ODbL.<br>
+								<img id="puce-open-data" src="img/opendata/keep_open.png"><i>Gardez ouvert : </i>Si vous redistribuez la base de données, ou une version modifiée de celle-ci, alors vous ne pouvez utiliser de mesures techniques restreignant la création que si vous distribuez aussi une version sans ces restrictions.<br>
+								</br></br>
+								<b>Avertissement : </b>Le résumé explicatif n'est pas un contrat, mais simplement une source pratique pour faciliter la compréhension de la version complète de la licence ODbL 1.0 — il exprime en termes courants les principales notions juridiques du contrat. Ce résumé explicatif n'a pas de valeur juridique, son contenu n'apparaît pas sous cette forme dans le contrat. Seul le <a href="http://opendatacommons.org/licenses/odbl/1.0/" title="Texte complet du contrat de licence, en anglais - Nouvelle fenêtre" target="_blank">texte complet du contrat de licence </a>fait loi.
+								</br></br>
+								<input type="checkbox" name="acceptCharte" value="oui" id="checkOui">
+								J'ai bien lu et j'accepte la <a href="http://opendatacommons.org/licenses/odbl/1.0/" title="Texte complet du contrat de licence, en anglais - Nouvelle fenêtre" target="_blank">licence</a>
+								</br>
+							</form>
+							<br>
+							<pre id="lienOpenData" style="display:none;">
+								<div class="glyphicon glyphicon-file"> URL : </div><a id='urlOpenData' href="#" target="_blank">?</a>
+								<div id='formatOpenData' class="glyphicon glyphicon-info-sign"> Format : ?</div>
+								<div id='tailleOpenData' class="glyphicon glyphicon-resize-horizontal"> Taille : ?</div>
+								<div id='dateOpenData' class="glyphicon glyphicon-time"> Date de mofication : ?</div>
+								<div class="glyphicon glyphicon-download-alt"></div><a id='downnloadLienOpenData' target="_blank" href="#"> Téléchargez votre fichier</a>
+							</pre>
+						</div>
+						<h4 id="Contact" class="anchor">Une remarque, une question ? </h4>
+						<hr>
+							<p id="contactOpenData">Vous voulez utiliser les données de Métromobilité, et vous avez des remarques, des interrogations ?<br>
+							Que ce soit sur le fonctionnement, les données, ou simplement pour nous signaler une réutilisation des données, vous pouvez nous contacter par le formulaire en bas de cette page.<br>
+							Nous sommes à votre écoute, pour permettre de faire évoluer le système afin de l'adapter et l'améliorer. N'hésitez pas !
+							</p>
+						<br>
+					</div>
+				</div>
+				<!--Fin modif -->
+				<div id="btn_up" title="Haut de page" alt="Haut de page">
+					<a href="#" class="glyphicon glyphicon-arrow-up"></a>
+				</div>
+			</div>
+		</div>
+		<div id='footer'></div>
+
+		<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+		<script type="text/javascript" src="js/lib/bs/js/moment.min.js"></script>
+		<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
+		<script type="text/javascript" src="stats/piwik.js"></script>
+		<script type="text/javascript" src="js/outils.js"></script>
+		<script type="text/javascript" src="js/fr.js"></script>
+		<script type="text/javascript">var pageStatique = true;</script>
+		<script type="text/javascript" src="js/index.js"></script>
+		<script type="text/javascript">
+		
+			$('#footer').load('index.html #footer',function(){});
+			$('#head').load('head.html',function(){});
+			addBackToTop();
+			trackPiwik("MetroMobilité : OpendataDepositaire.html"); //<!--modif -->
+			var anchor = window.location.hash;
+			window.location.hash = anchor;
+			
+			//faire marcher les href="#toto" avec la balise <base>
+			$().ready(function() {
+			  $("a[href^='\#']").each(function(){ 
+				this.href=location.href.split("#")[0]+'#'+this.href.substr(this.href.indexOf('#')+1);
+			  });
+			});
+
+			var dataName = 'Depositaires';<!--modif -->
+			var urlOpenDataDesc = url.descOpenData + 'desc' + url.fic[dataName];
+			
+			function error(xhr, status, error) {
+				try {
+
+					$('#divLienOpenData').hide();
+
+					var err = eval("(" + (xhr.responseText=="timeout"?libelleAlert[0]:xhr.responseText) + ")");
+					if (typeof(err) != "undefined")
+						console.info(err.Message);
+					else console.info(status+' : '+error);
+				} catch(e) {
+					console.info(e.lineNumber+' : '+e.message);
+				}
+			}
+			
+			function successOpenData(data, unknow, request) {
+				$('#tailleOpenData').html(' Taille : '+ request.getResponseHeader('Content-Length') + ' bytes');
+				$('#dateOpenData').html(' Date de modification : '+ request.getResponseHeader('Last-Modified'));
+				}
+			
+			function successOpenDataDesc(data, textStatus, request) {
+
+				$('#descOpenData').html(data.description);
+				delete data.description;
+
+				$('#specOpenData').html(JSON.stringify(data, null, "\t"));
+
+				$('#downnloadLienOpenData').attr('href', url.json(dataName));
+				$('#downnloadLienOpenData').attr('download', url.fic[dataName]);
+				
+				lienFichier = url.json(dataName).split('?')[0];
+				
+				$('#urlOpenData').attr('href', lienFichier);
+				$('#urlOpenData').html(' ' + lienFichier);
+
+				var formatFichier = lienFichier.split('.')[1];
+				$('#formatOpenData').html(' Format : '+ formatFichier);
+
+				trackPiwik("MetroMobilité : OpenDataDepositaires.html - " + url.json(dataName));
+			}
+
+			$.ajax({
+				type: "GET",
+				url: urlOpenDataDesc,
+				success: function(data, textStatus, request) {successOpenDataDesc(data, textStatus, request);},
+				error:error,
+				dataType:'json'
+			}).error(error);
+
+		
+			function checkChecked() {
+				if ($('#checkOui').is(':checked') === true) 
+				{
+					$('#lienOpenData').show();
+					$.ajax({
+						type: "GET",
+						url: lienFichier,
+						success: function(data,unknow,request) {successOpenData(data,unknow,request);},
+						error:error,
+						dataType:'json'
+					}).error(error);
+				}
+				else
+				{
+					$('#lienOpenData').hide();
+				}
+			}
+			
+			$( "input[type=checkbox]" ).on( "click", checkChecked );
+		</script>
+	</body>
+</html>

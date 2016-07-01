@@ -1,0 +1,192 @@
+/*
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+#panel {
+	background-color: rgba(30, 30, 30, 0.9);
+	bottom: 0;
+	color: #fff;
+	height: 100%;
+	overflow-y: hidden;
+	padding: 0;
+	position: absolute;
+	top: 0;
+	z-index: 50;
+}
+#panel > div {
+	height: 100%;
+	position: relative;
+}
+#panel .row {
+	padding: 10px 15px;
+}
+
+#panel h1 {
+	font-size:14px;
+	line-height: 20px;
+	margin:0px;
+	padding:0px;
+	padding-bottom: 10px;
+}
+#panel .panelDesc{
+	font-size:12px;
+	line-height: 1.1;
+	margin:0px;
+	padding:0px;
+	padding-bottom: 10px;
+}
+#panel .titreReseau, #panel h2[data-layer], #panel h2.panel-rubrique  {
+	background-color: #646464;
+	color:#fff;
+	margin: 0px -15px;
+	padding: 0px 15px;
+	min-height: 36px;
+}
+#panel h2[data-layer] {
+	cursor:pointer;
+}
+#panel .descReseau {
+	font-size: 12px;
+}
+
+/*#panel .titreReseau h2, */#panel h2 {
+	font-family: "GothamRounded-Medium",Arial,Verdana,Geneva,Lucida,Arial,Helvetica,sans-serif;
+	margin:0px;
+	padding:0px;
+	font-size: 18px;
+	line-height:28px;
+}
+#panel .titreReseau h2 {
+	line-height:19px;
+}
+#panel h2 > span:first-of-type, #panel h2.panel-rubrique > span {
+	/*font-weight:bold;*/
+	max-width:80%;
+	max-width:calc(100% - 50px);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: inline-block;
+}
+#panel h2[data-layer] .check{
+	border-radius: 14px;
+	box-shadow: -1px 1px 1px 1px rgba(0, 0, 0, 0.42) inset;
+	height: 28px;
+	padding: 2px;
+	width: 46px;
+	margin: 3px 0;
+}
+#panel h2[data-layer] .check .switch {
+	background-color: #c0c0c0;
+	border-radius: 12px;
+	display: block;
+	height: 24px;
+	width: 24px;
+	border: 2px solid #6f6f6f;
+	box-shadow: -1px 3px 1px 0 rgba(0, 0, 0, 0.42);
+}
+#panel h2[data-layer].layerVisible .check {
+	background-color:#50AE2F;
+}
+#panel h2[data-layer].layerVisible .check .switch {
+	margin-left:18px;
+}
+#panel h2[data-layer]:hover, #panel h2.panel-rubrique:hover {
+	background-color: #505050;
+}
+#panelContent {
+	position:relative;
+	height:90%;
+	height:calc(100% - 60px);
+	overflow-y:auto;
+}
+#panelContent > p {
+	margin-top:10px;
+}
+.opendata {
+	text-align: right;
+	cursor: pointor;
+	margin-bottom:10px;
+}
+.opendata img{
+	display: inline-block;
+	 width: 100px;
+	height: 35px;
+}
+#panelFilter {
+	color:#000;
+}
+.dropup .dropdown-menu {
+	bottom: 100%;
+	margin-bottom: 1px;
+	top: auto!important;
+}
+
+.typeahead span:before {
+    background-size: 16px 16px;
+    content:"";
+	display:inline-block;
+	width:16px;
+	height:16px;
+	margin-right:3px;
+}
+
+.typeahead span.LayerPKG:before, .typeahead span.PKG:before {
+	background-image:url(../img/carto/park.png);
+}
+.typeahead span.LayerPAR:before, .typeahead span.PAR:before {
+	background-image:url(../img/carto/pr.png);
+}
+.typeahead span.LayerMVA:before, .typeahead span.MVA:before {
+	background-image:url(../img/carto/MV_agence.png);
+}
+/*.typeahead span.LayerMVB:before, .typeahead span.MVB:before {
+	background-image:url(../img/carto/MV_box.png);
+}*/
+.typeahead span.LayerMVC:before, .typeahead span.MVC:before {
+	background-image:url(../img/carto/MV_consigne.png);
+}
+.typeahead span.Omms:before, .typeahead span.omms:before {
+	background-image:url(../img/citelibbyhamo.png);
+}
+.typeahead span.Citélib:before, .typeahead span.citelib:before {
+	background-image:url(../img/citelib.png);
+}
+.typeahead span.LayerCovoiturage:before, .typeahead span.covoiturage:before {
+	background-image:url(../img/carto/covoiturage.png);
+}
+.typeahead span.LayerCam:before, .typeahead span.CAM:before {
+	background-image:url(../img/carto/CAM_1.png);
+}
+.typeahead span.LayerPmv:before, .typeahead span.PMV:before {
+	background-image:url(../img/carto/pmv.png);
+}
+.typeahead span.Agences-Métro-Mobilité:before, .typeahead span.agenceM:before {
+	background-image:url(../img/carto/agenceMM.png);
+}
+.typeahead span.Points-Services:before, .typeahead span.pointService:before {
+	background-image:url(../img/carto/pointservice.png);
+}
+.typeahead span.Distributeurs:before, .typeahead span.dat:before {
+	background-image:url(../img/carto/Dat.png);
+}
+.typeahead span.Dépositaires:before, .typeahead span.depositaire:before {
+	background-image:url(../img/carto/relaisTAG.png);
+}

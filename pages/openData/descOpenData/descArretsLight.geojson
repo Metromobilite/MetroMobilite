@@ -1,0 +1,18 @@
+{
+	"description" : "Fichier de description de tous les arrêts TAG et TransIsère",
+	"type" : "FeatureCollection",
+	"features" : [{
+			"type" : "Feature",
+			"properties" : {
+				"CODE" : "Code arrêt",
+				"LIBELLE" : " Libellé de l'arrêt",
+				"COMMUNE" : "Commune de l'arrêt",
+				"LIGNESARRET" : "Code des lignes passant à cet arrêt"
+			},
+			"geometry" : {
+				"type" : "Point",
+				"coordinates" : "Long-Latitude, exemple '[5.74658, 45.192649]'"
+			}
+		}
+	]
+}

@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<!--
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Apps mobile</title>
+	
+	<style type="text/css"></style> 
+	
+</head>
+<body>
+	<h1 style="display:none">Applications mobile Android iOs Apple autour de moi Prochains passages Itineraire Alertes Mes trajets Favoris Toute la mobilité sur la Métropole Grenobloise</h1>
+	<script type="text/javascript">
+		var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+		var appUrl = 'http://www.metromobilite.fr';
+
+		if (userAgent.match( /iPad/i ) || userAgent.match( /iPhone/i ) || userAgent.match( /iPod/i ) ) {
+			appUrl = 'itms-apps://itunes.apple.com/fr/app/domainsicle-domain-name-search/id966169282?ls=1&mt=8';
+		}
+		else if (userAgent.match( /Android/i ) ) {
+			appUrl = 'http://play.google.com/store/apps/details?id=org.lametro.metromobilite';
+		}
+		else if (userAgent.match( /Mozilla/i ) ) {
+			//https://www.microsoft.com/en-us/store/apps/metromobilite/9nblggh1jp80
+			appUrl = 'https://www.microsoft.com/en-us/store/apps/metromobilite/9nblggh1jp80';
+			
+		}
+		window.location.replace(appUrl);
+	</script>
+</body>
+</html>

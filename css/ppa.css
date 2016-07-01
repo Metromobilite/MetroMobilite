@@ -1,0 +1,241 @@
+/*
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+@font-face {
+	font-family: "GothamRounded-Medium";
+	src: local("GothamRounded-Medium");
+	src: url('../img/GothamRounded-Medium.eot');
+	src: url('../img/GothamRounded-Medium.eot?#iefix') format('embedded-opentype'),
+		 url('../img/GothamRounded-Medium.woff') format('woff'),
+		 url('../img/GothamRounded-Medium.ttf') format('truetype'),
+		 url('../img/GothamRounded-Medium.svg#GothamRounded-Medium') format('svg')
+}
+html{
+	height:100%;
+}
+body{
+	padding:0px;
+	margin:0px;
+	width:100%;
+	height:100%;
+	text-align:center;
+	color:#000!important;
+	font-family: "GothamRounded-Medium",Arial,Verdana,Geneva,Lucida,Arial,Helvetica,sans-serif!important;
+}
+
+#information{
+	position:relative;
+	height:25%;
+	width:100%;
+	background-color:rgba(80,80,80,0.9);
+	background-color:#e55b2c;
+	text-align: left;
+	vertical-align: middle;
+	display: inline-block;
+}
+#information > div {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	width:100%;
+}
+#information > div > div {
+	padding-left: 0;
+	padding-right: 0;
+}
+#information h3 {
+	margin-top:0px;
+	font-size: 18px;
+}
+#information .glyphicon-map-marker {
+	font-size: 50px;
+}
+#content{
+	height:inherit;
+	overflow-x:hidden;
+	overflow-y:auto;
+}
+#content .line {
+	width : 100%;
+	height: 50px;
+	border-bottom : solid 1px rgba(120,120,120,0.9);
+	display:block;
+	overflow:hidden;
+}
+
+#content .line:first-child
+{
+	border-top : solid 1px rgba(120,120,120,0.9);
+}
+
+.noborder
+{
+	border: none!important;
+}
+.nocolor
+{
+	background-color:#fff!important;
+	color: #000!important;
+}
+
+#content h4{
+	margin:0px;
+	padding:0px;
+}
+#content .title{
+	height:100%;
+}
+#main{
+	height:77%;
+}
+
+.logo{
+	width:80%;
+	height:80%;
+}
+
+.logoM{
+	height:100%;
+}
+
+.logoRect{
+	width:60px;
+}
+
+#head {
+	height:10%;
+	background-color:#000!important;
+	text-align: left;
+}
+
+#head > span{
+	display:block;
+	vertical-align:middle;
+}
+
+#head .titre{
+	color:#fff;
+	font-size:20px;
+	height:100%;
+	display : inline-block;
+}
+#head .titre span{
+	margin-left: 5px;
+	display : inline-block;
+}
+
+#head .logo{
+	height:100%;
+	display : inline-block;
+}
+.terminus{
+	text-align: left;
+	padding-top: 5px !important;
+}
+.heure{
+	background-color:#e55b2c;
+	color:#fff;
+	margin:0px;
+	height: 100%;
+	padding-top: 5px;
+	display: inline;
+	justify-content: center;
+	flex-direction: column;
+	height: 100%;
+}
+#model{
+	display:none;
+}
+.footer{
+	height:13%;
+	bottom: 0px;
+	position: relative;
+	width: 100%;
+	cursor:pointer;
+	background-color:#000;
+	text-align:center;
+}
+
+.footer > svg {
+	display:block;
+	max-width:740px;
+	margin:auto;
+	margin-top: -1px;
+}
+
+#hideFooter {
+	color: #fff;
+	font-size: xx-large;
+	position: absolute;
+	right: 0;
+}
+
+.logoRss {
+	margin-bottom: 10px;
+	margin-left: 8px;
+	width: 10px;
+}
+
+.rss {
+	display: inline;
+}
+
+.infoMsg {
+	margin-top: 20px;
+}
+
+#appli{
+	color: #fff;
+	font-family: "GothamRounded-Medium", "Arial", "Helvetica", sans-serif;
+	font-style:italic;
+	text-decoration:none;
+	font-size: 1.3em;
+	margin: 5px;
+	cursor:pointer;
+	position: absolute;
+    right: 0;
+}
+
+#btnSignal{
+	margin: 10px;
+}
+.svgAndroid, .svgApple, .svgWindowsPhone {
+	height: 30px;
+	width: 30px;
+	display: none;
+	background-size: contain;
+	background-repeat: no-repeat;
+	padding-left:1px;
+	margin-left: 5px;
+	
+}
+
+.svgAndroid {
+	background-image:url(../img/android.png);
+}
+
+.svgApple {
+	background-image:url(../img/apple.png);
+}
+
+.svgWindowsPhone {
+	background-image:url(../img/windowsphone.png);
+}

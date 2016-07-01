@@ -1,0 +1,63 @@
+﻿<!doctype html>
+<!--
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html lang="fr">
+  <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta content="initial-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+	<title>Prochains passages aux arrêts</title>
+	<link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="Stylesheet" type="text/css" href="css/ppa.css">
+  </head>
+  <body>
+  	<div id="head">
+		<a href="index.html"><div class="titre col-xs-12"><img  class="logoM" src="img/metromobilite.svg"/><span>METROMOBILITE</span></div></a>
+		<a id="appli"href="" target="blank" style="display:none;">Essayez l'appli ! <span class="svgAndroid"></span><span class="svgApple"></span><span class="svgWindowsPhone"></span></a>
+	</div>
+	<div id="main">
+			<div id="information" data-code=""> 
+				<div>
+					<div class="col-xs-2"><span class="glyphicon glyphicon-map-marker"></span></div>
+					<div class="col-xs-10"><h3>Un moment ...</h3><h6 class="desc1">Nous recupérons les horaires...</h6></div>
+					<button id="btnSignal" type="button" class="btn btn-secondary" style="display:none;"><span class="glyphicon glyphicon-envelope"></span> Nous signaler cette erreur</button>
+				</div>
+			</div>
+		<div id="content"></div>
+	</div>
+	<div id="model">
+		<div class="line" data-line="" data-timestamp="" data-tripid="">
+			<h4 class="title col-xs-2"></h4>
+			<h4 class="terminus col-xs-6"></h4>
+			<div class="heure col-xs-4"></div>
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+	<script src="js/lib/bs/js/moment.min.js" type="text/javascript"></script>
+	<script src="js/lib/bs/js/bootstrap.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="js/outils.js"></script>
+	<script type="text/javascript" src="stats/piwik.js"></script>
+	<script type="text/javascript" src="js/ppa.js"></script>
+
+  </body>
+</html>

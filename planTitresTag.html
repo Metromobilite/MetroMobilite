@@ -1,0 +1,234 @@
+<!doctype html>
+<!--
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta content="initial-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+    <title>Métromobilité - Plan des agences « M », et points de vente TAG et Transisère</title>
+	<meta name="description" content="Plans des agences de Mobilité, des points service TAG et Transisère, des distributeurs automatiques TAG et des dépositaires TAG." />
+	<link rel="stylesheet" href="js/lib/ol/ol.css" type="text/css" />
+    <link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="Stylesheet" type="text/css" href="css/map.css"/>
+	<link rel="Stylesheet" type="text/css" href="css/panel.css">
+    <style type='text/css'>
+		.svgLigne {
+			position:relative;
+			width:40px;
+			height:40px;
+			font-size:30px;
+		}
+		.nomArret{
+			font-weight:bold;
+		}
+		.ol-control .glyphicon {
+			top:0px;
+		}
+		.localize.ol-control.controle-ol.ol-unselectable {
+			top: 145px;
+			z-index: 49;
+		}
+    </style>
+	
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->	
+  </head>
+  <body>
+	<div id='head'></div>
+	<div class="container-fluid main">
+		<div class="row">
+			<div id="menu" class="toggleListe listeAffichee pull-right" title="Affichage du panneau de sélection des éléments cartographiques" role="button" aria-label="Affichage du panneau de sélection des éléments cartographiques"><span class="glyphicon glyphicon-menu-hamburger"></span></div>
+			<div id="map" class="map"></div>
+			<div id="popup"></div>
+			<div class="layerSwitcher">
+				<div class="layersPanel">
+					<div class="close-switcher pull-right"><span class="glyphicon glyphicon-minus"></span></div>
+					<div class="pull-left">Afficher : </div>
+					<div class="bases list-unstyled text-left"></div>
+					<ul class="layers list-unstyled text-left"></ul>
+				</div>
+			</div>
+			<div id="panel" class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+				<div class="container-fluid">
+					<div id="panelContent" class="row">
+						<div id="menuListe" class="toggleListe pull-right" title="Affichage du panneau de sélection des éléments cartographiques" role="button" aria-label="Affichage du panneau de sélection des éléments cartographiques"><span class="glyphicon glyphicon-menu-hamburger"></span></div>
+						<h1>Plans des agences de Mobilité, des points service, des distributeurs et des Relais TAG</h1>
+						<h2 data-layer="agenceM"><span>Les agences de Mobilité</span></h2>
+						<p>Les agences de Mobilité vous informent sur l'offre de transport, vous conseillent dans vos déplacements, vendent des titres de transports tous réseaux, et vous permettent de souscrire un abonnement au service d'autopartage CitéLib.</p>
+						<h2 data-layer="pointService"><span>Les points service</span></h2>
+						<p>Les points services vous renseignent et vendent les tickets et abonnements TAG et TransIsère.</p>
+						<h2 data-layer="dat"><span>Les distributeurs</span></h2>
+						<p>Les distributeurs automatiques de titres sont à votre disposition dans toutes les stations de tramway. Ils vous permettent d'acheter les titres TAG (sauf les titres combinés et P+R et les tickets 10 voyages tarif groupe).</p>
+						<h2 data-layer="depositaire"><span>Les Relais TAG</span></h2>
+						<p>Les Relais TAG vendent des titres TAG (tickets, abonnements annuels et mensuels) dans toute l'agglomération grenobloise.</p>
+					</div>
+					<div class="row">
+						<div class="input-group input-group-sm dropup col-xs-12 pull-left">
+							<label for="panelFilter" class="sr-only">Rechercher un élément affiché</label>
+							<input type="text" class="form-control" id="panelFilter" placeholder="Rechercher un élément affiché"/>
+							<span class="input-group-addon"><span  class="glyphicon glyphicon-search"></span></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+ 	<script type="text/javascript" src="js/lib/ol/ol.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/moment.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>	
+	<script type="text/javascript" src="stats/piwik.js"></script>
+	<script type="text/javascript" src="js/outils.js"></script>
+	<script type="text/javascript" src="js/fr.js"></script>
+	<script type="text/javascript" src="js/carte.js"></script>
+
+    <script type="text/javascript">
+		//var sourceSel;
+		function initPage() {
+			isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+			modififieIconMaxres();
+			$( document ).on( "evtLignesChargees", {}, function( event, data ) {
+				initCarte();
+				initPanneau();
+			});
+			if (urlParams.iFrame){
+				$(".main").attr('style','top:0px');
+				$.support.cors = true;
+				chargeLignes();
+			} else {
+				$('#head').load('head.html');
+			}
+		}
+		function initCarte() {
+			var idcarte = 'map';
+			var map=initMap(idcarte);
+			ajouteControle(idcarte,'layerSwitcher');
+
+			ajouteLignes(idcarte,getDetails);
+			activeLayer('lignes_TRAM');
+			activeLayer('lignes_CHRONO');
+			
+			var sourcePoints = creeSourceType(idcarte,'agenceM,pointService,dat,depositaire',{fctStyle:getStylesTypes});
+			ajouteLayerType(idcarte,'agenceM','agenceM',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Agences-Métro-Mobilité'}); //,layerSwitcherName:'Points de vente'
+			ajouteLayerType(idcarte,'pointService','pointService',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Points-Services'});
+			ajouteLayerType(idcarte,'dat','dat',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Distributeurs'});
+			ajouteLayerType(idcarte,'depositaire','depositaire',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Depositaires'});
+			
+			if (urlParams.agenceM) activeLayer("agenceM",!urlParams.agenceM);
+			if (urlParams.pointService) activeLayer("pointService",!urlParams.pointService);
+			if (urlParams.dat) activeLayer("dat",!urlParams.dat);
+			if (urlParams.depositaires) activeLayer("depositaire",!urlParams.depositaires);
+			
+			if(isMobile() && navigator.geolocation && !isChrome) { //fonction dépressiée pour l'instant uniquement dans chrome mobile
+				ajouteLayerManuel('depArr','map',{source:null,fctStyle:getStylesTypes}).set('visible',true);
+				ajouteControle('map','localize',onLocalize,{mapName:'map',layerName:'depArr'});
+			}
+
+			
+		}
+		function initPanneau() {
+			$('.toggleListe').click(function(){
+				togglePanneau();
+			});
+			
+			var champ = '#panelFilter';
+			if ($(champ) && $(champ).typeahead) {
+				$(champ).typeahead({
+					source:function(query, process) {
+						var searchUrl = (url.saisieChoisie=='local'?url.hostnameLocal+url.portWSTest:url.hostnameData);
+							searchUrl += '/api/findType/json?';
+							searchUrl += 'types=agenceM,pointService,dat&query='+query;
+							
+						$.ajax({
+							type: "GET",
+							url: searchUrl,
+							error:error,
+							dataType: 'jsonp'
+						}).then(function(response) {
+							process(response.features);
+						});
+					},
+					matcher: function (item) {
+						return true;
+					},
+					sorter: function(items){
+						return items;
+					},
+					highlighter: function (item) {
+						var label = item.properties[stylesTypes[item.properties.type].text];
+						var regex = new RegExp( '(' + this.query + ')', 'gi' );
+						return '<span class="'+item.properties.type+'">'+label.replace( regex, "<strong>$1</strong>" )+'</span>';
+						
+					},
+					updater:function(item){
+							saisieReussie(item);
+							return item.properties[stylesTypes[item.properties.type].text];
+					},
+					items:'20',
+					minLength:4,
+					autoSelect:false
+				});
+			}
+		}
+		function togglePanneau() {
+			if(!$('#panel').is(':visible')) {
+				$('.toggleListe').addClass('listeAffichee');
+			} else {
+				$('.toggleListe').removeClass('listeAffichee');
+			}
+			$('#panel').toggle();
+		}
+		function getDetails(feature) {
+			var divLignes='';
+			if(feature.getGeometry().getType() == 'Point') {
+				var coord= ol.proj.transform(feature.getGeometry().getCoordinates(), sm, gg);
+				var lonlat = coord[1]+','+coord[0];
+				divLignes = getLignesProches(lonlat,afficheListeLgn,null,null,'map');
+				var div = '';
+				var rue = feature.get('RUE');
+				if (rue) div += '<span>'+rue+'</span>';
+				var commune = feature.get('COMMUNE');
+				if (commune) div += '<span>'+commune+'</span>';
+				var divPrefixe = '';
+				if (feature.get('type')=='dat') divPrefixe = lang.popup.arret+' ';
+				return '<span>'+divPrefixe+'<span class="nomArret">'+feature.get(stylesTypes[feature.get('type')].text)+'</span>'+'</span>'+ div + divLignes;
+			} else {
+				return feature.get('NUMERO')+' - '+feature.get('LIBELLE');
+			}
+		}
+		function saisieReussie(item) {
+			activeLayer(item.properties.type);
+			getMap('map').getView().setCenter(ol.proj.transform(item.geometry.coordinates, gg, sm));
+			getMap('map').getView().setZoom(18);
+			if(isTaille('xs')) togglePanneau();
+		}
+		initPage();
+		trackPiwik("MetroMobilité : planTitresTag.html");
+
+    </script>
+  </body>
+</html>

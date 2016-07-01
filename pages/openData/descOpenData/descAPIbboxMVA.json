@@ -1,0 +1,22 @@
+{
+	"description" : "Liste de description des agences Métrovélo",
+	"type" : "FeatureCollection",
+	"features" : [{
+			"type" : "Feature",
+			"properties" : {
+				"CODE" : "Code de l'agence, par exemple : 'AGENCE_METRO_VELO_CAMPUS'",
+				"LIBELLE" : "Nom de l'agence, par exemple : 'AGENCE METRO VELO CAMPUS'",
+				"ADRESSE" : "Adresse de l'agence, par exemple : 'BIBLIOTHÈQUE (AVENUE DE LA)'",
+				"TYPE" : "AGENCE METRO-VELO",
+				"TOTAL" : "Non renseigné",
+				"type" : "MVA",
+				"id" : "Identifiant de l'agence, par exemple : 'AGENCE_METRO_VELO_CAMPUS'"
+			},
+			"description" : "Position de l'agence Métrovélo",
+			"geometry" : {
+				"type" : "Point",
+				"coordinates" : "Long-Latitude, exemple '[5.74658, 45.192649]'"
+			}
+		}
+	]
+}

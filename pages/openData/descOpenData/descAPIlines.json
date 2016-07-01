@@ -1,0 +1,24 @@
+{
+	"description" : "Fichier de description des lignes de transport en commun",
+	"type" : "FeatureCollection",
+	"features" : [{
+			"type" : "Feature",
+			"properties" : {
+				"NUMERO" : "Nom de la ligne, par exemple: 'C1'",
+				"PMR" : "'1' pour accéssible aux PMR, '0' sinon",
+				"COULEUR" : "Couleur du logo et du tracé de la ligne, par exemple: '255,224,0'",
+				"CODE" : "Code de la ligne, par exemple: 'SEM_C1'",
+				"LIBELLE" : "Libellé de la ligne, par exemple: 'GRENOBLE JEAN MACÉ - MEYLAN MAUPERTUIS'",
+				"ZONES_ARRET" : ["Liste des arrêts de la ligne, par exemple:", "SEM_GENCITEMACE", "SEM_GENARAGO", "SEM_GENEMILGUEY", "..."],
+				"type" : "ligne",
+				"id" : "Id de la ligne, par exemple: SEM_C1",
+				"shape":"donnée polyligne encodée uniquement pour l'URL http://data.metromobilite.fr/api/lines/json, par exemple 'et}rGegkb@TILEBEJMl@UJIBC`A{@BATAl'"
+			},
+			"description" : "Géométrie de la ligne",
+			"geometry" : {
+				"type" : "MultiLineString",
+				"coordinates" : "Tableau de lati-longi décrivant la ligne, par exemple: [[[5.797151, 45.212985], [5.797198, 45.212885], [5.80, 45.22]]] uniquement pour l'URL http://data.metromobilite.fr/api/lines/json"
+			}
+		}
+	]
+}

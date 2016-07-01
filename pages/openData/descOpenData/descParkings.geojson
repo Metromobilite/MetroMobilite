@@ -1,0 +1,23 @@
+{
+	"description" : "Fichier de description des parkings, parcs relais, agences Métrovélo, consignes Métrovélo et MétrovéloBox au format GeoJSON",
+	"eacute": "<non utilisé : valeur par défaut é>",
+	"type": "FeatureCollection",
+	"features": [{
+		"type": "Feature",
+		"properties": {
+			"CODE": "Code interne unique de l'équipement",
+			"LIBELLE": "Nom de l'équipement",
+			"ADRESSE": "Adresse de l'équipement",
+			"TYPE": "Type de l'équipement",
+			"TOTAL": "Nombre de places total",
+			"LIGNES": "Code des lignes de transport en commun en correspondance",
+			"DISPO": "non utilisé : valeur par défaut -1",
+			"NSV_ID": "non utilisé : valeur par défaut 0"
+		},
+		"geometry": {
+			"type": "Point",
+			"coordinates" : "Long-Latitude, exemple '[5.74658, 45.192649]'"
+		}
+	}]
+}
+	

@@ -1,0 +1,205 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Test SIV</title>
+	
+	<link href="http://www.metromobilite.fr/js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
+
+	<script type="text/javascript" src="http://www.metromobilite.fr/js/lib/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="http://www.metromobilite.fr/js/lib/bs/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="http://www.metromobilite.fr/js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
+	<style type="text/css">
+
+	</style> 
+
+	<script type="text/javascript">
+	
+		$.support.cors = true;
+	 
+		var myUserName = 'vincent.thevenet';
+		var myUserPassword = 'juliehugo';
+		var serviceUrl = 'http://localhost:8082/'; //cf. http://localhost:8082/ServiceAbonnement.svc?wsdl
+		//var serviceUrl = 'http://192.168.247.169/wcf_abonnement/'; //cf. http://192.168.247.169/wcf_abonnement/ServiceAbonnement.svc?wsdl
+		//var serviceUrl = 'http://192.168.247.11/wcf_abonnement/'; //cf. http://192.168.247.11/wcf_abonnement/ServiceAbonnement.svc?wsdl
+		//var serviceUrl = 'http://83.145.98.141/wcf_abonnement/'; //cf. http://83.145.98.141/wcf_abonnement/ServiceAbonnement.svc?wsdl
+		var abo;
+		
+		var newID = "cjV0eDSt64M:APA91bFDLfu5YFOk7Clnqc3jQ9xjOZJTdlP9YHCMFih-2WUDnt9osmMW_waj1GzcUyCCRgMLEpJSr2cP5l3MUhq_TFgFgCVPtpceP1oHPqq2-uqFWr4qHV2Os1RXed3eARGV0OB5Q8dl";
+		var Id = "APA91bHDWpOf1pcGriwqscixcgF5V29OJ5fitPIS54XaHysoVWkiFLzQEurYi04ZmBu7nq622AINa5wUjcQJSPTWxGvKfm4mvoap3T88hMGRgR-d5sUC-y223mOBRa2vHXMKTkFSSxAV";
+		
+		
+		function displayTrajets(trajets) {
+	
+		$('#results').empty();
+		$('#abonnement').empty();
+		if (trajets.length==0) {
+			$('#results').append("<div class='col-xs-12 text-center'><h6>Désolé nous n'avons trouvé aucun trajet dans votre abonnement veuillez revoir votre configuration</h6></div>");
+		}
+		else {
+			for(var i= 0; i < trajets.length; i++) {
+				$('<div class="col-xs-12 text-center"><hr></div>').appendTo('#results');
+				var contenuTrajet = $('<div class="col-xs-12"><h4>'+trajets[i].intitule+'</h4></div>');
+				var troncon;
+				for (tr in trajets[i].troncons) {
+					troncon = trajets[i].troncons[tr];
+					if (troncon.__type && troncon.__type.contains("TronconTC")) { //Cas les ligne TC
+						$('<span class="left">Ligne :'+troncon.ligne+', Arrêt de départ: '+troncon.arretDepart+ ' Arrêt darrivée: '+troncon.arretDestination+'</span></br>').appendTo(contenuTrajet);
+						//$('<span class="left">'+troncon.reseau+'</span></br>').appendTo(contenuTrajet);
+					}
+					else if (troncon.__type && troncon.__type.contains("TronconRoutier")) {//Troncon routier
+						if (troncon.adresseDepart != "") {
+							$('<span class="left">Départ :'+troncon.adresseDepart+'Arrivée :'+troncon.adresseArrivee+'</span>').appendTo(contenuTrajet);
+						}
+						else {
+							for (axe in troncon.axesCalcules) {
+								var span;
+								if ((axe == 0) && (troncon.axesCalcules.length == 1))
+									span = '<span class="left"> Voie empruntée : ';
+								else if (axe == 0)
+									span = '<span class="left"> Voies empruntées : ';
+								else
+									span = '<span class="left"> - ';
+								
+								$(span+troncon.axesCalcules[axe].voie+ " , " + troncon.axesCalcules[axe].commune +'</span>').appendTo(contenuTrajet);
+							}
+						}
+					}
+				}
+				contenuTrajet.appendTo('#results');
+			}
+			$('<div class="col-xs-12 text-center"><hr></div>').appendTo('#results');
+		}
+	}
+		
+		
+		function getHeadersAbo() {
+			//btoa is a built in browser cmd for encode Base64
+			return { 'Authorization': 'Basic ' + btoa(myUserName  + ':' + myUserPassword) };
+		}
+		
+		function getHeadersTrajet() {
+			//btoa is a built in browser cmd for encode Base64
+			return { 'Authorization': 'Basic ' + btoa(Id.replace("http://","http@").replace(/:/g,"DOUBLEPOINT")  + ':' + '')};
+		}
+		
+		function getHeadersUpdateID() {
+			//btoa is a built in browser cmd for encode Base64
+			return { 'Authorization': 'Basic ' + btoa(Id.replace("http://","http@").replace(/:/g,"DOUBLEPOINT")  + ':' + newID.replace("http://","http@").replace(/:/g,"DOUBLEPOINT"))};
+		}
+		
+		$(document).ready(function(){
+
+		$('#ABO').click(function(){
+			 $.support.cors = true;
+			 $.ajax({
+				headers: getHeadersAbo(),
+				type: "GET",
+				url: serviceUrl + "ServiceAbonnement.svc/GetAbonnement",
+				data:{},
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+				success: function (data) {
+					var abo=data.abo;
+					$('#results').empty();
+					$('#abonnement').empty();
+					
+					for (field in abo) {
+						$('#abonnement').append('<div class="form-group"><label  class="col-sm-2 control-label" for="'+field+'">'+field+'</label><div class="col-sm-10"><input  class="form-control" type="text" id="'+field+'" value="'+abo[field]+'"/></div></div>');
+					}
+					$('#results').append('Abonnement : ').append('<div>'+ JSON.stringify(abo,null,'\t').replace(/\n/g,'<br>').replace(/\t/g,'&nbsp;&nbsp;&nbsp;&nbsp;') +'</div>');
+				},
+				error: function (msg) {
+					alert(msg.statusText);
+				}
+			});
+		});
+				
+		$('#TRAJET').click(function(){
+			 $.support.cors = true;
+			 $.ajax({
+				headers: getHeadersTrajet(),
+				type: "GET",
+				url: serviceUrl + "ServiceAbonnement.svc/GetAbonnementByID",
+				data:{},
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+				success: function (data) {
+				
+				//var trajets = JSON.parse('[{"intitule":"Aller","origineDestination":"","periods":[{"heureDepartPeriode":8,"heureFinPeriode":10,"semainier":{"jourSemaineValue":127,"type":"Semainier"},"type":"Periode"},{"heureDepartPeriode":8,"heureFinPeriode":10,"semainier":{"jourSemaineValue":107,"type":"Semainier"},"type":"Periode"}],"troncons":[{"__type":"TronconTC:#BDDService.InterfaceSIV","intitule":"Tronçon","modalite":1,"type":"Troncon","arretDepart":"ST-MARTIN-LE-VINOUX HOTEL DE VILLE","arretDestination":"GIERES GARE-UNIVERSITES","ligne":"E","reseau":"Reseau TAG"},{"__type":"TronconTC:#BDDService.InterfaceSIV","intitule":"Tronçon","modalite":1,"type":"Troncon","arretDepart":"FONTANIL-CORNILLON CROIX DE LA ROCHETTE","arretDestination":"ST-MARTIN-LE-VINOUX LE NERON","ligne":"EBUS","reseau":"Reseau TAG"},{"__type":"TronconRoutier:#BDDService.InterfaceSIV","intitule":"Tronçon","modalite":0,"type":"Troncon","adresseArrivee":"GRENOBLE,TOUR PERRET","adresseDepart":"FONTANIL-CORNILLON,ALLEE DES GENTIANES","axesCalcules":[{"commune":"FONTANIL-CORNILLON","echangeurs":"START;END","selected":true,"voie":"RUE CHANCELIERE"},{"commune":"FONTANIL-CORNILLON","echangeurs":"START;END","selected":true,"voie":"RUE BABIERE"},{"commune":"FONTANIL-CORNILLON","echangeurs":"START;END","selected":true,"voie":"ROUTE DE LYON"},{"commune":"SAINT-EGREVE","echangeurs":"START;END","selected":true,"voie":"BRETELLE DACCES"},{"commune":"SAINT-EGREVE","echangeurs":"START;END","selected":true,"voie":"AVENUE DE SAN MARINO"},{"commune":"SAINT-EGREVE","echangeurs":"START;END","selected":true,"voie":"E 711, E 713"},{"commune":"GRENOBLE","echangeurs":"16","selected":true,"voie":"N 481"},{"commune":"SAINT-MARTIN-LE-VINOUX","echangeurs":"START;END","selected":true,"voie":"N 481"},{"commune":"GRENOBLE","echangeurs":"START;END","selected":true,"voie":"PLACE ARISTIDE BRIAND"},{"commune":"GRENOBLE","echangeurs":"START;END","selected":true,"voie":"PASSERELLE"}],"axesSaisisManuellement":[],"communeArrivee":"GRENOBLE","communeDepart":"FONTANIL-CORNILLON","modaliteRoutier":0,"numeroArrivee":"","numeroDepart":"","voieArrivee":"TOUR PERRET","voieDepart":"ALLEE DES GENTIANES"}],"type":"Trajet"},{"intitule":"Retour","origineDestination":"","periods":[{"heureDepartPeriode":7,"heureFinPeriode":19,"semainier":{"jourSemaineValue":31,"type":"Semainier"},"type":"Periode"}],"troncons":[{"__type":"TronconTC:#BDDService.InterfaceSIV","intitule":"Tronçon","modalite":1,"type":"Troncon","arretDepart":"GRENOBLE VALLIER-LIBERATION","arretDestination":"FONTANIL-CORNILLON LEP FRANCOISE DOLTO","ligne":"EXP-2","reseau":"Reseau TRANSISERE"},{"__type":"TronconTC:#BDDService.InterfaceSIV","intitule":"Tronçon","modalite":1,"type":"Troncon","arretDepart":"BERNIN CLOYERES","arretDestination":"VOIRON GARE ROUTIERE","ligne":"EXP-1","reseau":"Reseau TRANSISERE"},{"__type":"TronconTC:#BDDService.InterfaceSIV","intitule":"Tronçon","modalite":1,"type":"Troncon","arretDepart":"BRIGNOUD CENTRE","arretDestination":"VILLARD-BONNOT VORS","ligne":"EXP-3","reseau":"Reseau TRANSISERE"}],"type":"Trajet"},{"intitule":"Trajet 3","origineDestination":"","periods":[{"heureDepartPeriode":7,"heureFinPeriode":19,"semainier":{"jourSemaineValue":24,"type":"Semainier"},"type":"Periode"}],"troncons":[{"__type":"TronconTC:#BDDService.InterfaceSIV","intitule":"Tronçon","modalite":1,"type":"Troncon","arretDepart":"GIERES UNIVERSITES-BIOLOGIE","arretDestination":"GRENOBLE VALLIER-CATANE","ligne":"C5","reseau":"Reseau TAG"},{"__type":"TronconTC:#BDDService.InterfaceSIV","intitule":"Tronçon","modalite":1,"type":"Troncon","arretDepart":"GRENOBLE ARAGO","arretDestination":"MEYLAN PLAINE FLEURIE","ligne":"C1","reseau":"Reseau TAG"},{"__type":"TronconTC:#BDDService.InterfaceSIV","intitule":"Tronçon","modalite":1,"type":"Troncon","arretDepart":"CLAIX PONT ROUGE","arretDestination":"LE PONT-DE-CLAIX PONT-DE-CLAIX MAIRIE","ligne":"C2","reseau":"Reseau TAG"},{"__type":"TronconRoutier:#BDDService.InterfaceSIV","intitule":"Tronçon","modalite":0,"type":"Troncon","adresseArrivee":"SEYSSINET-PARISET,ROND POINT SAN GIOVANNI LUPATOTO","adresseDepart":"GRENOBLE,RUE DU COMMANDANT PERREAU","axesCalcules":[{"commune":"GRENOBLE","echangeurs":"START;END","selected":true,"voie":"RUE DU COMMANDANT PERREAU"},{"commune":"GRENOBLE","echangeurs":"START;END","selected":true,"voie":"RUE LEON JOUHAUX"},{"commune":"GRENOBLE","echangeurs":"START;END","selected":true,"voie":"RUE ROGER LOUIS LACHAT"},{"commune":"GRENOBLE","echangeurs":"START;END","selected":true,"voie":"ROUTE SANS NOM"},{"commune":"GRENOBLE","echangeurs":"START;END","selected":true,"voie":"BOULEVARD CLEMENCEAU"},{"commune":"GRENOBLE","echangeurs":"START;END","selected":true,"voie":"D 523"},{"commune":"GRENOBLE","echangeurs":"START;END","selected":true,"voie":"AVENUE ALBERT 1ER DE BELGIQUE"},{"commune":"GRENOBLE","echangeurs":"START;END","selected":true,"voie":"RUE PIERRE LOTI"},{"commune":"GRENOBLE","echangeurs":"START;END","selected":true,"voie":"BOULEVARD DES DIABLES BLEUS"},{"commune":"GRENOBLE","echangeurs":"START;END","selected":true,"voie":"PLACE PASTEUR"}],"axesSaisisManuellement":[],"communeArrivee":"SEYSSINET-PARISET","communeDepart":"GRENOBLE","modaliteRoutier":0,"numeroArrivee":"","numeroDepart":"","voieArrivee":"ROND POINT SAN GIOVANNI LUPATOTO","voieDepart":"RUE DU COMMANDANT PERREAU"}],"type":"Trajet"}]');
+					displayTrajets(data.trajets);
+					//$('#results').empty();
+					//$('#abonnement').empty();
+					//$('#results').append('Trajets : ').append('<div>'+ JSON.stringify(data.trajets,null,'\t').replace(/\n/g,'<br>').replace(/\t/g,'&nbsp;&nbsp;&nbsp;&nbsp;') +'</div>');
+				},
+				error: function (msg) {
+					alert(msg.statusText);
+				}
+			});
+		});
+			
+		$('#UPDATE').click(function(){
+			for (field in abo) {
+				if(field=="dateDeNaissance") {
+					abo[field]=$('#'+field).val();
+				}
+			}
+			
+			var parameters = [];
+			parameters.push(
+				{
+					Key: 'jourSemaineValue',
+					Value: '96'
+				});
+
+			var object = JSON.stringify({type:'Semainier', id:'jourSemaineValue', objet:parameters });
+
+			 $.ajax({
+				headers: getHeaders(),
+				type: "POST",
+				url: serviceUrl + "ServiceAbonnement.svc/SetAbonnement",
+				data:object,
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+				success: function (data) {
+					$('#results').append('Abonnement : ').append('<code>'+ JSON.stringify(data) +'</code>');
+				},
+				error: function (msg) {
+					alert(msg.statusText);
+				}
+			});
+			
+			return;
+		});
+		
+		$('#UPDATEID').click(function(){
+			 $.support.cors = true;
+			 $.ajax({
+				headers: getHeadersUpdateID(),
+				type: "GET",
+				url: serviceUrl + "ServiceAbonnement.svc/UpdateAbonnementByID",
+				data:{},
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+				success: function (data) {
+					alert(data.msg);
+				},
+				error: function (msg) {
+					alert(msg.statusText);
+				}
+			});
+		});
+		
+	});
+	</script>
+</head>
+<body>
+		<br>
+		<span>1) Get détail Abonnement : </span><button id="ABO" type="button">Get Abonnement</button></br></br>
+		<span>2) Set détail Abonnement : </span><button id="UPDATE" type="button">Set Abonnement</button></br></br>
+		<span>3) Get détail Trajet : </span><button id="TRAJET" type="button">Get Trajet</button></br></br>
+		<span>4) Update register ID : </span><button id="UPDATEID" type="button">Update</button></br></br>
+		<form id="abonnement" action="" class="form-horizontal" role="form" ></form></br></br>
+		<div id="results"></div>
+</body>
+</html>

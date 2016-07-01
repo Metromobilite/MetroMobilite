@@ -1,0 +1,22 @@
+{
+	"description" : "Liste de description des dépositaites TAG",
+	"type" : "FeatureCollection",
+	"features" : [{
+			"type" : "Feature",
+			"properties" : {
+				"NOM" : "Nom du dépositaire, par exemple : 'TABAC'",
+				"RUE" : "Adresse du dépositaire, par exemple : '1, avenue Malherbe'",
+				"CODEPOSTAL" : "Code postal du dépositaire, par exemple : '38100'",
+				"COMMUNE" : "Ville du dépositaire, par exemple : 'GRENOBLE'",
+				"type" : "depositaire",
+				"CODE" : "Code du dépositaire, par exemple : '0'",
+				"id" : "Identifiant du dépositaire, par exemple : '0'"
+			},
+			"description" : "Position du dépositaites TAG",
+			"geometry" : {
+				"type" : "Point",
+				"coordinates" : "Long-Latitude, exemple '[5.74658, 45.192649]'"
+			}
+		}
+	]
+}

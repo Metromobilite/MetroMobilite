@@ -1,0 +1,281 @@
+<!doctype html>
+<!--
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html lang="fr">
+	<head>
+		<base href="../" />
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="initial-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+		<title> MétroMobilité - Se déplacer en transports en commun à Grenoble </title>
+		<meta name="description" content="Trouvez toutes les informations des  transports en commun TAG, Transisère et TER sur Grenoble et son agglomération." />
+		<link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/actus.css" rel="stylesheet">
+		<link href="css/head.css" rel="stylesheet">
+		<link href="css/index.css" rel="stylesheet">
+		<!-- debut modif image-->
+		<style type='text/css'>
+			@media (min-width: 768px) {
+				body {
+					background-image:url("img/pages/bandeauTC.jpg");
+					background-attachment: fixed;
+					background-repeat:no-repeat;
+					background-position:top center;
+				}
+			}
+			h2 {
+			font-size:18px!important;
+			margin-bottom:0px!important;
+			margin-top:20px!important;
+			text-transform:uppercase!important;
+			font-weight: 500!important;
+			line-height: 1.1!important;
+			}
+			#navbarDesc {
+				background-color: #0270bc;
+				opacity:0.9;
+			}
+			.container-page h2,.container-page h6, .container-page h5, .container-page h4, .container-page h3, .container-page  > div > .row a, .container-page .glyphicon-plus-sign:before   {
+				color:#0270bc;
+			}
+			hr {
+				 background-color: #0270bc;
+				 height: 4px;
+			}
+
+
+			.container-page .nav > li > a:hover, .nav > li > a:focus{
+				background-color: #0054ab;
+				border-color: #0054ab;
+				opacity:0.9;
+			}
+		</style>
+		<!--Fin modif -->
+	</head>
+	<body>
+	<div id='head'></div>
+	<div class="container-fluid container-page">
+	<!-- debut modif image-->
+		<div id="rowPage">
+			<div class="row rowHeader bgTransp hidden-xs">
+	<div class="container">
+<h1>SE DEPLACER EN TRANSPORT EN COMMUN</h1>
+	<br>
+	</div>
+	<div id="navbarDesc" class="container-fluid" data-spy="affix" data-offset-top="240">
+		<div class="container">
+			<div class="row">
+				<ul class="nav navbar-nav collapse navbar-collapse">
+					<li><a href="#reseaux">Mes réseaux</a></li>
+					<li><a href="#enagglo">En agglomération</a></li>
+					<li><a href="#horsagglo">Hors agglomération</a></li>
+					<li><a href="#participation">Participation employeur</a></li>
+					<li><a href="#oùra">Carte Oùra!</a></li>
+					<li><a href="#acheter">Acheter en ligne</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>	
+	</div>
+		<div class="row">
+			<div class="container">
+		<h2 id="reseaux" class="anchor">Mes réseaux de transports en commun </h2>
+			<hr>
+			<div class="centrerTexte pull-right" >
+				<img src="img/Pages/tc_reseaux.jpg" alt="" width="600" height="450"/>
+			</div>	
+				<h3>Le réseau TAG</h3>
+					<p>Avec 5 lignes de tramway et 46 lignes de bus, le réseau TAG effectue 16 millions de kilomètres par an sur le périmètre de l’agglomération grenobloise. Le Syndicat Mixte des Transports en Commun (SMTC) en a confié l'exploitation à la Semitag.</p>
+					<p>
+					<span class="glyphicon glyphicon-plus-sign"></span><a href="http://www.tag.fr" title="Accès au site www.tag.fr - Nouvelle fenêtre" target="_blank"> www.tag.fr</a><br>
+					<span class="glyphicon glyphicon-plus-sign"></span><a href="planTC.html"> Plan du réseau Tag</a><br>
+					</p>
+				<h3>Le réseau TransIsère</h3>
+					<p>Le réseau TransIsère est organisé par le Département de l'Isère. Il vise à assurer les liaisons régulières entre les principales communes du département pour tous les publics. </p>
+					La tarification est zonale. Il y a 5 zones sur le département. L'agglomération se trouve dans la zone A. Elle est entourée par la zone B.<br><br>
+					L'agglomération est desservie par :
+					<ul class="classic">
+						<li>3 lignes EXPRESS</li> 
+						<li>quelques lignes périurbaines</li>
+						<li>des lignes départementales.</li> 
+					</ul>
+					
+					<p>
+					<span class="glyphicon glyphicon-plus-sign"></span><a href="http://www.transisere.fr/" title="Accès au site www.transisere.fr - Nouvelle fenêtre" target="_blank"> www.transisere.fr</a><br>
+					<span class="glyphicon glyphicon-plus-sign"></span><a href="http://www.transisere.fr/fr/plans-et-depliants/8" title="Téléchargez le plan et carte tarfaire sur www.transisere.fr - Nouvelle fenêtre" target="_blank"> Téléchargez le plan et la carte tarifaire du réseau TransIsère</a><br>
+					</p>
+				<h3>Le réseau TER</h3>
+					<p>Le réseau TER (Transport Express Régional) est organisé par la Région qui en a confié l'exploitation à la SNCF.
+					Une importante refonte des horaires a été effectuée en 2011 afin d'assurer un meilleur cadencement.
+					Des travaux d'électrification ont été réalisés entre Grenoble et Valence pendant toute l'année 2013. </p>
+					
+					<p>
+					<span class="clearfix"></span>
+					<span class="glyphicon glyphicon-plus-sign"></span><a href="http://www.ter-sncf.com/" title="Accès au site www.ter-sncf.com - Nouvelle fenêtre"  target="_blank"> www.ter-sncf.com</a>
+					</p>
+					<br>
+		<h2 id="enagglo" class="anchor">Se déplacer dans Grenoble et son agglomération </h2>
+			<hr>
+			<div class="centrerTexte pull-right" >
+				<img src="img/Pages/tc_enagglo.JPG" alt="" width="600" height="450"/>
+			</div>	
+				<h3> Les titres TAG </h3>
+					<p>Les titres de transport TAG permettent de voyager sur :</p>
+					<ul class="classic">
+						<li>l'ensemble du réseau TAG (bus et tramways)</li>
+						<li>le réseau TransIsère, dans les communes desservies par la TAG, pour les voyageurs ayant un pass "libre circulation" (Pass Annuel, Pass Mensuel, Pass 1 jour, Pass 3 jours) <br></li>
+						<li>le réseau TER Rhône-Alpes : entre les différentes gares de l'agglomération comme Echirolles, St Egrève, Le Pont de Claix, Gières, 
+						 Jarrie-Vizille, Vif et <br>St-Georges-de-Commiers.<br></li>	
+					</ul>
+					<p>
+					La durée de validité du titre de transport est d'une heure que ce soit en correspondance ou pour le retour. Le temps est décompté entre la 1ère validation (trajet du départ) et la dernière validation.
+					<br><br>
+					<span class="glyphicon glyphicon-plus-sign"></span><a href="http://www.tag.fr" title="Accès au site www.tag.fr - Nouvelle fenêtre" target="_blank"> www.tag.fr</a><br>
+					</p>
+				<h3> Les titres TransIsère</h3>
+					<p>Les PASS TransIsère (1 jour, mensuel, annuel) intégrant la zone A permettent de voyager librement sur le réseau TAG. Un titre TransIsère ne permet pas de voyager sur le réseau TER (Transport Express Régional).</p>		
+					<p>
+					La durée de validité du titre de transport est d'une heure pour le billet 1 Trajet 1 Zone, avec un maximum de 2 correspondances. Le temps est décompté entre la 1ère validation (trajet du départ) et la dernière validation.
+					<br><br>
+					<span class="glyphicon glyphicon-plus-sign"></span><a href="http://www.transisere.fr" title="Accès au site www.transisere.fr - Nouvelle fenêtre" target="_blank"> www.transisere.fr</a><br>
+					</p>
+				<h3>Achat d'un titre de transport</h3>
+					<p>L'achat d'un titre de transport peut être effectué en ligne, dans les agences de mobilité M, dans les gares (réseau TER), chez les dépositaires, aux bornes TRAM (réseau TAG), à bord du bus ou du car. Dans ce dernier cas, les billets d'un montant supérieur à 20 euros ne seront pas acceptés. Cette solution n'est pas à privilégier dans la mesure où elle ralentit la montée des autres passagers et au final, le trajet.</p>
+					<p>
+					<span class="glyphicon glyphicon-plus-sign"></span><a href="http://www.tag.fr/48-les-points-de-vente.htm" title="Points de vente réseau TAG et agences de mobilité - Nouvelle fenêtre" target="_blank"> Points de vente réseau TAG et agences de mobilité M</a><br>
+					<span class="glyphicon glyphicon-plus-sign"></span><a href="http://www.transisere.fr/fr/agences-relais-vente/36" title="Points de vente réseau Transisère - Nouvelle fenêtre" target="_blank"> Points de vente réseau Transisère</a><br>
+					</p>
+					<br>
+		<h2 id="horsagglo" class="anchor">Se déplacer hors de Grenoble et son agglomération </h2>
+			<hr>
+			<div class="centrerTexte pull-right" >
+				<img src="img/Pages/tc_horsagglo.jpg" alt="" width="600" height="450"/>
+			</div>	
+				<h3>Le pass TransIsère</h3>
+					<p>
+					Les PASS TransIsère (1 jour, mensuel, annuel) permettent de voyager sur : </p>
+					<ul class="classic">
+						<li>le <b>réseau TransIsère</b> à l'intérieur de la ou des <b>zone(s) achetée(s)</b></li>
+						<li>selon la <b>zone</b> TransIsère <b>achetée</b>, sur les réseaux de transports <b>TAG</b>, du <b>Pays Voironnais</b> ou du <b>Pays du Grésivaudan</b>.</li>
+					</ul>
+					
+				<h3>Abonnement TER + TAG</h3>
+					<p> L'abonnement mensuel Combiné <a href="http://www.ter.sncf.com/rhone-alpes/offres/tarifs/ter-reseaux-urbains/ter-tag" title="Abonnement combiné TER+TAG - Nouvelle fenêtre" target="_blank">TER+TAG</a> permet de voyager de façon illimitée sur le <b>parcours TER choisi</b> et le réseau <b>TAG</b>. </p> 
+				<h3>Abonnement TER + TAG + TCL</h3>
+				<p>
+				L'abonnement mensuel Combiné <a href="http://www.ter.sncf.com/rhone-alpes/offres/tarifs/ter-reseaux-urbains/ter-tcl-tag" title="Abonnement combiné TER+TAG+TCL - Nouvelle fenêtre" target="_blank">TER+TAG+TCL</a> permet en plus de voyager sur le réseau urbain lyonnais.</p>
+				<span class="clearfix"></span>
+				<br>
+		<h2 id="participation" class="anchor">Participation de votre employeur</h2>
+			<hr>
+			<div class="centrerTexte pull-right" >
+				<img src="img/Pages/tc_participation.JPG" alt="" width="600" height="450"/>
+			</div>	
+			<p>L’article 20 de la loi de financement de la Sécurité sociale pour 2009 (n°2008-1330 du 17 décembre 2008 JO du 18 décembre 2008) instaure <b>une prise en charge par l’employeur</b> d’une partie des <b>frais de transport</b> engagés par les salariés au titre des <b>trajets réalisés entre leur domicile et leur lieu de travail</b>. <br><br>
+			Tous <b>les employeurs</b>, quelle que soit la localisation de l’entreprise, doivent désormais obligatoirement <b>prendre en charge une partie du prix des titres d'abonnements</b> souscrits par les salariés pour leurs déplacements, entre leur résidence habituelle et leur lieu de travail, accomplis au moyen de <b>transports publics</b> de personnes ou de <b>services publics de location de vélos</b>.<br><br> 
+			La prise en charge obligatoire de l’employeur est fixée à <b>50 % du coût de l’abonnement</b> sur la base des tarifs de 2è classe. <br><br>
+			La prise en charge des frais des <b>salariés à temps partiel</b> est identique à celle des salariés à temps complet, lorsque l’horaire de travail du salarié est au moins égal à la moitié de la durée légale hebdomadaire ou conventionnelle de travail.<br><br>
+			Pour bénéficier de l’exonération sociale, la copie de l’abonnement souscrit par le salarié aux transports en commun ou aux services publics de location de vélos doit être fournie par le salarié  à l’employeur.<br><br>
+			<span class="glyphicon glyphicon-plus-sign"></span><a href="pages/DecouvrirM.html#Pde"> Information sur le Plan de Déplacement d'Entreprise (PDE ou PDA)</a>
+
+			</p>
+			<span class="clearfix"></span>
+		<h2 id="oùra" class="anchor">La carte OùRA!</h2>
+			<hr>
+			<div class="centrerTexte pull-right" >
+				<img src="img/Pages/tc_oura.JPG" alt="Carte Ourà" width="600" height="450"/>
+			</div>
+			<p> La <b>carte à puce OùRA!</b>, passeport de votre mobilité, permet de voyager sur <b>15 réseaux</b> de transports en commun en Rhône-Alpes. <br><br>
+			Sur l'aire urbaine grenobloise, vous pouvez voyager avec la carte OùRA! sur les réseaux TAG, TransIsère, TER Rhône-Alpes et le réseau urbain du Pays Voironnais. 
+			A noter qu'il existe 2 types de cartes : anonyme ou nominative. <br><br>
+			Pour être valable, votre carte OùRA doit héberger un <b>titre de transport</b>. <br><br>
+			Pour obtenir votre carte, rendez-vous dans les agences TAG, les agences TransIsère, à l'agence StationMobile ou dans l'espace Ourà! en gare SNCF de Grenoble. 
+			Si vous en possédez déjà une, vous pouvez la recharger en plus dans les points services, les relais TAG ou dans les distributeurs automatiques présents à chaque station de tram. 
+			<br><br>
+			En 2015, près de 30 réseaux de transport de Rhône-Alpes seront accessibles avec la carte OùRA!.
+			</p>
+			<p>
+			<span class="glyphicon glyphicon-plus-sign"></span><a href="http://www.tag.fr/49-carte-et-cle-usb-tag.htm" title="Carte à puce et clé USB - Nouvelle fenêtre" target="_blank"> La carte à puce et la clé USB</a>
+			</p>
+			<span class="clearfix"></span>
+			<br>
+		<h2 id="acheter" class="anchor"> Boutiques en ligne </h2>
+			<hr>
+			<div class="centrerTexte pull-right" >
+				<img src="img/Pages/tc_enligne.JPG" alt="" width="600" height="450"/>
+			</div>	
+				<h3>Boutique TAG</h3>
+					<p>Pour acheter un titre TAG en ligne, vous devez avoir une carte à puce TAG (et un lecteur de carte à puce) ou une clé USB TAG.<br>
+					<span class="glyphicon glyphicon-plus-sign"></span><a href="https://tag.ticket-net.eu/accueil.do" title="Boutique en ligne TAG - Nouvelle fenêtre" target="_blank"> Boutique en ligne TAG</a></p>
+				<h3>Boutique TransIsère</h3>
+					<p>Pour acheter en ligne des trajets TransIsère, vous devez avoir (créer) un compte billettique TransIsère.<br>
+					<span class="glyphicon glyphicon-plus-sign"></span><a href="https://www.billettique.transisere.fr/HomeTicketingCG38/Maintenance.aspx" title="Boutique en ligne Transisère - Nouvelle fenêtre" target="_blank"> Boutique en ligne TransIsère</a></p>
+				<h3>Abonnement de travail TER</h3>
+					<p>Vous pouvez souscrire un abonnement de travail TER (Transport Express Régional) en rechargeant votre carte OùRA! Un lecteur de carte à puce est nécessaire.<br>
+					<span class="glyphicon glyphicon-plus-sign"></span><a href="http://www.ter.sncf.com/rhone-alpes/offres/tarifs" title="En savoir plus sur les abonnements TER - Nouvelle fenêtre" target="_blank"> En savoir plus sur les abonnements TER</a></p>
+				<h3>Billet de train</h3>
+					<p>Vous pouvez acheter vos billets de train à l'unité en cliquant sur le lien ci-dessous.<br>
+					<span class="glyphicon glyphicon-plus-sign"></span><a href="http://www.voyages-sncf.com/billet-train" title="Boutique en ligne SNCF - Nouvelle fenêtre" target="_blank"> Boutique en ligne SNCF</a></p>
+					<span class="clearfix"></span>
+					<br>
+	</div>
+</div>
+		</div>
+		<!--Fin modif -->
+		<div id="btn_up" title="Haut de page">
+			<a href="#" class="glyphicon glyphicon-arrow-up"></a>
+		</div>
+	</div>
+	<div id='footer'></div>
+	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/moment.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
+	<script type="text/javascript" src="stats/piwik.js"></script>
+	<script type="text/javascript" src="js/outils.js"></script>
+	<script type="text/javascript" src="js/fr.js"></script>
+	<script type="text/javascript">var pageStatique = true;</script>
+	<script type="text/javascript" src="js/index.js"></script>
+	<script type="text/javascript">
+		$('#footer').load('index.html #footer',function(){});
+		$('#head').load('head.html',function(){});
+		addBackToTop();
+		trackPiwik("MetroMobilité : TC.html"); //<!--modif -->
+		var anchor = window.location.hash;
+		window.location.hash = anchor;
+		
+		//faire marcher les href="#toto" avec la balise <base>
+		$().ready(function() {
+		  $("a[href^='\#']").each(function(){ 
+			this.href=location.href.split("#")[0]+'#'+this.href.substr(this.href.indexOf('#')+1);
+		  });
+		});
+	</script>
+  </body>
+</html>
+
+
+
+
+
+
+

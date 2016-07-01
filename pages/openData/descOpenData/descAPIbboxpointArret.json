@@ -1,0 +1,22 @@
+{
+	"description" : "Liste de description poteaux des arrêts",
+	"type" : "FeatureCollection",
+	"features" : [{
+			"type" : "Feature",
+			"properties" : {
+				"CODE" : "Code de l'arrêt, exemple : 'C38_10460'",
+				"LIBELLE" : "Nom de l'arret, exemple : MONESTIER-DE-CLERMONT, COLLEGE-ECOLES'",
+				"PMR" : "Accés au PMR si '1', sinon '0'",
+				"lgn" : "Code des lignes passant par ce poteau, exemple : 'C38_MON03,C38_MON05,C38_MON04'",
+				"ZONE" : "Code de la zone, exemple : 'C38_GEN04230'",
+				"type" : "pointArret",
+				"id" : "Identifiant de la zone, exemple : 'C38_10460'"
+			},
+			"description" : "Position l'arrêt",
+			"geometry" : {
+				"type" : "Point",
+				"coordinates" : "Long-Latitude, exemple '[5.74658, 45.192649]'"
+			}
+		}
+	]
+}

@@ -1,0 +1,17 @@
+{
+	"description" : "Liste des évènements TC",
+	"description" : "Identifiant de chaque évènement",
+	"SEM_3100" : {
+		"type" : "Exemple : 'restriction_ltc' etc..",
+		"id" : "Identifiant de l'évènement, exemple : '34677'",
+		"dateDebut" : "Date de début de l'évènement, exemple : '24/02/2015 05:20'",
+		"dateFin" : "Date de fin de l'évènement, exemple : '31/12/2050 23:59'",
+		"heureDebut" : "Heure de début de l'évènement, exemple : '09:00:00', '00:00:00' si tout la journée",
+		"heureFin" : "Heure de fin de l'évènement, exemple : 17:00:00', '00:00:00' si tout la journée",
+		"latitude" : "'-1' car non localisé par une point",
+		"longitude" : "'-1' car non localisé par une point",
+		"weekEnd" : "'1' si uniquement le week-end, '2' la semaine et week-end, '0' uniquemenet la semaine",
+		"listeLigneArret" : "Liste des codes des lignes éventuellement impactés, exemple : SEM_48",
+		"texte" : "Description, exemple : '48 : Travaux secteur Claix Mairie|Du 24/02/2015 05:20|Jusqu'à une date indéterminée...'"
+	}
+}

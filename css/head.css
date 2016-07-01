@@ -1,0 +1,342 @@
+/*
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+@media (min-width: 1200px) {
+	/*body { padding-top: 141px; }deplacé dans les pages pour reserver la place de l'entete au chargement*/
+	.anchor:before { content: ''; display: block; position: relative; width: 0; height: 191px; margin-top: -191px; }/*utilisé dans pagesxxx donc +50 pour menu*/
+	.anchorInvisible{display: block; position: relative; top: -191px; visibility: hidden;}
+	.head  ul.nav.navbar-nav {margin-top:25px;}
+	.rowMenu {
+		height:100px;
+	}
+	.navbar-logo {
+		width:100px;
+		height:100px;
+	}
+}
+@media (max-width: 1200px) {
+	/*body { padding-top: 91px; }deplacé dans les pages pour reserver la place de l'entete au chargement*/
+	.anchor:before { content: ''; display: block; position: relative; width: 0; height: 141px; margin-top: -141px; }
+	.anchorInvisible{display: block; position: relative; top: -141px; visibility: hidden;}
+	.rowMenu {
+		height:50px;
+	}
+	.navbar-logo {
+		width:50px;
+		height:50px;
+	}
+}
+
+.beta {
+	color: #ccc;
+	font-style: italic;
+	margin-left: 5px;
+	position: absolute;
+	width: 100px;
+	bottom:0;
+}
+
+.siv, #appli {
+	position: absolute;
+	right: 0;
+}
+
+.siv > a, #appli {
+	color:#fff;
+}
+
+.siv > a:hover, #appli:hover {
+	text-decoration: underline;
+}
+
+
+.siv:hover{
+	color:#777;
+}
+
+#appli{
+	font-family: "GothamRounded-Medium", "Arial", "Helvetica", sans-serif;
+	font-style:italic;
+	text-decoration:none;
+	/*font-size: 1vmin;*/
+	font-size: 1.3em;
+	margin: 5px;
+	cursor:pointer;
+}
+.svgAndroid, .svgApple, .svgWindowsPhone {
+	height: 30px;
+	width: 30px;
+	display: none;
+	background-size: contain;
+	background-repeat: no-repeat;
+	padding-left:1px;
+	margin-left: 5px;
+
+}
+
+.svgAndroid {
+	background-image:url(../img/android.png);
+}
+
+.svgApple {
+	background-image:url(../img/apple.png);
+}
+
+.svgWindowsPhone {
+	background-image:url(../img/windowsphone.png);
+}
+
+#navAlert {
+	display:inline-block;
+	color:#fff;
+	margin-bottom:20px;
+}
+
+#navAlert .ignore{
+	color:#f00;
+	cursor:pointer;
+}
+
+#navAlert a{
+	color:#fff;
+}
+
+#navAlert .glyphicon{
+	padding-left:10px;
+}
+
+.navbar-fixed-top {
+    border-width: 0px;
+}
+.rowMenu {
+	position:relative;
+}
+
+.navbar-logo {
+	padding:0px;
+}
+
+.navbar {
+	margin-bottom:0px;
+}
+.nav-titre {
+	font-family: "GothamRounded-Medium", "Arial", "Helvetica", sans-serif;
+	font-style:italic;
+	margin-left: 20px;
+	color:#fff;
+	font-size:18px;
+	text-align:right;
+	position:absolute;
+	bottom:0px;
+	right:0px;
+}
+
+.headdropdow .dropdown-menu {
+	padding-bottom: 5px;
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-top: 5px;
+	background-color:#080808;
+}
+.headdropdow .dropdown-menu:hover {
+	padding-bottom: 5px;
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-top: 5px;
+	background-color#080808;
+}
+
+.headdropdow  .dropdown-menu > li {
+	padding-bottom: 8px;
+}
+
+#seDeplacer > .dropdown-menu li:hover hr, #seDeplacer > .dropdown-menu li:hover hr{
+	border-top-color: #029ebc!important;
+}
+
+#actualites > .dropdown-menu li:hover hr, #actualites > .dropdown-menu li:hover hr {
+	border-top-color: #f0037f!important;
+}
+
+#indicesDePollution > .dropdown-menu li:hover hr, #indicesDePollution > .dropdown-menu li:hover hr {
+	border-top-color: #21881c!important;
+}
+
+#decouvrirM > .dropdown-menu li:hover hr, #decouvrirM > .dropdown-menu li:hover hr {
+	border-top-color: #dc3c1b!important;
+}
+
+#plandemobilite > .dropdown-menu li:hover hr, #plandemobilite > .dropdown-menu li:hover hr {
+    border-top-color: #8334a7!important;
+}
+
+.headdropdow  .dropdown-menu li hr{
+	border-top-color: transparent!important;
+}
+
+.headdropdow  .dropdown-menu li  span  a:focus, .headdropdow  .dropdown-menu li  span a:hover{
+	text-decoration: none;
+}
+
+.headdropdow  .dropdown-menu li span a {
+	color:#fff;
+	font-weight: bold;
+	padding-bottom: 12px;
+	white-space: nowrap;
+}
+
+#seDeplacer > a, #actualites  > a, #indicesDePollution  > a, #decouvrirM > a, #plandemobilite > a {
+	color:#fff;
+	font-weight: bold;
+	padding-bottom:12px;
+}
+
+#seDeplacer hr, #actualites hr, #indicesDePollution hr, #decouvrirM hr, #plandemobilite hr {
+	border-top-width: 3px;
+	background-color:transparent;
+	margin-top: 0;
+	margin-bottom:0px;
+}
+#seDeplacer > a:hover hr, #actualites > a:hover hr, #indicesDePollution > a:hover hr, #decouvrirM > a:hover hr,#plandemobilite > a:hover hr{
+	width:50%;
+}
+
+#seDeplacer hr {
+	border-top-color: #029ebc;
+}
+
+#actualites hr {
+	border-top-color: #f0037f;
+}
+
+#indicesDePollution hr{
+	border-top-color: #21881c;
+}
+
+#decouvrirM hr{
+	border-top-color: #dc3c1b;
+}
+#plandemobilite hr{
+    border-top-color: #8334a7;
+}
+
+#row-indices #row-indices .input-group-sm {
+	padding-top: 5px;
+}
+
+#row-indices .glyphicon {
+	position:static; 	/*ie chrome safari*/
+	height: 100%;		/*safari*/
+}
+
+.rowSearch {
+	background-color:#3a3a38;
+	color:#636363;
+	height: 41px;
+}
+.rowSearch .row {
+	position:relative;
+}
+#MM-indices {
+	line-height:16px;
+}
+#MM-indices > div{
+	display:inline-block;
+	position:relative;
+	margin-top:auto;
+	margin-bottom:auto;
+}
+
+#iconetrafic, #iconeTC, #iconeatmo{
+	width: 30px;
+	height: 35px;
+}
+
+#diviconetrafic:hover a, #diviconeTC:hover a, #diviconeatmo:hover a, #diviconemeteo:hover a{
+	outline: none;
+}
+
+.svgNumLigne:hover {
+	text-decoration:none;
+}
+
+#diviconeatmo, #diviconeTC, #diviconetrafic, #diviconemeteo{
+	padding-left: 2px;
+    padding-right: 2px;
+}
+
+#diviconeatmo a, #diviconeTC a, #diviconetrafic a, #diviconemeteo a{
+	float: left;
+	text-align:center;
+}
+#row-indices a:hover,#row-indices a:focus, #row-indices a:active {
+	text-decoration:none;
+	outline: 0 none;
+}
+#divtemperaturemeteo {
+	font-size:20px;
+	color:#a9a9a9;
+	margin-right: 15px;
+}
+
+#divtemperaturemeteo  span {
+	float: left;
+	text-align:center;
+	line-height: 35px;
+}
+
+#diviconeatmo .popover, #diviconemeteo .popover{
+	min-width:300px;
+}
+
+#diviconemeteo img {
+	width: 35px;
+}
+#diviconeTC .detailsTC svg {
+	cursor:pointer;
+}
+.evtLoc {
+	display: block;
+}
+.logoLgn {
+    height: 20px;
+	width:20px;
+	cursor:default;
+	float:left;
+}
+.logoLgnRect {
+    height: 20px;
+	width:40px;
+}
+
+#diviconemeteoTitle {
+	height:20px;
+}
+
+.logoSEM, .logoC38, .logoSNC {
+	height:50px;
+	padding-bottom:5px;
+}
+
+::-webkit-input-placeholder { font-style:italic!important; }
+::-moz-placeholder { font-style:italic!important; } /* firefox 19+ */
+:-ms-input-placeholder { font-style:italic!important; } /* ie */
+input:-moz-placeholder { font-style:italic!important; }

@@ -1,0 +1,13 @@
+{
+	"description" : "Fichier de disponibilité des places et des véhicules Cité Lib by Ha:mo au format GeoJSON",
+	"27" : {
+		"record_time" : "Date de l'enregistrement",
+		"result_code" : 0,
+		"station" : {
+			"opening_flag_today" : "1 ouvert, 0 fermé",
+			"service_type" : 1,
+			"parking_space_free" : "Nombre de place libre",
+			"available_car" : "Nombre voitures disponible"
+		}
+	}
+}

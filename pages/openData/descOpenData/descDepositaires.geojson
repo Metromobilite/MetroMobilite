@@ -1,0 +1,18 @@
+{
+	"description" : "Fichier de description des emplacements des dépositaires au format GeoJSON",
+	"type" : "FeatureCollection",
+	"features" : [{
+			"type" : "Feature",
+			"properties" : {
+				"NOM" : "Nom du dépositaire",
+				"RUE" : "Adresse du dépositaire",
+				"CODEPOSTAL" : "code postal",
+				"COMMUNE" : "Commune du dépositaire"
+			},
+			"geometry" : {
+				"type" : "Point",
+				"coordinates" : "Long-Latitude, exemple '[5.74658, 45.192649]'"
+			}
+		}
+	]
+}

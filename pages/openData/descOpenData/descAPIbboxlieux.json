@@ -1,0 +1,20 @@
+{
+	"description" : "Liste de description des lieux de l'agglomération",
+	"type" : "FeatureCollection",
+	"features" : [{
+			"type" : "Feature",
+			"properties" : {
+				"COMMUNE" : "Ville du lieu, par exemple : 'BERNIN'",
+				"LIBELLE" : "Nom du lieu, par exemple : 'MAIRIE DE BERNIN'",
+				"type" : "lieux",
+				"CODE" : "Code du lieu, par exemple : '0'",
+				"id" : "Identifiant du lieu, par exemple : '0'"
+			},
+			"description" : "Position du lieux de l'aglomération",
+			"geometry" : {
+				"type" : "Point",
+				"coordinates" : "Long-Latitude, exemple '[5.74658, 45.192649]'"
+			}
+		}
+	]
+}

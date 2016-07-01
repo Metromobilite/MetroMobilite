@@ -1,0 +1,27 @@
+[{
+		"description" : "Liste d'horaires de lignes pour une zone d'arrêt",
+		"description" : "Liste des parcours",
+		"pattern" : {
+			"id" : "Identifiant du parcours, par exemple : 'SEM:12:1'",
+			"desc" : "Nom du parcours, par exemple : 'EYBENS-MAISONS NEUVES'",
+			"dir" : "Direction du parcours, '1' ou '2'",
+			"shortDesc" : "Nom court du parcours, par exemple : 'EYBENS-MAISONS'"
+		},
+		"description" : "Liste des arrêts pour ce parcours",
+		"times" : [{
+				"stopId" : "Identifiant, par exemple 'SEM:0451'",
+				"stopName" : "Nom de l'arrêt, par exemple: 'GRENOBLE, CONDORCET'",
+				"scheduledArrival" : "Heure d'arrivée théorique en seconde depuis minuit, exemple : '34680'",
+				"scheduledDeparture" : "Heure de départ théorique en seconde depuis minuit, exemple : '34680'",
+				"realtimeArrival" : "Heure d'arrivé temps réel en seconde depuis minuit, exemple : '34680', si 'realtime' : 'true'",
+				"realtimeDeparture" : "Heure d'arrivé temps réel  en seconde depuis minuit, exemple : '34680', si 'realtime' : 'true'",
+				"arrivalDelay" : "Non utilisé",
+				"departureDelay" : "Non utilisé",
+				"timepoint" : "Non utilisé",
+				"realtime" : "'true' pour données temps réelles, 'false' sinon",
+				"serviceDay" : 1450220400,
+				"tripId" : ""
+			}
+		]
+	}
+]

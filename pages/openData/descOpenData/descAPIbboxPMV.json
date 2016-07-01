@@ -1,0 +1,22 @@
+{
+	"description" : "Liste de description des panneaux à messages variables",
+	"type" : "FeatureCollection",
+	"features" : [{
+			"type" : "Feature",
+			"properties" : {
+				"CODE" : "Code du PMV, exemple : 'GRE_PMV_1001'",
+				"LIBELLE" : "Nom du PMV, exemple : 'RN 90'",
+				"ADRESSE" : "Adresse du PMV, exemple : 'D1090'",
+				"TYPE" : "PMV",
+				"MESSAGES" : "Non renseigné",
+				"type" : "PMV",
+				"id" : "Identifiant du PMV, exemple : 'GRE_PMV_1001'"
+			},
+			"description" : "Position du PMV",
+			"geometry" : {
+				"type" : "Point",
+				"coordinates" : "Long-Latitude, exemple '[5.74658, 45.192649]'"
+			}
+		}
+	]
+}

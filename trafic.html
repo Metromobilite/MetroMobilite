@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="fr">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="initial-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+		<title>Métromobilité – Trafic en temps réel des routes et autoroutes Grenobloises</title>
+		<meta name="description" content="Afin d’éviter les bouchons, Métromobilité vous propose une carte de l’état du trafic en temps réel et des perturbations en cours." />
+		<link rel="stylesheet" type="text/css" href="js/lib/ol/ol.css">
+		<link rel="stylesheet" type="text/css" href="js/lib/bs/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="js/lib/bs/css/bootstrap-datetimepicker.min.css">
+		<link rel="stylesheet" type="text/css" href="css/map.css">
+		<link rel="Stylesheet" type="text/css" href="css/panel.css">
+		<style type='text/css'>
+		.svgLigne {
+			position:relative;
+			width:40px;
+			height:40px;
+			font-size:30px;
+		}
+		.nomPopup{
+			font-weight:bold;
+		}
+		.PopupDetailsEnteteomms, .PopupDetailsEntetecitelib {
+			background-color: #009CD3;
+		}
+		.PopupDetails-detailsCallback ul {
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+		}
+		.PopupDetails-detailsCallback ul li {
+			display: inline-block;
+			font-size: 1.125em;
+			line-height: 35px;
+			text-align: left;
+			width: 49%;
+		}
+		.bs-picto-comms, .bs-picto-iroad {
+			font-size: 0.8em;
+		}
+
+		.ol-control .glyphicon {
+			top:0px;
+		}
+		.dynVide  {
+			display:none!important;
+		}
+		.localize.ol-control.controle-ol.ol-unselectable {
+			top: 145px;
+			z-index: 49;
+		}
+		</style>
+	</head>
+	<body>
+	<div id='head'></div>
+	<div class="container-fluid main">
+		<div class="row">
+			<div id="menu" class="toggleListe pull-right" title="Affichage du panneau de sélection des éléments cartographiques" role="button" aria-label="Affichage du panneau de sélection des éléments cartographiques"><span class="glyphicon glyphicon-menu-hamburger"></span></div>
+			<div id="map" class="map"></div>
+			<div id="popup"></div>
+			<div class="layerSwitcher">
+				<div class="layersPanel">
+					<div class="close-switcher pull-right"><span class="glyphicon glyphicon-minus"></span></div>
+					<div class="pull-left">Afficher : </div>
+					<div class="bases list-unstyled text-left"></div>
+					<ul class="layers list-unstyled text-left"></ul>
+				</div>
+			</div>
+			<div id="panel" class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+				<div class="container-fluid">
+					<!--<h1 style="display:none">circulation déplacements informations temps réel agglomération grenobloise traficolor bouchons accidents travaux autopartage Cité Lib by Ha:mo Covoiturage parking parking-relais Panneaux à Messages Variables</h1>-->
+					<div id="panelContent" class="row">
+						<div id="menuListe" class="toggleListe pull-right" title="Affichage du panneau de sélection des éléments cartographiques" role="button" aria-label="Affichage du panneau de sélection des éléments cartographiques"><span class="glyphicon glyphicon-menu-hamburger"></span></div>
+						<h1>La carte trafic : des informations pour bien préparer vos déplacements !</h1>
+						<h2 data-layer="trr" data-layer2="evtTr"><span>La circulation</span></h2>
+						<p>Etre informé en <b>temps réel</b> des conditions de circulation et des perturbations sur l'agglomération grenobloise (traficolor, bouchons, accidents, travaux).</p>
+						<h2 data-layer="CAM"><span>Les caméras</span></h2>
+						<p>Consulter les caméras de circulation routière.</p>
+						<h2 data-layer="citelib"><span>L'autopartage Cité Lib</span></h2>
+						<p>Localiser les stations de voitures en libre-service mises à la disposition des adhérents inscrits au service Cité Lib.</p>
+						<!--<div class="opendata"><a href="pages/OpenData/OpenDatacitelib.html" target="_blank"><img  src="img/telechargement.png" alt="telecharger les données"></a></div>-->
+						<h2 data-layer="Citélib-by-Ha-Mo"><span>Cité Lib by Ha:mo</span></h2>
+						<p>Localiser l'emplacement des stations des véhicules urbains électriques en autopartage, Toyota Iroad et Coms, et  connaître, <b>en temps réel</b>, le nombre de véhicules disponibles.</p>
+						<!--<p>Localiser l'emplacement de bornes de recharge ouvertes à tout véhicule électrique privé et savoir, <b>en temps réel</b>, le nombre de bornes disponibles.</p>-->
+						<!--<div class="opendata"><a href="pages/OpenData/OpenDataCitelibHamo.html" target="_blank"><img  src="img/telechargement.png" alt="telecharger les données"></a></div>-->
+						<!-- <p class="opendata"><span class="glyphicon glyphicon-plus-sign"></span><a href="#" onclick="lienVers('OmmsStat'); return false;"> Télécharger les données.</a></p> -->
+						<h2 data-layer="covoiturage"><span>Le Covoiturage</span></h2>
+						<p>Afficher les aires de covoiturage et accéder aux sites internet correspondants.</p>
+						<h2 data-layer="PAR"><span>Les parkings Relais</span></h2>
+						<p>Consulter l'emplacement des 19 parkings-relais,  le nombre de places, le nombre de places disponibles ainsi que les lignes de bus situées à proximité. Ces parking-relais sont proches des lignes de bus et de tramways et vous permettent de combiner voiture et transports en commun. Ils proposent également des services de <a href="pages/Velo.html#Veloagrenoble">Métrovélo</a>.</p>
+						<!--<div class="opendata"><a href="pages/OpenData/OpenDataPRelais.html" target="_blank"><img  src="img/telechargement.png" alt="telecharger les données"></a></div>-->
+						<h2 data-layer="PKG"><span>Les parkings</span></h2>
+						<p>Afficher l'emplacement des parking et le nombre de places de chaque parking.</p>
+						<!--<div class="opendata"><a href="pages/OpenData/OpenDataParkings.html" target="_blank"><img  src="img/telechargement.png" alt="telecharger les données"></a></div>-->
+						<h2 data-layer="PMV"><span>Les PMV</span></h2>
+						<p>Consulter les messages inscrits sur les Panneaux à Messages Variables.</p>
+					</div>
+					<div class="row">
+						<div class="input-group input-group-sm dropup col-xs-12 pull-left">
+							<label for="panelFilter" class="sr-only">Rechercher un élément affiché</label>
+							<input type="text" class="form-control" id="panelFilter" placeholder="Rechercher un élément affiché"/>
+							<span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="js/lib/ol/ol.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/moment.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
+	<script type="text/javascript" src="stats/piwik.js"></script>
+	<script type="text/javascript" src="js/outils.js"></script>
+	<script type="text/javascript" src="js/fr.js"></script>
+	<script type="text/javascript" src="js/carte.js"></script>
+	<script type="text/javascript">
+		var majPopupInterval;
+		var sourcePoints;
+		var sourceEvtTr;
+		var localFindFeatures=[];
+		function initPage() {
+			isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+			modififieIconMaxres();
+			$( document ).on( "evtLignesChargees", {}, function( event, data ) {
+				initCarte();
+				initPanneau();
+			});
+
+			$( document ).on( "evtMajDyn", {}, function( event, type ) {
+				if(type == 'evtTr') {
+					if(urlParams.id) {
+						var f = sourceEvtTr.getFeatureById(urlParams.id);
+						if(f) {
+							getMap('map').getView().setCenter(f.getGeometry().getCoordinates());
+							getMap('map').getView().setZoom(14);
+							if(isTaille('xs')) togglePanneau();
+							urlParams.id=false;
+						}
+					}
+				} else if(type=='PAR') {
+					
+				}
+
+			});
+			
+			if (urlParams.iFrame){
+				$(".main").attr('style','top:0px');
+				$.support.cors = true;
+				chargeLignes();
+			} else {
+				$('#head').load('head.html');
+			}
+			
+			if (urlParams.hamo) togglePanneau();
+		}
+		function initPanneau() {
+			$('.toggleListe').click(function(){
+				togglePanneau();
+			});
+			
+			var champ = '#panelFilter';
+			if ($(champ) && $(champ).typeahead) {
+				$(champ).typeahead({
+					source:function(query, process) {
+						var searchUrl = (url.saisieChoisie=='local'?url.hostnameLocal+url.portWSTest:url.hostnameData);
+							searchUrl += '/api/findType/json?';
+							searchUrl += 'types=citelib,PAR,PKG&query='+query;
+							
+						$.ajax({
+							type: "GET",
+							url: searchUrl,
+							error:error,
+							dataType: 'jsonp'
+						}).then(function(response) {
+							var features = localFindFeatures.concat(response.features);
+							process(features);
+						});
+					},
+					matcher: function (item) {
+						var label = item.properties[stylesTypes[item.properties.type].text];
+						var regex = new RegExp( '(' + this.query + ')', 'gi' );
+						return regex.test(label);
+					},
+					sorter: function(items){
+						return items;
+					},
+					highlighter: function (item) {
+						var label = item.properties[stylesTypes[item.properties.type].text];
+						var regex = new RegExp( '(' + this.query + ')', 'gi' );
+						return '<span class="'+item.properties.type+'">'+label.replace( regex, "<strong>$1</strong>" )+'</span>';
+						
+					},
+					updater:function(item){
+							saisieReussie(item);
+							return item.properties[stylesTypes[item.properties.type].text];
+					},
+					items:'20',
+					minLength:4,
+					autoSelect:false
+				});
+			}
+		}
+		function saisieReussie(item) {
+			activeLayer(item.properties.type);
+			if (item.properties.type=='covoiturage') {
+				var f = sourceCov.getFeatureById(item.id);
+				getMap('map').getView().fitGeometry(f.getGeometry(),getMap('map').getSize(),{maxZoom:17});
+			} else {
+				getMap('map').getView().setCenter(ol.proj.transform(item.geometry.coordinates, gg, sm));
+				getMap('map').getView().setZoom(18);
+			}
+			if(isTaille('xs')) togglePanneau();
+		}
+		function initCarte() {
+			var idcarte = 'map';
+			var map=initMap(idcarte);
+			ajouteControle(idcarte,'layerSwitcher');
+			ajouteControle(idcarte,'refresh',maj);
+
+			ajouteLayerSwitcher('map','covoiturage','.layerSwitcher',{
+				libelle:'Covoiturage',
+				initFct:function(){
+					return ajouteLayerCovoiturage('covoiturage','map');
+				}
+			});
+			ajouteLignes(idcarte,getDetails);
+
+			var layerTrr = ajouteLayerManuel('trr','map',{fctStyle:getStylesTrr});
+			sourceTrr = layerTrr.getSource();
+			ajouteLayerSwitcher('map','trr','.layerSwitcher',{libelle:'Réseau routier'});
+			chargeTrr('map',sourceTrr,0);
+			chargeTrrC38('map',sourceTrr);
+			
+			
+			sourcePoints = creeSourceType(idcarte,'citelib,omms,PAR,PKG,PMV,CAM',{fctStyle:getStylesTypes});
+			ajouteLayerType(idcarte,'Citélib-by-Ha-Mo','omms',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Citélib-by-Ha-Mo'});
+			ajouteLayerType(idcarte,'citelib','citelib',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Citélib'}); //,layerSwitcherName:'Points de vente'
+			ajouteLayerType(idcarte,'PKG','PKG',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Parkings'});
+			ajouteLayerType(idcarte,'PAR','PAR',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Parc-relais'});
+			ajouteLayerType(idcarte,'CAM','CAM',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Caméras'});
+			ajouteLayerType(idcarte,'PMV','PMV',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'PMV'});
+
+			
+			/*ajouteLayerSwitcher('map','Citélib-by-Ha-Mo','.layerSwitcher',{
+				libelle:'Cité Lib by Ha:mo',
+				initFct:function(){
+					var layer= ajouteLayerManuel('Citélib-by-Ha-Mo','map',{fctStyle:getStylesTypes,source:sourceOmms});
+					chargeOmms('Citélib-by-Ha-Mo','map',{detailsCallback:getDetails,detailsSeul:true});
+					return layer;
+				}
+			});*/
+			
+			if(isMobile() && navigator.geolocation && !isChrome) { //fonction dépressiée pour l'instant uniquement dans chrome mobile
+				ajouteLayerManuel('depArr','map',{source:null,fctStyle:getStylesTypes}).set('visible',true);
+				ajouteControle('map','localize',onLocalize,{mapName:'map',layerName:'depArr'});
+			}
+			
+			var layerEvtTr = ajouteLayerManuel('evtTr','map',{fctStyle:getStylesEvt,detailsCallback:getDetails,detailsSeul:true});
+			sourceEvtTr = layerEvtTr.getSource();
+			ajouteLayerSwitcher('map','evtTr','.layerSwitcher',{libelle:'Evènements'});
+			//activeLayer('evtTr');
+			updateEvtTR('map',sourceEvtTr);
+			
+			$( document ).on( "evtSourceChargee", {}, function( event, type ) {
+				if (type=='trr')  {
+					updateDynTrr('Troncon','map');
+					updateDynTrrC38('Troncon','map');
+				}
+				if (type=='PAR') updateDyn('PAR','map','PAR',sourcePoints);
+				else if (type=='covoiturage') {//on construit des geojson pour alimenter la saisie semi auto.
+					var geojson  = new ol.format.GeoJSON;
+					var featuresCollection = geojson.writeFeaturesObject(sourceCov.getFeatures(),{featureProjection:sm,dataProjection:gg});
+					localFindFeatures = localFindFeatures.concat(featuresCollection.features);
+				} else if (type == 'omms') {
+					updateDyn('omms','map','omms',sourcePoints);
+					//var geojson  = new ol.format.GeoJSON;
+					//var featuresCollection = geojson.writeFeaturesObject(sourceOmms.getFeatures(),{featureProjection:sm,dataProjection:gg});
+					//localFindFeatures = localFindFeatures.concat(featuresCollection.features);
+				}
+			});
+			
+			if (isMobile) {
+				window.setInterval(function() {maj();}, 60000);
+			}
+
+			if (urlParams.covoiturage) activeLayer("Covoiturage",!urlParams.covoiturage);
+			if (urlParams.parkings) activeLayer("PKG",!urlParams.parkings);
+			if (urlParams.parcrelais) activeLayer("PAR",!urlParams.parcrelais);
+			if (urlParams.hamo) activeLayer("Citélib-by-Ha-Mo",!urlParams.hamo);
+			if (urlParams.citelib) activeLayer("Citélib",!urlParams.citelib);
+			if (urlParams.cam) activeLayer("CAM",!urlParams.cam);
+			if (urlParams.pmv) activeLayer("PMV",!urlParams.pmv);
+			if (urlParams.trafic) {
+				activeLayer("trr",!urlParams.trafic);
+				activeLayer("evtTr",!urlParams.trafic);
+			}
+		}
+		
+		function getDetails(feature) {
+			var nomPopup = '';
+			if (stylesTypes[feature.get('type')]) {
+				nomPopup = feature.get(stylesTypes[feature.get('type')].text)
+			}
+			if(feature.getGeometry().getType() == 'Point') {
+				var coord= ol.proj.transform(feature.getGeometry().getCoordinates(), sm, gg);
+				var lonlat = coord[1]+','+coord[0];
+				var divPrefixe = '';
+				var div = '';
+				if (feature.get('type')=='PKG' || feature.get('type')=='PAR') {
+					div += '<span>'+feature.get('TOTAL')+' '+lang.carteMobile.places+'</span>';
+					div += '<span class="dyn dynVide" data-type="'+feature.get('type')+'"><span class="dispo"></span> '+lang.carteMobile.placesdisponibles+'</span>';
+					div += getLignesProches(lonlat,afficheListeLgn,null,null,'map');
+				}
+				if (feature.get('type')=='CAM') {
+					div += '<span class="dyn" data-type="'+feature.get('type')+'">'+lang.carteMobile.messageCAM+'</span>';
+				}
+				if (feature.get('type')=='PMV') {
+					div += '<span class="dyn" data-type="'+feature.get('type')+'">'+lang.carteMobile.messagePMV+'</span>';
+				}
+				if (feature.get('type')=='citelib') {
+					divPrefixe = lang.station+' : ';
+					div += getLignesProches(lonlat,afficheListeLgn,null,null,'map');
+				}
+				if (feature.get('type')=='omms') {
+					divPrefixe = lang.station+' : ';
+					div = '<div class="adresse adresseVide" data-type="'+feature.get('type')+'"></div>';
+					div += '<div class="dyn dynVide" data-type="'+feature.get('type')+'"><ul class="row">\
+						<li class="state-car" title="'+lang.carteMobile.nbTotVehicule+'" alt="'+lang.carteMobile.nbTotVehicule+'"><span class="bs-picto-car">0</span></li>\
+						<li class="state-park" title="'+lang.carteMobile.nbTotPlace+'" alt="'+lang.carteMobile.nbTotPlace+'"><span class="bs-picto-park">0</span></li>\
+					</ul>\
+					<ul class="row">\
+						<li class="state-iroad-comms background-iroad-pas-dispo" title="'+lang.carteMobile.dispoiRoad+'" alt="'+lang.carteMobile.dispoComms+'"><span class="bs-picto-iroad">'+lang.carteMobile.etatNonDisponible+'</span></li>\
+						<li class="state-iroad-comms background-comms-pas-dispo" title="'+lang.carteMobile.dispoComms+'" alt="'+lang.carteMobile.dispoComms+'"><span class="bs-picto-comms">'+lang.carteMobile.etatNonDisponible+'</span></li>\
+					</ul></div>';
+					div +='<a class="lienInscriptionOmms btn btn-primary btn-xs text-center" href="http://www.citelibbyhamo.fr/inscription/" target="_blank">'+lang.carteMobile.inscriptionOmms+'</a>';
+					div +='<a class="lienInscriptionOmms btn btn-primary btn-xs text-center" href="https://gride.gr-tsc.com/login" target="_blank">' + lang.carteMobile.reservationOmms + '</a>';
+					if (isUrlExists('img/hamo/Hamo_' + feature.get('CODE') +'.jpg'))
+						div += '<span><a href="' + 'img/hamo/Hamo_' + feature.get('CODE') +'.jpg' + '" target="_blank"><div class="glyphicon glyphicon-camera state-camera" title="' + lang.carteMobile.photoStation + '" alt="' + lang.carteMobile.photoStation + '"/></a><span>';
+					majAdresse(feature.get('type'),lonlat); //mis a jour de l'adresse de la station
+				}
+				if (feature.get('type')=='evtTr') {
+					div = '<span class="text-left" data-type="'+feature.get('type')+'">'+feature.get('contenu')+'</span>';
+				}
+				return '<span>'+divPrefixe+'<span class="nomPopup">'+nomPopup+'</span>'+'</span>'+ div;
+			} else {
+				return feature.get('NUMERO')+' - '+feature.get('LIBELLE');
+			}
+		}
+
+		function majAdresse(type,lonlat) {
+				try {
+					var searchUrl;
+					//http://api-adresse.data.gouv.fr/reverse?lon=5.725969&lat=45.188616&type=street
+					searchUrl =  url.urlAddok + '/reverse?lon=' + lonlat.split(',')[1] + '&lat=' + lonlat.split(',')[0] + '&type=street';
+					$.support.cors = true; //pour IE7/8/9
+					$.ajax({
+						type: 'GET',
+						url : searchUrl, 
+						dataType :'json',
+						error : function (xhr, ajaxOptions, thrownError) {
+							console.log('xhr.status : '+xhr.status + '\nxhr.responseText : '+xhr.responseText + '\najaxOptions : '+ajaxOptions + 'thrownError : '+thrownError);
+						},
+						success : function (data) {
+							for (var i = 0; i < data.features.length ; i++) {
+								if (data.features[i].properties.name != "") {
+									$('#popup .PopupDetails-body .PopupDetails-detailsCallback .adresse').html(data.features[i].properties.name);
+									$('#popup .PopupDetails-body .PopupDetails-detailsCallback .adresse').toggleClass('adresseVide',false);
+								return;
+								}
+								
+								} 
+							}
+					});
+					
+			} catch (e) {
+				console.error(e.lineNumber+' : '+e.message);
+				if (attente) fct_attente(false,'nominatim'+item.value);
+			}
+		}
+		function maj() {
+			urlParams.heure = new Date;
+			updateDynTrr('Troncon','map');
+			updateDynTrrC38('Troncon','map');
+			updateEvtTR('map',sourceEvtTr);
+			updateDyn('PAR','map','PAR',sourcePoints);
+		}
+		function togglePanneau() {
+			if(!$('#panel').is(':visible')) {
+				$('.toggleListe').addClass('listeAffichee');
+			} else {
+				$('.toggleListe').removeClass('listeAffichee');
+			}
+			$('#panel').toggle();
+		}
+		initPage();
+		trackPiwik("MetroMobilité : trafic.html");
+	
+	</script>
+  </body>
+</html>

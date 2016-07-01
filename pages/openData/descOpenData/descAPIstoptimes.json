@@ -1,0 +1,26 @@
+[{
+		"description" : "Horaires pour chaque ligne s'arrêtant à une zone d'arrêt",
+		"pattern" : {
+			"id" : "Identifiant de la zone d'arrêt, exemple : 'SEM:E:1'",
+			"desc" : "Nom de la zone d'arrêt, exemple : 'LE FONTANIL PALLUEL'",
+			"dir" : "Sens '1' ou '2'",
+			"shortDesc" : "Nom court de la zone d'arrêt, exemple : 'LE FONTANIL PAL'"
+		},
+		"description" : "Pour chaque arrêt",
+		"times" : [{
+				"stopId" : "Identifiant de l'arrêt, exemple : 'SEM:3207'",
+				"stopName" : "GRENOBLE, CONDORCET",
+				"scheduledArrival" : 63540,
+				"scheduledDeparture" : 63540,
+				"realtimeArrival" : 63540,
+				"realtimeDeparture" : 63540,
+				"arrivalDelay" : 0,
+				"departureDelay" : 0,
+				"timepoint" : true,
+				"realtime" : true,
+				"serviceDay" : 1450134000,
+				"tripId" : ""
+			}
+		]
+	}
+]

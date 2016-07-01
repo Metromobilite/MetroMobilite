@@ -1,0 +1,458 @@
+<!doctype html>
+<!--
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html lang="fr">
+	<head>
+		<base href="../" />
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="initial-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+		<title>MétroMobilité - Mise en oeuvre du Plan de Mobilité</title>
+		<meta name="description" content="TODO" />
+		<link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/actus.css" rel="stylesheet">
+		<link href="css/head.css" rel="stylesheet">
+		<link href="css/index.css" rel="stylesheet">
+		<style type='text/css'>
+			@media (min-width: 768px) {
+				body {
+					background-image:url("img/pages/bandeauPdmMiseEnOeuvre.jpg");
+					background-attachment: fixed;
+					background-repeat:no-repeat;
+					background-position:top center;
+				}
+			}
+			h2 {
+			font-size:18px!important;
+			margin-bottom:0px!important;
+			margin-top:20px!important;
+			text-transform:uppercase!important;
+			font-weight: 500!important;
+			line-height: 1.1!important;
+			}
+            h3 {
+                text-decoration:none;
+                margin-top:0px;
+            }
+			h4 {
+			font-size:12px!important;
+			}
+			#navbarDesc {
+				background-color: #8334a7;
+			}
+			.container-page h2,.container-page h6,.container-page h5,
+            .container-page h4,.container-page h3,.container-page  > div > .row a,
+            .container-page .glyphicon-plus-sign:before,
+            .container-page .glyphicon-circle-arrow-right:before {
+				color:#8334a7;
+			}
+			.container-page hr {
+				 background-color: #8334a7;
+			}
+			.container-page .nav > li > a:hover, .nav > li > a:focus{
+				background-color: #691A8D;
+				border-color: #691A8D;
+				opacity:0.9;
+			}
+            #temoignage {
+                margin-left : 15px;
+                color:#8334a7;
+            }
+            .avantages {
+                margin-bottom:15px;
+                font-size:11px;
+            }
+            .pdmFondMauve { background-color:#8334a7; color:#fff; }
+            div:not(:last-child) > div > .pdmFondMauve { margin-right:15px;}
+            .chiffres {
+                font-size:18px;
+            }
+            .pdmFondRose {
+                background-color:#AC8EBB;
+                padding:15px;
+            }
+            .pdmFondContacts {
+                background-color:#f0037f;
+                color:#fff;
+                padding: 0 15px;
+            }
+            .pdmFondContacts > a,.pdmFondContacts .glyphicon-circle-arrow-right:before {color:#fff!important;}
+            /* triangle */
+            .menuFleche {
+                width: 0;
+                height: 0;
+                border-top: 30px solid transparent;
+                border-bottom: 30px solid transparent;
+                border-left: 20px solid;
+                border-left-color:#c0c0c0;
+                position:relative;
+                z-index:1;
+            }
+            .menuFleche:last-of-type {
+                border-bottom: 30px solid #AC8EBB;
+            }
+            /*triangle interieur pour bords seul*/
+            .menuFleche::before {
+                position:absolute;
+                top:-28px;
+                left:-20px;
+                content:"";
+                width: 0;
+                height: 0;
+                border-top: 28px solid transparent;
+                border-bottom: 28px solid transparent;
+                border-left: 18px solid;
+                border-left-color:#fff;
+            }
+            /*bords haut et bas au niveau des fleches*/
+            #processusPdm .menuFleche:not(:last-of-type)::after{
+                content:"";
+                position:absolute;
+                width:30px;
+                height:60px;
+                top:-30px;
+                left:-30px;
+                border-top:1px solid #c0c0c0;
+                border-bottom:1px solid #c0c0c0;
+            }
+            /*cases normales*/
+            #processusPdm > div, #processusPdm > a {
+                position:relative;
+                float:left;
+                height:60px;
+                line-height:60px;
+                display:block;
+            }
+            #processusPdm > a:first-child {
+                border-left:1px solid #c0c0c0;
+            }
+            #processusPdm > a {
+                width: calc( 20% - 20px);
+                border-top:1px solid #c0c0c0;
+                border-bottom:1px solid #c0c0c0;
+                background-color:#fff;
+                padding-left:10px;
+            }
+            #processusPdm > a:nth-of-type(3) {
+                width: calc( 15% - 20px);
+            }
+            #processusPdm > a:nth-of-type(4) {
+                width: calc( 25% - 20px);
+            }
+            /* selection */
+            #processusPdm > a.selectionne {
+                background-color:#8334a7;
+                color:#fff;
+                outline:none;
+                text-decoration:none;
+            }
+            #processusPdm > a.selectionne + div.menuFleche {
+                border-left-color:#8334a7;
+            }
+
+             #processusPdm > a.selectionne + div.menuFleche::before {
+                border-left-color:#8334a7;
+             }
+             /*fond de la fleche avant la fleche selectionnée */
+             #processusPdm > a.selectionne:not(:first-child)::before {
+                content:"";
+                position:absolute;
+                left:-20px;
+                height:58px;
+                width:20px;
+                background-color:#8334a7;
+                z-index:0;
+             }
+/*survol*/
+            #processusPdm > a:hover {
+                background-color:#AC8EBB;
+                color:#000;
+                outline:none;
+                text-decoration:none;
+            }
+            #processusPdm > a:hover + div.menuFleche {
+                border-left-color:#AC8EBB;
+            }
+
+             #processusPdm > a:hover + div.menuFleche::before {
+                border-left-color:#AC8EBB;
+             }
+             /*fond de la fleche avant la fleche */
+             #processusPdm > a:hover:not(:first-child)::before {
+                content:"";
+                position:absolute;
+                left:-20px;
+                height:58px;
+                width:20px;
+                background-color:#AC8EBB;
+                z-index:0;
+             }
+            #detailProcessusPdm {
+                clear:both;
+                position:relative;
+                min-height:285px;
+            }
+            #detailProcessusPdm > div {
+                color:#000;
+                z-index:0;
+            }
+            /* on utilise un target vers un element caché pour eviter de scroller sur le href */
+            .processusPdmWrap {
+                display:none;
+            }
+            /* puis affecte le style sur l'element adjacent */
+            #detailProcessusPdm > .processusPdmWrap:target + div {
+                z-index:1;
+            }
+            #detailProcessusPdm > div.pdmFondRose {
+                min-height:270px;
+                position:absolute;
+            }
+			.quotes, .quotesInv  {
+				background-repeat:no-repeat;
+				height: 24px;
+			}
+			.quotes{
+				background-image:url('img/pages/quotes.png');
+				background-position: left center;
+			}
+			.quotesInv {
+				background-image:url('img/pages/quotesInv.png');
+				background-position: right center;
+			}
+			.paysage {
+				background-repeat:no-repeat;
+				height: 112px;
+				background-image:url('img/pages/paysage.png');
+				background-position: center center;
+				 margin: 10px;
+			}
+
+		</style>
+	</head>
+	<body>
+	<div id='head'></div>
+	<div class="container-fluid container-page">
+		<div id="rowPage">
+			<div class="row rowHeader bgTransp hidden-xs">
+				<div class="container">
+					<br>
+                    <h1>Mise en oeuvre du Plan de Mobilité</h1>
+					<br>
+				</div>
+				<div id="navbarDesc" class="container-fluid" data-spy="affix" data-offset-top="240">
+					<div class="container">
+						<div class="row">
+							<ul class="nav navbar-nav collapse navbar-collapse">
+								<li><a href="#meoPdm">Processus de mise en oeuvre</a></li>
+								<li><a href="#referentsPdm">Référents Plan de Mobilité</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="container">
+					<div>
+                        <h2 id="meoPdm" class="anchor">Processus de mise en oeuvre</h2>
+                        <hr>
+                        <div id="processusPdm">
+                            <a href="#processusPdm1" class="selectionne">1. Pilotage du projet</a>
+                            <div class="menuFleche"></div>
+                            <a href="#processusPdm2">2. Elaboration du plan d'action</a>
+                            <div class="menuFleche"></div>
+                            <a href="#processusPdm3">3. Etat des lieux</a>
+                            <div class="menuFleche"></div>
+                            <a href="#processusPdm4">4. Signature du Plan de Mobilité</a>
+                            <div class="menuFleche"></div>
+                            <a href="#processusPdm5">5. suivi et évaluation</a>
+                            <div class="menuFleche"></div>
+                        </div>
+                        <div id="detailProcessusPdm">
+                            <!--processusPdm1 en dernier pour qu'il s'affiche par defaut-->
+                            <div class="processusPdmWrap" id="processusPdm2"></div>
+                            <div class="pdmFondRose">
+                                <h3>Elaboration du plan d'action</h3>
+                                <p>
+                                    Au préalable de la définition des objectifs et du plan d’action du plan de Mobilité, les établissements partenaires devront réaliser un État des lieux « Mobilité ». L’objectif de cette étape est de réaliser une analyse de tous les déplacements liés à l’activité des établissements :
+                                    <ul>
+                                        <li>Déplacements « domicile – travail » ;</li>
+                                        <li>Déplacements professionnels ;</li>
+                                        <li>Organisation du temps de travail ;</li>
+                                        <li>Accessibilité de l’établissement ;</li>
+                                        <li>Stationnement et parkings disponibles ;</li>
+                                        <li>Services annexes ;</li>
+                                    </ul>
+                                    Afin de faciliter cette étape, le SMTC, Grenoble-Alpes Métropole, la SEMITAG et les partenaires de la mobilité mettent à disposition des outils pour collecter et analyser les données.
+                                </p>
+                            </div>
+                            <div class="processusPdmWrap" id="processusPdm3"></div>
+                            <div class="pdmFondRose">
+                                <h3>Etat des lieux</h3>
+                                <p>
+                                    Suite à la réalisation de l’état des lieux, les établissements en partenariat avec l’agence Métromobilité et les partenaires de la mobilité, définissent un plan d’actions qui comprend des mesures à sélectionner en fonction des orientations prises par les établissements.<br>Thématiques à sélectionner :
+                                    <ul>
+                                        <li>TRANSPORTS EN COMMUN</li>
+                                        <li>MOBILITE ALTERNATIVE (Covoiturage / Autopartage)</li>
+                                        <li>MOBILITE DOUCE</li>
+                                        <li>GESTION DU TEMPS DE TRAVAIL ET SERVICES AUX SALARIES (Vélo ; Marche et autres formes de mobilité)</li>
+                                        <li>EVOLUTION ET REDUCTION DE LA FLOTTE DE VEHICULE</li>
+                                    </ul>
+                                </p>
+                            </div>
+                            <div class="processusPdmWrap" id="processusPdm4"></div>
+                            <div class="pdmFondRose">
+                                <h3>Signature du Plan de Mobilité</h3>
+                                <p>
+                                    La signature de la convention engage les établissements, à mettre en œuvre le plan d’actions défini préalable. Pour ce faire, les établissements bénéficient de l’accompagnement proposé par le SMTC, Grenoble-Alpes Métropole et de la SEMITAG : <a href="pages/pdmServices.html">offre de services</a>.
+                                </p>
+                            </div>
+                            <div class="processusPdmWrap" id="processusPdm5"></div>
+                            <div class="pdmFondRose">
+                                <h3>Suivi et évaluation</h3>
+                                <p>
+                                    Afin de vérifier l’efficacité du plan d’actions et du plan de mobilité, les établissements partenaires devront évaluer la démarche avec l’appui des partenaires, pendant la durée de la convention « plan de mobilité ». Cette démarche comprendra :
+                                    <ul>
+                                        <li>La réalisation d’une évaluation annuelle  visant à  quantifier le report modal (par le biais du Challenge Mobilité ou d’une enquête interne);</li>
+                                        <li>La réalisation d’un point annuel avec les partenaires de la mobilité pour faire un bilan d’avancement des engagements liés à la convention de partenariat ;</li>
+                                        <li>Le renseignement des données dans le site internet et dans l’espace dédié au management du Plan de Mobilité.</li>
+                                    </ul>
+                               </p>
+                            </div>
+                            <div class="processusPdmWrap" id="processusPdm1"></div>
+                            <div class="pdmFondRose">
+                                <div class="col-sm-9"><div class="row">
+                                    <h3>Pilotage du projet</h3>
+                                    <p>
+                                        Différentes étapes à mettre en oeuvre pour élaborer un plan de mobilité :
+                                        <ul>
+                                            <li>Développer et mobiliser le partenariat avec un acteur de la Mobilité : SMTC / Grenoble-Alpes Métropole / SEMITAG.</li>
+                                            <li>Définir un <a href="#referentsPdm">référent Plan de Mobilité</a> : interlocuteur pour toutes les questions liées à la mobilité de l’établissement.</li>
+                                            <li>Mise en œuvre d’une communication régulière auprès des salariés pour les sensibiliser et les impliquer dans la démarche.</li>
+                                        </ul>
+                                    </p>
+                                    <b>Liens utiles</b><br>
+                                    <p>
+                                        <span class="glyphicon glyphicon-circle-arrow-right"></span><a href="pages/pdmPartenaires.html" target="_self"> Prendre rendez-vous avec un conseiller</a><br>
+                                        <span class="glyphicon glyphicon-circle-arrow-right"></span><a href="pages/pdmPartenaires.html" target="_self"> documents utils liés au pilotage du projet (checklist ? formulaire ?)</a><br>
+										<span class="glyphicon glyphicon-circle-arrow-right"></span><a href="pages/pdmPartenaires.html" target="_self"> Documents utiles liés au pilotage projet</a><br>
+                                    </p>
+                                </div></div>
+                                <div class="col-sm-3"><div class="row">
+                                    <div class="pdmFondContacts text-center"><br>
+                                        <b>Prenez un rendez-vous avec un conseiller</b><br><br>
+                                        <span class="glyphicon glyphicon-circle-arrow-right"></span><a href="pages/pdmContact.html" target="_self"> Contact</a><br><br>
+                                    </div>
+                                </div></div>
+                            </div>
+                        </div>
+                        <div class="clearfix"><br></div>
+                    </div>
+					<div>
+                        <h2 id="referentsPdm" class="anchor">Referents Plan de Mobilite</h2>
+                        <hr>
+                        <div class="col-sm-8"><div class="row">
+                            <p>
+                                Pour faciliter la mise en œuvre d’un plan de mobilité, l'établissement doit identifier en interne une personne qui sera l'interface entre les salariés et le SMTC concernant toutes les questions en lien avec la mobilité.
+                            </p>
+                            <h3>Les missions du référent Plan de Mobilité</h3>
+
+                            Le référent Plan de Mobilité aura comme missions :
+                            <ul>
+                                <li>Accompagner la mise en œuvre de l'état des lieux « Mobilité » ;</li>
+                                <li>Être l'interlocuteur de tous les acteurs de la mobilité ;</li>
+                                <li>Être l'interlocuteur auprès de tous les salariés de l'établissement pour les questions de mobilité et de l'offre de mobilité sur le territoire ;</li>
+                                <li>Réaliser l'évaluation et le suivi de la convention ;</li>
+                                <li>Transmettre toutes les informations liées à toutes les évolutions du réseau des transports en commun ou des offres commerciales a ses salariés ;</li>
+                                <li>Mettre en oeuvre le plan de communication lié au plan de mobilité (affiche, etc.) ;</li>
+                                <li>Participer à la mise en œuvre des évènements mobilités liés au Plan de Mobilité.</li>
+                            </ul>
+                        </div></div>
+						<div class="col-sm-4"><div class="row">
+                            <div id="temoignage" class="pdmFondRose text-center">
+								<div class="paysage"></div>
+                                <b>Jean-Michel</b><br>
+								<div class="quotes"></div>
+                                <p class="text-left">
+                                    Je suis hyper content avec Mon Plan de Mobilité... depuis tous mes collègues se sont mis au vélo, ils sont heureux, travaillent super bien.
+                                    Ils sont plus productifs depuis...et Mon patron gagne beaucoup plus d’argent...<br>
+                                   Merci le SMTC...
+                                </p>
+								<div class="quotesInv"></div>
+                            </div>
+							
+                        </div></div>
+                        <div class="clearfix"><br></div>
+                    </div>
+
+                    <br>
+				</div>
+			</div>
+
+		</div>
+		<div id="btn_up" title="Haut de page">
+			<a href="#" class="glyphicon glyphicon-arrow-up"></a>
+		</div>
+	</div>
+	<div id='footer'></div>
+	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/moment.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
+	<script type="text/javascript" src="stats/piwik.js"></script>
+	<script type="text/javascript" src="js/outils.js"></script>
+	<script type="text/javascript" src="js/fr.js"></script>
+	<script type="text/javascript">var pageStatique = true;</script>
+	<script type="text/javascript" src="js/index.js"></script>
+	<script type="text/javascript">
+		$('#footer').load('index.html #footer',function(){});
+		$('#head').load('head.html',function(){});
+		addBackToTop();
+		trackPiwik("MetroMobilité : decouvrirM.html"); //<!--modif -->
+		var anchor = window.location.hash;
+		window.location.hash = anchor;
+
+        [].map.call(document.querySelectorAll('#processusPdm > a'), function(a) {
+            a.addEventListener('click', function(e) {
+                [].map.call(document.querySelectorAll('#processusPdm > a.selectionne'), function(el) {
+                    el.classList.remove('selectionne');
+                });
+                this.classList.add('selectionne');
+            });
+        });
+
+		//faire marcher les href="#toto" avec la balise <base>
+		$().ready(function() {
+		  $("a[href^='\#']").each(function(){
+			this.href=location.href.split("#")[0]+'#'+this.href.substr(this.href.indexOf('#')+1);
+		  });
+		});
+	</script>
+  </body>
+</html>
+
+
+
+
+
+
+

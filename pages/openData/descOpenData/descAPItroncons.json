@@ -1,0 +1,21 @@
+{
+	"description" : "Description, géométrie et niveau de service de la liste des tronçons",
+	"type" : "FeatureCollection",
+	"features" : [{
+			"description" : "Collection de tronçons",
+			"type" : "Feature",
+			"properties" : {
+				"CODE" : "Code du tronçon, exemple :'T605'",
+				"NIVEAU" : "Niveau du tronçon, exemple :'0', '1' ou  '2'",
+				"NSV_ID" : "'0' : Non précisé",
+				"type" : "troncon",
+				"id" : "Code du tronçon, exemple :'T605'",
+				"shape":"donnée polyligne encodée uniquement pour l'URL http://data.metromobilite.fr/api/troncons/poly, par exemple 'et}rGegkb@TILEBEJMl@UJIBC`A{@BATAl'"
+			},
+			"geometry" : {
+				"type" : "MultiLineString",
+				"coordinates" : "Tableau de lati-longi décrivant le tronçon, par exemple: '[[[5.797151, 45.212985], [5.797198, 45.212885], [5.80, 45.22]]]' uniquement pour l'URL http://data.metromobilite.fr/api/troncons/json"
+			}
+		}
+	]
+}

@@ -1,0 +1,292 @@
+<!doctype html>
+<!--
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html lang="fr">
+	<head>
+		<base href="../" />
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="initial-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+		<title>Métromobilité – Se déplacer en vélo à Grenoble </title>
+		<meta name="description" content="Trouvez toutes les informations sur la pratique du vélo à Grenoble et dans son agglomération : Métrovélo, pistes cyclables, les avantages du vélo..." />
+		<link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/actus.css" rel="stylesheet">
+		<link href="css/head.css" rel="stylesheet">
+		<link href="css/index.css" rel="stylesheet">
+		<!-- debut modif image-->
+		<style type='text/css'>
+			@media (min-width: 768px) {
+				body {
+					background-image:url("img/pages/bandeauvelo.jpg");
+					background-attachment: fixed;
+					background-repeat:no-repeat;
+					background-position:top center;
+				}
+			}
+			h2 {
+			font-size:18px!important;
+			margin-bottom:0px!important;
+			margin-top:20px!important;
+			text-transform:uppercase!important;
+			font-weight: 500!important;
+			line-height: 1.1!important;
+			}
+			
+			h4 {
+			font-size:12px!important;
+			}
+			
+			#navbarDesc {
+				background-color: #0270bc;
+				opacity:0.9;
+			}
+			.container-page h2,.container-page h6, .container-page h5, .container-page h4, .container-page h3, .container-page  > div > .row a, .container-page .glyphicon-plus-sign:before   {
+				color:#0270bc;
+			}
+			.container-page hr {
+				 background-color: #0270bc;
+			}
+			.container-page .nav > li > a:hover, .nav > li > a:focus{
+				background-color: #0054ab;
+				border-color: #0054ab;
+				opacity:0.9;
+			}
+		</style>
+		<!--Fin modif -->
+	</head>
+	<body>
+	<div id='head'></div>
+	<div class="container-fluid container-page">
+	<!-- debut modif image--> 
+		<div id="rowPage">
+			<div class="row rowHeader bgTransp hidden-xs">
+	<div class="container">
+		<h1>SE DEPLACER A VELO<br>
+		Economique, bon pour la santé, non polluant...<br>
+		de bonnes raisons pour rouler à vélo</h1>
+		<br>
+	</div>
+	<div id="navbarDesc" class="container-fluid" data-spy="affix" data-offset-top="240">
+		<div class="container">
+			<div class="row">
+				<ul class="nav navbar-nav collapse navbar-collapse">
+					<li><a href="#Pistescyclables">Pistes cyclables</a></li>
+					<li><a href="#Veloagrenoble">Grenoble à vélo</a></li>
+					<li><a href="#LeVeloPratique">Le Vélo pratique</a></li>
+					<li><a href="#securite">En sécurité</a></li>
+					<li><a href="#sante">Bon pour la santé</a></li>
+					<li><a href="#rapide">Rapide le vélo ?</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>	
+</div>
+<div class="row">
+	<div class="container">
+		<h2 id="Pistescyclables" class="anchor">Les pistes cyclables</h2>
+			<hr>
+			<div class="centrerTexte pull-right" >
+				<img src="img/Pages/velo_cyclable.jpg" alt="" width="600" height="450"/>
+			</div>	
+			<p> Grenoble et son agglomération compte 320 km de pistes cyclables, ce qui en fait un des réseaux les plus denses de France. </p>
+				Une pratique du vélo facilitée par la topographie des lieux : Grenoble est la ville la plus plate de France.<br><br>
+				Les itinéraires cyclables existent sous diverses formes :<br>
+				<ul class="classic">
+					<li>Pistes cyclables en site propre, séparées de la circulation</li>
+					<li>Bandes cyclables tracées sur la chaussée</li>
+					<li>Contresens cyclistes autorisés signalés dans les rues à sens unique</li>
+				</ul>
+				<br><br>
+				<p>
+				<span class="glyphicon glyphicon-plus-sign"></span><a href="velo.html"> Carte des pistes cyclables</a><br>
+				<span class="glyphicon glyphicon-plus-sign"></span><a href="iti.html"> Calculer son itinéraire à vélo</a>
+				</p>
+			
+			<span class="clearfix"></span>
+			<br>
+		<h2 id="Veloagrenoble" class="anchor">Le vélo dans Grenoble et son agglomération</h2>
+			<hr>
+			<div class="centrerTexte pull-right" >
+				<img src="img/Pages/velo_grenoble.jpg" alt="Métrovélo" width="600" height="450"/>
+			</div>	
+				<h3>Louer un vélo</h3>
+					<p> Sur l'agglomération grenobloise, vous pouvez louer un Métrovélo pour une courte ou longue durée (de la journée à l’année) :</p>
+					<ul class="classic">
+						<li>dans les <b>agences Métrovélo</b> (gare SNCF de Grenoble et Campus Universitaire de Saint-Martin-d’Hères)</li>
+						<!--<li>dans les <b><a href="pages/DecouvrirM.html#Agences">agences de Mobilité M</a></b></li>-->
+						 
+					</ul>
+					Certaines gares disposent d'un service de location généralement appelé Vélostation.<br><br>
+					A noter que les <b>abonnés Métrovélo</b> bénéficient de 40% de remise sur l'abonnement mensuel de Cité lib, le système d'autopartage de l'agglomération grenobloise.<br><br>
+					Si vous utilisez un Métrovélo pour vous rendre sur votre lieu de travail, <a href="pages/TC.html#participation">votre employeur prend en charge 50% du prix de votre abonnement Métrovélo</a>. <br>Il suffit pour cela de lui fournir une copie de votre abonnement Métrovélo. 
+					<br><br>
+					<p> 
+					<span class="glyphicon glyphicon-plus-sign"></span><a href="http://www.metrovelo.fr/" title="Accès au site www.metrovelo.fr - Nouvelle fenêtre" target="_blank"> www.metrovelo.fr</a>
+					</p>
+				
+				<h3>Parking et consignes à vélo</h3>
+			
+					<ul class="classic">
+						<li>5000 places de stationnement gratuit (arceaux)</li>
+						<li>260 places en consigne individuelle (MétrovéloBOX)</li>
+						<li>830 places en consigne collective (gares SNCF de Grenoble, Gières et Echirolles, P+R Vallier-Catane, Grand Sablon et Esplanade)</li>
+					</ul>
+					
+					<p>
+					<span class="glyphicon glyphicon-plus-sign"></span><a href="velo.html"> Carte des points de location et consignes</a><br>
+					<span class="glyphicon glyphicon-plus-sign"></span><a href="http://www.ter-velo-rhonealpes.com/" title="Consignes collectives et individuelles proches des gares - Nouvelle fenêtre" target="_blank"> Consignes collectives et individuelles proches des gares</a>
+					</p>
+				<h3>Vélo et transports en commun</h3>
+				
+					<ul class="classic">
+						<li>Le transport des vélos est autorisé et gratuit dans les trains TER (Transport Express Régional) et les cars Transisère dans la limite des places disponibles.</li>
+						<li>Le transport des vélos est autorisé dans les trams avant 7h30 et après 19h30 en semaine, et toute la journée les dimanches et les jours fériés.</li>
+						<li>Les vélos ne sont pas admis dans les bus Tag.</li>
+						<li>Les vélos pliants sont autorisés sans condition horaire dans les bus et les trams.</li>
+					</ul>	
+					<br>
+					<span class="clearfix"></span>
+					
+		<h2 id="LeVeloPratique" class="anchor">Le vélo pratique</h2>
+			<hr>
+			<div class="centrerTexte pull-right" >
+				<img src="img/Pages/velo_reparation.jpg" alt="" width="600" height="450"/>
+			</div>	
+			<p>Vous souhaitez savoir comment protéger votre vélo, comment l'entretenir ou le réparer ? Consultez les fiches dans les liens ci-dessous.<br>
+			</p> 
+			<p>
+			<span class="glyphicon glyphicon-plus-sign"></span><a href="pdf/Plaquette_securite_2009.pdf" target="_blank"> Quatre règles d'or pour lutter contre le vol (pdf, 575 ko)</a><br>
+			<span class="glyphicon glyphicon-plus-sign"></span><a href="http://velo-reparation.fr/entretien/fiches_techniques.php" title="Les fiches pratiques d'entretien de votre vélo - Nouvelle fenêtre" target="_blank"> Les fiches pratiques d'entretien de votre vélo</a><br>
+			</p>
+			
+				<h3>Réglementation</h3>
+				<p>Le vélo est un véhicule au sens du code de la route. Ses règles doivent être respectées, sous peine d'amende, mais aussi pour préserver sa sécurité... </p>
+					<h4><b>Circulation</b></h4>
+						<ul class="classic">
+							<li>Interdite sur les autoroutes et autres voies spécifiquement interdites (panneau blanc cerclé de rouge et portant le dessin d'un vélo).</li>
+							<li>Interdite dans les couloirs réservés aux transports en commun, sauf mention contraire.</li>
+							<li>Obligation d'utiliser les pistes et bandes cyclables uniquement si elles sont équipées du panneau rond avec un vélo sur fond bleu.</li>
+							<li>Autorisée sur les aires piétonnes, et pour les enfants de moins de 8 ans sur les trottoirs, à la condition de conserver l’allure du pas et de ne pas occasionner de gêne aux piétons (sauf disposition contraire du Maire).</li>
+							<li>Le piéton a priorité sur le cycliste.</li>
+							<li>Obligation de respecter le sens de circulation (sens unique, sauf mention particulière), les priorités, feux tricolores...</li>
+							<li>Interdiction de se faufiler entre les véhicules à l'arrêt.</li>
+							<li>Stationnement : autorisé dans les endroits prévus, et donc en théorie interdit sur les trottoirs, sauf disposition contraire du Maire.</li>
+							<li>Le cycliste ne doit pas avoir un taux d'alcoolémie égal ou supérieur à 0,5g /l de sang ou téléphoner en circulant (sauf kit mains libres).</li>
+						</ul>
+						<span class="clearfix"></span>
+					<h4><b>Equipement</b></h4>
+						<p>Outre 2 freins, il faut avoir un éclairage avant (blanc ou jaune) et arrière (rouge), des catadioptres, un timbre ou grelot et porter un gilet jaune la nuit hors agglomération. </p>
+						<br>
+		<h2 id="securite" class="anchor">Augmenter sa sécurité</h2>
+			<hr>
+			<div class="centrerTexte pull-right" >
+				<img src="img/Pages/velo_securite.jpg" alt="" width="600" height="450"/>
+			</div>	
+				<p> En milieu urbain, un cycliste a 4 fois plus de risques d'être victime (légère, grave, décès) d'un accident qu'un automobiliste, à kilométrage identique parcouru.<br><br>
+				Tout comme pour les piétons, les accidents les plus graves se produisent aux <b>intersections lorsqu'une voiture tourne à droite ou à gauche</b>.
+				Le cerveau de l'automobiliste n'a pas détecté le cycliste qui a un gabarit bien inférieur à celui d'une voiture.<br><br>
+				<b>N'hésitez pas à être bien visible</b> à tout moment et par tous temps : baudrier et/ou brassards fluos et rétro-réfléchissants, écarteur orange, éclairage d'au moins 10 lux...et optez pour le port du casque qui limite les traumatismes crâniens.<br><br>
+				Par ailleurs, soyez particulièrement vigilant lorsque vous circulez à proximité des camions et des bus, les conducteurs n'ont bien souvent pas la visibilité suffisante pour distinguer les cyclistes circulant à côté d'eux, en raison notamment des <b>angles morts</b>.<br><br>
+				Sans oublier que plus il y aura de cyclistes, plus l'automobiliste intégrera sa présence potentielle... </p>
+				<p>
+				<span class="glyphicon glyphicon-plus-sign"></span><a href="http://www.securite-routiere.gouv.fr/conseils-pour-une-route-plus-sure/conseils-pratiques/circuler-a-velo/circuler-a-velo-roulez-en-toute-securite" title="Conseils pour circuler à vélo en toute sécurité - Nouvelle fenêtre" target="_blank"> conseils pour circuler à vélo en toute sécurité</a><br>
+				<span class="glyphicon glyphicon-plus-sign"></span><a href="http://www.youtube.com/watch?feature=player_embedded&v=eO99B5T2YX8" title="Qu'est-ce qu'un angle mort ? Vidéo non disponible en audiodescription - Nouvelle fenêtre" target="_blank"> Qu'est qu'un angle mort ? Visualisez la vidéo...</a><br>
+				</p>
+			<span class="clearfix"></span>
+			<br>
+		<h2 id="sante" class="anchor">Bon pour la santé</h2>
+			<hr>
+			<div class="centrerTexte pull-right" >
+				<img src="img/Pages/velo_sante.jpg" alt="" width="600" height="450"/>
+			</div>	
+			<p> Faire 30 minutes d’activité physique par jour :</p>
+			<ul class="classic">
+				<li>limite les risques cardio-vasculaires </li>
+				<li>diminue l'ostéoporose</li>
+				<li>augmente l'espérance de vie</li>
+			</ul>
+			<br>
+			Le vélo, même à allure modérée, entre dans la catégorie de ces activités...<br><br>
+			Sans oublier la consommation de calories (3 fois plus qu'en voiture et 2 fois plus qu'à pied)...
+			Une étude a permis de montrer que se déplacer régulièrement à vélo fait plus gagner en espérance de vie que ce qu’on perd du fait des accidents de la route.
+			<br>
+			<span class="clearfix"></span>
+		<h2 id="rapide" class="anchor">Rapide le vélo ?</h2>
+			<hr>
+			<div class="centrerTexte pull-right" >
+				<img src="img/Pages/velo_rapide.jpg" alt="" width="600" height="450"/>
+			</div>
+			<p>Le vélo est le moyen le plus rapide en milieu urbain...<br><br>
+			Le vélo permet de bien gérer son temps, car il ne subit pas l'aléa des congestions. <br>Il est aussi pratique car il assure le "porte à porte".<br>
+			Il est enfin rapide : en effet, en ville, en moyenne, un cycliste roule à 15 km/h. Un automobiliste roule, compte tenu des intersections, des feux tricolores...en moyenne à 20 km/h en heure creuse et à 10 km/h en heure de pointe, cette vitesse augmentant d'environ 8 km/h en zone peu dense.</p>
+			Pour un trajet de 2 km en ville, il faut :
+			<ul class="classic">
+						<li>30 mn à pied</li>
+						<li>entre 6 et 12 mn en voiture + le temps pour se garer et rejoindre à pied sa destination</li>
+						<li>8 mn en tram, en bus + le temps de marche à pied pour rejoindre l'arrêt et éventuellement l'attente à l'arrêt</li>
+						<li>8 mn en vélo (+ quelques secondes pour attacher son vélo)</li>
+			</ul>
+			Aller au travail en vélo ou à pied permet aussi d’éviter de rejeter 500 à 600 kg de CO2 par an (base 10(2 x 5) km/jour).<br><br>
+			<span class="clearfix"></span>
+			<br>
+	</div>
+</div>
+		</div>
+		<!--Fin modif -->
+		<div id="btn_up" title="Haut de page">
+			<a href="#" class="glyphicon glyphicon-arrow-up"></a>
+		</div>
+	</div>
+	<div id='footer'></div>
+	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/moment.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
+	<script type="text/javascript" src="stats/piwik.js"></script>
+	<script type="text/javascript" src="js/outils.js"></script>
+	<script type="text/javascript" src="js/fr.js"></script>
+	<script type="text/javascript">var pageStatique = true;</script>
+	<script type="text/javascript" src="js/index.js"></script>
+	<script type="text/javascript">
+		$('#footer').load('index.html #footer',function(){});
+		$('#head').load('head.html',function(){});
+		addBackToTop();
+		trackPiwik("MetroMobilité : Velo.html"); //<!--modif -->
+		var anchor = window.location.hash;
+		window.location.hash = anchor;
+		
+		//faire marcher les href="#toto" avec la balise <base>
+		$().ready(function() {
+		  $("a[href^='\#']").each(function(){ 
+			this.href=location.href.split("#")[0]+'#'+this.href.substr(this.href.indexOf('#')+1);
+		  });
+		});
+	</script>
+  </body>
+</html>
+
+
+
+
+
+
+

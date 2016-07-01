@@ -1,0 +1,9 @@
+{
+	"description" : "Disponibilité et niveau de service de la liste des lignes TC",
+	"description" : "Identifiant pour chaque lignes TC",
+	"C38_1380" : [{
+			"nsv_id" : "'0' : 'n.c.', '1' : 'Service normal','2' : 'Service perturbé','3' : 'Service très perturbé','5' : 'Hors horaire de service'",
+			"time" : "Unix TimeStamp en miliseconde, exemple '1449813396561'"
+		}
+	]
+}

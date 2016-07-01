@@ -1,0 +1,46 @@
+{
+	"description" : "Nouvel indice atmosphérique",
+	"1" : [{
+			"date" : "Date courante par exemple : '2015-12-13'",
+			"date_modification" : {
+				"date" : "Horodate de la derniere modification, par exemple '2015-12-13 21:53:22'",
+				"timezone_type" : 3,
+				"timezone" : "UTC"
+			},
+			"dispositif_en_cours" : "Par exemple : 'Pas de dispositif'",
+			"polluant_majoritaire" : "Par exemple : 'Particules PM10'",
+			"indice_exposition_sensible" : {
+				"description" : "date sur 3 jours glissants",
+				"2015-12-12" : {
+					"indice" : "Exemple : '5'",
+					"texte" : "Exemple : 'Moyen'"
+				}
+			},
+			"indice_exposition_moyenne" : {
+				"description" : "date sur 3 jours glissants",
+				"2015-12-12" : {
+					"indice" : "Exemple : '4'",
+					"texte" : "Exemple : 'Bon'"
+				}
+			},
+			"tendance_apres_demain" : "D&eacute;gradation",
+			"activation" : {
+				"description" : "date sur 3 jours glissants",
+				"2015-12-12" : {
+					"indice" : "Exemple : '1'",
+					"texte" : "Exemple : 'Pas de dispositif'"
+				}
+			},
+			"action" : {
+				"description" : "date sur 3 jours glissants",
+				"2015-12-12" : {
+					"indice" : "Exemple : '0'",
+					"texte" : "Aucune action"
+				}
+			},
+			"url_carte" : "Exemple : 'http://www.air-rhonealpes.fr/sites/ra/files/thumbnails/image/20151213_multi-polluant_reg.png'",
+			"commentaire" : "Exemple : 'Aujourd&#039;hui, la qualit&eacute; de l&#039;air est m&eacute;diocre ...'",
+			"time" : "Unix TimeStamp en miliseconde, exemple '1450040002000'"
+		}
+	]
+}

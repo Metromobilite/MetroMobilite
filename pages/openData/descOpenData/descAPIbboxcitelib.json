@@ -1,0 +1,22 @@
+{
+	"description" : "Liste de description des emplacements citélib",
+	"type" : "FeatureCollection",
+	"features" : [{
+			"type" : "Feature",
+			"properties" : {
+				"CODE" : "Code de l'emplacement, example : '1'",
+				"Ville" : "Ville de l'emplacement, example : 'Grenoble'",
+				"Nom de la station" : "Nom de l'emplacement, example : 'Bir Hakeim'",
+				"GPSLatitude" : "Latitude de l'emplacement, example : '45.188679'",
+				"GPS Longitude" : "Longitude de l'emplacement, example : '5.736693'",
+				"type" : "citelib",
+				"id" : "Identifiant de l'emplacement, example : '1'"
+			},
+			"description" : "Position de l'emplacement citélib",
+			"geometry" : {
+				"type" : "Point",
+				"coordinates" : "Long-Latitude, exemple '[5.74658, 45.192649]'"
+			}
+		}
+	]
+}

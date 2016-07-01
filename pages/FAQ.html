@@ -1,0 +1,194 @@
+<!doctype html>
+<!--
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html lang="fr">
+	<head>
+		<base href="../" />
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="initial-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+		<title> MétroMobilité - Questions frequemment posées </title>
+		<meta name="description" content="Vous rencontrez des problèmes avec les services de Métromobilité? Consultez notre page FAQ afin de trouver des réponses à vos questions." />
+		<link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/actus.css" rel="stylesheet">
+		<link href="css/head.css" rel="stylesheet">
+		<link href="css/index.css" rel="stylesheet">
+		<!-- debut modif image-->
+		<style type='text/css'>
+			@media (min-width: 768px) {
+				body {
+					background-image:url("img/pages/bandeauTC.jpg");
+					background-attachment: fixed;
+					background-repeat:no-repeat;
+					background-position:top center;
+				}
+			}
+			h2 {
+			font-size:18px!important;
+			margin-bottom:0px!important;
+			margin-top:20px!important;
+			text-transform:uppercase!important;
+			font-weight: 500!important;
+			line-height: 1.1!important;
+			}
+			#navbarDesc {
+				background-color: #0270bc;
+				opacity:0.9;
+			}
+			.container-page h2,.container-page h6, .container-page h5, .container-page h4, .container-page h3, .container-page  > div > .row a, .container-page .glyphicon-plus-sign:before   {
+				color:#0270bc;
+			}
+			hr {
+				 background-color: #0270bc;
+				 height: 4px;
+			}
+
+
+			.container-page .nav > li > a:hover, .nav > li > a:focus{
+				background-color: #0054ab;
+				border-color: #0054ab;
+				opacity:0.9;
+			}
+		</style>
+		<!--Fin modif -->
+	</head>
+	<body>
+	<div id='head'></div>
+	<div class="container-fluid container-page">
+	<!-- debut modif image-->
+		<div id="rowPage">
+			<div class="row rowHeader bgTransp hidden-xs">
+	<div class="container">
+<h1>QUESTIONS FREQUEMMENT POSEES</h1>
+	<br>
+	</div>
+	<div id="navbarDesc" class="container-fluid" data-spy="affix" data-offset-top="240">
+		<div class="container">
+			<div class="row">
+				<ul class="nav navbar-nav collapse navbar-collapse">
+					<li><a href="#Favoris">Favoris</a></li>
+					<li><a href="#session">Session expirée</a></li>
+					<li><a href="#loc">Géolocalisation</a></li>
+					<li><a href="#PP">Prochains passages</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>	
+	</div>
+		<div class="row">
+			<div class="container">
+		<h2 id="Favoris" class="anchor"> Je n'arrive pas à supprimer mes favoris (ou mes notifications) </h2>
+			<hr>
+			<div class="centrerTexte pull-right" >
+				<img src="img/Pages/FAQ_Sup_Fav.png" alt="" width="600" height="450"/>
+			</div>	
+				<p>
+				Lorsque vous avez mis un <b>arrêt en favori</b> (ou que vous avez reçu une <b>notification</b>) et que celui-ci ne vous est plus utile vous pouvez le <b>supprimer</b>. <br></p>
+				Pour cela, 2 solutions :<br><br>
+				<ul class="classic">
+					<li>Lorsque vous êtes sur votre page de favoris, <b>faites glisser le favori</b> que vous voulez supprimer vers la droite ou la gauche de l'écran. 3 choix s'offrent  à vous. Supprimer / Afficher / Annuler. <b>Appuyez sur "Supprimer"</b>.<br><br></li>
+					<li>Sinon, lorsque vous êtes sur votre page de favoris, <b>appuyez sur le favori</b> que vous souhaitez supprimer et les prochains passages s'affichent. Ensuite, <b>désélectionnez l'étoile</b> qui est affichée en jaune. <br></li>
+				</ul>
+				
+				<span class="clearfix"></span>
+				<br>
+		<h2 id="session" class="anchor"> Lorsque j’essaie d'accéder à mon compte SIV, le navigateur m'indique que ma session a expiré</h2>
+			<hr>
+			<div class="centrerTexte pull-right" >
+				<img src="img/Pages/FAQ_Session.png" alt="" width="600" height="450"/>
+			</div>	
+				<p>
+				Pour accéder à la page d'<b>inscription</b> ou de <b>connexion aux alertes Métromobilité</b>, cliquez sur <b>« Mon compte »</b> en haut à droite de l'écran d'accueil.<br><br>
+				Lorsque vous êtes sur la page SIV (Système d'Information Voyageur), et que vous tentez de créer un compte et/ou de vous connecter, votre navigateur vous affiche le message suivant :<br>
+				<b>"Votre session a expiré".</b><br><br>
+				Ce message indique que <b>votre navigateur n’accepte pas les « cookies »</b>. Pour remédier à ce problème, vous devez accepter les « cookies » dans les <b>options de votre navigateur</b> (Firefox, IE, Safari, Google Chrome etc.).
+				</p>
+				<span class="clearfix"></span>
+				<br>
+		<h2 id="loc" class="anchor"> L'application n'arrive pas à me géolocaliser </h2>
+			<hr>
+			<div class="centrerTexte pull-right" >
+				<img src="img/Pages/FAQ_Geoloc.png" alt="" width="600" height="450"/>
+			</div>	
+				<p>
+				Lorsque vous lancez l'application et que vous cherchez à utiliser la fonction <b>« autour de moi »</b>, l'application ne vous localise pas.<br> <br>
+				Cela veut dire que votre smartphone n'autorise pas les applications à utiliser votre <b>position GPS</b>. Pour permettre à l'application d'afficher votre position, vous devez modifier les <b>réglages de votre téléphone</b> et activer le service de localisation.
+				</p>
+			<span class="clearfix"></span>
+			<br>
+		<h2 id="PP" class="anchor"> Les prochains passages de mon bus ne sont pas en temps réel </h2>
+			<hr>
+			<div class="centrerTexte pull-right" >
+				<img src="img/Pages/FAQ_Reel_time.png" alt="" width="600" height="450"/>
+			</div>	
+				<p>
+				La fonction <b>« prochains passages »</b> du site internet et de l'application vous propose le <b>temps d'attente</b> jusqu'au passage des bus ou trams suivants. Cette information est basée sur la <b>géolocalisation du bus</b> par rapport à celle de l'arrêt demandé. Parfois, le signe " <img src="img/Pages/rss.png" alt="" width="10" height="10"/> " n'est pas présent. Cela signifie que l'information sur le temps d'attente est <b>basée sur les horaires de passage théoriques</b>. <br></p>
+				L'absence de temps réel et l'affichage des horaires théoriques peut s'expliquer de plusieurs manières :<br><br>
+					<ul class="classic">
+						<li>La ligne que vous consultez n'est <b>pas équipée de véhicules localisés</b> (les lignes Flexos, la ligne 17 et certains bus Transisère).<br><br></li>
+						<li> Un <b>dysfonctionnement chez le fournisseur</b> de la donnée nous oblige à afficher le temps d'attente théorique.<br></li>
+					</ul>
+			
+				<span class="clearfix"></span>
+				<br>
+			</div>
+		</div>
+		</div>
+		<!--Fin modif -->
+		<div id="btn_up" title="Haut de page">
+			<a href="#" class="glyphicon glyphicon-arrow-up"></a>
+		</div>
+	</div>
+	<div id='footer'></div>
+	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/moment.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
+	<script type="text/javascript" src="stats/piwik.js"></script>
+	<script type="text/javascript" src="js/outils.js"></script>
+	<script type="text/javascript" src="js/fr.js"></script>
+	<script type="text/javascript">var pageStatique = true;</script>
+	<script type="text/javascript" src="js/index.js"></script>
+	<script type="text/javascript">
+		$('#footer').load('index.html #footer',function(){});
+		$('#head').load('head.html',function(){});
+		addBackToTop();
+		trackPiwik("MetroMobilité : FAQ.html"); //<!--modif -->
+		var anchor = window.location.hash;
+		window.location.hash = anchor;
+		
+		//faire marcher les href="#toto" avec la balise <base>
+		$().ready(function() {
+		  $("a[href^='\#']").each(function(){ 
+			this.href=location.href.split("#")[0]+'#'+this.href.substr(this.href.indexOf('#')+1);
+		  });
+		});
+	</script>
+  </body>
+</html>
+
+
+
+
+
+
+

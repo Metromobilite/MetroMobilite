@@ -1,0 +1,9 @@
+[
+	{
+		"id" : "Identifiant de l'arret la ligne ex 'SEM:0844'",
+		"name" : "Nom de l''arret exemple 'GRENOBLE, CHAMPS-ELYSEES'",
+		"lon" : "Longitude de l'arret exemple : '5.71025'",
+		"lat" : "Latitude de l'arret exemple : '45.17794'",
+		"lines" : "Nom de la ligne passant par cet arret, exemple : ['SEM:12']"
+	}
+]

@@ -1,0 +1,207 @@
+<!doctype html>
+<!--
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html lang="fr">
+	<head>
+		<base href="../" />
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="initial-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+		<title>MétroMobilité - Calculez vos émission de CO2</title>
+		<meta name="description" content="Métromobilité vous permet de calculer vos émissions de CO2 liées à vos déplacements. " />
+		<link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/actus.css" rel="stylesheet">
+		<link href="css/head.css" rel="stylesheet">
+		<link href="css/index.css" rel="stylesheet">
+		<!-- debut modif image-->
+		<style type='text/css'>
+			@media (min-width: 768px) {
+				body {
+					background-image:url("img/pages/bandeauEmissionCO2.jpg");
+					background-attachment: fixed;
+					background-repeat:no-repeat;
+					background-position:top center;
+				}
+			}
+			h2 {
+			font-size:18px!important;
+			margin-bottom:0px!important;
+			margin-top:20px!important;
+			text-transform:uppercase!important;
+			font-weight: 500!important;
+			line-height: 1.1!important;
+			}
+			
+			h4 {
+			font-size:11px!important;
+			}
+			#navbarDesc {
+				background-color: #21881c;
+				opacity:0.9;
+			}
+			.container-page h2, .container-page h6, .container-page h5, .container-page h4, .container-page h3, .container-page  > div > .row a, .container-page .glyphicon-plus-sign:before   {
+				color:#21881c;
+			}
+			hr {
+				 background-color: #21881c;
+				 height: 4px;
+			}
+			.container-page .nav > li > a:hover, .nav > li > a:focus{
+				background-color: #1f6314;
+				border-color: #1f6314;
+				opacity:0.9;
+			}
+		</style>	
+		<!--Fin modif -->
+	</head>
+	<body>
+	<div id='head'></div>
+	<div class="container-fluid container-page">
+	<!-- debut modif image--> 
+		<div id="rowPage">
+			<div class="row rowHeader bgTransp hidden-xs">
+				<div class="container">
+					<h1>Calculer mes émissions de CO2</h1>
+				</div>
+				<div id="navbarDesc" class="container-fluid" data-spy="affix" data-offset-top="240">
+					<div class="container">
+						<div class="row">
+							<ul class="nav navbar-nav collapse navbar-collapse">
+								<li><a href="#situation">Une situation préoccupante</a></li>
+								<li><a href="#comparatif">Comparez !</a></li>
+								<li><a href="#calculez">Calculez !</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="container">
+					<h2 id="situation" class="anchor">Une situation préoccupante</h2>
+						<hr>
+						<div class="centrerTexte pull-right" >
+							<img src="img/Pages/emission_co2.jpg" alt="" width="600" height="450"/>
+						</div>
+						<p>Les transports sont aujourd'hui le premier secteur émetteur de gaz à effet de serre en France. Les émissions de ces gaz sont très majoritairement dues à la consommation de produits pétroliers. Le principal gaz à effet de serre en cause est le gaz carbonique (CO2).</p>
+						<p>Malgré les gains en consommation de carburant des véhicules et donc la diminution de leurs émissions, les émissions globales du secteur ont augmenté du fait, principalement, de la hausse constante du trafic.</p>
+						<p>La France, signataire du protocole de Kyoto de 1997, s’est engagée à ne pas émettre, en 2012, plus de gaz à effet de serre qu’elle n’en émettait en 1990. Les conclusions du Grenelle de l’Environnement de fin 2007 ont retenu, s’agissant des transports, l’objectif de réduire de 20% d’ici 2020 les émissions actuelles de l’ensemble des transports en France (pour les ramener au niveau de 1990).</p>
+						<p>Dans le secteur du transport routier de voyageurs, relever le défi de réduire les émissions de CO2, c’est aussi relever le défi de réduire la dépendance du secteur au pétrole.</p>
+						<span class="clearfix"></span>
+					<h2 id="comparatif" class="anchor">Comparatif des émissions selon le mode de déplacement</h2>
+						<hr>
+						<div class="centrerTexte pull-right" >
+							<img src="img/Pages/emission_comparez.jpg" alt="" width="600" height="450"/>
+						</div>
+							<h3>Transports en commun : facteur d'émission (gCO²/voyageur.km)</h3>
+								<ul class="classic">
+									<li>Tramway : 6.62g</li>
+									<li>Autobus urbain : 144g</li>
+									<li>Autobus interurbain : 171g</li>
+									<li>TGV : 3.4g</li>
+									<li>TER moyen : 30g</li>
+									<li>TER électrique : 8.94g</li>
+									<li>Vols longs courriers : 120g</li>
+									<li>TER gazole : 76.75g</li>
+									<li>Vols moyens courriers : 145g</li>
+									<li>Vols régionaux : 168g</li>
+								</ul>
+							<h3>Véhicules particuliers : facteur d'émission (gCO²/véhicule.km)</h3>
+								<ul class="classic">
+									<li>Vélo, marche à pied : 0g</li>
+									<li>Moto : 134.40g</li>
+									<li>Voiture moyenne 1 passager : 205g</li>
+									<li>Voiture essence citadine : 189g</li>
+									<li>Voiture essence familiale : 219g</li>
+									<li>Voiture essence routière : 252g</li>
+									<li>Voiture diesel familiale : 224g</li>
+									<li>Voiture diesel citadine : 189g</li>
+									<li>Voiture diesel familiale : 224g</li>
+									<li>Voiture diesel routière : 224g</li>
+								</ul>
+								<h4>Données issues de l'arrêté ministériel du 10/04/12 suite au décret n°2011-13136 du 24/10/11 et de la SNCF (informations CO2 - méthodologie générale - version du 16/09/13)</h4>
+								<br><br>
+								<span class="clearfix"></span>
+																	
+					<h2 id="calculez" class="anchor">Calculez !</h2>
+						<hr>
+						
+						<div class="centrerTexte pull-right" >
+							<a href="http://quizz.ademe.fr/eco-deplacements/comparateur/" target="_blank"><img src="img/Pages/emission_calulez.JPG" alt="" width="600" height="450"/></a>
+						</div>
+						<ul class="classic">
+							<li>Comparez différents modes de transports pour un déplacement de type domicile travail avec la <b>calculette Eco-déplacements</b>.</li>
+							<li>Calculez l'impact de vos déplacements quotidiens sur l'environnement et sur vos dépenses avec l'<b>écocalculateur</b>.</li>
+							<li>Trouvez la valeur exacte des émissions de CO2 de votre véhicule avec ce formulaire.</li>
+						</ul>
+					
+						Vous pouvez opter pour une compensation volontaire et solidaire de vos émissions de gaz à effet de serre. Il vous suffit de contacter un opérateur de la compensation ayant signé la charte de l’ADEME (Agence de l'Environnement et de la Maîtrise de l'Energie).
+						<br><br>
+						<p>
+						<span class="glyphicon glyphicon-plus-sign"></span><a href="http://www.ademe.fr/" title="Site de l'ADEME - Nouvelle fenêtre" target="_blank"> Site de l'ADEME</a><br>
+						<span class="glyphicon glyphicon-plus-sign"></span><a href="http://quizz.ademe.fr/eco-deplacements/comparateur/" title="La calculette Eco-déplacements - Nouvelle fenêtre" target="_blank"> La calculette Eco-déplacements</a><br>
+						<span class="glyphicon glyphicon-plus-sign"></span><a href="http://vosdroits.service-public.fr/particuliers/R18602.xhtml" title="Connaître le taux d'emission de CO2 de sa voiture - Nouvelle fenêtre" target="_blank"> Connaître le taux d'emission de CO2 de sa voiture</a><br>
+						<span class="glyphicon glyphicon-plus-sign"></span><a href="http://www.co2solidaire.org" title="Compensation volontaire des émissions de CO2 - Nouvelle fenêtre" target="_blank"> Compensation volontaire des émissions de CO2</a><br>
+						</p>
+					<span class="clearfix"></span>
+				</div>
+			</div>
+		</div>
+		<!--Fin modif -->
+		<div id="btn_up" title="Haut de page">
+			<a href="#" class="glyphicon glyphicon-arrow-up"></a>
+		</div>
+	</div>
+	<div id='footer'></div>
+	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/moment.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
+	<script type="text/javascript" src="stats/piwik.js"></script>
+	<script type="text/javascript" src="js/outils.js"></script>
+	<script type="text/javascript" src="js/fr.js"></script>
+	<script type="text/javascript">var pageStatique = true;</script>
+	<script type="text/javascript" src="js/index.js"></script>
+	<script type="text/javascript">
+		$('#footer').load('index.html #footer',function(){});
+		$('#head').load('head.html',function(){});
+		addBackToTop();
+		trackPiwik("MetroMobilité : EmissionCO2.html"); //<!--modif -->
+		var anchor = window.location.hash;
+		window.location.hash = anchor;
+		
+		//faire marcher les href="#toto" avec la balise <base>
+		$().ready(function() {
+		  $("a[href^='\#']").each(function(){ 
+			this.href=location.href.split("#")[0]+'#'+this.href.substr(this.href.indexOf('#')+1);
+		  });
+		});
+	</script>
+  </body>
+</html>
+
+
+
+
+
+
+

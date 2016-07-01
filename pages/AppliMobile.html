@@ -1,0 +1,177 @@
+<!doctype html>
+<!--
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html lang="fr">
+	<head>
+		<base href="../" />
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="initial-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+		<title>MétroMobilité - Les Application Mobile </title>
+		<meta name="description" content="Pour vous déplacer sans tracas, retrouvez les services Métromobilité sur votre smartphone : Calculateur d'itinéraire, Prochains passages, Bouchons..." />
+		<link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/actus.css" rel="stylesheet">
+		<link href="css/head.css" rel="stylesheet">
+		<link href="css/index.css" rel="stylesheet">
+		<!-- debut modif image-->
+		<style type='text/css'>
+			@media (min-width: 768px) {
+				body {
+					background-image:url("img/pages/BandeauAppliM3.jpg"); 
+					background-attachment: fixed;
+					background-repeat:no-repeat;
+					background-position:top center;
+				}
+			}
+			h2 {
+			font-size:18px!important;
+			margin-bottom:0px!important;
+			margin-top:20px!important;
+			text-transform:uppercase!important;
+			font-weight: 500!important;
+			line-height: 1.1!important;
+			}
+			
+			h4 {
+			font-size:12px!important;
+			}
+			#navbarDesc {
+				background-color: #dc3c1b;
+				opacity:0.9;
+			}
+			.container-page h2, .container-page h6, .container-page h5, .container-page h4, .container-page h3, .container-page  > div > .row a, .container-page .glyphicon-plus-sign:before   {
+				color:#dc3c1b;
+			}
+			.container-page hr {
+				 background-color: #dc3c1b;
+			}
+			.container-page .nav > li > a:hover, .nav > li > a:focus{
+				background-color: #ae2315;
+				border-color: #ae2315;
+				opacity:0.9;
+			}
+		</style>
+		<!--Fin modif -->
+	</head>
+	<body>
+	<div id='head'></div>
+	<div class="container-fluid container-page">
+	<!-- debut modif image--> 
+		<div id="rowPage">
+			<div class="row rowHeader bgTransp hidden-xs">
+				<div class="container">
+					<h1>L'APPLICATION MOBILE <br> METROMOBILITE</h1>
+					<br>
+				</div>
+				<div id="navbarDesc" class="container-fluid" data-spy="affix" data-offset-top="240">
+					<div class="container">
+						<div class="row">
+							<ul class="nav navbar-nav collapse navbar-collapse">
+								<li><a href="#App">L'Application</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>	
+			</div>
+			<div class="row">
+				<div class="container">
+					<h2 id="App" class="anchor">L'application Métromobilité</h2>
+						<hr>
+						<div class="centrerTexte pull-right" >
+							<img src="img/Pages/m_Appli.png" alt="" width="600" height="450"/>
+						</div>	
+						<p>Pour vous déplacer sans tracas, retrouvez les services Métromobilité sur votre smartphone.</p>
+						
+							<h3>Disponible sur plusieurs stores</h3>
+								L'application Métromobilité est disponible sur :
+								<ul class="classic">
+									<li><b>GooglePlay</b> pour les smartphones <b>Android.</b></li> 
+									<li>l'<b>AppStore</b> pour les <b>iPhones</b>.</li>
+									<li>l'<b>Windows Store</b> pour les <b>Windows Phone</b>.</li>
+								</ul>
+								
+							<h3>Notre panel de services dans votre poche</h3>	
+								<p>L'application Métromobilité rassemble la quasi-totalité des services du site :</p>
+								<ul class="classic">
+									<li>Les <strong>prochains passages</strong> à l'arrêt, en <b>temps réel</b>, pour les bus et tramways du réseau <strong>TAG</strong> ainsi que pour les cars <strong>TRANSISERE</strong>. La possibilité de mettre en <b>favoris</b> vos arrêts les plus utilisés afin de les retrouver en un clic pour connaître les prochains passages.</li>
+									<li>Le <b>calculateur d'itinéraire multimodal</b> pour trouver le meilleur trajet et le mode de transport le plus efficace pour vous rendre aux quatre coins de l'agglomération (en voiture, en tram, en bus, à vélo, à pied et même avec les bulles de Grenoble ou les véhicules électriques en autopartage).  </li>
+									<li>Les <b>perturbations</b> en cours sur l'ensemble des <b>réseaux de transports en commun</b> de l'agglomération grenobloise (TAG, TER, Transisère) ainsi que sur le <b>réseau routier</b>.</li>
+									<li>L'<b>indice atmosphérique</b> du jour pour connaître la <b>qualité de l'air</b> sur le bassin d'air grenoblois. </li>
+									<li>La <b>carte du trafic routier en temps réel</b> sur l'A480 et la rocade sud ainsi que sur les grands axes grenoblois (par exemple ouverture ou fermeture de la voie sur berge). </li>
+									<li>Des <b>alertes personnalisées</b> pour vous prévenir en temps réel des <b>perturbations</b> en cours en fonction de vos trajets et de vos heures de déplacements. (Inscription gratuite à ce service).</li>
+								</ul>
+								<span class="clearfix"></span>
+								L'application Métromobilité permet aussi de vous géolocaliser sur une carte afin de trouver les points d’intérêt autour de vous comme les arrêts de bus et tram, les distributeurs de titres, les agences et consignes Métrovélo et les voitures en autopartage.
+								<br>
+								<br>
+									<span class="glyphicon glyphicon-plus-sign"></span><a href="https://play.google.com/store/apps/details?id=org.lametro.metromobilite&hl=fr" title="Votre application Androïd ici - Nouvelle fenêtre" target="_blank"> Votre application Androïd ici</a> <br>
+									<span class="glyphicon glyphicon-plus-sign"></span><a href="https://itunes.apple.com/fr/app/metromobilite/id966169282?mt=8" title="Votre application Iphone ici - Nouvelle fenêtre" target="_blank"> Votre application Iphone ici</a><br>
+									<span class="glyphicon glyphicon-plus-sign"></span><a href="http://windowsphone.com/s?appid=1ce56f15-f2a0-447b-b641-2284a43e130a" title="Votre application Windows ici - Nouvelle fenêtre" target="_blank"> Votre application Windows ici</a>
+								<br>
+								<span class="clearfix"></span>
+								<br><br>
+								<span class="glyphicon glyphicon-plus-sign"></span><a href="pages/FAQ.html"> Questions fréquentes</a> <br>
+								
+								<br>
+				</div>
+			</div>
+
+		</div>
+		<!--Fin modif -->
+		<div id="btn_up" title="Haut de page">
+			<a href="#" class="glyphicon glyphicon-arrow-up"></a>
+		</div>
+	</div>
+	<div id='footer'></div>
+	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/moment.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
+	<script type="text/javascript" src="stats/piwik.js"></script>
+	<script type="text/javascript" src="js/outils.js"></script>
+	<script type="text/javascript" src="js/fr.js"></script>
+	<script type="text/javascript">var pageStatique = true;</script>
+	<script type="text/javascript" src="js/index.js"></script>
+	<script type="text/javascript">
+		$('#footer').load('index.html #footer',function(){});
+		$('#head').load('head.html',function(){});
+		addBackToTop();
+		trackPiwik("MetroMobilité : AppliMobile.html"); //<!--modif -->
+		var anchor = window.location.hash;
+		window.location.hash = anchor;
+		
+		//faire marcher les href="#toto" avec la balise <base>
+		$().ready(function() {
+		  $("a[href^='\#']").each(function(){ 
+			this.href=location.href.split("#")[0]+'#'+this.href.substr(this.href.indexOf('#')+1);
+		  });
+		});
+	</script>
+  </body>
+</html>
+
+
+
+
+
+
+

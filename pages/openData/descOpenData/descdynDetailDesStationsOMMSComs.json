@@ -1,0 +1,10 @@
+{
+	"description" : "Fichier de disponibilité des Coms par station au format GeoJSON",
+	"record_time" : "Date de l'enregistrement",
+	"result_code" : 0,
+	"available_stations" : [{
+			"station_id" : "id de la station",
+			"available_service" : "Nombre voitures Coms disponible"
+		}
+	]
+}

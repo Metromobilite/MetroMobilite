@@ -1,0 +1,22 @@
+{
+	"description" : "Liste de description des consignes Métrovélo",
+	"type" : "FeatureCollection",
+	"features" : [{
+			"type" : "Feature",
+			"properties" : {
+				"CODE" : "Code de la consigne, par exemple : 'AUGUSTE_DELAUNE'",
+				"LIBELLE" : "Nom de la consigne, par exemple : 'AUGUSTE DELAUNE'",
+				"ADRESSE" : "Adresse de la consigne, par exemple : 'GÉNÉRAL DE GAULLE (AVENUE)'",
+				"TYPE" : "CONSIGNE METRO-VELO",
+				"TOTAL" : "Nombre de place de la consigne, par exemple : '14'",
+				"type" : "MVC",
+				"id" : "Identifiant de la consigne, par exemple : 'AUGUSTE_DELAUNE'"
+			},
+			"description" : "Position de la consignes Métrovélo",
+			"geometry" : {
+				"type" : "Point",
+				"coordinates" : "Long-Latitude, exemple '[5.74658, 45.192649]'"
+			}
+		}
+	]
+}

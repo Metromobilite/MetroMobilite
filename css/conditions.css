@@ -1,0 +1,53 @@
+/*
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+@media (min-width: 768px) {
+	body {
+		background-image:url("../img/pages/bandeauDecouvrirM.jpg");
+		background-attachment: fixed;
+		background-repeat:no-repeat;
+		background-position:top center;
+	}
+}
+
+#navbarDesc {
+	background-color: #21881c;
+	opacity:0.9;
+}
+.container-page h6, .container-page h5, .container-page h4, .container-page h3, .container-page  > div > .row a, .container-page .glyphicon-plus-sign:before   {
+	color:#21881c;
+}
+.container-page hr {
+	 background-color: #21881c;
+}
+.container-page .nav > li > a:hover, .nav > li > a:focus{
+	background-color: #1f6314;
+    border-color: #1f6314;
+	opacity:0.9;
+}
+
+
+
+
+
+
+
+

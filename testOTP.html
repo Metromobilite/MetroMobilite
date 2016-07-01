@@ -1,0 +1,837 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta content="initial-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+    <title>OTP : données temps réel</title>
+	<!--<meta name="description" content="" />-->
+	<link rel="stylesheet" href="js/lib/ol/ol.css" type="text/css" />
+    <link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="Stylesheet" type="text/css" href="css/map.css"/>
+	<link rel="Stylesheet" type="text/css" href="css/planTC.css"/>
+	
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+		 <style type='text/css'>
+			#listeLignes .container-fluid > a {
+				display:block;
+			}
+			#traceC38 > select {
+				color: #000;
+				width: 150px;
+			}
+			#traceC38 > input {
+				color: #000;
+			}
+			#proj select,#proj input {
+				color: #000;
+				margin-top:10px;
+			}
+			#proj > label {display:block;}
+			#current,#nbCutOff,#cutoff,#precision,#heure,#date{color:#000;float:right;}
+			#iso label {display: block;width: calc(100% - 5px);float: left;}
+		 </style>
+  </head>
+  <body>
+	<div id='head'></div>
+	<div class="container-fluid main">
+		<div class="row">
+			<div id="modele" style="display:none;">
+				<ul>
+					<a href='#' id='id' class="row"><span class="col-xs-12"></span>
+					</a>
+				</ul>
+			</div>
+			<div id="liste">
+				<div id="listeMain">
+					<div id="listeTop">
+						<label>Action : <select id="current">
+							<option value="traceC38">Tracés Transisère</option>
+							<option value="proj">Projection</option>
+							<option value="iso" selected>Isochrone</option>
+							<!--<option value="pme">PME</option>-->
+						</select></label>
+						<div id="menuListe" class="toggleListe pull-right" title="Affichage du panneau de sélection des éléments cartographiques" alt="Affichage du panneau de sélection des éléments cartographiques"><span class="glyphicon glyphicon-menu-hamburger"></span></div>
+					</div>
+					<div id="listeLignes" class="col-xs-12">
+						<div id="iso" class="row current">
+							<label>Nombre d'isochrones : <select id="nbCutOff">
+							<option>1</option>
+							<option>2</option>
+							<option>3</option>
+							<option selected>4</option>
+							<option>5</option>
+							<option>6</option>
+						</select></label><br>
+							<label>Intervalle(min) : <input id="cutoff" type="text" value="10"></label><br>
+							<label>Precision(m) : <input id="precision" type="text" value="200"></label><br>
+							<label>Date : <input id="date" type="text" value="2016/06/09"></label><br>
+							<label>Heure : <input id="heure" type="text" value="08:00"></label><br>
+							<div class="col-xs-3"><div class="row"><input name="modes" type="checkbox" value="WALK" /><label for="WALK">Pieton</label></div></div>
+							<div class="col-xs-3"><!--<div class="container-fluid">-->
+								<div class="row"><span class="col-xs-12"><input name="modes" type="checkbox" value="BICYCLE" checked/><label for="BICYCLE">Vélo</label></span></div>
+								<div class="row"><span class="col-xs-12"><input name="modes" type="checkbox" value="CAR"/><label for="CAR">Voiture</label></span></div>
+							<!--</div>--></div>
+							<div class="col-xs-6"><div class="row"><input name="modes" type="checkbox" value="TRANSIT" /><label for="TRANSIT">Transports en Commun</label></div></div>
+							<div class="clearfix"></div>
+							<div class="col-xs-6"><a href="#" class="btn btn-default" onclick="recalculerIsoChrone()"/>Recalculer</a></div>
+							<div class="col-xs-6"><a href="#" class="btn btn-default" id="download" download="isochrones.zip" />Télécharger</a></div>
+						</div>
+						<div id="pme" class="current">
+							<div id="dir" class="row titreReseau">
+								<h4>D.I.R.</h4>
+								<div class="descReseau"></div>
+							</div>
+							<div class="container-fluid dir"></div>
+							<div id="GRE" class="row titreReseau">
+								<h4>Grenoble</h4>
+								<div class="descReseau"></div>
+							</div>
+							<div class="container-fluid GRE"></div>
+							<div id="evtTr" class="row titreReseau">
+								<h4>Routier</h4>
+							</div>
+							<div class="container-fluid evtTr"></div>
+							<div id="EvtTc" class="row titreReseau"><h4>Transport en commun</h4></div>
+							<div class="container-fluid EvtTc"></div>
+						</div>
+						
+						<div id="traceC38" class="row current">
+							<h4>Tracés C38</h4>
+							<select id="listeC38"></select>
+							<input id="goC38" type="button" value="Go !">
+							<input id="exportC38" type="button" value="Get fichier !">
+							<!--<a id="exportC38" onclick="exportC38(this);" target="_blank" download="exportC38.gpx">Import fichier</a>-->
+						</div>
+						<div id="proj" class="row current">
+							<label>Axes : <select id="listeAxes"></select></label>
+							<label>Sens : <select id="listeSens">
+								<option value="1">1</option>
+								<option value="2">2</option>
+							</select></label>
+							<label>De : <select id="listeEchangeursSec"></select></label>
+							<label>Distance : <input id="distSec" type="number" size="4" step="50" value="0"></label>
+							<label>A : <select id="listeEchangeursPrim"></select></label>
+							<label>Distance : <input id="distPrim" type="number" size="4" step="50" value="0"></label>
+							<input id="goProj" type="button" value="Go !">
+							<span id="textProj"></span>
+						</div>
+					</div>
+					<div id="search">
+						<div class="input-group input-group-sm dropup">
+							<input type="text" placeholder="Recherche" id="inputSearch" class="form-control"/>
+							<div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="menu" class="toggleListe pull-right" title="Affichage du panneau de sélection des éléments cartographiques" alt="Affichage du panneau de sélection des éléments cartographiques"><span class="glyphicon glyphicon-menu-hamburger"></span></div>
+			<div id="map" class="map"></div>
+			<div id="popup"></div>
+			<div id="popupZA" class="template hidden">
+				<div class="row"><span class="col-xs-12 header nom">nom de l'arret</span></div>
+				<div class="row icones text-nowrap">
+					<span class="col-xs-4 arret"><span class="glyphicon glyphicon-screenshot"></span><span class="libelle">&nbsp;arrêts</span></span>
+					<span class="col-xs-4 dep"><span class="glyphicon glyphicon-map-marker"></span><span class="libelle"> départ<br>itinéraire</span></span>
+					<span class="col-xs-4 arr"><span class="glyphicon glyphicon-map-marker"></span><span class="libelle"> arrivée<br>itinéraire</span></span>
+				</div>
+				<div class="passages">
+					<div class="row"><span class="col-xs-12 header">Prochains passages</span></div>
+					<div class="row ligne">
+						<div class="logoLigne"></div>
+						<div class="dir1"><span class="libDir"></span><div class="pull-right"><div class="delai pull-left"><span></span><br><span></span></div><a href="#" target="_blank"class="pull-right"><span class="glyphicon glyphicon-list-alt"></span></a></div></div>
+						<div class="dir2"><span class="libDir"></span><div class="pull-right"><div class="delai pull-left"><span></span><br><span></span></div><a href="#" target="_blank" class="pull-right"><span class="glyphicon glyphicon-list-alt"></span></a></div></div>
+						<div class="evt"></div>
+					</div>
+				</div>
+			</div>
+			<div class="layerSwitcher">
+				<div class="layersPanel">
+					<div class="close-switcher pull-right"><span class="glyphicon glyphicon-minus"></span></div>
+					<div class="pull-left">Afficher : </div><br>
+					<div class="bases list-unstyled text-left"></div>
+					<ul class="layers list-unstyled text-left"></ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="js/lib/ol/ol.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/moment.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
+	<script type="text/javascript" src="js/lib/FileSaver.js"></script>
+	<script type="text/javascript" src="stats/piwik.js"></script>
+	<script type="text/javascript" src="js/outils.js"></script>
+	<script type="text/javascript" src="js/fr.js"></script>
+	<script type="text/javascript" src="js/carte.js"></script>
+	<script type="text/javascript">
+		//var serveur_otp='http://83.145.98.142';
+		url.otpChoisi='prod2';
+		var sourceTestEvt;
+		var listeLigneC38 = {};
+		var jsonFile ="";
+		var geojsonSource;
+		var dataAlertc;
+		function getStreetEdge(coordonnees) {
+			var coord = ol.proj.transform(coordonnees, sm, gg);
+			var searchUrl = url.hostnameData+url.portProd;
+			//var searchUrl = serveur_otp;
+				searchUrl += '/otp/patch/nearestStreetEdge';
+				searchUrl += '?lon='+coord[0];
+				searchUrl += '&lat='+coord[1];
+			$.ajax({
+				type: "GET",
+				url: searchUrl,
+				error:error,
+				dataType: 'json'
+			}).then(function(p) {
+				//console.info(p);
+				var edgeFeature =sourceTestEvt.getFeatureById('testEvt');
+				if(!edgeFeature) {
+					edgeFeature = new ol.Feature();
+					edgeFeature.setId('testEvt');
+					sourceTestEvt.addFeature(edgeFeature);
+				}
+				
+				var format = new ol.format.Polyline({
+					//factor: 1e6
+				});
+				var geom = format.readGeometry(p.geometry, {
+					dataProjection: gg,
+					featureProjection: sm
+				});
+				edgeFeature.setGeometry(geom);
+				edgeFeature.set('details',p.name);
+			});
+		}
+		function chargeEvtsTr(idcarte,options){
+			var map = getMap(idcarte);
+		
+			//var searchUrl = serveur_otp;
+			//	searchUrl += '/otp/routers/default/updaters/1/updates';
+			var searchUrl = url.otp2();
+				searchUrl += '/updaters/1/updates';
+
+			$.ajax({
+				type: "GET",
+				url: searchUrl,
+				error:error,
+				dataType: 'json'
+			}).then(function(response) {
+				response[0].streetPatches.forEach(function (p){
+					var geom = new ol.geom.Point(ol.proj.transform([p.lng,p.lat], gg, sm));
+					var feature;
+					if(!options.source.getFeatureById(p.id)) {
+						feature = new ol.Feature({
+							'id':p.id,
+							'geometry':geom
+						});
+					}else if (geom.getCoordinates() != feature.get('geometry').getCoordinates()) {
+						feature.set('geometry',geom);
+					}
+					feature.set('class','evtTr');
+					feature.set('description','Perturbation');
+					feature.set('timePeriods',p.timePeriods);
+					feature.set('dateAffichee',urlParams.heure);
+					var name = p.alert.alertHeaderText.someTranslation.split(':')[0].toLowerCase();
+					feature.set('name',name);
+					feature.set('libelle','');
+					feature.set('comment',p.alert.alertDescriptionText.someTranslation);
+
+					var ddeb = moment(new Date(p.timePeriods[0].startTime*1000));
+					var dfin = moment(new Date(p.timePeriods[p.timePeriods.length-1].endTime*1000));
+					var now  = moment(urlParams.heure);
+					var dansPeriode = now.isAfter(ddeb) && now.isBefore(dfin);
+					var periode = {enCours:dansPeriode && true,dansPeriode:dansPeriode};
+
+					feature.set('visible',periode.dansPeriode);
+					feature.set('periode',periode);
+					
+					if(!options.source.getFeatureById(p.id)) {
+						options.source.addFeature(feature);
+					}
+					
+					var format = new ol.format.Polyline({
+						//factor: 1e6
+					});
+					var geom = format.readGeometry(p.edge, {
+						dataProjection: gg,
+						featureProjection: sm
+					});
+
+					var opt ={}; //= feature.properties;
+					opt.geometry = geom;
+					//opt.id = id;
+					//opt.detailsCallback = options.fctDetails;
+					//opt.TYPE = getTypeLigne(opt.CODE,opt.CODE.substr(0,3));
+					var edgeFeature = new ol.Feature(opt);
+					//feature.setId(id);
+					
+					if(!options.source.getFeatureById(p.id)) {
+						options.source.addFeature(edgeFeature);
+					}
+				});
+				getLis(options.source);
+			});
+		}
+		function chargePme(idcarte,options){
+			var map = getMap(idcarte);
+			
+			//var searchUrl = serveur_otp;
+			//	searchUrl += '/otp/routers/default/updaters/0/updates';
+			var searchUrl = url.otp2();
+				searchUrl += '/updaters/0/updates';
+
+			$.ajax({
+				type: "GET",
+				url: searchUrl,
+				error:error,
+				dataType: 'json'
+			}).then(function(response) {
+				response[0].streetPatches.forEach(function (p){
+					var geom = new ol.geom.Point(ol.proj.transform([p.lng,p.lat], gg, sm));
+					var feature;
+					if(!options.source.getFeatureById(p.id)) {
+						feature = new ol.Feature({
+							'id':p.id,
+							'geometry':geom
+						});
+					}else if (geom.getCoordinates() != feature.get('geometry').getCoordinates()) {
+						feature.set('geometry',geom);
+					}
+					feature.set('class','dir');
+					feature.set('description','Comptage');
+					feature.set('timePeriods',p.timePeriods);
+					feature.set('dateAffichee',urlParams.heure);
+					//feature.set('detail',p.alert.alertHeaderText.someTranslation);
+					feature.set('comment',Math.floor(p.carSpeed*3.6)+' km/h');
+					feature.set('carSpeed',p.carSpeed);
+					
+					var name = p.alert.alertHeaderText.someTranslation.split(':')[0].toLowerCase();
+					feature.set('libelle',name);
+					feature.set('name','PME');
+					var ddeb = moment(new Date(p.timePeriods[0].startTime*1000));
+					var dfin = moment(new Date(p.timePeriods[p.timePeriods.length-1].endTime*1000));
+					var now  = moment(urlParams.heure);
+					var dansPeriode = now.isAfter(ddeb) && now.isBefore(dfin);
+					var periode = {enCours:dansPeriode && true,dansPeriode:dansPeriode};
+
+					feature.set('visible',periode.dansPeriode);
+					feature.set('periode',periode);
+					if(!options.source.getFeatureById(p.id)) {
+						options.source.addFeature(feature);
+					}
+
+					var format = new ol.format.Polyline({
+						//factor: 1e6
+					});
+					var geom = format.readGeometry(p.edge, {
+						dataProjection: gg,
+						featureProjection: sm
+					});
+					var opt ={};
+					opt.geometry = geom;
+					//opt.id = id;
+					//opt.detailsCallback = options.fctDetails;
+					//opt.TYPE = getTypeLigne(opt.CODE,opt.CODE.substr(0,3));
+					var edgeFeature = new ol.Feature(opt);
+					var color = VERT;
+					if(p.carSpeed*3.6 < 30) color = ROUGE;
+					if(p.carSpeed*3.6 >= 30 && p.carSpeed*3.6 < 60) color = ORANGE;
+					edgeFeature.set('color',color);
+					//feature.setId(id);
+					if(!options.source.getFeatureById(p.id)) {
+						options.source.addFeature(edgeFeature);
+					}
+				});
+				getLis(options.source);
+			});
+		}
+		// +----------------------------------------------------------------------------
+		// | Methode        : getStylesEvt
+		// | Description    : 
+		// | Paramètres     : 
+		// | Valeur retour  : 
+		// +----------------------------------------------------------------------------
+		function getStylesEvtTr(feature,resolution) {
+			if (feature.getGeometry().getType() == 'MultiLineString' || feature.getGeometry().getType() == 'LineString') {
+				return getStylesEdges(feature,resolution);
+			} else if(feature.getGeometry().getType() == 'Point') {
+				var name = feature.get('name');
+				var dateAfficheeFeature = feature.get('dateAffichee');
+				if (urlParams.heure != dateAfficheeFeature) {
+					var periode;
+					if(feature.get('timePeriods'))
+						periode = getPeriode(feature.get('timePeriods'),urlParams.heure);
+					else
+						periode = feature.get('periode');
+					feature.set('dateAffichee',urlParams.heure);
+					feature.set('visible',periode.dansPeriode);
+					feature.set('periode',periode);
+				}
+				
+				if(!feature.get('visible')) return [];
+				if(!styleCache['evtIcon_'+name]) {
+					styleCache['evtIcon_'+name] = new ol.style.Style({
+							zIndex: 200,
+							image: eval('icone'+name)
+						});
+					//console.info(name);
+				}
+				//styleCache['evtIcon_'+name].getImage().opacity=(feature.get('periode').enCours?0.1:0.1);
+				
+				return [styleCache['evtIcon_'+name]];
+			}
+		}
+		
+		function getStylesEdges(feature,resolution) {
+			var color = feature.get('color');
+			var zIndex= 100;
+			if(!color) color = '#FF00FF';
+			if(color == ORANGE) zIndex+=1;
+			if(color == ROUGE) zIndex+=2;
+			if (!styleCache['styleEdge_'+color]) {
+				styleCache['styleEdge_'+color] = new ol.style.Style({
+					stroke: new ol.style.Stroke({
+						color: color,
+						width: 3,
+						opacity: 1,
+						zIndex: zIndex
+					})
+				});
+			}
+			return [styleCache['styleEdge_'+color]] ;
+		}
+
+		function getStylesIsochrone(feature,resolution) {
+			var styles =[];
+			var color='#000000';
+			
+			if (feature.getGeometry().getType() == 'MultiPolygon' || feature.getGeometry().getType() == 'Polygon') {
+				var numPoly = feature.get('time')/baseCutoff;
+				if (numPoly%2==0) color = 'rgba(0,0,255,0.1)';
+				else color = 'rgba(0,255,0,0.1)';
+				if (!styleCache['styleIsoChrone_'+numPoly]) {
+					styleCache['styleIsoChrone_'+numPoly] = new ol.style.Style({
+						stroke: new ol.style.Stroke({
+							color: '#000000',
+							width: 1,
+							opacity: 1,
+							zIndex: 200
+						}),
+						fill:new ol.style.Fill({ color: color }),
+						zIndex: 200
+					});
+				}
+				
+				styles = [styleCache['styleIsoChrone_'+numPoly]] ;
+			} else if (feature.getGeometry().getType() == 'MultiLineString' || feature.getGeometry().getType() == 'LineString') {
+				if (!styleCache['styleLigne_'+color]) {
+					color='#FF0000';
+					styleCache['styleLigne_'+color] = new ol.style.Style({
+						stroke: new ol.style.Stroke({
+							color: color,
+							width: 3,
+							opacity: 1,
+							zIndex: 200
+						}),
+						zIndex: 200
+					});
+				}
+				styles = [styleCache['styleLigne_'+color]];
+				
+			} else if (feature.getGeometry().getType() == 'Point') {
+				color='#FF0000';
+				if (!styleCache['styleCentreIsoChrone_'+color]) {
+					styleCache['styleCentreIsoChrone_'+color] = new ol.style.Style({
+						zIndex: 201,
+						image: /*new ol.style.Icon(iconePositionRouge)*/
+						new ol.style.Circle({
+							radius: 5,
+							fill: new ol.style.Fill({color: color}),
+							stroke: new ol.style.Stroke({color: color, width: 1})
+						})
+					});
+				} 
+				styles = [styleCache['styleCentreIsoChrone_'+color]];
+			}
+			return styles ;
+		}
+
+		function getLis(source) {
+			source.getFeatures().forEach(function(f){
+				if (f.getGeometry().getType() == 'Point'){
+					if (f.get('visible')==false) return;
+					var code =f.get('id');
+					var modele = $('#modele > ul > a');
+					var li = modele.clone();
+					li.attr('id',code).attr('title',code); //pour Chrome
+					var gauche = f.get('libelle')?f.get('libelle'):f.get('comment');
+					var droite = f.get('libelle')?f.get('comment'):'';
+					li.find('span').html(gauche+'<div class="pull-right">'+droite+'</div>');
+					$('#listeLignes').find('.'+f.get('class')).append(li);
+				}
+			});
+		}
+		function getDetails(feature) {
+			if (feature.getGeometry().getType() == 'MultiLineString' || feature.getGeometry().getType() == 'LineString') {
+				return '';
+			}
+			var coord= ol.proj.transform(feature.getGeometry().getCoordinates(), sm, gg);
+			var lonlat = coord[1]+','+coord[0];
+			//var divLignes = getLignesProches(lonlat,afficheListeLgn);
+
+			//return feature.get(stylesTypes[feature.get('type')].text)+ divLignes;
+			var details = feature.get('id')+' : '+feature.get('libelle')+'<br/>'+feature.get('comment');
+			return details;
+		}
+		function initPage() {
+			if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+				isMobile =true;
+			}
+			modififieIconMaxres();
+			if (urlParams.iFrame){
+				$(".main").attr('style','top:0px');
+				$.support.cors = true;
+				//initPlanTC();
+			} else {
+				$('#head').load('head.html'/*,initPlanTC*/);
+			}
+			initPanneau();
+			initTraceC38();
+			initProj();
+			initPlanTC();
+			
+		}
+		function initPanneau(){
+			$('.toggleListe').click(function(){$('#liste').toggle()});
+
+			$('#current').change(function(){
+				$('.current').hide();
+				$('#'+$(this).val()).show();
+			});
+			$('#current').trigger('change');
+		}
+		function ajouteCoucheRaster(idcarte,id,url) {
+			var map = maps[idcarte];
+			var layer=null;
+			source = new ol.source.XYZ({
+				tileUrlFunction: function(coordinate) {
+							if(coordinate == null){
+										 return "";
+							} 
+				  var z = coordinate[0];//.z;
+				  var x = coordinate[1];//.x;
+				  var y = coordinate[2];
+				  
+				  return url+z+'/'+x+'/'+y+'.png';//todo mettre en url prod quand on aura l'acces exterieur
+				}
+			});
+			layer = new ol.layer.Tile({id:id,source: source});
+			map.addLayer(layer);
+			return layer;
+		}
+		function initPlanTC(){
+			var idcarte = 'map';
+			var map=initMap(idcarte,{minZoom:1,maxZoom:20});
+			ajouteControle('map','layerSwitcher');
+			
+			//map.singleClickCallback = getStreetEdge;
+			map.singleClickCallback = clickCarte;
+
+			/*var layerPme = ajouteLayerManuel('pme','map',{fctStyle:getStylesEvtTr,detailsCallback:getDetails});
+			sourcePme = layerPme.getSource();
+			chargePme('map',{source:sourcePme});
+			ajouteLayerSwitcher('map','pme','.layerSwitcher',{
+				libelle:'pme'
+			});
+			//activeLayer('pme');
+			
+			var layerEvtTr = ajouteLayerManuel('evttr','map',{fctStyle:getStylesEvtTr,detailsCallback:getDetails});
+			sourceEvtTr = layerEvtTr.getSource();
+			chargeEvtsTr('map',{source:sourceEvtTr});
+			ajouteLayerSwitcher('map','evttr','.layerSwitcher',{
+				libelle:'evttr'
+			});
+			//activeLayer('evttr');
+			*/
+			var layerTestEvt = ajouteLayerManuel('testEvt','map',{'color':'#FF0000'});
+			sourceTestEvt = layerTestEvt.getSource();
+			layerTestEvt.set('visible',true);
+			
+			ajouteCoucheRaster('map','bike-safety',url.otp2()+'/inspector/tile/bike-safety/').set('visible',false);
+			ajouteLayerSwitcher('map','bike-safety','.layerSwitcher',{
+				libelle:'bike-safety'
+			});
+			ajouteCoucheRaster('map','traversal',url.otp2()+'/inspector/tile/traversal/').set('visible',false);
+			ajouteLayerSwitcher('map','traversal','.layerSwitcher',{
+				libelle:'traversal'
+			});
+			ajouteCoucheRaster('map','wheelchair',url.otp2()+'/inspector/tile/wheelchair/').set('visible',false);
+			ajouteLayerSwitcher('map','wheelchair','.layerSwitcher',{
+				libelle:'wheelchair'
+			});
+			geojsonSource = new ol.source.Vector({});
+			var layerGeojson = ajouteLayerManuel('geojson','map',{fctStyle:getStylesIsochrone});
+			sourceGeojson = layerGeojson.getSource();
+			ajouteLayerSwitcher('map','geojson','.layerSwitcher',{
+				libelle:'geojson'
+			});
+			activeLayer('geojson');
+		}
+		
+		function getStringLine(itinerary) {
+			var itineraryCoord="";
+			itinerary.StopPoints.forEach(function (stopPoint) { //On parcours tous les arret pour parcourir la ligne dans l'ordre
+				var stopId = stopPoint.Id; //Avec le stop id on recupere l'itinerary link avec le même stop id
+				itinerary.ItineraryLinks.forEach(function (itineraryLinks) {
+				
+					if (itineraryLinks.StopDepId == stopId) {
+						itineraryCoord += itineraryLinks.Geometry.replace('LINESTRING (','').replace(')',', ');
+						//stop la boucle si trouvé.
+					}
+				});
+			
+			});
+			itineraryCoord = itineraryCoord.replace(/, /g,'],[');
+			itineraryCoord = itineraryCoord.replace(/ 45./g,', 45.');
+			itineraryCoord = itineraryCoord.replace(/ 44./g,', 44.');
+			itineraryCoord = itineraryCoord.replace(/ 43./g,', 43.');
+
+			return itineraryCoord;
+		}
+		
+		function getNextItinerary(direction,id) {
+		
+			if (direction > listeLigneC38[id].dir) { //C'est fini
+			
+				jsonFile += ']}';
+				jsonFile = jsonFile.replace(/,\[]/g,'');
+				
+				afficheGeojson(jsonFile);
+				
+				$('#exportC38').show();
+				return;
+			}
+			var url = 'http://www.itinisere.fr/webServices/TransinfoService/api/map/v2/GetItinerary/json?Line=' + id +'&Direction=' + direction + '&user_key=2f359a673db8504b1e4940b791fdb4d3';
+			console.info('getItineraryC38, direction :', url);
+			
+			function successGetItineraryC38(response,direction) {
+				
+				console.info('successGetItineraryC38, direction :', direction);
+				
+				var ligneItinerary = response.Data[0];
+
+				jsonFile += '{ "type": "Feature", "properties": { "direction": "' + direction + '" }, "geometry": { "type": "LineString", "coordinates":[['
+				
+				jsonFile += getStringLine(ligneItinerary);
+				
+				jsonFile += ']]}}';
+				jsonFile = jsonFile.replace(', ]',']');
+				if (direction < listeLigneC38[id].dir) jsonFile += ','; 
+				
+				getNextItinerary(direction+1,id);
+
+			}
+			function errorGetItineraryC38(response) { 
+				console.error('Erreur getItineraryC38'); 
+				jsonFile = '{"error":"Erreur getItineraryC38"}';
+				return;
+			}
+			
+			$.ajax({
+				type: "GET",
+				url: url,
+				success: function (response) { successGetItineraryC38(response, direction) },
+				dataType:'jsonp'
+			}).error(errorGetItineraryC38);
+		}
+		
+		function getItineraryC38(id) { //pour la ligne choisie, crée le fichier geojson
+			try {
+				if (listeLigneC38[id].dir == 0) {
+					jsonFile = '{"error":"Nombre de direction null !"}';
+					return;
+				}
+				jsonFile = '{"type": "FeatureCollection","features": [';
+				getNextItinerary(1,id);
+			} catch(e) {
+				console.error(e.lineNumber+' : '+e.message);
+				jsonFile = '{"error":"' + e.lineNumber +' : '+ e.message + '"}';
+				return;
+			}
+		}
+		function sort_multi_select(select) {
+			var x = jQuery(select + ' option');
+			x.remove();
+			x.sort(function(a,b) { a = a.firstChild.nodeValue; b = b.firstChild.nodeValue; if (a==b) return 0; return (a>b) ? 1 : -1; });
+			x.appendTo(select);
+		};
+		
+		function chargeListeLigneC38(id) { //récupere la liste des lignes pour remplir la combo de choix
+			try {
+				
+				var url = 'http://www.itinisere.fr/webServices/TransinfoService/api/transport/v3/line/GetLines/json?user_key=2f359a673db8504b1e4940b791fdb4d3&OperatorIds=12';
+				
+				function successchargeListeLigneC38(response) {
+					$("#listeC38").empty();
+				
+					response.Data.forEach(function (line) {
+						$("#listeC38").append($("<option />").val(line.Id).text(line.Number + " (" + line.LineDirections.length + ")"));
+						listeLigneC38[line.Id] = {name:line.Number,dir:line.LineDirections.length};
+					});
+				
+					sort_multi_select("#listeC38");
+					$("#listeC38").val($("#listeC38 option:first").val());
+				}
+				function errorchargeListeLigneC38(response) { 
+					console.error('Erreur chargeListeLigneC38'); 
+					jsonFile = '{"error":"Erreur chargeListeLigneC38"}';
+					return;
+				}
+				
+				$.ajax({
+					type: "GET",
+					url: url,
+					success: successchargeListeLigneC38,
+					dataType:'jsonp'
+				}).error(errorchargeListeLigneC38);
+
+			} catch(e) {
+				console.error(e.lineNumber+' : '+e.message);
+				jsonFile = '{"error":"' + e.lineNumber +' : '+ e.message + '"}';
+				return;
+			}
+		}
+		function initTraceC38() {
+			$('#liste').toggle();
+			$('#exportC38').hide();
+			chargeListeLigneC38();
+			
+			$('#goC38').click(function(){
+				$('#exportC38').hide();
+				var result = getItineraryC38($('#listeC38').find(":selected").val());
+			});
+		}
+		
+		$('#exportC38').click(function(){
+				var blob = new Blob([jsonFile], {type: "text/plain;charset=utf-8"});
+				saveAs(blob, listeLigneC38[$('#listeC38').find(":selected").val()].name + ".geojson");
+		});
+		
+		function afficheGeojson(geojson) {
+			//var obj = JSON.parse(geojson);
+			sourceGeojson.clear();
+			sourceGeojson.addFeatures((new ol.format.GeoJSON()).readFeatures(geojson,{dataProjection:gg,featureProjection:sm}));
+		}
+		var baseCutoff;
+		function getIsoChrone(coordonnees){
+			var coord = ol.proj.transform(coordonnees, sm, gg);
+			var feature = {type:"Feature",geometry:{type:"Point",coordinates:coord},properties:{},id:"centreIsochrone"};
+			var cutoff = $('#cutoff').val()*60;
+			baseCutoff = $('#cutoff').val()*60;
+			var precision = $('#precision').val();
+			var nbCutOff = $('#nbCutOff').val();
+			var heure = $('#heure').val();
+			var date = $('#date').val();
+			
+			var modes = [];
+			$('#iso input[name=modes]:checked').each(function(){
+				modes.push($(this).val());
+			});
+			
+			var searchUrl = 'http://data.metromobilite.fr/api/routers/default/isochrone?algorithm=recursiveGrid';
+			searchUrl += '&fromPlace='+coord[1]+','+coord[0];
+			searchUrl += '&date='+date;
+			searchUrl += '&time='+heure+':00';
+			searchUrl += '&maxWalkDistance=1000';
+			searchUrl += '&mode='+modes.join(',');
+			searchUrl += '&precisionMeters='+precision;
+			for (var i=1;i<=nbCutOff;i++){
+				searchUrl += '&cutoffSec='+cutoff*i;
+			}
+			$('#download').attr('href',searchUrl);
+			fct_attente_horaires(true);
+			$.ajax({
+				type: "GET",
+				url: searchUrl,
+				error:error,
+				dataType: 'json'
+			}).then(function(response) {
+				fct_attente_horaires(false);
+				response.features.push(feature);
+				afficheGeojson(response);
+			});
+		}
+		/*function exportC38(_this) {
+			var C38Data = 'application/json;charset=utf-8,' + encodeURIComponent( jsonFile );
+			$(_this).attr( { 'href': C38Data ,'download': 'C38Data.geojson' } );
+		}*/
+		function clickCarte(coord){
+			if($('#current').val()=='iso'){
+				getIsoChrone(coord);
+			}
+			else
+				getStreetEdge(coord);
+		}
+		function recalculerIsoChrone() {
+			var f = sourceGeojson.getFeatureById('centreIsochrone');
+			if(!f) return;
+			getIsoChrone(f.getGeometry().getCoordinates());
+		}
+		function initProj(){
+			var searchUrl = 'http://serex1:8082/api/data/alertc/json';
+			$.ajax({
+				type: "GET",
+				url: searchUrl,
+				error:error,
+				dataType: 'json'
+			}).then(function(response) {
+				var options='';
+				dataAlertc = response;
+				for (var axe in response) {
+					options+='<option>'+axe+'</option>';
+				}
+				$('#listeAxes').append(options);
+				$('#listeAxes').trigger('change');
+			});
+			$('#listeAxes,#listeSens').change(function(){
+				var liste = dataAlertc[$('#listeAxes').val()][$('#listeSens').val()];
+				var prim='';
+				liste.forEach(function(e,i){
+					prim+='<option value="'+e.code+'">'+e.name+'</option>';
+				});
+				$('#listeEchangeursPrim,#listeEchangeursSec').html(prim);
+			});
+			$('#goProj').click(function(){
+				var searchUrl = 'http://serex1:8082/api/proj/alertc/json';
+				
+				searchUrl+='?road='+$('#listeAxes').val();
+				searchUrl+='&dir='+$('#listeSens').val();
+				searchUrl+='&ppm='+$('#listeEchangeursPrim').val();
+				searchUrl+='&psc='+$('#listeEchangeursSec').val();
+				searchUrl+='&dpp='+$('#distPrim').val();
+				searchUrl+='&dps='+$('#distSec').val();
+				
+				$.ajax({
+					type: "GET",
+					url: searchUrl,
+					error:error,
+					dataType: 'json'
+				}).then(function(response) {
+					console.log(response);
+					$('#textProj').html(response.text);
+					afficheGeojson(response);
+					
+				});
+			});
+		}
+		initPage();
+	</script>
+  </body>
+</html>

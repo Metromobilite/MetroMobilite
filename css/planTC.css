@@ -1,0 +1,390 @@
+/*
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+@media (min-width: 1200px) {
+	.main { 	top: 141px;	}
+}
+@media (max-width: 1199px) {
+	.main { 	top: 91px;	}
+}
+@font-face {
+	font-family: "GothamRounded-Medium";
+	src: local("GothamRounded-Medium");
+	src: url('../img/GothamRounded-Medium.eot');
+	src: url('../img/GothamRounded-Medium.eot?#iefix') format('embedded-opentype'),
+		 url('../img/GothamRounded-Medium.woff') format('woff'),
+         url('../img/GothamRounded-Medium.ttf') format('truetype'),
+		 url('../img/GothamRounded-Medium.svg#GothamRounded-Medium') format('svg'),
+		 url("../img/GothamRounded-Medium.otf") format("opentype");
+}
+body {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+a, a:visited, a:focus, a:active, a:hover{
+    outline:0 none !important;
+	text-decoration:none;
+}
+.attenteCurseur {
+	cursor:progress!important;
+}
+.navbar {
+    margin-bottom: 0px;
+	}
+.main {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+}
+.main > .row {
+	height:100%;
+}	
+#page {
+	height:auto !important; /* real browsers */
+	height:100%; /* IE6: treaded as min-height*/
+	min-height:100%; /* real browsers */
+	position:relative;
+}
+#menu{
+	float:left;
+	background-color:rgba(30,30,30,0.9);
+	width:30px;
+	height:45px; /*pas 30px pour ie*/
+	line-height:30px;
+	position:absolute;
+	top:0px;/*calc(50% - 10px);*/
+	left:0px;
+	color:#fff;
+	z-index:50;
+	padding-left: 9px;
+	cursor:pointer;
+}
+#menu span {
+	margin-top:20px; /*pour ie*/
+}
+#menu.listeAffichee {
+	left:380px;
+	background-color:rgba(30,30,30,0);
+	top:0px;
+	display:none!important;
+}
+#menuListe {
+	margin-right:5px;
+	cursor:pointer;
+}
+#liste {
+	color: #fff;
+	background-color:rgba(30,30,30,0.9);
+	float:left;
+	position:absolute;
+	top:0;
+	left:0;
+	max-width: 400px;
+	height:100%;
+	z-index:50;
+	display:none;
+	width:100%;
+	margin-right: auto;
+	margin-left: auto;
+	z-index:51;
+	
+}
+#listeMain {
+	position:relative;
+	height:100%;
+	width:100%;
+}
+#listeTop {
+	position:absolute;
+	top:0;
+	width:100%;
+	line-height:30px;
+	padding-left: 10px;
+	margin-top:10px; /*pour ie*/
+}
+#listeLignes {
+	position:absolute;
+	top:40px;
+	bottom:50px;
+	overflow-y:auto;
+	
+}
+#listeLignes > div{
+	padding-left:5px;
+}
+#search{
+	position:absolute;
+	bottom:10px;
+	width:100%;
+	padding-left: 10px;
+	padding-right:10px;	
+}
+
+#search .input-group-addon{/*safari*/
+	padding-top: 0px;
+	padding-bottom:0px;
+	border-top:0px;
+	border-bottom:0px;
+}
+
+.ligneSelected .svgFond {
+	stroke-width:6px;
+}
+
+.texteLigne:hover {
+	animation-play-state: paused
+}
+@keyframes texteLigne {
+	0%   { text-indent: 0%; }
+	100% { text-indent: -99%; }
+}
+.svgLigne .logo {
+    height: 30px;
+	width:30px;
+}
+.svgLigne .logoRect {
+    height: 30px;
+	width:60px;
+}
+.svgLigne  {
+    line-height: 10px;
+	padding: 0 0 0 3px;
+}
+
+#liste .svgLigne:hover, #liste .svgLigne:active, #liste .svgLigne:focus {
+	text-decoration:none;
+}
+
+
+#liste .titreReseau {
+	background-color:#646464;
+	color: #fff;
+	cursor: default;
+}
+
+#liste .descReseau{
+	font-size:12px;
+}
+#liste .titreReseau  h4{
+	margin-bottom:0px;
+	margin-top:0px;
+}
+#liste .TRAM, #liste .NAVETTE, #liste .CHRONO, #liste .PROXIMO, #liste .FLEXO, #liste .C38 {
+	padding:10px 0 10px 0;
+}
+
+#reseau > li > a > div{
+	margin-left:0px;
+	margin-right:0px;
+}
+
+.typeahead { z-index: 1051;}
+
+.typeahead span[data-type="RUE"]::before, .typeahead span[data-type="LIEU"]::before, .typeahead span[data-type="ARRET"]::before, .typeahead span[data-type="AXE"]::before{
+	background-size: 100% 100%;
+	content: "\00a0";
+	height: 16px;
+    width: 16px;
+	margin-right:5px;
+	display:inline-block;
+}
+
+.typeahead span[data-type="RUE"]::before{
+	background: url(../img/rue.png) no-repeat;
+}
+
+.typeahead span[data-type="LIEU"]::before{
+	background: url(../img/lieu.png) no-repeat;
+}
+
+.typeahead span[data-type="ARRET"]::before{
+	background: url(../img/arret.png) no-repeat;
+}
+
+.typeahead span[data-type="AXE"]::before{
+	font-family: "Glyphicons HalfLings", "Arial", "Helvetica", sans-serif;
+	content: "\e024";
+	color:#cd5c1d;			
+}
+.typeahead  .categorie {
+    font-weight: bold;
+    margin-left: -21px;
+}
+.typeahead  .bestResult {
+	/*pour mettre en valeur le meilleur resultat*/
+	background-color: #d0d0d0;
+}
+.dropup .dropdown-menu {
+    bottom: 100%;
+    margin-bottom: 1px;
+    top: auto!important;
+}
+.dropdown-menu li a {
+	padding:0px 0px;
+}
+.dropdown-menu li a span {
+	padding:0px 0px;
+	width:100%;
+	padding:3px 20px;
+	display:block;
+}
+.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
+	background-color:#fff;
+	color:#000;
+}
+.dropdown-menu > .active > a span[data-type], .dropdown-menu > .active > a span[data-type]:hover, .dropdown-menu > .active > a span[data-type]:focus {
+    background-color: #428bca;
+    color: #fff;
+}
+.logoBar {
+height: 34px;
+width: 34px;
+}
+.logoBarRect {
+height: 34px;
+width: 68px;
+}
+#popup .PopupDetails-detailsCallback .header {
+	height:30px;
+	line-height:30px;
+	background-color:#00a453;
+	color:#fff;
+}
+#popup .PopupDetails-detailsCallback .logoLigne {
+    display: block;
+    float: left;
+    height: 34px;
+    width: 60px;
+}
+#popup .PopupDetails-detailsCallback [class*=" SEM_"] .logoLigne  {
+	height: 60px;
+}
+
+#popup .PopupDetails-detailsCallback .logoLigne .svgLigne .logo  {
+	margin-left: 15px;
+    margin-right: 15px;
+}
+#popup .PopupDetails-detailsCallback .logoLigne .svgLigne .logoRect  {
+	margin:0px;
+}
+#popup .PopupDetails-detailsCallback .icones {
+	height:30px;
+	background-color:#f0f0f0;
+}
+#popup .PopupDetails-detailsCallback .icones > span{
+	line-height:30px;
+	cursor:pointer;
+}
+#popup .PopupDetails-detailsCallback .icones .libelle{
+	display:inline-block;
+	line-height:14px;
+}
+#popup .PopupDetails-detailsCallback .dep .glyphicon{
+	color:#52ae32;
+	font-size:23px;
+}
+#popup .PopupDetails-detailsCallback .arr .glyphicon {
+	color:#ff0032;
+	font-size:23px;
+}
+#popup .PopupDetails-detailsCallback .ligne {
+	margin-bottom:10px;
+}
+#popup .PopupDetails-detailsCallback .dir1, #popup .PopupDetails-detailsCallback .dir2 {
+	float:left;
+	width: 80%;
+	width: calc(100% - 65px);
+	height:30px;
+	line-height:30px;
+	border-left: 1px solid #777777;
+	padding-left:5px;
+}
+#popup .PopupDetails-detailsCallback .ligne:not([class*=" SEM_"]) .dir2 {
+	height:4px;
+}
+#popup .PopupDetails-detailsCallback .ligne:not([class*=" SEM_"]) .dir2 *{
+	display:none;
+}
+#popup .PopupDetails-detailsCallback .libDir {
+    display: block;
+    float: left;
+    max-width: 170px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+#popup .PopupDetails-detailsCallback .evt {
+	float:left;
+	line-height:30px;
+	padding-left:70px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow-x:hidden;
+	text-align:left;
+	width:100%;
+}
+#popup .PopupDetails-detailsCallback .dir1 {
+	border-bottom: 1px solid #777777;
+}
+#popup .PopupDetails-detailsCallback .delai {
+   font-family: Arial;
+    font-size: 10px;
+    font-style: italic;
+	line-height:14px;
+	text-align:right;
+}
+#popup .PopupDetails-detailsCallback .ligne  .glyphicon {
+	font-size:20px;
+	line-height:30px;
+}
+#popup .PopupDetails-detailsCallback .evt  .glyphicon {
+	color:red;
+}
+.PopupDetailsLayerLgn{
+	cursor:pointer;
+}
+.PopupDetailsLayerLgn:hover{
+	cursor:pointer;
+	color:#c0c0c0;
+}
+#pub {
+	bottom: 46px;
+	left: 2px;
+	position: fixed;
+	cursor: pointer;
+}
+#pub > img{
+	width: 40px;
+}
+#pub > div {
+	display: inline;
+	color:#019ebc;
+	font-weight: bold;
+	background-color: #fff;
+	border-radius: 4px;
+	padding: 0px 10px 0px 10px;
+	margin-left: -2px;
+	opacity: 0.7;
+	filter: alpha(opacity=70);
+}

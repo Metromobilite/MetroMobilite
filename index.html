@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="fr">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="initial-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+		<title>Métromobilité - Toute la mobilité sur la Métropole Grenobloise</title>
+		<meta name="description" content="Sur le réseau TAG et Transisère, en Vélo, en Voiture ou en Train, Métromobilité vous informe sur vos déplacements dans Grenoble et son agglomération." />
+		<link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/actus.css" rel="stylesheet">
+		<link href="css/index.css" rel="stylesheet">
+	</head>
+	<body>
+	<div id='head'></div>
+	<div class="container-fluid main main-fluid">
+		<div class="container main">
+			<!--
+			<style>
+				.bandeauCharlie:hover{
+					background-color: #E1007A!important;
+					opacity:0.9;
+					height:195px;
+				}
+				.bandeauCharlie:hover img{
+					display:none;
+				}
+				.bandeauCharlie span{
+					display:none;
+				}
+				.bandeauCharlie:hover span{
+					display:inline;
+					color:#fff;
+					text-decoration:none!important;
+				}
+				.bandeauCharlie a:focus, .bandeauCharlie a:hover {
+					text-decoration: none;
+				}
+			</style>
+			<div class="row rowHeadLine text-center hidden-xs bandeauCharlie" style="background-color:#009CD5;color:#fff;padding:10px 0"> 
+				<a href="pages/Actu.html#1an" >
+				<img src="actus/Index_1An.png" alt="1 An" width="700" />
+				<span><br><br><h1>Revivre ma première année !</h1></span>
+				</a>
+			</div>
+			-->
+			<div class="row rowIti">
+				<div class="containerIti">
+					<div class="row-Iti">
+						<div id="div-Iti" style="display:none">
+							<div class="col-sm-5">
+								<div class="input-group input-group-sm">
+									<label class="control-label sr-only" for="dep">Départ</label>
+									<span class="geoloc input-group-addon glyphicon glyphicon-map-marker"></span>
+									<input id="dep" data-lonlat="0,0" type="text" class="form-control hasclear" autocomplete="off" placeholder="Départ : Arrêt ou adresse"/>
+									<span class="saisie_clear glyphicon glyphicon-remove"></span>
+								</div>
+							</div>
+							<div class="col-sm-5">
+								<div class="input-group input-group-sm">
+									<label class="control-label sr-only" for="arr">Arrivée</label>
+									<span class="geoloc input-group-addon glyphicon glyphicon-map-marker"></span>
+									<input id="arr" data-lonlat="0,0" type="text" class="form-control hasclear" autocomplete="off" placeholder="Arrivée : Arrêt ou adresse"/>
+									<span class="saisie_clear glyphicon glyphicon-remove"></span>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<button type="button" id="calculer" class="btn btn-default btn-sm center-block">
+									<span class="glyphicon glyphicon-search"></span> Calculer
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row rownav">
+				<div id="blocks-navigation">
+						<div class="item item-passages active">
+							<div>
+								<svg version="1.1" viewBox="0 0 139.69 115.73"><g transform="matrix(1.25,0,0,-1.25,0,115.7325)"><g transform="translate(13.597,37.119)"><path fill-rule="nonzero" fill="currentColor"  d="m0,0c-0.38,0-0.685-0.305-0.685-0.68,0-0.378,0.305-0.686,0.685-0.686,0.377,0,0.683,0.308,0.683,0.686,0,0.375-0.306,0.68-0.683,0.68"/></g><g transform="translate(21.7935,37.119)"><path fill-rule="nonzero" fill="currentColor"  d="m0,0c-0.377,0-0.685-0.305-0.685-0.68,0-0.378,0.308-0.686,0.685-0.686,0.376,0,0.682,0.308,0.682,0.686,0,0.375-0.306,0.68-0.682,0.68"/></g><g transform="translate(17.3127,53.3092)"><path fill-rule="nonzero" fill="currentColor"  d="m0,0c1.001,0,1.924-0.014,2.75-0.033,0.008,0.011,0.009,0.022,0.016,0.036l1.211,1.519h-7.322l1.23-1.539c0.636,0.012,1.34,0.017,2.115,0.017"/></g><g transform="translate(12.1565,37.6861)"><path fill-rule="nonzero" fill="currentColor"  d="m0,0c-0.376,0-0.68-0.306-0.68-0.683,0-0.374,0.304-0.68,0.68-0.68,0.377,0,0.683,0.306,0.683,0.68,0,0.377-0.306,0.683-0.683,0.683"/></g><g transform="translate(37.0651,74.2647)"><path fill-rule="nonzero" fill="currentColor"  d="m0,0c0,0.037-0.011,0.07-0.011,0.107,0,0.93,0.756,1.685,1.687,1.685,0.935,0,1.69-0.755,1.69-1.685,0-0.037-0.009-0.07-0.012-0.107h0.888c0-3.604-2.843-6.529-6.345-6.529-3.504,0-6.346,2.925-6.346,6.529h8.449zm-1.981-7.504c4.178,0,7.567,3.717,7.567,8.298,0,4.582-3.389,8.299-7.567,8.299-4.179,0-7.568-3.717-7.568-8.299,0-4.581,3.389-8.298,7.568-8.298"/></g><g transform="translate(42.1606,68.7745)"><path fill-rule="nonzero" fill="currentColor"  d="m0,0c-0.338,0-0.609-0.273-0.609-0.61,0-0.338,0.271-0.61,0.609-0.61s0.61,0.272,0.61,0.61c0,0.337-0.272,0.61-0.61,0.61"/></g><g transform="translate(39.9062,74.2647)"><path fill-rule="nonzero" fill="currentColor"  d="m0,0c0.003,0.037,0.011,0.07,0.011,0.107,0,0.686-0.558,1.249-1.248,1.249-0.689,0-1.246-0.563-1.246-1.249,0-0.037,0.007-0.07,0.009-0.107h2.474z"/></g><g transform="translate(27.8838,67.5541)"><path fill-rule="nonzero" fill="currentColor"  d="M0,0c0.336,0,0.61,0.273,0.61,0.61s-0.274,0.61-0.61,0.61-0.61-0.273-0.61-0.61,0.274-0.61,0.61-0.61"/></g><g transform="translate(87.5154,28.9367)"><path fill-rule="nonzero" fill="currentColor"  d="m0,0c-7.441-17.256-27.464-25.211-44.717-17.771-7.557,3.258-13.33,8.929-16.807,15.724,5.516,2.979,9.265,8.811,9.265,15.52,0,6.706-3.746,12.536-9.259,15.516,0.268,0.524,0.548,1.038,0.839,1.542,2.502-1.363,5.37-2.138,8.42-2.138,9.736,0,17.628,7.892,17.628,17.628,0,0.439-0.034,0.869-0.065,1.3,5.589,0.575,11.398-0.222,16.924-2.605,4.114-1.774,7.692-4.269,10.667-7.266l-23.751-23.075,33.633-0.486c0.059-4.635-0.823-9.357-2.777-13.889m-61.864,48.884c0-0.431-0.349-0.781-0.78-0.781h-0.953c-0.431,0-0.78,0.35-0.78,0.781v3.452c0,0.432,0.349,0.782,0.78,0.782h0.953c0.431,0,0.78-0.35,0.78-0.782v-3.452zm-0.068-42.704c0-0.61-0.492-1.099-1.101-1.099h-3.76l4.283-2.633h-1.658l-3.58,2.633h-4.385l-3.476-2.553h-1.653l4.153,2.553h-3.632c-0.609,0-1.1,0.489-1.1,1.099,0,0-0.057,3.784-0.057,9.013,0,5.233,0.278,7.86,0.278,7.86,0,0.607,0.49,1.099,1.099,1.099,0,0,1.099,0.111,3.19,0.171l-1.374,1.72c-0.097,0.122-0.114,0.287-0.048,0.426,0.067,0.142,0.21,0.227,0.364,0.227h9.004c0.154,0,0.291-0.085,0.364-0.227,0.066-0.139,0.046-0.304-0.051-0.426l-1.383-1.731c1.988-0.064,3.205-0.16,3.205-0.16,0.606,0,1.095-0.492,1.095-1.099,0,0,0.279-3.451,0.279-7.811,0-4.357-0.056-9.062-0.056-9.062m0.603,46.128c0,1.529,1.238,2.768,2.767,2.768h12.525c1.529,0,2.769-1.239,2.769-2.768v-12.524c0-1.09-0.631-2.029-1.544-2.48v-1.057c0-0.533-0.433-0.966-0.966-0.966h-1.134c-0.532,0-0.964,0.433-0.964,0.966v0.768h-9.14v-0.768c0-0.533-0.431-0.966-0.962-0.966h-1.135c-0.535,0-0.966,0.433-0.966,0.966v1.206h0.026c-0.767,0.492-1.276,1.352-1.276,2.331v12.524zm18.673,0.028c0,0.432,0.348,0.782,0.781,0.782h0.951c0.434,0,0.783-0.35,0.783-0.782v-3.452c0-0.431-0.349-0.781-0.783-0.781h-0.951c-0.433,0-0.781,0.35-0.781,0.781v3.452zm51.304,0.42-9.747-9.47c-3.719,3.763-8.201,6.896-13.357,9.119-7.489,3.23-15.395,4.126-22.912,3.022-3.124,4.935-8.618,8.222-14.891,8.222-9.736,0-17.628-7.892-17.628-17.628,0-3.589,1.079-6.924,2.921-9.71-1.05-1.647-1.993-3.389-2.827-5.215-0.032,0-0.063,0.005-0.094,0.005-9.736,0-17.628-7.893-17.628-17.628,0-9.736,7.892-17.629,17.628-17.629,0.028,0,0.054,0.004,0.082,0.005,4.212-9.225,11.727-16.978,21.772-21.31,21.501-9.271,46.448,0.643,55.721,22.146,2.403,5.574,3.507,11.379,3.464,17.083l13.076-0.189c0.204,14.576-5.432,28.716-15.58,39.177"/></g><g transform="translate(40.7848,67.8432)"><path fill-rule="nonzero" fill="currentColor"  d="m0,0c-0.246,0-0.445-0.199-0.445-0.445s0.199-0.443,0.445-0.443,0.444,0.197,0.444,0.443-0.198,0.445-0.444,0.445"/></g><g transform="translate(29.2595,67.8432)"><path fill-rule="nonzero" fill="currentColor"  d="m0,0c-0.247,0-0.444-0.199-0.444-0.445s0.197-0.443,0.444-0.443c0.245,0,0.445,0.197,0.445,0.443s-0.2,0.445-0.445,0.445"/></g><g transform="translate(23.2297,37.6861)"><path fill-rule="nonzero" fill="currentColor"  d="m0,0c-0.375,0-0.681-0.306-0.681-0.683,0-0.374,0.306-0.68,0.681-0.68,0.378,0,0.683,0.306,0.683,0.68,0,0.377-0.305,0.683-0.683,0.683"/></g><g transform="translate(23.6417,51.5377)"><path fill-rule="nonzero" fill="currentColor"  d="m0,0-11.931,0c-0.301,0-0.549-0.245-0.549-0.548v-10.912c0-0.301,0.248-0.546,0.549-0.546h11.931c0.301,0,0.548,0.245,0.548,0.546v10.912c0,0.303-0.247,0.548-0.548,0.548"/></g></g></svg>
+								<hr>
+								<span>PROCHAINS PASSAGES</span>
+							</div>
+						</div>
+						<div class="item item-horaires">
+							<div>
+								<svg class="icon-horaires" viewBox="0 0 94.4 121"><g transform="matrix(1.25,0,0,-1.25,0,120.81812)"><g transform="translate(56.9768,74.4931)"><path fill-rule="nonzero" fill="currentColor" d="m0,0c-0.326,0-0.588-0.264-0.588-0.589,0-0.326,0.262-0.589,0.588-0.589s0.589,0.263,0.589,0.589c0,0.327-0.263,0.591-0.589,0.591"/></g><g transform="translate(43.1975,73.3152)"><path fill-rule="nonzero" fill="currentColor" d="M0,0c0.325,0,0.589,0.263,0.589,0.589,0,0.325-0.264,0.591-0.589,0.591s-0.589-0.266-0.589-0.591c0-0.326,0.264-0.589,0.589-0.589"/></g><g transform="translate(55.6489,73.5942)"><path fill-rule="nonzero" fill="currentColor" d="m0,0c-0.238,0-0.429-0.192-0.429-0.429,0-0.238,0.191-0.428,0.429-0.428s0.428,0.19,0.428,0.428c0,0.237-0.19,0.429-0.428,0.429"/></g><g transform="translate(37.8017,13.2293)"><path fill-rule="nonzero" fill="currentColor" d="m0,0c-14.8,0-26.9,12-26.9,26.9,0,14.8,12,26.9,26.9,26.9,14.8,0,26.9-12,26.9-26.9s-12.1-26.9-26.9-26.9m-20,76.5c0,0.586,0.473,1.06,1.06,1.06,0,0,1.06,0.106,3.08,0.165l-1.33,1.66c-0.093,0.119-0.109,0.278-0.046,0.412,0.064,0.137,0.203,0.22,0.351,0.22h8.69c0.149,0,0.281-0.083,0.351-0.22,0.065-0.134,0.045-0.293-0.049-0.412l-1.34-1.67c1.92-0.061,3.09-0.154,3.09-0.154,0.585,0,1.06-0.475,1.06-1.06,0,0,0.269-3.33,0.269-7.54,0-4.2-0.054-8.74-0.054-8.74,0-0.589-0.475-1.06-1.06-1.06h-3.63l4.13-2.54h-1.6l-3.46,2.54h-4.23l-3.36-2.46h-1.59l4.01,2.46h-3.51c-0.588,0-1.06,0.473-1.06,1.06,0,0-0.056,3.65-0.056,8.7s0.269,7.59,0.269,7.59m20.7-3.3c0,0.417,0.337,0.755,0.753,0.755h0.92c0.415,0,0.753-0.338,0.753-0.755v-3.33c0-0.416-0.338-0.754-0.753-0.754h-0.92c-0.416,0-0.753,0.338-0.753,0.754v3.33zm2.94-0.027c0,1.48,1.2,2.67,2.67,2.67h12.1c1.48,0,2.67-1.2,2.67-2.67v-12.1c0-1.05-0.609-1.96-1.49-2.39v-1.02c0-0.514-0.418-0.932-0.932-0.932h-1.09c-0.514,0-0.931,0.418-0.931,0.932v0.742h-8.82v-0.742c0-0.514-0.415-0.932-0.929-0.932h-1.1c-0.516,0-0.932,0.418-0.932,0.932v1.16h0.026c-0.741,0.475-1.23,1.3-1.23,2.25v12.1zm18,0.027c0,0.417,0.337,0.755,0.755,0.755h0.918c0.418,0,0.755-0.338,0.755-0.755v-3.33c0-0.416-0.337-0.754-0.755-0.754h-0.918c-0.418,0-0.755,0.338-0.755,0.754v3.33zm6.75,10.1-57.1,0c-5.08,0-9.19-4.12-9.19-9.19v-73.2c0-5.08,4.12-9.19,9.19-9.19h57.1c5.08,0,9.19,4.12,9.19,9.19v73.2c0,5.08-4.12,9.19-9.19,9.19"/></g><g transform="translate(19.9338,75.9022)"><path fill-rule="nonzero" fill="currentColor" d="m0,0c-0.363,0-0.656-0.295-0.656-0.66,0-0.36,0.293-0.655,0.656-0.655,0.364,0,0.66,0.295,0.66,0.655,0,0.37-0.296,0.665-0.66,0.665"/></g><g transform="translate(52.0589,79.7919)"><path fill-rule="nonzero" fill="currentColor" d="m0,0c0,0.035-0.011,0.068-0.011,0.104,0,0.897,0.73,1.63,1.63,1.63s1.63-0.73,1.63-1.63c0-0.036-0.01-0.069-0.01-0.104h0.857c0-3.48-2.74-6.3-6.12-6.3s-6.12,2.82-6.12,6.3h8.14zm-1.91-7.24c4.03,0,7.3,3.59,7.3,8.01s-3.27,8.01-7.3,8.01-7.3-3.59-7.3-8.01,3.27-8.01,7.3-8.01"/></g><g transform="translate(21.3241,75.3549)"><path fill-rule="nonzero" fill="currentColor" d="m0,0c-0.366,0-0.662-0.294-0.662-0.657,0-0.364,0.296-0.661,0.662-0.661,0.364,0,0.66,0.297,0.66,0.661,0,0.365-0.296,0.659-0.66,0.659"/></g><g transform="translate(54.801,79.7919)"><path fill-rule="nonzero" fill="currentColor" d="m0,0c0.003,0.035,0.011,0.068,0.011,0.104,0,0.662-0.539,1.2-1.2,1.2-0.665,0-1.2-0.542-1.2-1.2,0-0.036,0.007-0.069,0.009-0.104l2.38,0.004z"/></g><g transform="translate(24.9103,90.9806)"><path fill-rule="nonzero" fill="currentColor" d="m0,0c0.966,0,1.86-0.013,2.65-0.032,0.007,0.011,0.009,0.021,0.016,0.035l1.17,1.47h-7.07l1.19-1.48c0.61,0.005,1.29,0.01,2.04,0.01"/></g><g transform="translate(44.5254,73.5942)"><path fill-rule="nonzero" fill="currentColor" d="m0,0c-0.238,0-0.429-0.192-0.429-0.429,0-0.238,0.191-0.428,0.429-0.428,0.236,0,0.429,0.19,0.429,0.428,0,0.237-0.193,0.429-0.429,0.429"/></g><g transform="translate(19.5037,77.6832)"><path fill-rule="nonzero" fill="currentColor" d="m0,0,11.5,0c0.29,0,0.529,0.237,0.529,0.527v10.5c0,0.293-0.239,0.529-0.529,0.529l-11.5,0.1c-0.29,0-0.53-0.236-0.53-0.529v-10.5c0-0.363,0.24-0.6,0.53-0.6"/></g><g transform="translate(29.235,75.3549)"><path fill-rule="nonzero" fill="currentColor" d="m0,0c-0.364,0-0.661-0.294-0.661-0.657,0-0.364,0.297-0.661,0.661-0.661,0.363,0,0.658,0.297,0.658,0.661,0,0.365-0.295,0.659-0.658,0.659"/></g><g transform="translate(30.6212,75.9022)"><path fill-rule="nonzero" fill="currentColor" d="m0,0c-0.362,0-0.657-0.295-0.657-0.66,0-0.36,0.295-0.655,0.657-0.655,0.364,0,0.659,0.295,0.659,0.655,0,0.37-0.295,0.665-0.659,0.665"/></g><g transform="translate(11.9964,5.279)"><path fill-rule="nonzero" fill="currentColor" d="m0,0,5.28,0,0-2.11c0-1.75,1.34-3.17,2.99-3.17h0.153c1.65,0,2.99,1.42,2.99,3.17v2.11h31.1v-2.11c0-1.75,1.34-3.17,2.99-3.17h0.153c1.65,0,2.99,1.42,2.99,3.17v2.11h2.98"/></g><g transform="translate(37.3266,34.5614)"><path fill-rule="nonzero" fill="currentColor" d="m0,0c-1.43,0.246-2.65,1.17-3.35,2.46l-6.17-8.66c-0.733-1.11-0.367-2.36,0.5-3.01,0.867-0.643,2.11-0.576,2.84,0.53l6.18,8.68z"/></g><g transform="translate(38.0843,44.541)"><path fill-rule="nonzero" fill="currentColor" d="m0,0c0.771-0.001,1.5-0.2,2.14-0.547v14.6c0,1.35-1.11,2.16-2.17,2.16s-2.17-0.807-2.17-2.16v-14.6c0.66,0.288,1.4,0.5,2.2,0.5"/></g><g transform="translate(41.5592,39.5158)"><path fill-rule="nonzero" fill="currentColor" d="M0,0c0,2.03-1.56,3.68-3.48,3.68-1.91,0-3.47-1.65-3.47-3.68s1.56-3.68,3.48-3.68c1.91,0,3.47,1.65,3.47,3.68"/></g></g></svg>
+								<hr>
+								<span>HORAIRES</span>
+								<br/>
+								<span></span>
+							</div>
+						</div>
+						<div class="item item-plan">
+							<div>
+								<svg class="icon-plan" viewBox="0 0 120.31 114.43"><g transform="matrix(1.25,0,0,-1.25,0,114.42675)"><g transform="translate(27.1375,42.3499)"><path fill-rule="nonzero" fill="currentColor" d="m0,0c-0.354,0-0.639-0.284-0.639-0.634,0-0.352,0.285-0.639,0.639-0.639,0.351,0,0.637,0.287,0.637,0.639,0,0.35-0.286,0.634-0.637,0.634"/></g><g transform="translate(57.7051,41.4963)"><path fill-rule="nonzero" fill="currentColor" d="m0,0c-0.314,0-0.569-0.255-0.569-0.569,0-0.315,0.255-0.569,0.569-0.569s0.569,0.254,0.569,0.569c0,0.314-0.255,0.569-0.569,0.569"/></g><g transform="translate(67.7601,47.8784)"><path fill-rule="nonzero" fill="currentColor" d="m0,0c-0.643,0-1.162-0.524-1.162-1.164,0-0.035,0.007-0.066,0.009-0.1h2.306c0.004,0.034,0.011,0.065,0.011,0.1,0,0.64-0.521,1.164-1.164,1.164"/></g><g transform="translate(58.9878,40.6279)"><path fill-rule="nonzero" fill="currentColor" d="m0,0c-0.23,0-0.414-0.185-0.414-0.414,0-0.231,0.184-0.414,0.414-0.414,0.228,0,0.414,0.183,0.414,0.414,0,0.229-0.186,0.414-0.414,0.414"/></g><g transform="translate(36.1181,42.8785)"><path fill-rule="nonzero" fill="currentColor" d="m0,0c-0.349,0-0.635-0.285-0.635-0.637,0-0.349,0.286-0.634,0.635-0.634,0.352,0,0.636,0.285,0.636,0.634,0,0.352-0.284,0.637-0.636,0.637"/></g><g transform="translate(36.5022,55.7922)"><path fill-rule="nonzero" fill="currentColor" d="m0,0-11.123,0c-0.281,0-0.512-0.228-0.512-0.51v-10.174c0-0.28,0.231-0.509,0.512-0.509h11.123c0.28,0,0.51,0.229,0.51,0.509v10.174c0,0.282-0.23,0.51-0.51,0.51"/></g><g transform="translate(34.7792,42.3499)"><path fill-rule="nonzero" fill="currentColor" d="m0,0c-0.351,0-0.638-0.284-0.638-0.634,0-0.352,0.287-0.639,0.638-0.639s0.636,0.287,0.636,0.639c0,0.35-0.285,0.634-0.636,0.634"/></g><g transform="translate(30.6017,57.4438)"><path fill-rule="nonzero" fill="currentColor" d="m0,0c0.933,0,1.793-0.013,2.563-0.031,0.008,0.01,0.009,0.02,0.016,0.034l1.129,1.416h-6.827l1.147-1.435c0.593,0.011,1.249,0.016,1.972,0.016"/></g><g transform="translate(71.0153,41.4963)"><path fill-rule="nonzero" fill="currentColor" d="m0,0c-0.315,0-0.568-0.255-0.568-0.569,0-0.315,0.253-0.569,0.568-0.569s0.569,0.254,0.569,0.569c0,0.314-0.254,0.569-0.569,0.569"/></g><g transform="translate(75.8759,49.9298)"><path fill-rule="nonzero" fill="currentColor" d="m0,0c0-0.401-0.325-0.728-0.729-0.728h-0.887c-0.404,0-0.729,0.327-0.729,0.728v3.218c0,0.403,0.325,0.73,0.729,0.73h0.887c0.404,0,0.729-0.327,0.729-0.73v-3.218zm-2.915-8.483c0-1.017-0.589-1.893-1.439-2.313v-0.985c0-0.497-0.404-0.901-0.901-0.901h-1.057c-0.496,0-0.899,0.404-0.899,0.901v0.716h-8.521v-0.716c0-0.497-0.402-0.901-0.898-0.901h-1.057c-0.499,0-0.901,0.404-0.901,0.901v1.124h0.025c-0.716,0.459-1.19,1.261-1.19,2.174v11.675c0,1.425,1.154,2.581,2.579,2.581h11.677c1.426,0,2.582-1.156,2.582-2.581v-11.675zm-17.337,8.483c0-0.401-0.326-0.728-0.727-0.728h-0.888c-0.402,0-0.728,0.327-0.728,0.728v3.218c0,0.403,0.326,0.73,0.728,0.73h0.888c0.401,0,0.727-0.327,0.727-0.73v-3.218zm-17.312-9.446c0-0.569-0.458-1.025-1.026-1.025h-3.505l3.993-2.455h-1.546l-3.338,2.455h-4.088l-3.241-2.38h-1.54l3.871,2.38h-3.386c-0.568,0-1.025,0.456-1.025,1.025,0,0-0.054,3.528-0.054,8.402,0,4.878,0.26,7.328,0.26,7.328,0,0.565,0.457,1.024,1.024,1.024,0,0,1.025,0.104,2.974,0.16l-1.281,1.603c-0.09,0.114-0.105,0.268-0.044,0.397,0.062,0.133,0.195,0.213,0.339,0.213h8.394c0.144,0,0.272-0.08,0.339-0.213,0.063-0.129,0.043-0.283-0.047-0.397l-1.29-1.613c1.854-0.06,2.989-0.15,2.989-0.15,0.565,0,1.021-0.459,1.021-1.024,0,0,0.26-3.217,0.26-7.282,0-4.063-0.053-8.448-0.053-8.448m28.166,31.191,0-8.098c-0.624,0.072-1.256,0.119-1.899,0.119-0.459,0-0.91-0.032-1.359-0.069v8.037l-30.182,19.878v-27.981c-0.703,0.092-1.414,0.156-2.142,0.156-0.377,0-0.746-0.032-1.116-0.057v27.862l-29.78-19.853v-71.65l29.78,19.854v11.031c0.37-0.025,0.739-0.056,1.116-0.056,0.728,0,1.439,0.063,2.142,0.155v-11.124l30.182-19.879v30.895c0.449-0.037,0.9-0.069,1.359-0.069,0.643,0,1.275,0.047,1.899,0.119v-30.919l29.768,19.847v71.649l-29.768-19.847z"/></g><g transform="translate(25.7946,42.8785)"><path fill-rule="nonzero" fill="currentColor" d="m0,0c-0.351,0-0.634-0.285-0.634-0.637,0-0.349,0.283-0.634,0.634-0.634,0.352,0,0.637,0.285,0.637,0.634,0,0.352-0.285,0.637-0.637,0.637"/></g><g transform="translate(64.3039,40.5278)"><path fill-rule="nonzero" fill="currentColor" d="m0,0c-3.267,0-5.916,2.727-5.916,6.087h7.877c0,0.034-0.01,0.065-0.01,0.1,0,0.867,0.704,1.571,1.572,1.571,0.872,0,1.576-0.704,1.576-1.571,0-0.035-0.008-0.066-0.012-0.1h0.829c0-3.36-2.65-6.087-5.916-6.087m7.168,6.827c0,4.272-3.159,7.737-7.054,7.737-3.896,0-7.055-3.465-7.055-7.737,0-4.271,3.159-7.736,7.055-7.736,3.895,0,7.054,3.465,7.054,7.736"/></g><g transform="translate(69.7326,40.6279)"><path fill-rule="nonzero" fill="currentColor" d="m0,0c-0.229,0-0.414-0.185-0.414-0.414,0-0.231,0.185-0.414,0.414-0.414s0.414,0.183,0.414,0.414c0,0.229-0.185,0.414-0.414,0.414"/></g></g></svg>
+								<hr>
+								<span>PLAN<br/>DES RESEAUX</span>
+							</div>
+						</div>
+						<br class="visible-md-inline">
+						<div class="item item-velo">
+							<div>
+								<svg class="icon-velo" viewBox="0 0 72 64"><g transform="translate(10.838295,8.2395497)"><g transform="matrix(1.25,0,0,-1.25,-461.54367,575.3512)"><g transform="translate(417.1783,430.0286)"><path fill-rule="nonzero" fill="currentcolor" d="m0,0c0,6.164-5.14,11.148-11.446,11.148-6.333,0-11.466-4.984-11.466-11.148,0-6.165,5.133-11.156,11.466-11.156,6.306,0,11.446,4.991,11.446,11.156m-2.13,0c0-5.03-4.175-9.095-9.316-9.095-5.159,0-9.342,4.065-9.342,9.095,0,5.015,4.183,9.08,9.342,9.08,5.141,0,9.316-4.065,9.316-9.08m-12.239,20.312-7.184-0.016-4.727,7.223s-1.006,1.617-2.917,1.617c0,0-1.576,0.195-2.707-1.048l-9.102-8.878c-0.584-0.624-0.935-1.454-0.935-2.348,0-1.316,0.759-2.475,1.853-3.071l9.285-5.015v-9.452c0-1.338,1.11-2.418,2.483-2.418,1.375,0,2.487,1.08,2.487,2.418v11.799s0.328,1.882-1.873,2.909l-5.356,2.752,5.776,5.558,2.803-4.261c0.486-0.753,1.165-1.065,1.777-1.049h8.337c2.578,0,2.578,3.28,0,3.28m-4.199,11.078c0,2.308-1.933,4.198-4.305,4.198-2.379,0-4.317-1.89-4.317-4.198,0-2.317,1.938-4.19,4.317-4.19,2.372,0,4.305,1.873,4.305,4.19m-26.598-20.142c-6.306,0-11.448-4.982-11.448-11.139,0-6.166,5.142-11.158,11.448-11.158,6.333,0,11.465,4.992,11.465,11.158,0,6.157-5.132,11.139-11.465,11.139m9.343-11.139c0-5.03-4.184-9.103-9.343-9.103-5.142,0-9.324,4.073-9.324,9.103,0,5.014,4.182,9.088,9.324,9.088,5.159,0,9.343-4.074,9.343-9.088"/></g></g></g></svg>
+								<hr>
+								<span>CIRCULER<br/>A VELO</span>
+							</div>
+						</div>
+						<div class="item item-voiture">
+							<div>
+								<svg class="icon-voiture" viewBox="0 0 72 64" ><g transform="translate(32.69222,20.917311)"><g transform="matrix(1.25,0,0,-1.25,-477.99259,561.84677)"><g transform="translate(410.6443,443.2463)"><path d="M0,0,0,0.438c0.2-0.047,0.407-0.077,0.629-0.077,1.222,0,2.22,0.723,2.22,1.612,0,0.895-0.998,1.614-2.22,1.614s-2.213-0.719-2.213-1.614c0-0.014,0.004-0.027,0.007-0.047-0.003-0.013-0.007-0.03-0.007-0.04v-1.124c-0.071,0.027-0.15,0.05-0.225,0.07-1.287,12.112-11.292,21.538-23.457,21.538-12.047,0-21.981-9.26-23.415-21.213v0.729,0.04,0.047c0,0.895-0.99,1.614-2.216,1.614-1.222,0-2.212-0.719-2.212-1.614,0-0.872,0.954-1.575,2.137-1.605-1.68-0.879-3.435-2.712-3.432-5.52v-14.314h4.579v-4.569c-0.01-5.633,8.583-5.567,8.58,0v4.569h15.468,15.428v-4.569c0.022-5.567,8.608-5.633,8.615,0v4.569h4.583v14.314c-0.018,2.463-1.373,4.18-2.849,5.152m-45.395-10.829c-2.199-0.006-3.976,1.688-3.968,3.78-0.008,2.105,1.769,3.8,3.968,3.783,2.187,0.017,3.96-1.678,3.96-3.783,0-2.092-1.78-3.786-3.96-3.78m1.823,11.774c0.722,10.046,8.322,16.906,18.306,16.906,9.991,0,17.591-6.86,18.313-16.906h-36.619zm37.412-12.212c-2.201-0.006-3.985,1.688-3.996,3.78,0.011,2.105,1.795,3.8,3.996,3.783,2.174,0.017,3.951-1.678,3.968-3.783-0.017-2.092-1.794-3.786-3.968-3.78" fill-rule="nonzero" fill="currentcolor"/></g></g></g></svg> 
+								<hr>
+								<span>CIRCULER<br/>EN VOITURE</span>
+							</div>
+						</div>
+						<div class="item item-conseils">
+							<div>
+								<svg class="icon-conseils" viewBox="0 0 72 64" ><g transform="matrix(2.5399292,0,0,-2.5399292,71.999373,35.673079)"><path fill-rule="nonzero" fill="currentcolor" d="m0,0,0,0c-0.006,1.979-1.253,3.594-2.906,4.635-1.083,0.683-2.375,1.17-3.796,1.432-0.557,1.433-1.686,2.635-3.081,3.512-2.01,1.271-4.653,2.003-7.553,2.006-2.899-0.004-5.542-0.735-7.554-2.006-1.993-1.256-3.449-3.17-3.457-5.478,0.008-2.306,1.465-4.219,3.458-5.475,0.316-0.2,0.657-0.383,1.005-0.557-0.996-1.496-2.497-2.61-4.246-3.103,0.338-0.076,0.686-0.132,1.041-0.163,2.352-0.207,4.546,0.683,6.083,2.243,1.153-0.274,2.384-0.424,3.67-0.426,0.155,0,0.307,0.004,0.46,0.01,0.436-0.483,0.954-0.908,1.52-1.264,1.669-1.055,3.845-1.653,6.225-1.655,0.618,0.001,1.222,0.042,1.806,0.122,1.536-1.534,3.711-2.405,6.043-2.2,0.352,0.031,0.699,0.087,1.036,0.165-1.642,0.463-3.069,1.478-4.062,2.843,0.497,0.209,0.968,0.451,1.402,0.725,1.653,1.041,2.9,2.658,2.906,4.634m-23.439,0.911c-1.504,0.962-2.21,2.112-2.202,3.19-0.008,1.08,0.698,2.23,2.2,3.192,1.485,0.948,3.669,1.589,6.105,1.586,2.434,0.003,4.621-0.637,6.103-1.585,0.509-0.325,0.921-0.674,1.252-1.03-2.047-0.13-3.906-0.701-5.378-1.63-1.652-1.04-2.897-2.655-2.905-4.635,0.003-0.219,0.021-0.434,0.049-0.645-2.079,0.13-3.922,0.725-5.224,1.557m19.084-3.259c-1.146-0.73-2.861-1.24-4.776-1.236-1.916-0.004-3.632,0.506-4.777,1.236-1.164,0.748-1.657,1.599-1.651,2.347-0.006,0.751,0.487,1.604,1.65,2.35,1.146,0.731,2.862,1.239,4.778,1.236,1.915,0.003,3.63-0.504,4.776-1.235,1.162-0.747,1.656-1.6,1.651-2.35,0.005-0.747-0.489-1.599-1.651-2.348"/></g></svg>
+								<hr>
+								<span>CONSEILS & VENTE</span>
+							</div>
+						</div>
+						<br class="visible-md-inline">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid actu-fluid">
+		<div class="container actu hidden-xs">
+			<div id="twitter" class="visible-lg">
+				<a class="twitter-timeline"  href="https://twitter.com/metromobilite"  data-widget-id="497043352097787904">Tweets de @metromobilite</a>
+				<script type="text/javascript">!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+			</div>
+			<div id="panel-actu">
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid container-page">
+		<div id="rowPage"></div>
+		<div id="btn_up" title="Haut de page">
+			<a href="#"><span class="glyphicon glyphicon-arrow-up"></span><span class="sr-only">Retourner en haut</span></a>
+		</div>
+	</div>
+	<div id='footer'>
+		<div class="container-fluid container-contact">
+			<div class="row" id="div-entete-contact" >
+				<div class="container">
+					<div id="entete-contact" class="row">
+						<h1><span><img id="logo-contact" src="img/metromobilite.svg" alt=""> Métromobilité</span></h1>
+						<div class="pull-right" id="entete-contact-titre"> Contact</div>
+					</div>
+					<div id="contact"  class="row">
+						<img id="image-plan-contact" class="col-sm-4" src="img/plan.png" alt="Plan de quartier de Stationmobile">
+						<ul class="list-unstyled col-sm-2">
+							<li><span class="glyphicon glyphicon-road"></span> 15, bd Joseph Vallier 38000 Grenoble</li>
+							<li>&nbsp;</li>
+							<li><span class="glyphicon glyphicon-earphone"></span> 04 76 20 36 36</li>
+							<li>&nbsp;</li>
+							<li><span class="glyphicon glyphicon-envelope"></span><a href="mailto:contact@metromobilite.fr"> contact</a></li>
+							<li>&nbsp;</li>
+							<li><span class="glyphicon glyphicon-thumbs-up"></span><a href="https://www.facebook.com/metromobilite?fref=ts" target="_blank"> Facebook</a></li>
+							<li><span class="glyphicon glyphicon-heart"></span><a href="https://twitter.com/metromobilite" target="_blank"> Twitter</a></li>
+
+						</ul>
+						<form role="form" id="formulaire-contact">
+							<div class="col-sm-2">
+								<div class="form-group">
+									<label for="inputNom" class="sr-only">Nom</label>
+									<input type="text" class="form-control" id="inputNom" placeholder="Nom">
+								</div>
+								<div class="form-group">
+									<label for="inputMail" class="sr-only">Email</label>
+									<input type="email" class="form-control" id="inputMail" placeholder="Email">
+								</div>
+								<div class="form-group">
+									<label for="inputObjet" class="sr-only">Objet</label>
+									<input type="text" class="form-control" id="inputObjet" placeholder="Objet">
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="form-group">
+									<label for="inputMessage" class="sr-only">Votre message</label>
+									<textarea rows="4" cols="50" class="form-control" id="inputMessage" placeholder="Votre message"></textarea>
+								</div>
+								<button type="button" class="btn btn-default" id="submitBouton">Envoyer votre message</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid container-piedDePage hidden-xs">
+			<div class="container" id="piedDePage">
+				<div class="row">
+					<ul class="col-xs-2">
+						<li><h2>Se Déplacer</h2></li>
+						<li><a href="pages/TC.html"><h3>En Transport en Commun</h3></a></li>
+						<li><a href="pages/Velo.html"><h3>A Vélo</h3></a></li>
+						<li><a href="pages/Voiture.html"><h3>En Voiture</h3></a></li>
+						<li><a href="pages/Pied.html"><h3>A Pied</h3></a></li>
+						<li><a href="pages/PMR.html"><h3>Personnes à Mobilité Réduite</h3></a></li>
+					</ul>
+					<ul class="col-xs-2">
+						<li><h2>Services</h2></li>
+						<li><a href="iti.html"><h3>Calculateur d'itinéraire multimodal</h3></a></li>
+						<li><a href="prochainsPassages.html"><h3>Prochains Passages</h3></a></li>
+						<li><a href="horaires.html"><h3>Horaires</h3></a></li>
+						<li><a href="planTC.html"><h3>Plan des reseaux</h3></a></li>
+						<li><a href="velo.html"><h3>Circuler à vélo</h3></a></li>
+						<li><a href="trafic.html"><h3>Circuler en voiture</h3></a></li>
+						<li><a href="planTitresTag.html?agenceM=true"><h3>Conseils & ventes</h3></a></li>
+					</ul>
+					<ul class="col-xs-2">
+						<li><a href="pages/Actu.html"><h2>Actualités</h2></a></li>
+					</ul>
+					<ul class="col-xs-2">
+						<li><h2>Indices de pollution</h2></li>
+						<li><a href="pages/Pollution.html"><h3>Kézako ?</h3></a></li>
+						<li><a href="pages/EmissionCO2.html"><h3>Calculer mes émisisons de CO2</h3></a></li>
+					</ul>	
+					<ul class="col-xs-2">
+						<li><h2>Découvir M</h2></li>
+						<li><a href="pages/DecouvrirM.html"><h3>Les agences de mobilité</h3></a></li>
+						<li><a href="pages/OpenData.html"><h3>Les données ouvertes</h3></a></li>
+						<li><a href="pages/AppliMobile.html"><h3>L'application mobile</h3></a></li>
+					</ul>
+					<ul class="col-xs-2">
+						<li><a href="pages/conditions.html"><h3>Mentions légales et Crédits</h3></a></li>
+						<li><a href="pages/FAQ.html"><h3>Questions fréquentes</h3></a></li>
+					</ul>	
+				</div>
+				<div class="row">
+					<span>&copy;2014 Métromobilité - v1.0</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/moment.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
+	<script type="text/javascript" src="stats/piwik.js"></script>
+	<script type="text/javascript" src="js/outils.js"></script>
+	<script type="text/javascript" src="js/fr.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>
+  </body>
+</html>

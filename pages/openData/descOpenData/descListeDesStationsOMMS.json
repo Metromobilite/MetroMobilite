@@ -1,0 +1,29 @@
+{
+	"description" : "Fichier de description de toutes les stations Cité Lib by Ha:mo",
+	"record_time" : "Date de la derniere mise à jour",
+	"result_code" : "Code resultat",
+	"zone" : {
+		"zone_name" : "Nom de la zone",
+		"zone_lat" : "Latitude",
+		"zone_lng" : "Longitude",
+		"map_level" : "Niveau",
+		"areas" : [{
+				"area_name" : "Nom de la ville",
+				"area_lat" : "Latitude de la ville",
+				"area_lng" : "Longitude de la ville",
+				"area_map_lat" : "Latitude de la ville",
+				"area_map_lng" : "Longitude de la ville",
+				"map_level" : "Niveau",
+				"stations" : [{
+						"station_id" : "ID de la station",
+						"station_name" : "Nom de la station",
+						"station_lat" : "Latitude de la station",
+						"station_lng" : "Longitude de la station",
+						"service_type" : "Type (1)... (2)...",
+						"opening_flag_today" : "(0)Fermé (1)Ouvert"
+					}
+				]
+			}
+		]
+	}
+}

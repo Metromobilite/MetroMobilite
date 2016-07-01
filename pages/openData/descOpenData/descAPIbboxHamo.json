@@ -1,0 +1,18 @@
+{
+	"description" : "Fichier de description des stations Citélib by Hamo",
+	"type" : "FeatureCollection",
+	"features" : [{
+			"type" : "Feature",
+			"properties" : {
+				"CODE" : "Code de la station, exemple 'E28'",
+				"LIBELLE" : "Nom de la station 'Jean Pain -  Stade des Alpes'",
+				"type" : "hamo",
+				"id" : "Identifiant de la station, exemple 'E28'"
+			},
+			"geometry" : {
+				"type" : "Point",
+				"coordinates" : "Long-Latitude, exemple '[5.74658, 45.192649]'"
+			}
+		}
+	]
+}

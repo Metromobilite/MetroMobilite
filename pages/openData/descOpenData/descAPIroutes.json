@@ -1,0 +1,12 @@
+[
+{
+		"description" : "Liste des lignes de transport en commun, avec pour chaque ligne :",
+		"id" : "Identifiant de la ligne, par exemple: 'C38:SLP01'",
+		"shortName" : "Nom court de la ligne, par exemple: 'SLP01'",
+		"longName" : "Nomde la ligne, par exemple: 'MIRIBEL LES ECHELLES-ST LAURENT DU PONT'",
+		"color" : "Couleur du logo et du tracé, par exemple: '66FF00'",
+		"textColor" : "Couleur du texte du logo, par exemple: 'FFFFFF'",
+		"mode" : "'BUS', 'TRAM', 'RAIL'",
+		"type" : "'TRAM', 'C38', 'CHRONO', 'FLEXO', 'SCOL', 'NAVETTE', 'SNC'"
+	}
+]

@@ -1,0 +1,247 @@
+<!doctype html>
+<!--
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html lang="fr">
+	<head>
+		<base href="../" />
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="initial-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+		<title>MétroMobilité - Les agences de mobilité</title>
+		<meta name="description" content="Les agences de Mobilité vous informent, vous conseillent et vendent des titres de transports TAG, TER, Transisère..." />
+		<link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/actus.css" rel="stylesheet">
+		<link href="css/head.css" rel="stylesheet">
+		<link href="css/index.css" rel="stylesheet">
+		<!-- debut modif image-->
+		<style type='text/css'>
+			@media (min-width: 768px) {
+				body {
+					background-image:url("img/pages/bandeauDecouvrirM.jpg"); 
+					background-attachment: fixed;
+					background-repeat:no-repeat;
+					background-position:top center;
+				}
+			}
+			h2 {
+			font-size:18px!important;
+			margin-bottom:0px!important;
+			margin-top:20px!important;
+			text-transform:uppercase!important;
+			font-weight: 500!important;
+			line-height: 1.1!important;
+			}
+			
+			h4 {
+			font-size:12px!important;
+			}
+			#navbarDesc {
+				background-color: #dc3c1b;
+				opacity:0.9;
+			}
+			.container-page h2, .container-page h6, .container-page h5, .container-page h4, .container-page h3, .container-page  > div > .row a, .container-page .glyphicon-plus-sign:before   {
+				color:#dc3c1b;
+			}
+			.container-page hr {
+				 background-color: #dc3c1b;
+			}
+			.container-page .nav > li > a:hover, .nav > li > a:focus{
+				background-color: #ae2315;
+				border-color: #ae2315;
+				opacity:0.9;
+			}
+		</style>
+		<!--Fin modif -->
+	</head>
+	<body>
+	<div id='head'></div>
+	<div class="container-fluid container-page">
+	<!-- debut modif image--> 
+		<div id="rowPage">
+			<div class="row rowHeader bgTransp hidden-xs">
+				<div class="container">
+					<h1>DECOUVRIR LES AGENCES DE MOBILITE</h1>
+					<br>
+				</div>
+				<div id="navbarDesc" class="container-fluid" data-spy="affix" data-offset-top="240">
+					<div class="container">
+						<div class="row">
+							<ul class="nav navbar-nav collapse navbar-collapse">
+								<li><a href="#Agences">Agences M</a></li>
+								<li><a href="#Emploi">Emploi & Mobilité</a></li>
+								<li><a href="#Pde">PDE / PDA</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>	
+			</div>
+			<div class="row">
+				<div class="container">
+					<h2 id="Agences" class="anchor">Les Agences de Mobilité M</h2>
+						<hr>
+						<div class="centrerTexte pull-right" >
+							<img src="img/Pages/m_guichet.jpg" alt="Les Agences de Mobilité" width="600" height="450"/>
+						</div>	
+						<p>Les agences de Mobilité s'adressent à tous les publics : particuliers, entreprises, établissements scolaires...<br><br>
+						Elles vous informent sur l'offre de déplacement dans l'agglomération, vous conseillent sur vos déplacements, vendent des titres de transports tous réseaux (TAG, TER, TRANSISERE)
+						principalement sur la Région Urbaine Grenobloise, mais des services peuvent être proposés sur un périmètre plus étendu, notamment grâce à la billettique OùRA!<br><br>
+						Dans les agences M, vous pouvez également louer un Métrovélo, souscrire un abonnement au service d'autopartage CitéLib.</p>	
+							<h3>Agence de Mobilité StationMobile</h3>
+								<p>Adresse : 15 bd, Joseph Vallier à Grenoble.<br>
+								Horaires : du lundi au vendredi de 8h30 à 18h30 (de mi-juillet à mi-août, de 9h30 à 17h30).<br>
+								<b>Attention, vendredi 6 mai l'agence est ouverte exceptionnellement de 9h30 à 17h30.</b><br>
+								Accès : 
+								<ul class="classic">
+										<li>lignes C, 12 - arrêt Vallier − Docteur Calmette</li>
+										<li>lignes E, 17 - arrêt Vallier − Libération</li>
+										<li>lignes Express2, Lise, 3000, 4100, 4101, 4110, 4500 - arrêt Vallier − Libération</li>
+								</ul>
+								<p>
+								De nombreux <b>arceaux à vélo sont disponibles</b>. Une place de stationnement pour <b>personne à mobilité réduite</b> est disponible devant le bâtiment. 
+								</p>
+								
+								
+								<p>
+								<span class="glyphicon glyphicon-plus-sign"></span><a href="pdf/chem_StationMobile.mp3" title="Télécharger la description sonore d'accès à StationMobile format MP3 - Nouvelle fenêtre" target="_blank"> Télécharger la description sonore d'accès à l'agence de Mobilité StationMobile au format MP3</a><br>
+								<span class="glyphicon glyphicon-plus-sign"></span><a href="pdf/Description-sonore-cheminement-Stationmobile.txt" title="Télécharger la description sonore d'accès à StationMobile format texte - Nouvelle fenêtre" target="_blank"> Télécharger la description sonore d'accès à l'agence de Mobilité StationMobile au format texte</a><br>
+								</p>
+								
+								
+							<h3>Agence de Mobilité Centre-Ville</h3>	
+								<p>Adresse : 49 avenue Alsace-Lorraine à Grenoble.<br>
+								Horaires : du lundi au vendredi de 7h15 à 18h30, le samedi de 9h à 18h (de mi-juillet à mi-août : du lundi au samedi de 9h30 à 18h00).<br>
+								<b>Attention, vendredi 6 mai l'agence est ouverte exceptionnellement de 9h30 à 18h00.</b><br>
+								Accès : 
+								<ul class="classic">
+									<li>Lignes A, B et E - station Alsace-Lorraine.</li>
+									<li>Lignes A, B, C1 et Transisère - arrêt Gares.</li>
+								</ul>
+								<span class="clearfix"></span>
+							<h3>Agence de Mobilité Grand'Place</h3>	
+								<p>Horaires : du lundi au vendredi de 7h30 à 18h30, le samedi de 9h30 à 17h30 (de mi-juillet à mi-août : du lundi au samedi de 9h30 à 17h30).<br>
+								<b>Attention, vendredi 6 mai l'agence est ouverte exceptionnellement de 9h30 à 17h30.</b><br>
+								Accès : 
+								<ul class="classic">
+									<li>Lignes Lignes A, C3 ,C6 ,12 , 66, 67, 68 - arrêt Grand'place.</li>
+								</ul>
+								<br>
+								<p>
+								<span class="glyphicon glyphicon-plus-sign"></span><a href="iti.html"> Votre itinéraire pour rejoindre les agences de mobilité M</a>
+								</p>
+								<br><br>
+					<h2 id="Emploi" class="anchor">La plateforme mobilité emploi</h2>
+						<hr>
+						<div class="centrerTexte pull-right" >
+							<img src="img/Pages/m_plateforme-mobilité.jpg" alt="" width="600" height="450"/>
+						</div>	
+						<p>La "Plateforme mobilité-emploi" est un lieu d'accueil, de conseil, de formation et d'accompagnement personnalisé en direction des personnes les plus fragiles, dans une démarche de formation et de retour vers l'emploi.<br><br>
+						L'offre proposée est adaptée à l'autonomie et au besoin de déplacement de chacun. <br>
+						Porté par la Métro, mis en place et exploité par le CCAS (Centre Communal d'Action Social) de la ville de Grenoble, réalisé dans le cadre d'un projet partenarial soutenu par l'Etat, la région Rhône-Alpes et l'Europe, ce service mêle action sociale (via l'insertion), aide au retour à l'emploi et mobilité durable.<br><br>
+						La plateforme de mobilité propose des formations, des aides matérielles d'urgence et les services d'une auto-école citoyenne.</p>
+						<br>
+						<p>
+						<span class="glyphicon glyphicon-plus-sign"></span><a href="http://www.grenoble.fr/1268-plateforme-mobilite.htm" title="Les services de la Plateforme Mobilité - Nouvelle fenêtre" target="_blank"> Les services de la Plateforme Mobilité</a>
+						</p>
+						<span class="clearfix"></span>
+					<h2 id="Pde" class="anchor">L'aide pour les professionnels</h2>
+						<hr>
+						<div class="centrerTexte pull-right" >
+							<img src="img/Pages/m_pde.png" alt="" width="600" height="450"/>
+						</div>
+						Professionnels ou institutions, les <b>agences de mobilité vous aident à promouvoir les modes alternatifs</b>, tels que la mise en place de Plan de Déplacement d'Entrepise, des pédibus et/ou vélobus dans les écoles ou de manifestations en faveurs de nouveaux moyens de déplacements. 
+							<h3>Les PDE et PDA</h3>
+								<p>Le Plan de Déplacement d'Entreprise (PDE) ou d'Administration (PDA) est une démarche volontaire d'une entreprise qui a un double objectif :  </p> 
+								<ul class="classic">
+									<li>réduire la part de la voiture dans tous les déplacements générés par l'entreprise : trajet domicile-travail, déplacement professionnel...</li> 
+									<li>optimiser et sécuriser les déplacements des salariés.</li>
+								</ul>
+								Le PDE se traduit par la mise en oeuvre d'actions variées, comme par exemple :
+								<ul class="classic">
+									<li>promotion des modes de transports alternatifs : subvention aux abonnements TC ou aux covoitureurs, prêt ou fourniture d'accessoires de vélos, création de vestiaires-douches...</li>
+									<li>limitation des déplacements des salariés : télétravail, visioconférence, coin-cuisine, aménagement des horaires...</li>
+								</ul>
+								La méthode pour la mise en place d'un PDE est, en général, la suivante :
+								<ul class="classic">
+									<li>constitution d'un comité de pilotage et d'un groupe technique (volontaires)</li>
+									<li>état des lieux des déplacements : adresse des salariés, moyens utilisés, stationnements internes, desserte TC existante...</li>
+									<li>actions possibles</li>
+									<li>définir les objectifs et choisir les solutions</li>
+									<li>informer les salariés et promouvoir les actions</li>
+									<li>évaluer le plan et continuer à le faire vivre (nouveaux salariés, nouvelles dessertes, nouveaux besoins...)</li>
+								</ul>
+								Un PDE est un <b>dossier "vivant" destiné à évoluer</b>.
+
+								Sous l'impulsion et la coordination de l'Agence, la Chambre de Commerce et de l'Industrie (CCI) et la TAG accompagnent gratuitement les 
+								entreprises : méthode, documents-type (cahier des charges, enquêtes...) ; regroupement pour créer un PDE Inter-Entreprise ; 
+								animation du club des référents PDE...<br><br>
+								<p>
+								<span class="glyphicon glyphicon-plus-sign"></span><a href="http://industrie.grenoble.cci.fr/la-cci-a-votre-service/industrie-services-aux-entreprises/mener-une-demarche-environnementale/mettre-en-place-un-pde-plan-de-deplacement-entreprise--9894.kjsp?RH=CCIG" title="Informations PDE de la Chambre de Commerce et de l'Industrie - Nouvelle fenêtre" target="_blank"> Informations PDE sur le site de la Chambre de Commerce et de l'Industrie</a><br>
+								<span class="glyphicon glyphicon-plus-sign"></span><a href="http://www.tag.fr/39-deplacements-entreprises.htm" title="Informations PDE/PDA sur le site de la TAG - Nouvelle fenêtre" target="_blank"> Informations PDE/PDA sur le site de la TAG</a>		
+								</p>
+							<h3>Pédibus et vélobus pour les scolaires</h3>
+								<p>Les enfants vont beaucoup trop souvent à l'école ou au collège en voiture.
+								Les Plans de Déplacement des Etablissements Scolaires (PDES) permettent aux parents, aux enseignants, et aux collectivités de travailler ensemble pour mettre en oeuvre des actions qui permettent aux enfants d'apprendre à aller à l'école autrement qu'en voiture. </p>
+									<span class="clearfix"></span>
+								<br>
+				</div>
+			</div>
+
+		</div>
+		<!--Fin modif -->
+		<div id="btn_up" title="Haut de page">
+			<a href="#" class="glyphicon glyphicon-arrow-up"></a>
+		</div>
+	</div>
+	<div id='footer'></div>
+	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/moment.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
+	<script type="text/javascript" src="stats/piwik.js"></script>
+	<script type="text/javascript" src="js/outils.js"></script>
+	<script type="text/javascript" src="js/fr.js"></script>
+	<script type="text/javascript">var pageStatique = true;</script>
+	<script type="text/javascript" src="js/index.js"></script>
+	<script type="text/javascript">
+		$('#footer').load('index.html #footer',function(){});
+		$('#head').load('head.html',function(){});
+		addBackToTop();
+		trackPiwik("MetroMobilité : decouvrirM.html"); //<!--modif -->
+		var anchor = window.location.hash;
+		window.location.hash = anchor;
+		
+		//faire marcher les href="#toto" avec la balise <base>
+		$().ready(function() {
+		  $("a[href^='\#']").each(function(){ 
+			this.href=location.href.split("#")[0]+'#'+this.href.substr(this.href.indexOf('#')+1);
+		  });
+		});
+	</script>
+  </body>
+</html>
+
+
+
+
+
+
+

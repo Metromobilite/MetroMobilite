@@ -1,0 +1,9 @@
+{
+	"description" : "Disponibilité et niveau de service de la liste des parkings",
+	"description" : "Identifiant de chaque parking",
+	"GAM_PAR_CARRONNERIE" : [{
+			"time" : "Unix TimeStamp en miliseconde, exemple '1449560230000'",
+			"dispo" : "Nombre de places disponibles, '-1' sinon",
+			"nsv_id" : "'0' : 'indisponible', '1': 'places disponibles', '2' : 'peu de places disponibles', '3' : 'Complet', '4' : 'fermé'"
+		}]
+}

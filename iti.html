@@ -1,0 +1,505 @@
+<!doctype html>
+<!--
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html lang="fr">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="initial-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+		<title>Métromobilité – Calculateur d’itinéraire multimodal</title>
+		<meta name="description" content="Calculez les meilleurs itinéraires pour vos trajets via le réseau TAG et Transisère mais aussi en voiture, en vélo ou à pied. Trouvez même votre chemin en Cité Lib by Ha:mo" />
+		<link href="js/lib/ol/ol.css" rel="stylesheet">
+		<link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
+		<link href="js/lib/bs/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+		<link href="css/map.css" rel="stylesheet">
+		<link href="css/iti.css" rel="stylesheet">
+	</head>
+	<body>
+	<div id='head'></div>
+	<div class="container-fluid main">
+		<div class="row hidden-print">
+			<div id="map" class="map"></div>
+			<div id="popup"></div>
+			<div class="layerSwitcher">
+				<div class="layersPanel">
+					<div class="close-switcher pull-right"><span class="sr-only">Fermer</span><span class="glyphicon glyphicon-minus"></span></div>
+					<div class="pull-left">Afficher : </div>
+					<div class="bases list-unstyled text-left"></div>
+					<ul class="layers list-unstyled text-left"></ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid popups">
+		<div class="row hidden-print">
+			<div class="col-xs-12 col-sm-6 col-md-5 col-lg-4">
+				<div id="itiParams" class="panel panel-default">
+					<div class="panel-heading" id="panel-heading-itineraire">
+						<a id="togglePanelsParams" class="pull-left btn btn-link no-h-padding no-v-padding" href="#"><span class="sr-only">Reduire</span><span class="glyphicon glyphicon-resize-small"></span></a>
+						<h1 class="panel-title text-center">Itinéraire</h1>
+					</div>
+					<div class="panel-body">
+						<div id="itiMainParams" class="row">
+							<div class="col-xs-10">
+								<div class="input-group input-group-sm">
+									<label class="control-label sr-only" for="dep">Départ</label>
+									<span id="geoloc" class="input-group-addon"><span class="glyphicon glyphicon-screenshot"></span></span>
+									<input id="dep" data-lonlat="0,0" type="text" class="form-control hasclear" autocomplete="off" placeholder="Arrêt ou adresse de départ"/>
+									<span class="saisie_clear glyphicon glyphicon-remove"></span>
+								</div>
+								<div class="input-group input-group-sm">
+									<label class="control-label sr-only" for="arr">Arrivée</label>
+									<span class="input-group-addon"><span class="glyphicon glyphicon-map-marker"></span></span>
+									<input id="arr" data-lonlat="0,0" type="text" class="form-control hasclear" autocomplete="off" placeholder="Arrêt ou adresse d'arrivée"/>
+									<span class="saisie_clear glyphicon glyphicon-remove"></span>
+								</div>
+							</div>
+							<div class="col-xs-1">
+								<button type="button" id="iti-params-inverse" class="btn btn-default btn-xs" title="Inverse le départ et l'arrivée" alt="Inverse le départ et l'arrivée">
+									<span class="glyphicon glyphicon-sort"></span><span class="sr-only">Inverser</span>
+								</button>
+							</div>
+						</div>
+						<div class="row" id="rowOptions"><h2 class="col-xs-12"><span class="glyphicon glyphicon-chevron-down"></span> Plus d'options</h2></div>  <!--data-toggle="collapse" data-target="#itiOptions"--> 
+						<div id="itiOptions" class="collapse">
+							<div class="row">
+								<form class="form-inline" role="form">
+										<div class='input-group date col-xs-12' id='datepickerIti'>
+											<label for="dateItiInput" class="sr-only">Date</label>
+											<input type='text' id="dateItiInput" class="form-control datepicker-readonly" data-date-format="DD/MM/YYYY" readonly="true"/>
+											<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+										</div>
+										<div class="input-group col-xs-6 pull-left"  id='apavpicker'>
+											<label for="ap_av" class="sr-only">Avant ou après</label>
+											<select id="ap_av" class="form-control">
+												<option value="D">Après</option>
+												<option value="A">Avant</option>
+											</select>
+										</div>
+										<div class='input-group date col-xs-6 pull-left' id='timepickerIti'>
+											<label for="timeItiInput" class="sr-only">Heure</label>
+											<input type='text' id="timeItiInput" class="form-control datepicker-readonly" data-date-format="HH:mm" readonly="true"/>
+											<span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+										</div>
+								</form>
+							</div>
+							<div id="allModes" class="col-xs-12">
+									<div id="ongletsPietonPmr" class="input-group input-group-sm" data-toggle="checkbox">
+										<div id="ongletPieton" class="active" title="Piéton"/>
+											<img id="imgPieton" src="img/pieton_blanc.svg" alt="Piéton"/>
+										</div>
+										<div  id="ongletPmr" title="Personne à mobilité réduite">
+											<img id="imgPmr" src="img/pmr_blanc.svg" alt="Personne à mobilité réduite"/>
+										</div>
+									</div>
+									<div id="modes" class="input-group input-group-sm active" data-toggle="checkbox">
+										<ul id="transit" title="Transports en commun">
+											<img src="img/tc_blanc.svg" alt="Transports en commun"/>
+											<input id="checkTransit" type="checkbox" checked="checked" value="transit"/><label for="checkTransit" class="sr-only">Transports en commun</label>
+										</ul>
+										<ul id="transit_pmr" title="Transports en commun avec accés PMR" alt="Transports en commun avec accés PMR" style="display:none">
+											<img src="img/tc_pmr_blanc.svg" alt="Transports en commun avec accés PMR"/>
+											<input id="checkTransit_pmr" type="checkbox" checked="checked" value="transit"/><label for="checkTransit_pmr" class="sr-only">Transports en commun avec accés PMR</label>
+										</ul>
+										<ul id="bike" title="Vélo">
+											<img src="img/velo_blanc.svg" alt="Vélo"/>
+											<input id="checkBike" type="checkbox" checked="checked" value="bike"/><label for="checkBike" class="sr-only">Vélo</label>
+										</ul>
+										<ul id="walk" title="Piéton">
+											<img src="img/pieton_blanc.svg" alt="Piéton"/>
+											<input id="checkWalk" type="checkbox" checked="checked" value="walk"><label for="checkWalk" class="sr-only">Piéton</label>
+										</ul>
+										<ul id="pmr" title="Personne à mobilité réduite" style="display:none">
+											<img id="imgPmr" src="img/pmr_blanc.svg" alt="Personne à mobilité réduite"/>
+											<input id="checkPmr" type="checkbox" checked="checked" value="pmr" disabled="disabled"><label for="checkPmr" class="sr-only">Personne à mobilité réduite</label>
+										</ul>
+										<ul id="car" title="Voiture">
+											<img src="img/voiture_blanc.svg" alt="Voiture"/>
+											<input id="checkCar" type="checkbox" value="car"><label for="checkCar" class="sr-only">Voiture</label>
+										</ul>
+										<ul id="carSharing" title="Cité Lib by Ha:mo">
+											<img src="img/comms_blanc.svg" alt="Cité Lib Ha:mo"/>
+											<input id="checkCarSharing" type="checkbox" value="carSharing"><label for="checkCarSharing" class="sr-only">Cité Lib Ha:mo</label>
+										</ul>
+									</div>
+							</div>
+						</div>
+					</div>
+					<img id="wait" src="img/wait.gif" alt="recherche en cours"></img>
+					<div class="panel-footer">
+						<div class="row">
+							<button type="button" id="calculer" class="btn btn-default center-block">
+								<span class="glyphicon glyphicon-search"></span> Calculez
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+			<a id="pub" style="display:none;" href="http://www.metromobilite.fr" target='_blank'>
+				<img src="img/metromobilite.svg" alt="Métromobilite">
+				<div></div>
+			</a>
+		<div class="rowResultats row hidden-print">
+			<div class="col-xs-12 col-sm-6 col-md-5 col-lg-4">
+				<div id="iti" class="collapse panel panel-default">
+					<div class="panel-heading" id="panel-heading-resultats">
+					<a id="togglePanelsResultats" class="pull-left btn btn-link no-h-padding no-v-padding" href="#"><span class="sr-only">Reduire</span><span class="glyphicon glyphicon-resize-small"></span></a>
+					<h2 id="iti-resultat" class="panel-title text-center">Résultats</h2></div>
+					<div class="panel-heading" id="panel-heading-resultats-precedent" title="Calcul et affiche les itinéraires précédents" alt="Calcul et affiche les itinéraires précédents">
+						<div class="text-center"><div class="glyphicon glyphicon glyphicon-chevron-up"></div></div>
+						<div id="iti-dep-prec" class="text-center">Départ précédent</div>
+					</div>
+					<ul class="template hidden">
+						<li class="list-group-item no-v-padding">
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="row headIti">
+										<span class="hdep col-xs-4">00:00</span>
+										<span class="harr col-xs-4">00:00</span>
+										<span class="duree ellipsis col-xs-4">0 min</span>
+									</div>
+									<div class="row">
+										<div class="resultat col-xs-12">
+											<ul class="legs btn-group btn-group-justified pull-left"></ul>
+											<a id="resultat-detail" class="lien-details" href="#" title="Détails de l'itinéraire"><span class="sr-only">Détails</span><span class="glyphicon glyphicon-chevron-right"></span></a>
+										</div>
+										<div class="co2 btn-link col-xs-5" title="CO2 émis" alt="CO2 émis"><a href="#"></a></div>
+										<div id="resultat-trafic" class="traffic ellipsis btn-link col-xs-5">trafic :<a href="#"></a></div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li class="btn WALK"><figure><img title="Piéton" alt="Piéton" class="logoMode" src="img/blank.png"/><figcaption class="from"></figcaption></figure></li>
+						<li class="btn BICYCLE"><figure><img title="Vélo" alt="Vélo" class="logoMode" src="img/blank.png"/><figcaption class="from"></figcaption></figure></li>
+						<li class="btn BUS TRAM RAIL"><figure><img title="Transports en commun" alt="Transports en commun" class="logoMode" src="img/blank.png"/><figcaption class="from"></figcaption></figure></li>
+						<li class="btn CABLE_CAR"><figure><img title="Bulles de Grenoble" alt="Bulles de Grenoble" class="logoMode" src="img/blank.png"/><figcaption class="from"></figcaption></figure></li>
+						<li class="btn CAR"><figure><img title="Voiture"  alt="Voiture" class="logoMode" src="img/blank.png"/><figcaption class="from"></figcaption></figure></li>
+						<li class="btn CUSTOM_MOTOR_VEHICLE"><figure><img title="Cité Lib Ha:mo" alt="Cité Lib Ha:mo" class="logoMode" src="img/blank.png"/><figcaption class="from"></figcaption></figure></li>
+					</ul>
+					<ul class="list-group">
+					</ul>
+					<div class="panel-heading" id="panel-footer-resultats-suivant" title="Calcule et affiche les itinéraires suivants">
+						<div id="iti-dep-suiv" class="text-center">Départ suivant</div>
+						<div class="text-center"><div class="glyphicon glyphicon glyphicon-chevron-down"></div></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="rowResultats row">
+			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-5">
+				<div id="itiDetails" class="collapse panel panel-default">
+					<div class="panel-heading hidden-print" id="panel-heading-details">
+						<a class="lien-resultats pull-left" href="#"><span class="glyphicon glyphicon-chevron-left"></span><span id="itiDetails-ret">Retour aux resultats</span></a>
+						<h2 class="panel-title text-center"><span>Détails</span></h2>
+						 <div class="template hidden">
+							<div class="leg BICYCLE">
+								<div class="text-right text-v-top">
+									<span class="text-v-top text-nowrap">
+										<span class="hdep"></span>
+										<img id="logoModeVelo" title="Vélo" alt="Vélo" class="logoMode" src="img/blank.png"/>
+									</span>
+								</div>
+								<div class="border-left text-v-middle">
+									<span class="duree ellipsis">0 min</span>
+								</div>
+								<div>
+									<div class="row steps"></div>
+									<div class="row profil"><div class="col-xs-12"><canvas width="200" height="100"></canvas></div></div>
+								</div>
+							</div>
+							<div class="leg CAR">
+								<div class="text-right text-v-top">
+									<span class="text-v-top text-nowrap">
+										<span class="hdep"></span>
+										<img id="logoModeVoiture" title="Voiture" alt="Voiture" class="logoMode" src="img/blank.png"/>
+									</span>
+								</div>
+								<div class="border-left text-v-middle">
+									<span class="duree ellipsis">0 min</span>
+								</div>
+								<div>
+									<div class="row steps"></div>
+									<div class="row info">
+										<a class="cov" style="display:none;" href="#"><img src="img/blank.png" alt="Covoiturage"/></a>
+									</div>
+									<div class="row profil"><div class="col-xs-12"><canvas width="200" height="100"></canvas></div></div>
+								</div>
+							</div>
+							<div class="leg CUSTOM_MOTOR_VEHICLE">
+								<div class="text-right text-v-top">
+									<span class="text-v-top text-nowrap">
+										<span class="hdep"></span>
+										<img title="Cité Lib by Ha:mo" alt="Cité Lib by Ha:mo" class="logoMode" src="img/blank.png"/>
+									</span>
+								</div>
+								<div class="border-left text-v-middle">
+									<span class="duree ellipsis">0 min</span>
+								</div>
+								<div>
+									<div class="row steps"></div>
+									<div class="row profil"><div class="col-xs-12"><canvas width="200" height="100"></canvas></div></div>
+								</div>
+							</div>
+							<div class="leg WALK">
+								<div class="text-right text-v-top">
+									<span class="text-v-top text-nowrap">
+										<span class="hdep"></span>
+										<img id="logoModePieton" title="Piéton" alt="Piéton" class="logoMode" src="img/blank.png"/>
+									</span>
+								</div>
+								<div class="border-left text-v-middle">
+									<span class="duree ellipsis">0 min</span>
+								</div>
+								<div>
+									<div class="row steps"></div>
+									<div class="row profil"><div class="col-xs-12"><canvas width="200" height="100"></canvas></div></div>
+								</div>
+							</div>
+							<div class="leg BUS TRAM RAIL">
+								<div class="text-right text-v-top">
+									<span class="text-v-top text-nowrap">
+										<span class="hdep"></span>
+										<img id="logoModeTC" title="Transports en commun" alt="Transports en commun" class="logoMode" src="img/blank.png"/>
+									</span>
+								</div>
+								<div class="border-left text-v-middle">
+									<span class="duree ellipsis">0 min</span>
+								</div>
+								<div>
+									<div class="row steps"></div>
+									<div class="row info" style="display:none;">
+										<a class="flexo" style="display:none;" href="javascript:void(0)"><img src="img/blank.png"/></a>
+									</div>
+								</div>
+							</div>
+							<div class="leg CABLE_CAR">
+								<div class="text-right text-v-top">
+									<span class="text-v-top text-nowrap">
+										<span class="hdep"></span>
+										<img title="Bulles de Grenoble" alt="Bulles de Grenoble" class="logoMode" src="img/blank.png"/>
+									</span>
+								</div>
+								<div class="border-left text-v-middle">
+									<span class="duree ellipsis">0 min</span>
+								</div>
+								<div>
+									<div class="row steps"></div>
+								</div>
+							</div>
+							<span class="col-xs-12 step"></span>
+						 </div>
+					</div>
+					<div class="panel-body" id="details-panel-body">
+						<div class="container-fluid">
+							<div class="row headIti">
+									<div class="col-xs-4"><div class="co2 btn-link" title="CO2 émis" alt="CO2 émis"><a href="#"></a></div></div>
+									<div class="traffic btn-link col-xs-4">trafic :<a href="#"></a></div>
+									<span class="duree col-xs-4">0 min</span>
+							</div>
+							<div class="row legs"></div>
+						</div>
+					</div>
+					<div class="panel-footer hidden-print">
+						<div class=row id='detailFooter'>
+							<a class="col-xs-4" onclick="zoomCarte();">Tout voir sur la carte</a>
+							<a class="col-xs-5" onclick="imprimeFeuilleDeRoute();">Imprimer la feuille de route</a>
+							<a class="col-xs-3" onclick="exportGPX(this);" target="_self" download="export.gpx">trace GPS</a>
+							<!--<span class="col-xs-2" style="color:grey; cursor:default;">M'alerter</span>-->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="js/lib/ol/ol.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/moment-with-locales.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap-datetimepicker.min.js"></script>
+	<script type="text/javascript" src="js/lib/curve.min.js"></script>
+	<script type="text/javascript" src="stats/piwik.js"></script>
+	<script type="text/javascript" src="js/outils.js"></script>
+	<script type="text/javascript" src="js/fr.js"></script>
+	<script type="text/javascript" src="js/carte.js"></script>
+	<script type="text/javascript" src="js/iti.js"></script>
+	<script type="text/javascript">
+	
+		if (urlParams.lang != 'us') //si nouvelle langue mettre le fichier correspondant dans js/lib/bs/js/locales 
+			$.getScript("js/lib/bs/js/locales/bootstrap-datetimepicker."+ urlParams.lang + ".js");
+
+		if (urlParams.lang != 'fr') {
+			$.getScript("js/" + (urlParams.lang=='fr'?'':urlParams.lang + "/") + urlParams.lang + ".js", function()
+			{
+				$.getScript("js/iti-Translate.js",function() {translate();} );
+				
+				initItiFrame();
+		}); } else {
+			initItiFrame();
+		}
+
+		function initItiFrame(){
+			if (urlParams.iFrame){
+					$("body").attr('style','padding-top:0px;');
+					$(".main").attr('style','top:0px;');
+					$.support.cors = true;
+					initIti();
+			} else {
+					$('#head').load('head.html',initIti);
+				}
+		}
+	
+		function getDetails(feature) {
+			var nomPopup = '';
+			if (stylesTypes[feature.get('type')]) {
+				nomPopup = feature.get(stylesTypes[feature.get('type')].text)
+			}
+			if(feature.getGeometry().getType() == 'Point') {
+				var coord= ol.proj.transform(feature.getGeometry().getCoordinates(), sm, gg);
+				var lonlat = coord[1]+','+coord[0];
+				var divPrefixe = '';
+				var div = '';
+				if (feature.get('type')=='PKG' || feature.get('type')=='PAR') {
+					div += '<span>'+feature.get('TOTAL')+' '+lang.carteMobile.places+'</span>';
+					div += '<span class="dyn dynVide" data-type="'+feature.get('type')+'"><span class="dispo"></span> '+lang.carteMobile.placesdisponibles+'</span>';
+					div += getLignesProches(lonlat,afficheListeLgn,null,null,'map');
+				}
+				if (feature.get('type')=='PMV') {
+					div += '<span class="dyn" data-type="'+feature.get('type')+'">'+lang.carteMobile.messagePMV+'</span>';
+				}
+				if (feature.get('type')=='CAM') {
+					div += '<span class="dyn" data-type="'+feature.get('type')+'">'+lang.carteMobile.messageCAM+'</span>';
+				}
+				if (feature.get('type')=='citelib') {
+					divPrefixe = lang.station+' : ';
+					div += getLignesProches(lonlat,afficheListeLgn,null,null,'map');
+				}
+				if (feature.get('type')=='MVA' || feature.get('type')=='MVC' || feature.get('type')=='agenceM') {
+					div += getLignesProches(lonlat,afficheListeLgn,null,null,'map');
+				}
+				if (feature.get('type')=='omms') {
+					divPrefixe = lang.station+' : ';
+					
+					div = '<div class="dyn dynVide" data-type="'+feature.get('type')+'"><ul class="row">\
+						<li class="state-car" title="'+lang.carteMobile.nbTotVehicule+'" alt="'+lang.carteMobile.nbTotVehicule+'"><span class="bs-picto-car">0</span></li>\
+						<li class="state-park" title="'+lang.carteMobile.nbTotPlace+'" alt="'+lang.carteMobile.nbTotPlace+'"><span class="bs-picto-park">0</span></li>\
+					</ul>\
+					<ul class="row">\
+						<li class="state-iroad-comms background-iroad-pas-dispo" title="'+lang.carteMobile.dispoiRoad+'" alt="'+lang.carteMobile.dispoComms+'"><span class="bs-picto-iroad">'+lang.carteMobile.etatNonDisponible+'</span></li>\
+						<li class="state-iroad-comms background-comms-pas-dispo" title="'+lang.carteMobile.dispoComms+'" alt="'+lang.carteMobile.dispoComms+'"><span class="bs-picto-comms">'+lang.carteMobile.etatNonDisponible+'</span></li>\
+					</ul></div>';
+					div +='<a class="lienInscriptionOmms btn btn-primary btn-xs text-center" href="http://www.citelibbyhamo.fr/inscription/" target="_blank">'+lang.carteMobile.inscriptionOmms+'</a>';
+					div +='<a class="lienInscriptionOmms btn btn-primary btn-xs text-center" href="https://gride.gr-tsc.com/login" target="_blank">' + lang.carteMobile.reservationOmms + '</a>';
+					if (isUrlExists('img/hamo/Hamo_' + feature.get('CODE') +'.jpg'))
+						div += '<span><a href="' + 'img/hamo/Hamo_' + feature.get('CODE') +'.jpg' + '" target="_blank"><div class="glyphicon glyphicon-camera state-camera" title="' + lang.carteMobile.photoStation + '"/></a><span>';
+
+				}
+				if (feature.get('type')=='evtTr') {
+					div = '<span class="text-left" data-type="'+feature.get('type')+'">'+feature.get('contenu')+'</span>';
+				}
+				return '<span>'+divPrefixe+'<span class="nomPopup">'+nomPopup+'</span>'+'</span>'+ div;
+			} else {
+				return feature.get('NUMERO')+' - '+feature.get('LIBELLE');
+			}
+		}
+		function initIti(){
+			isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+			initForm();
+			var idcarte = 'map';
+			map = initMap(idcarte,{overlayStyle:getStylesTypes});
+			sourceIti=new ol.source.GeoJSON({projection: sm});
+			layerIti = ajouteLayerManuel('itineraires',idcarte,{source:sourceIti,fctStyle:getStylesIti}).set('visible',true);
+			sourceDepArr=new ol.source.GeoJSON({projection: sm});
+			ajouteControle(idcarte,'layerSwitcher');
+
+			sourcePoints = creeSourceType(idcarte,'citelib,omms,PAR,PKG,MVA,MVC,agenceM',{fctStyle:getStylesTypes});
+			
+			$('.layerSwitcher .layers').append('<span class="layerSwitcherTitle">' + lang.iti.Autopartage + '</span>');
+			ajouteLayerType(idcarte,'citelib','citelib',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Citélib'}); //,layerSwitcherName:'Points de vente'
+			ajouteLayerType(idcarte,'Citélib-by-Ha-Mo','omms',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Citélib-by-Ha-Mo'});
+			
+			$('.layerSwitcher .layers').append('<span class="layerSwitcherTitle">' + lang.iti.Parking + '</span>');
+			ajouteLayerType(idcarte,'PKG','PKG',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Parkings'});
+			ajouteLayerType(idcarte,'PAR','PAR',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Parc-relais'});
+
+			$('.layerSwitcher .layers').append('<span class="layerSwitcherTitle">' + lang.iti.Metrovelo + '</span>');
+			ajouteLayerType(idcarte,'MVA','MVA',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Agences'}); //,layerSwitcherName:'Points de vente'
+			ajouteLayerType(idcarte,'MVC','MVC',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Consignes'});
+			ajouteLayerType(idcarte,'agenceM','agenceM',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Agences Métromobilité'}); //,layerSwitcherName:'Points de vente'
+
+			$('.layerSwitcher .layers').append('<span class="layerSwitcherTitle">' + lang.iti.Autres + '</span>');
+
+			ajouteLayerSwitcher('map','covoiturage','.layerSwitcher',{
+				libelle:'Covoiturage',
+				initFct:function(){
+					return ajouteLayerCovoiturage('covoiturage','map');
+				}
+			});
+			
+			if(isMobile() && navigator.geolocation && !isChrome) { //fonction dépressiée pour l'instant uniquement dans chrome mobile
+				ajouteLayerManuel('depArr','map',{source:null,fctStyle:getStylesTypes}).set('visible',true);
+				ajouteControle('map','localize',onLocalize,{mapName:'map',layerName:'depArr'});
+			}
+			
+			var layerEvtTr = ajouteLayerManuel('evtTr','map',{fctStyle:getStylesEvt,detailsCallback:getDetails,detailsSeul:true});
+			sourceEvtTr = layerEvtTr.getSource();
+			ajouteLayerSwitcher('map','evtTr','.layerSwitcher',{libelle:'Evènements'});
+			updateEvtTR('map',sourceEvtTr);
+			
+			$( document ).on( "evtSourceChargee", {}, function( event, type ) {
+				if (type=='trr') updateDynTrr('Troncon','map');
+				if (type=='PAR') updateDyn('PAR','map','PAR',sourcePoints);
+				else if (type=='covoiturage') {//on construit des geojson pour alimenter la saisie semi auto.
+					var geojson  = new ol.format.GeoJSON;
+					var featuresCollection = geojson.writeFeaturesObject(sourceCov.getFeatures(),{featureProjection:sm,dataProjection:gg});
+					localFindFeatures = localFindFeatures.concat(featuresCollection.features);
+				} else if (type == 'omms') {
+					updateDyn('omms','map','omms',sourcePoints);
+				}
+			});
+			
+
+			if (isMobile) {
+				var modify	= new ol.interaction.Modify({
+				  features: map.featuresOverlay.getFeatures(),
+				  style:[],
+				  pixelTolerance:30
+				});
+
+				map.addInteraction(modify);
+
+				map.once('moveend',function(){setParamsForm();});
+			}
+			
+			map.singleClickCallback = onClickCarte;
+			
+			if (urlParams.iFrame) {
+				$('#pub').show();
+				$( "#pub > div" ).text(lang.pub.text);
+			}
+		
+			trackPiwik("MetroMobilité : iti.html" + (urlParams.lang=='fr'?'':' ' + urlParams.lang));
+		}
+	</script>
+  </body>
+</html>

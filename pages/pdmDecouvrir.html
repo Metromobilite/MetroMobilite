@@ -1,0 +1,417 @@
+<!doctype html>
+<!--
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html lang="fr">
+	<head>
+		<base href="../" />
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="initial-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+		<title>MétroMobilité - Plan de Mobilité</title>
+		<meta name="description" content="Découverte du Plan de Mobilité, ses avantages, ses services, et l'accompagnement dont vous pouvez bénéficier." />
+		<link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/actus.css" rel="stylesheet">
+		<link href="css/head.css" rel="stylesheet">
+		<link href="css/index.css" rel="stylesheet">
+		<!-- debut modif image-->
+		<style type='text/css'>
+			@media (min-width: 768px) {
+				body {
+					background-image:url("img/pages/bandeauPdmDecouvrir.jpg");
+					background-attachment: fixed;
+					background-repeat:no-repeat;
+					background-position:top center;
+				}
+			}
+			h2 {
+				font-size:18px!important;
+				margin-bottom:0px!important;
+				margin-top:20px!important;
+				text-transform:uppercase!important;
+				font-weight: 500!important;
+				line-height: 1.1!important;
+				color:#8334a7;
+			}
+            h3 {
+                text-decoration:none;
+                margin-top:0px;
+            }
+			h4 {
+			font-size:12px!important;
+			}
+			space {
+				margin:50px;
+				padding:50px;
+				display: block;
+			}
+			
+			#navbarDesc {
+				background-color: #8334a7;
+			}
+			#mainpdm .container-page h2,#mainpdm .container-page h6,#mainpdm .container-page h5,
+            #mainpdm .container-page h4,#mainpdm .container-page h3,#mainpdm .container-page  > div > .row a,
+            #mainpdm .container-page .glyphicon-plus-sign:before,
+            #mainpdm .container-page .glyphicon-circle-arrow-right:before {
+				color:#8334a7;
+			}
+			.container-page hr {
+				 background-color: #8334a7;
+			}
+			.container-page mauve {
+				 color: #8334a7;
+				 font-weight : bold;
+			}
+			.container-page .nav > li > a:hover, .nav > li > a:focus{
+				background-color: #691A8D;
+				border-color: #691A8D;
+				opacity:0.9;
+			}
+			#mailContact{
+				padding:10px;
+			}
+            #temoignage {
+                margin-left : 15px;
+                color:#8334a7;
+            }
+			#rhse .col-sm-9{
+				padding-top: 40px;
+			}
+			#rhse {
+				padding-top: 15px;
+			}
+            .avantages {
+                margin-bottom:15px;
+                font-size:14px;
+            }
+            .pdmFondMauve { background-color:#8334a7; color:#fff; margin-right: 10px;}
+            div:not(:last-child) > div > .pdmFondMauve { margin-right:15px;}
+            .chiffres {
+                font-size:18px;
+            }
+			.text-center.pdmFondMauve > a {color: #fff !important;}
+            .pdmFondRose {
+                background-color:#AC8EBB;
+                padding:15px;
+            }
+            .pdmFondContacts {
+                background-color:#f0037f;
+                color:#fff;
+                padding:0 15px;
+            }
+            .pdmFondContacts > a,.pdmFondContacts .glyphicon-circle-arrow-right:before {color:#fff!important;}
+            .pdmFondContacts > a,.pdmFondContacts .glyphicon-circle-arrow-right:before {color:#fff!important;}
+			
+			#divservicesSalaries .col-sm-6 {
+				padding-top: 5px;
+			}
+			.miseenoeuvre {
+				background-image:url('img/pages/mise_en_oeuvre.jpg');
+				background-repeat:no-repeat;
+				height: 215px;
+				background-position: center center;
+			}
+			.cartoentreprisespde {
+				background-image:url('img/pages/carto_entreprises_pde.jpg');
+				background-repeat:no-repeat;
+				height: 205px;
+				margin-top: 10px;
+				background-position: center center;
+			}
+			.fondRHSE {
+				background-image:url('img/pages/FondRHSE.png');
+				background-repeat:no-repeat;
+				height: 134px;
+				margin-top: 10px;
+				background-position: center center;
+			}
+			.logoRH {
+				background-image:url('img/pages/RH.png');
+				background-repeat:no-repeat;
+				height: 110px;
+				margin-top: 10px;
+				background-position: center center;
+			}
+			.logoHSE {
+				background-image:url('img/pages/HSE.png');
+				background-repeat:no-repeat;
+				height: 110px;
+				margin-top: 10px;
+				background-position: center center;
+			}
+			.logoRSE {
+				background-image:url('img/pages/RSE.png');
+				background-repeat:no-repeat;
+				height: 110px;
+				margin-top: 10px;
+				background-position: center center;
+			}
+			.logosalaries {
+				background-image:url('img/pages/salaries.png');
+				background-repeat:no-repeat;
+				height: 110px;
+				margin-top: 10px;
+				background-position: center center;
+			}
+			.logoetablissements {
+				background-image:url('img/pages/etablissements.png');
+				background-repeat:no-repeat;
+				height: 110px;
+				margin-top: 10px;
+				background-position: center center;
+			}
+			.logoSMTC {
+				background-image:url('img/pages/smtc.jpg');
+				background-repeat:no-repeat;
+				height: 110px;
+				margin-top: 10px;
+				background-position: center center;
+			}
+			.logoTAG {
+				background-image:url('img/pages/tag.png');
+				background-repeat:no-repeat;
+				height: 110px;
+				margin-top: 10px;
+				background-position: center center;
+			}
+			.logoMetro {
+				background-image:url('img/pages/metro.png');
+				background-repeat:no-repeat;
+				height: 110px;
+				margin-top: 10px;
+				background-position: center center;
+			}
+			.logoTransisere {
+				background-image:url('img/pages/transisere.png');
+				background-repeat:no-repeat;
+				height: 110px;
+				margin-top: 10px;
+				background-position: center center;
+			}
+			.logoRhoneAlpes {
+				background-image:url('img/pages/rhonealpes.jpg');
+				background-repeat:no-repeat;
+				height: 110px;
+				margin-top: 10px;
+				margin-left: 30px;
+				background-position: center center;
+			}
+			.compagnement1, .compagnement2, .compagnement3, .compagnement4 {
+				background-repeat:no-repeat;
+				height: 30px;
+				background-position: center center;
+			}
+
+		</style>
+		<!--Fin modif -->
+	</head>
+	<body>
+	<div id='head'></div>
+	<div id='mainpdm' class="container-fluid container-page">
+	<!-- debut modif image-->
+		<div id="rowPage">
+			<div class="row rowHeader bgTransp hidden-xs">
+				<div class="container">
+					<br>
+                    <h1>Découvrir le Plan de Mobilité</h1>
+					<br>
+				</div>
+				<div id="navbarDesc" class="container-fluid" data-spy="affix" data-offset-top="240">
+					<div class="container">
+						<div class="row">
+							<ul class="nav navbar-nav collapse navbar-collapse">
+								<li><a href="#cestquoi">Qu'est-ce qu'un Plan de Mobilité ?</a></li>
+								<li><a href="#obligations">Les obligations de l'employeur</a></li>
+								<li><a href="#lesavantages">Les avantages de la convention PDM</a></li>
+								<li><a href="#actualités">Actualités</a></li>
+								<li><a href="#partenaires">Partenaires</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+            <div class="row">
+                <div class="container">
+					<div id="mailContact" class="col-sm-offset-10  col-sm-2">
+						<div class="pdmFondContacts text-center"><br>
+							<span class="glyphicon glyphicon glyphicon-envelope"></span><a href="mailto:contact@metromobilite.fr"> Je prends contact</a><br><br>
+						</div>
+					</div>
+                    <div>
+						<h2 id="cestquoi" class="anchor">QU'EST-CE QU'UN PLAN DE MOBILITE ?</h2>
+                        <hr>
+                        <div class="col-sm-6"><div class="row">
+                            <p>
+                                Un plan de mobilité (PDM), est une démarche d’analyse globale de tous les déplacements d’un établissement. Son objectif est de <mauve>réduire l’usage de la voiture individuelle</mauve> au profit de <mauve>modes alternatifs</mauve> (transports collectifs, vélo, marche, covoiturage…) tant pour des déplacements domicile/travail que professionnels.<br> Intégrant tous les fondements d’un développement durable, la réussite d’un PDM ne peut avoir lieu que si les actions engagées sont pertinentes et suffisamment soutenues.<br><br>
+                            </p>
+							<h2 id="obligations" class="anchor">LES OBLIGATIONS DE L'EMPLOYEUR</h2>
+							<hr>
+							<p>
+								Selon l’article L3261-2, l’employeur doit prendre en charge <mauve>à hauteur de 50% minimum</mauve>, le prix du ou des abonnements souscrits par ses salariés pour leurs déplacements domicile/travail accomplis aux moyens de transports publics de personnes ou de services publics de location de vélos.<br>
+								Depuis août 2015, la loi de transition énergétique pour une croissance verte <mauve>rend obligatoire la mise en œuvre d’un plan de mobilité pour tous les établissements privés de plus de 100 salariés.</mauve><br><br>
+                            </p>
+                        </div></div>
+                        <div id="rhse" class="col-sm-6">
+                            <div class="avantages col-sm-12"><div class="row">
+								<div class="logoRH col-sm-3"></div>
+								<div class="col-sm-9 avantages">
+									<li>Amélioration de l’accessibilité du site</li>
+									<li>Gestion des coûts liés aux déplacements</li>
+									<li>Faciliter le recrutement et le maintien dans l’emploi</li>
+								</div>
+                            </div></div>
+                            <div class="avantages col-sm-12"><div class="row">
+								<div class="logoRSE col-sm-3"></div>
+                                <div class="col-sm-9">
+									<li>Implication concrète dans une démarche environnementale</li>
+									<li>Exemplarité sociale de l’employeur</li>
+									<li>Valorisation de cette démarche auprès des partenaires et clients</li>
+								</div> 
+                            </div></div>
+                            <div class="avantages col-sm-12"><div class="row">
+								<div class="logoHSE col-sm-3"></div>
+                                <div class="col-sm-9">
+									<li>Amélioration de l’accessibilité du site</li>
+									<li>Gestion des coûts liés aux déplacements</li>
+									<li>Faciliter le recrutement et le maintien dans l’emploi</li>
+								</div>
+                            </div></div>
+							<div class="col-sm-12 fondRHSE"></div>
+                        </div>
+                        <div class="clearfix"><br></div>
+                    </div>
+
+					<div>
+						<h2 id="lesavantages" class="anchor">LES AVANTAGES DE LA CONVENTION PDM</h2>
+                        <hr>
+						<div class="col-sm-12">
+							<p>
+								Employeurs du privé comme du public ? Découvrez tout l’intérêt de devenir signataire de notre convention PDM. Avec un programme «  clé en main » et des offres tarifaires préférentielles, tout est fait pour favoriser l’utilisation de modes alternatifs au sein de votre structure !<br><br>
+                            </p>
+						</div>
+                        <div class="col-sm-6">
+						<div class="logoetablissements col-sm-3"></div>
+                                <div class="col-sm-9">
+									<mauve>Pour votre établissement</mauve>
+									<li>Accompagnement individuel</li>
+									<li>Assistance technique</li>
+									<li>Animation Métromobilité</li>
+									<li>Avantages tarifaires</li>
+								</div>
+						</div>
+						<div class="col-sm-6">
+						<div class="logosalaries col-sm-3"></div>
+                                <div class="col-sm-9">
+									<mauve>Pour vos salarié</mauve>
+									<li>Conseils personnalisés</li>
+									<li>Offres d'essais</li>
+									<li>Test de modes alternatifs</li>
+									<li>Avantages tarifaires</li>
+								</div>
+						</div>
+					</div>
+					<space></space>
+					<div>
+						<h2 id="actualités" class="anchor">ACTUALITES</h2>
+                        <hr>
+						<div class="col-sm-12">
+							<div class="text-center pdmFondMauve col-sm-2">
+								<br>
+								<span class="chiffres">102</span><br><br>
+								Etablissements enregistrés<br><br>
+							</div>
+							<div class="text-center pdmFondMauve col-sm-2">
+								<br>
+								<span class="chiffres">3 892</span><br><br>
+								Salariés bénéficiant du Plan de Mobilité<br><br>
+							</div>
+							
+						</div>
+						<div id="panel-actu" class="col-sm-12"></div>
+					<space></space>
+					<div>
+						<h2 id="partenaires" class="anchor">VOS PARTENAIRES</h2>
+                        <hr>
+						<div class="col-sm-12">
+							<p>
+								Le SMTC aux côtés des autres autorités organisatrices de mobilité met à votre disposition une nouvelle méthodologie et une équipe de conseillers qui vous accompagnera du diagnostic à la mise en œuvre de votre PDM.<br><br>
+                            </p>
+						</div>
+						<div class="col-sm-12"><div class="row">
+                        	<a href="http://www.smtc-grenoble.org/"  alt="SMTC" class="col-sm-2 col-sm-offset-2" target="_blank"><img src="img/pages/smtc.jpg" target="_blank"/></a>
+							<a href="https://www.isere.fr/"  alt="Département de l'Isère" class="col-sm-2" target="_blank"><img src="img/pages/isere.png" target="_blank"/></a>
+							<a href="http://www.auvergnerhonealpes.eu/"  alt="Région Auvergne Rhones-Alpes" class="col-sm-2" target="_blank"><img src="img/pages/rhonealpes.jpg" target="_blank"/></a>
+						</div></div>
+						<space></space>
+						<div class="col-sm-12"><div class="row">
+                        	<a href="http://www.tag.fr"  alt="SEMITAG" class="col-sm-2 col-sm-offset-1" target="_blank"><img src="img/pages/tag.png" target="_blank"/></a>
+							<a href="http://www.metrovelo.fr/"  alt="Métrovélo" class="col-sm-2" target="_blank"><img src="img/pages/Metrovelo.jpg" target="_blank"/></a>
+							<a href="http://www.citelibbyhamo.fr/"  alt="Citélib by Ha:mo" class="col-sm-2" target="_blank"><img src="img/pages/citelibbyhamo.png" target="_blank"/></a>
+							<a href="http://www.adtc-grenoble.org/"  alt="ADTC" class="col-sm-2" target="_blank"><img src="img/pages/adtc.jpg" target="_blank"/></a>
+						</div></div>
+						
+					</div>
+					<space></space>
+                <br>
+                </div>
+            </div>
+
+		</div>
+		<!--Fin modif -->
+		<div id="btn_up" title="Haut de page">
+			<a href="#" class="glyphicon glyphicon-arrow-up"></a>
+		</div>
+	</div>
+	<div id='footer'></div>
+	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/moment.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
+	<script type="text/javascript" src="stats/piwik.js"></script>
+	<script type="text/javascript" src="js/outils.js"></script>
+	<script type="text/javascript" src="js/fr.js"></script>
+	<script type="text/javascript">var pageStatique = true;</script>
+	<script type="text/javascript" src="js/index.js"></script>
+	<script type="text/javascript">
+		$('#footer').load('index.html #footer',function(){});
+		$('#head').load('head.html',function(){});
+		addBackToTop();
+		trackPiwik("MetroMobilité : decouvrirM.html"); //<!--modif -->
+		var anchor = window.location.hash;
+		window.location.hash = anchor;
+
+		$().ready(function() {
+		  $("a[href^='\#']").each(function(){
+			this.href=location.href.split("#")[0]+'#'+this.href.substr(this.href.indexOf('#')+1);
+		  });
+		  
+		  $('#panel-actu').load('pages/actus.html');
+		});
+	</script>
+  </body>
+</html>
+
+
+
+
+
+
+

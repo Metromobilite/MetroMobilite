@@ -1,0 +1,17 @@
+{
+	"description" : "Liste des évènements routier",
+	"description" : "Identifiant de chaque évènement",
+	"GAM_EVT_39362" : {
+		"type" : "Exemple : 'chantier', 'bouchon', ...",
+		"id" : "Identifiant de l'évènement, exemple : '39362'",
+		"dateDebut" : "Date de début de l'évènement, exemple : '05/10/2015 14:26'",
+		"dateFin" : "Date de fin de l'évènement, exemple : '31/12/2015 17:00'",
+		"heureDebut" : "Heure de début de l'évènement, exemple : '09:00:00', '00:00:00' si tout la journée",
+		"heureFin" : "Heure de fin de l'évènement, exemple : 17:00:00', '00:00:00' si tout la journée",
+		"latitude" : "exemple : '45.1669'",
+		"longitude" : "exemple : '5.69118'",
+		"weekEnd" : "'1' si uniquement le week-end, '2' la semaine et week-end, '0' uniquemenet la semaine",
+		"listeLigneArret" : "Liste des codes des lignes éventuellement impactés",
+		"texte" : "Description, exemple : 'CHANTIER: Avenue du Général de Gaulle...'"
+	}
+}

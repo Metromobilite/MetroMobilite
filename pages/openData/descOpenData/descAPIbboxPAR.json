@@ -1,0 +1,25 @@
+{
+	"description" : "Liste de description des parking",
+	"type" : "FeatureCollection",
+	"features" : [{
+			"type" : "Feature",
+			"properties" : {
+				"CODE" : "Code du parking, par exemple : 'SPR_PAR_2'",
+				"LIBELLE" : "Nom  du parking, par exemple : 'P+R LA TRONCHE - GRAND SABLON'",
+				"ADRESSE" : "Adresse du parking, par exemple : '4, AVENUE DE L'OBIOU'",
+				"TYPE" : "PAR",
+				"TOTAL" : "Nombre total de place du parking, par exemple : '220'",
+				"LIGNES" : "Liste de lignes passant à proximité du parking, par exemple : 'SEM_41,SEM_42,C38_6021,C38_6550,SEM_82,SEM_B,SEM_C1'",
+				"DISPO" : "Non renseigné",
+				"NSV_ID" : 0,
+				"type" : "PAR",
+				"id" : "Identifiant du parking, par exemple : 'SPR_PAR_2"
+			},
+			"description" : "Position du parking",
+			"geometry" : {
+				"type" : "Point",
+				"coordinates" : "Long-Latitude, exemple '[5.74658, 45.192649]'"
+			}
+		}
+	]
+}

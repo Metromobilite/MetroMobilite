@@ -1,0 +1,597 @@
+<!doctype html>
+<!--
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta content="initial-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+    <title>Métromobilité – Horaires des lignes TAG et Transisère</title>
+	<meta name="description" content="Recherchez les horaires de votre bus ou de votre tram en 1 seul clic pour les lignes TAG et Transisière." />
+	<link rel="stylesheet" href="js/lib/ol/ol.css" type="text/css" />
+    <link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
+	<link href="js/lib/bs/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+	<link rel="Stylesheet" type="text/css" href="css/horaires.css">
+	<link rel="Stylesheet" type="text/css" href="css/panel.css">
+	<style type='text/css'>
+		#listeLignes {
+			height: calc(100% - 40px);
+			overflow-y: auto;
+			position: relative;
+			padding: 0px 15px!important;
+		}
+		.ligneSelected .svgFond {
+			stroke-width:6px;
+		}
+		#listeLignes.withPub {
+			height:calc(100% - 85px);
+		}
+		#pub.row {
+			padding: 3px;
+			cursor: pointer;
+			display: inline-block;
+		}
+		#pub img{
+			width: 40px;
+		}
+		#pub div {
+			font-family: "GothamRounded-Medium",Arial,Verdana,Geneva,Lucida,Helvetica,sans-serif;
+			display: inline;
+			color:#019ebc;
+			font-size: 13px;
+			background-color: #fff;
+			border-radius: 4px;
+			padding: 0px 10px 0px 10px;
+			margin-left: -2px;
+			opacity: 0.7;
+			filter: alpha(opacity=70);
+		}
+
+		.form-control.datepicker-readonly {
+			cursor:default;
+		}
+		#mainView {
+			background-color : #009fd6;
+		}
+		#titre > h1{
+			margin-left: 30px;
+			font-family: "GothamRounded-Medium", "Arial", "Helvetica", sans-serif;
+			font-size: 18px;
+			margin-top:10px;
+		}
+		#horaires {
+			height: 90%;
+			height: calc(100% - 113px);
+		}
+		@media (min-width: 1200px) {
+			#mainView {
+				padding-left: 25%;
+				padding-left: calc(25% + 8px);
+			}
+		}
+		@media (min-width: 992px) and (max-width: 1200px) {
+			#mainView {
+				padding-left: 33.3333%;
+				padding-left: calc(33.3333% + 8px);
+			}
+		}
+		@media (min-width: 768px) and (max-width: 991px) {
+			#mainView {
+				padding-left: 50%;
+				padding-left: calc(50% + 8px);
+			}
+		}
+	</style>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->	
+  </head>
+  <body>
+	<div id='head'></div>
+	<div class="container-fluid main">
+		<div class="row">
+			<div id="mainView">
+				<div id="titre"><h1 id="titreHoraires">Horaires </h1></div><br>
+				<form id="dates" role="form">
+					<div id="datepicker">
+							<label for="dateInput" class="sr-only">Date</label>
+							<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+							<input id="dateInput" type='text' class="form-control datepicker-readonly" data-date-format="DD/MM/YYYY" readonly />
+					</div>
+					<div id="timepicker">
+							<label for="heureInput" class="sr-only">Heure</label>
+							<span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+							<input id="heureInput" type='text' class="form-control datepicker-readonly" data-date-format="HH:mm" readonly />
+					</div>
+					<div id="timesync">
+						<button class="btn btn-default btn-xm glyphicon glyphicon-refresh" title="Mise à l'heure courante"><span class="sr-only">Remise à l'heure courante</span></button>
+					</div>
+				</form>
+				<div id="horairesOnglets"></div>
+				<div id="horaires">
+					<span id="horairesText">Sélectionnez la ligne dans le panneau de gauche</span>
+				</div>
+			</div>
+			<div id="modele" style="display:none;">
+				<ul>
+					<li><a id='id' class="svgLigne pull-left">
+					</a></li>
+				</ul>
+			</div>
+			<div id="menu" class="toggleListe pull-right listeAffichee" title="Affichage du panneau de sélection des lignes" role="button" aria-label="Affichage du panneau de sélection des lignes"><span class="glyphicon glyphicon-menu-hamburger"></span></div>
+			<div id="panel" class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+				<div id="listeMain" class="container-fluid">
+					<div id="listeTop" class="row">
+						<a id="unselect" href='#'><span class="pull-left">Annuler la sélection</span></a>
+						<div id="menuListe" class="toggleListe pull-right visible-xs listeAffichee" title="Masquage du panneau de sélection des lignes" role="button" aria-label="Masquage du panneau de sélection des lignes"><span class="glyphicon glyphicon-menu-hamburger"></span></div>
+					</div>
+					<div id="listeLignes" class="row">
+						<div id="TRAM" class="row titreReseau">
+							<h2>Tram</h2>
+							<div id="descReseauTram" class="descReseau">De 4h30 à 1h, fréquence de 4 à 10 min (heures de pointe)</div>
+						</div>
+						<div class="row TRAM"></div>
+						<div id="NAVETTE" class="row titreReseau">
+							<h2>Navettes de travaux</h2>
+							<div  id="descReseauNav" class="descReseau">En fonction pendant les travaux sur les lignes de Tram</div>
+						</div>
+						<div class="row NAVETTE"></div>
+						<div id="CHRONO" class="row titreReseau">
+							<h2>Chrono</h2>
+							<div id="descReseauChrono" class="descReseau">De 5h à 1h, fréquence de 4 à 10 min (heures de pointe)</div>
+						</div>
+						<div class="row CHRONO"></div>
+						<div id="PROXIMO" class="row titreReseau">
+							<h2>Proximo</h2>
+							<div id="descReseauProximo" class="descReseau">De 5h à 21h, fréquence de 7 à 15 min (heures de pointe)</div>
+						</div>
+						<div class="row PROXIMO"></div>
+						<div id="FLEXO" class="row titreReseau">
+							<h2>Flexo</h2>
+							<div id="descReseauFlexo" class="descReseau">De 6h30 à 20h, offre régulière et service sur réservation</div>
+						</div>
+						<div class="row FLEXO"></div>
+						<div id="C38" class="row titreReseau"><h2>Transisère</h2></div>
+						<div class="row C38"></div>
+					</div>
+					<a id="pub" style="display:none;" href="http://www.metromobilite.fr" target='_blank'>
+							<img src="img/metromobilite.svg" alt="">
+							<div></div>
+					</a>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<img id="wait" src="img/wait.gif" alt="recherche en cours" />
+	<div id='footer'></div>
+
+	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="stats/piwik.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/moment-with-locales.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap-datetimepicker.min.js"></script>
+	<script type="text/javascript" src="js/outils.js"></script>
+	<script type="text/javascript" src="js/fr.js"></script>
+	<script type="text/javascript">
+
+		var selectedDir;
+		if (urlParams.reseau == 'SNC') {
+			$('#listeLignes').prepend('<div id="SNC" class="row titreReseau"><h2>SNCF</h2></div><div class="row SNC"></div>');
+			$('#listeLignes #TRAM h2').text('TAG');
+			$('#listeLignes #descReseauTram, #NAVETTE, #CHRONO, #PROXIMO, #FLEXO').remove();
+		}
+		if (urlParams.reseau == 'GSV') {
+			$('#listeLignes').prepend('<div id="GSV" class="row titreReseau"><h2>Gresivaudan</h2></div><div class="row Structurantes"></div><div class="row Secondaires"></div><div class="row Citadines"></div><div class="row TAD"></div>');
+			$('#listeLignes #TRAM h2').text('TAG');
+			$('#listeLignes #descReseauTram, #NAVETTE, #CHRONO, #PROXIMO, #FLEXO').remove();
+		}
+		if (urlParams.reseau == 'TPV') {
+			$('#listeLignes').prepend('<div id="TPV" class="row titreReseau"><h2>Voironnais</h2></div><div class="row Urbaines"></div><div class="row Interurbaines"></div><div class="row TAD"></div>');
+			$('#listeLignes #TRAM h2').text('TAG');
+			$('#listeLignes #descReseauTram, #NAVETTE, #CHRONO, #PROXIMO, #FLEXO').remove();
+		}
+		if (urlParams.lang != 'fr') {
+			$.getScript("js/" + (urlParams.lang=='fr'?'':urlParams.lang + "/") + urlParams.lang + ".js", function()
+			{
+				$.getScript("js/horaires-Translate.js",function() {translate();} );
+				 initPage();
+			}); 
+		} else {
+			 initPage();
+		}
+		function togglePanneau() {
+			if(!$('#panel').is(':visible')) {
+				$('.toggleListe').addClass('listeAffichee');
+			} else {
+				$('.toggleListe').removeClass('listeAffichee');
+			}
+			$('#panel').toggle();
+		}
+		function getLisLgn(data) {
+			for (r in data) {
+				var route = data[r];
+				var modele = $('#modele > ul > li > a');
+				var li = modele.clone();
+				//li.addClass(nomLayer.replace(' ','_'));
+				var code = route.code;
+				var color = '#'+route.routeColor;
+				var numero = route.routeShortName;
+				var libelle = route.routeLongName;
+
+				li.attr('id',code).attr('title',numero+' - '+libelle).attr('href','#'); //pour Chrome
+				var logo = getLogoLgn(code,numero,color,0,'logo','logoRect');
+				//$(logo).find('title').text(numero+' - '+libelle); //pour vieux Firefox
+				li.append(logo);
+
+				$('#listeLignes').find('.'+route.type).append(li);
+			}
+			tri('#panel .TRAM','a','','id');
+			tri('#panel .NAVETTE','a','','id');
+			tri('#panel .CHRONO','a','','id');
+			tri('#panel .PROXIMO','a','','id');
+			tri('#panel .FLEXO','a','','id');
+			tri('#panel .C38','a','','id');
+			tri('#panel .GSV','a','','id');
+			tri('#panel .TPV','a','','id');
+			
+			$('#panel').show();
+		}
+		function showLigne(code) {
+			$('#horairesOnglets .active').removeClass('active');
+			$('#horairesOnglets > div[data-code='+code+']').addClass('active');
+			$('#horaires > div').hide();
+			$('#horaires > div[data-code='+code+']').show();
+		}
+		function ajouteLigne(code) {
+
+			if (attente) return;
+		
+			var _this = $('#'+code)[0];
+			//var ligne = dataLignesTC[_this.id];
+			if($('#horaires div[data-code='+_this.id+']').length ==0) {
+				$('#horaires').append('<div data-code="'+_this.id+'" class="ligne"><div class="tableau"></div></div>');
+				var onglet = $('<div data-code="'+_this.id+'" data-libelle="'+_this.title+'" class="ligne"></div>').append($(_this).find('svg').clone());
+				var close = $('<span class="horairesOnglets-Close pull-right glyphicon glyphicon-remove" data-code="'+_this.id+'"></span>');
+				onglet.append(close);
+				$('#horairesOnglets').append(onglet);
+			}
+			showLigne(_this.id);
+			lanceHoraires();
+			
+			var nombreOnglet = $('#horairesOnglets .ligne').length;
+			if (isTaille('xxs') && (nombreOnglet>2)) { supprimePremiereLigne(); }
+			else if (isTaille('xs') && (nombreOnglet>5)) { supprimePremiereLigne(); }
+			else if (isTaille('sm') && (nombreOnglet>5)) { supprimePremiereLigne(); }
+			else if (isTaille('md') && (nombreOnglet>9)) { supprimePremiereLigne(); }
+			else if (isTaille('lg') && (nombreOnglet>12)) { supprimePremiereLigne(); }
+			
+			if(isTaille('xs')) togglePanneau(false);
+		}
+		function supprimePremiereLigne() {
+			$('#horairesOnglets div.ligne')[0].remove();
+				$('#horaires div.ligne')[0].remove();
+		}
+		function error(xhr, status, error) {
+			try {
+				var err = eval("(" + (xhr.responseText=="timeout"?lang.alertHoraire[0]:xhr.responseText) + ")");
+				if (typeof(err.Message) != "undefined")
+					console.log(err.Message);
+			} catch(e) {
+				console.log(e.msg+' : '+e.lineNumber);
+			}
+			fct_attente_horaires(false);
+		}
+
+		function initPage() {
+			if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+				isMobile =true;
+			}
+			$( document ).on( "evtHorairesCharges", {}, function( event, ligne, time,res ) {
+				afficheHoraires(ligne, time,res);
+			});
+			$( document ).on( "evtLignesChargees", {}, function( event, data ) {
+				initMain();
+				initPanneau();
+				if (urlParams.codeLigne) {
+					$('#'+urlParams.codeLigne).trigger('click');
+				}
+			});
+			if (urlParams.iFrame){
+				$(".main").attr('style','top:0px');
+				$.support.cors = true;
+				chargeLignes();
+				$('#listeLignes').addClass('withPub');
+				$('#pub').show();
+				$( "#pub" ).attr({ alt: lang.pub.alt,  title: lang.pub.alt });
+				$( "#pub > div" ).text(lang.pub.text);
+			} else {
+				$('#head').load('head.html');
+			}
+			trackPiwik("MetroMobilité : Horaires" + (urlParams.lang=='fr'?'':' ' + urlParams.lang));
+		}
+		function initPanneau(){
+			/*if (urlParams.debug) 
+				$('#listeLignes').append('<div id="BUL" class="row titreReseau"><h2>Transisère</h2></div><div class="row FUN BUL"></div>');*/
+			getLisLgn(dataLignesTC);
+			
+			$('.toggleListe').click(function(){
+				togglePanneau();
+			});
+			
+			$('#listeLignes').on('click','.svgLigne',function(e){
+				var code = this.id;
+				ajouteLigne(code);
+				$('#horaires>span').hide();
+			});
+			$('#unselect').click(function(){
+				$('#horairesOnglets').empty();
+				$('#horaires div').remove(); 
+				$('#horaires>span').show();
+			});
+		}
+		function initMain(){
+			try {
+				$('#horairesOnglets').on('click','div',function(e){
+					var code = $(this).attr('data-code');
+					showLigne(code);
+				});
+				$('#horaires').on('change','select.onglets',function(e){
+					$(this).parent().next().find('.contenuDir').hide();
+					var selectedIndex = $(this)[0].selectedIndex+1;
+					$(this).parent().next().find('.contenuDir:nth-child('+selectedIndex+')').show();
+					$('.contenuDir:nth-child('+selectedIndex+') .glyphicon-screenshot').hide();
+				});
+				$('#horairesOnglets').on('click','.horairesOnglets-Close',function(e){
+					var code = $(this).attr('data-code');
+					$('#horairesOnglets > div[data-code='+code+']').remove();
+					$('#horaires div[data-code='+code+']').remove();
+					if ($('#horaires').children().length>1) {
+						showLigne($('#horairesOnglets > .ligne:nth-of-type(1)').attr('data-code'));
+					}
+					else if (isTaille('xs')) {
+						$('#horaires>span').show();
+						togglePanneau();
+					}
+					else {
+						$('#horaires>span').show();
+					}
+					return false;
+				});
+				$('#datepicker').datetimepicker({
+							locale: 'fr',
+							format: 'DD/MM/YYYY',
+							allowInputToggle:true,
+							defaultDate:urlParams.date,
+							ignoreReadonly:true
+						});
+
+				$('#timepicker').datetimepicker({
+							locale: 'fr',
+							format: 'HH:mm',
+							allowInputToggle:true,
+							defaultDate:urlParams.heure,
+							ignoreReadonly:true
+						});
+
+				$('#timesync').click(function(e) {
+					e.preventDefault();
+					var newDate = new Date;
+					$('#timepicker').data("DateTimePicker").date(newDate);
+					$('#datepicker').data("DateTimePicker").date(newDate);
+					lanceHorairesAuto();
+					return false; //évite le rechargement de la page.
+				});
+
+				$('#datepicker, #timepicker').on('dp.hide',function(){
+					lanceHorairesAuto();
+				});
+
+			} catch (e) {
+				console.log(e.msg+' : '+e.lineNumber);
+			}
+		}
+
+		function checkSaisie(ligne) {
+				return ligne && ligne.code;
+		}
+
+		function lanceHorairesAuto() {
+			if (attente) return;
+			var ligne = dataLignesTC[$('#horairesOnglets > div.active').attr('data-code')];
+			if(checkSaisie(ligne)) {
+				var date = getDateHeureSaisie();
+				getDataHoraires(ligne,date.getTime());
+			}
+		}
+		function getDateSaisie(){
+			return $('#datepicker input').val();
+		}
+		function getHeureSaisie(){
+			return $('#timepicker input').val();
+		}
+		function getDateHeureSaisie() {
+			// on decale la demande si elle est entre 0h et 3h car sinon pas de resultat
+			var d = $('#datepicker input').val();
+			var t = $('#timepicker input').val();
+			if (parseInt(t.split(':')[0]) < 3) {
+				var date = moment.utc(d+' 23:59:59','DD/MM/YYYY HH:mm:ss').subtract(24,'hours').toDate();
+				// on commence par l'heure car ca redeclenche l'evt et ca donne une boucle infinie si on commence par la date
+				$('#timepicker').data("DateTimePicker").date(date);
+				$('#datepicker').data("DateTimePicker").date(date);
+			}
+			return moment.utc($('#datepicker input').val()+' '+$('#timepicker input').val(), 'DD/MM/YYYY HH:mm').toDate();
+		}
+		function lanceHoraires() {
+			var date = getDateHeureSaisie();
+			var codeligne=$("#horairesOnglets .ligne.active").attr('data-code');
+			var ligne = dataLignesTC[$('#horairesOnglets > div.active').attr('data-code')];
+			getDataHoraires(ligne,date.getTime());
+		}
+		function getDataHoraires(ligne,time) {
+			var searchUrl = (url.saisieChoisie=='local'?url.hostnameLocal+url.portWSTest:url.hostnameData);
+			//var searchUrl = url.hostnameLocal+url.portWSTest;
+			//var searchUrl = url.hostnameData;
+			searchUrl += '/api/ficheHoraires/json?route='+ligne.code.replace('_',':')+'&time='+time+(url.otp2Router=='local'?'':'&router='+url.otp2Router);
+			fct_attente_horaires(true);
+			$.ajax({
+				type: "GET",
+				url: searchUrl,
+				error:error,
+				dataType: 'json'
+			}).then(function(res) {
+				fct_attente_horaires(false);
+				$( document ).trigger( 'evtHorairesCharges', [ligne, time,res] );
+			});
+		}
+		function afficheHoraires(ligne, time,res) {
+			//var textSelected = $('#onglets .ongletSelected label').text();
+			selectedDir = $('#horaires div[data-code='+ligne.code+'] select.onglets').val();
+			//console.log(selectedDir);
+			$('#horaires div[data-code='+ligne.code+'] .tableau').empty();
+			var span = $('<span><label for="arretSelect'+ligne.code+'">' + lang.horaires.direction + '</label></span>');
+			var onglets = $('<select id="arretSelect'+ligne.code+'" class="onglets"></select>');
+			var contenuOnglets = $('<div class="contenuOnglets"></div>');
+			var codeLigne = ligne.code.split('_')[1];
+			
+			if (ligne.shortName == '66') {
+				$('#horaires div[data-code='+ligne.code+'] .tableau').append($('<div id="messageErreurHoraires">'  + lang.libelleMessageErreurHoraires + '</div>'));
+				contenuOnglets.attr('style','height: calc(100% - 100px);');
+				if ( ligne.code.indexOf( "SEM_" ) != -1 ) {
+					var liensFicheTag = $('<tfoot><tr><td colspan="8"><span class="pull-left glyphicon glyphicon-plus-sign"></span><a href="http://www.tag.fr/ftp/fiche_horaires/fiche_horaires_2014/HORAIRES_'+ligne.code.replace('SEM_','')+'" target="_blank" class="fichesHorairesTag">' + lang.libelleFicheTag + '</a></td></tr></tfoot>');
+					
+					$('#horaires div[data-code='+ligne.code+'] .tableau').append(liensFicheTag);
+				}
+				return;
+			}
+			
+			//if ($.isNumeric(codeLigne) && codeLigne>=40 && codeLigne<=70) {
+			if (ligne.type == 'FLEXO') {
+				$('#horaires div[data-code='+ligne.code+'] .tableau').append($('<div id="horairesTextFlexo">'  + (codeLigne != "62"?lang.libelleMessageFlexo:lang.libelleMessageFlexo62) + '</div>'));
+				contenuOnglets.attr('style','height: calc(100% - 100px);');
+			}
+
+			for (var i=0;i<2;i++) {
+				var tableauVide = true;
+				var dir = res[i].arrets;
+
+				var table = $('<table></table>');
+				var tbody = $('<tbody></tbody>');
+				table.append(tbody);
+				
+				/*var codeDest;
+				if(urlParams.arretDepart && urlParams.arretArrivee) {
+					codeDest = urlParams.arretArrivee;
+				} else {
+					//codeDest = tableauArrets[headsign].pivot.arret;
+					codeDest = ligne.directions[headsign].pivot.arret;
+				}*/
+				for (var j=0;j<dir.length;j++) {
+					var arr = dir[j];
+					var row = $('<tr></tr>');
+					var arret = "";
+					var stopName = (ligne.type=='TRAM' || ligne.type=='NAVETTE' || ligne.type=='CHRONO' || ligne.type=='PROXIMO'?getShortStopName(arr.stopName):arr.stopName) ;
+					if (urlParams.tc)
+						var arret = $('<td title="'+arr.stopName.split(',')[0]+'"><span style="display:none;"></span>&nbsp;' + stopName +'</td>');
+					else
+						var arret = $('<td title="'+arr.stopName.split(',')[0]+'"><span class="glyphicon glyphicon-screenshot" style="display:none;"></span>&nbsp;' + stopName +'</td>');
+					row.append(arret);
+					row.attr('data-lonlat',arr.lat+','+arr.lon);
+					row.attr('data-arr-code',arr.stopId);
+					
+					//icone rond.
+					var rond = $('<td class="rondhoraire"><div></div></td>');
+					row.append(rond);
+					
+					for (var k=0;k<arr.trips.length;k++) {
+						var heure = "|";
+						var h = parseInt(arr.trips[k]);
+						if (!isNaN(h)) heure = moment.utc(h*1000).format('HH:mm');
+						var date = moment.utc(new Date(Math.floor(time))).format('DD/MM/YYYY');
+						var tripHoraire = $('<td title="'+date+'" alt="'+date+'">'+ heure +'</td>');
+						row.append(tripHoraire);
+					}
+					tbody.append(row);
+					if (tableauVide) tableauVide=false;
+				}
+				var contenuDir = $('<div class="contenuDir"></div>');
+				contenuOnglets.append(contenuDir);
+				if(dir.length>0) 
+					onglets.append('<option>'+dir[dir.length-1].stopName+'</option>');
+				
+				var nbTripsAffiches = 4;
+				var heureSuivant = res[i].nextTime;
+				var heurePrecedent  = res[i].prevTime;
+
+				var liens = $('<div class="liens"><a href="#" class="horairesPrecedents" title="' + lang.libelleAffiche_1 + nbTripsAffiches + lang.libelleHorairePrec_2 + '" alt="' + lang.libelleAffiche_1 + nbTripsAffiches + lang.libelleHorairePrec_2 + '">' + lang.libelleHorairePrec +'</a><a href="#" class="horairesSuivants" title="' + lang.libelleAffiche_1 + nbTripsAffiches +lang.libelleHoraireSuivant_2 + '">' + lang.libelleHoraireSuiv + '</a></div>');
+
+				if (tableauVide) {
+					//var message = $('<label>'+lang.alertHoraire[1]+' : '+moment(new Date(Math.floor(heureCourante))).format('HH:mm')+' - '+moment(new Date(Math.floor(heureCourante+maxArriveeDest))).format('HH:mm')+'</label>');
+					var message = $('<span>'+lang.alertHoraire[1]+' : '+moment.utc(new Date(Math.floor(time))).format('HH:mm')+'</span><br/>');
+					contenuDir.append(message);
+					contenuDir.append(liens);
+				} else {
+					var div = $('<div class="divDir"></div>');
+					div.append(span);
+					div.append(onglets);
+					$('#horaires div[data-code='+ligne.code+'] .tableau').append(div);
+					var thead= $('<thead><tr><td colspan="8"></td></tr></thead>');
+					thead.find('td').append(liens);
+					table.append(thead);
+				}
+				
+				$('#horaires div[data-code='+ligne.code+'] .tableau').append(contenuOnglets);
+				liens.find('.horairesPrecedents').click(function(){
+					selectedDir = $(this).closest('.tableau').find('select.onglets').val();
+					getDataHoraires(ligne,heurePrecedent);
+				});
+				liens.find('.horairesSuivants').click(function(){
+					selectedDir = $(this).closest('.tableau').find('select.onglets').val();
+					getDataHoraires(ligne,heureSuivant);
+				});
+				contenuDir.append(table);
+				tbody.on('click','td',function(e){
+					$( this ).parents('tr').toggleClass( 'highlightLigne',this.clicked );
+				});
+				tbody.on('click','.glyphicon-screenshot',function(e){
+					window.open('planTC.html?lonlatDep='+$(this ).parents('tr').attr('data-lonlat') + '&codeArr='+$(this ).parents('tr').attr('data-arr-code'))
+				});
+				if ( ligne.code.indexOf( "SEM_" ) != -1 ) {
+					var liensFicheTag = $('<tfoot><tr><td colspan="8"><span class="pull-left glyphicon glyphicon-plus-sign"></span><a href="http://www.tag.fr/ftp/fiche_horaires/fiche_horaires_2014/HORAIRES_'+ligne.code.replace('SEM_','')+'" target="_blank" class="fichesHorairesTag">' + lang.libelleFicheTag + '</a></td></tr></tfoot>');
+					
+					table.append(liensFicheTag);
+				}
+			}
+			if (selectedDir) {
+				var sel = $('#horaires div[data-code='+ligne.code+'] select.onglets');
+				sel.val(selectedDir);
+				if(sel.val()!=selectedDir) 
+					sel.find('option').eq(0).prop('selected', 'selected');
+				sel.trigger('change');
+			}
+		}
+	</script>
+	
+  </body>
+</html>

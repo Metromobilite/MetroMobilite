@@ -1,0 +1,23 @@
+{
+	"description" : "Liste de description des points service TC",
+	"type" : "FeatureCollection",
+	"features" : [{
+			"type" : "Feature",
+			"properties" : {
+				"NOM" : "Nom du points service, exemple : 'Point Service Campus'",
+				"RUE" : "Adresse du points service, exemple : '442, avenue de la Bibliothèque'",
+				"CODEPOSTAL" : "Code postal du points service, exemple : '38400'",
+				"COMMUNE" : "Ville du points service, exemple : 'ST-MARTIN-D'HERES'",
+				"TYPE" : "Point Service",
+				"type" : "pointService",
+				"CODE" : "Code du du points service, exemple : '0'",
+				"id" : "Identifiant du du points service, exemple : '0'"
+			},
+			"description" : "Position du points service",
+			"geometry" : {
+				"type" : "Point",
+				"coordinates" : "Long-Latitude, exemple '[5.74658, 45.192649]'"
+			}
+		}
+	]
+}

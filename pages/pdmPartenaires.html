@@ -1,0 +1,215 @@
+<!doctype html>
+<!--
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html lang="fr">
+	<head>
+		<base href="../" />
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="initial-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+		<title>MétroMobilité - Partenaires du Plan de Mobilité</title>
+		<meta name="description" content="TODO" />
+		<link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/actus.css" rel="stylesheet">
+		<link href="css/head.css" rel="stylesheet">
+		<link href="css/index.css" rel="stylesheet">
+		<style type='text/css'>
+			@media (min-width: 768px) {
+				body {
+					background-image:url("img/pages/bandeauPdmPartenaires.jpg");
+					background-attachment: fixed;
+					background-repeat:no-repeat;
+					background-position:top center;
+				}
+			}
+			h2 {
+			font-size:18px!important;
+			margin-bottom:0px!important;
+			margin-top:20px!important;
+			text-transform:uppercase!important;
+			font-weight: 500!important;
+			line-height: 1.1!important;
+			}
+            h3 {
+                text-decoration:none;
+                margin-top:0px;
+            }
+			h4 {
+			font-size:12px!important;
+			}
+			space {
+				margin:50px;
+				padding:50px;
+				display: block;
+			}
+			#navbarDesc {
+				background-color: #8334a7;
+			}
+			.container-page h2,.container-page h6,.container-page h5,
+            .container-page h4,.container-page h3,.container-page  > div > .row a,
+            .container-page .glyphicon-plus-sign:before,
+            .container-page .glyphicon-circle-arrow-right:before {
+				color:#8334a7;
+			}
+			.container-page hr {
+				 background-color: #8334a7;
+			}
+			.container-page .nav > li > a:hover, .nav > li > a:focus{
+				background-color: #691A8D;
+				border-color: #691A8D;
+				opacity:0.9;
+			}
+            #temoignage {
+                margin-left : 15px;
+                color:#8334a7;
+            }
+            .avantages {
+                margin-bottom:15px;
+                font-size:11px;
+            }
+            .pdmFondMauve { background-color:#8334a7; color:#fff; }
+            div:not(:last-child) > div > .pdmFondMauve { margin-right:15px;}
+            .chiffres {
+                font-size:18px;
+            }
+            .pdmFondRose {
+                background-color:#AC8EBB;
+                padding:15px;
+            }
+            .pdmFondContacts {
+                background-color:#f0037f;
+                color:#fff;
+                padding: 0 15px;
+            }
+            .pdmFondContacts > a,.pdmFondContacts .glyphicon-circle-arrow-right:before {color:#fff!important;}
+            .pdmListePartenaires {
+                display:flex;
+                flex-flow: row wrap;
+                justify-content:space-between;
+            }
+            .pdmPartenaire {
+                display:block;
+                flex:0 1 auto;
+                /*width:250px;*/
+                margin:15px 0;
+            }
+		</style>
+	</head>
+	<body>
+	<div id='head'></div>
+	<div class="container-fluid container-page">
+		<div id="rowPage">
+			<div class="row rowHeader bgTransp hidden-xs">
+				<div class="container">
+					<br>
+                    <h1>Partenaires</h1>
+					<br>
+				</div>
+				<div id="navbarDesc" class="container-fluid" data-spy="affix" data-offset-top="240">
+					<div class="container">
+						<div class="row">
+							<ul class="nav navbar-nav collapse navbar-collapse">
+								<li><a href="#">&nbsp</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="container">
+                    <br>
+                    <div class="col-sm-12"><div class="row">
+							<div class="col-sm-10">
+							 <p>
+									Le SMTC aux côtés des autres autorités organisatrices de mobilité met à votre disposition une nouvelle méthodologie et une équipe de conseillers qui vous accompagnera du diagnostic à la mise en œuvre de votre PDM.<br><br>
+								</p>
+							</div>
+							<div id="mailContact" class="col-sm-2">
+								<div class="pdmFondContacts text-center"><br>
+									<span class="glyphicon glyphicon glyphicon-envelope"></span><a href="mailto:contact@metromobilite.fr"> Je prends contact</a><br><br>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-12"><div class="row">
+                        	<a href="http://www.smtc-grenoble.org/"  alt="SMTC" class="col-sm-2 col-sm-offset-2" target="_blank"><img src="img/pages/smtc.jpg" target="_blank"/></a>
+							<a href="https://www.isere.fr/"  alt="Département de l'Isère" class="col-sm-2" target="_blank"><img src="img/pages/isere.png" target="_blank"/></a>
+							<a href="http://www.auvergnerhonealpes.eu/"  alt="Région Auvergne Rhones-Alpes" class="col-sm-2" target="_blank"><img src="img/pages/rhonealpes.jpg" target="_blank"/></a>
+                    </div></div>
+					<space></space>
+					<div class="col-sm-12"><div class="row">
+                        	<a href="http://www.tag.fr"  alt="SEMITAG" class="col-sm-2 col-sm-offset-1" target="_blank"><img src="img/pages/tag.png" target="_blank"/></a>
+							<a href="http://www.metrovelo.fr/"  alt="Métrovélo" class="col-sm-2" target="_blank"><img src="img/pages/Metrovelo.jpg" target="_blank"/></a>
+							<a href="http://www.citelibbyhamo.fr/"  alt="Citélib by Ha:mo" class="col-sm-2" target="_blank"><img src="img/pages/citelibbyhamo.png" target="_blank"/></a>
+							<a href="http://www.adtc-grenoble.org/"  alt="ADTC" class="col-sm-2" target="_blank"><img src="img/pages/adtc.jpg" target="_blank"/></a>
+                    </div></div>
+					<space></space>
+				</div>
+			</div>
+		</div>
+		<div id="btn_up" title="Haut de page">
+			<a href="#" class="glyphicon glyphicon-arrow-up"></a>
+		</div>
+	</div>
+	<div id='footer'></div>
+	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/moment.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
+	<script type="text/javascript" src="stats/piwik.js"></script>
+	<script type="text/javascript" src="js/outils.js"></script>
+	<script type="text/javascript" src="js/fr.js"></script>
+	<script type="text/javascript">var pageStatique = true;</script>
+	<script type="text/javascript" src="js/index.js"></script>
+	<script type="text/javascript">
+		$('#footer').load('index.html #footer',function(){});
+		$('#head').load('head.html',function(){});
+		addBackToTop();
+		trackPiwik("MetroMobilité : decouvrirM.html"); //<!--modif -->
+		var anchor = window.location.hash;
+		window.location.hash = anchor;
+
+        [].map.call(document.querySelectorAll('#processusPdm > a'), function(a) {
+            a.addEventListener('click', function(e) {
+                [].map.call(document.querySelectorAll('#processusPdm > a.selectionne'), function(el) {
+                    el.classList.remove('selectionne');
+                });
+                this.classList.add('selectionne');
+            });
+        });
+
+		//faire marcher les href="#toto" avec la balise <base>
+		$().ready(function() {
+		  $("a[href^='\#']").each(function(){
+			this.href=location.href.split("#")[0]+'#'+this.href.substr(this.href.indexOf('#')+1);
+		  });
+		});
+	</script>
+  </body>
+</html>
+
+
+
+
+
+
+

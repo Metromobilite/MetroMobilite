@@ -1,0 +1,453 @@
+/*
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+@media (min-width: 1200px) {
+	.main { 	top: 141px;	}
+}
+@media (max-width: 1199px) {
+	.main { 	top: 91px;	}
+}
+@media (max-width: 479px) {
+	#popup{
+		position:absolute;
+		bottom:0px;
+		left:0px;
+		right:0px;
+		top:auto;
+		z-index:1001;
+		overflow-y:auto;
+		max-height:60%;
+		width:auto;
+	}
+}
+@media (min-width: 480px) {
+	#popup{
+		width:350px;
+	}
+}
+@font-face {
+	font-family: "GothamRounded-Medium";
+	src: local("GothamRounded-Medium");
+	src: url('../img/GothamRounded-Medium.eot');
+	src: url('../img/GothamRounded-Medium.eot?#iefix') format('embedded-opentype'),
+		 url('../img/GothamRounded-Medium.woff') format('woff'),
+         url('../img/GothamRounded-Medium.ttf') format('truetype'),
+		 url('../img/GothamRounded-Medium.svg#GothamRounded-Medium') format('svg'),
+		 url("../img/GothamRounded-Medium.otf") format("opentype");
+}
+#popup {
+	font-family: "GothamRounded-Medium",Arial,Verdana,Geneva,Lucida,Arial,Helvetica,sans-serif;
+	font-size: 12px;
+	display: none;
+	padding: 0px 15px 3px;
+	background-color:rgba(255,255,255,1);
+}
+a, a:visited, a:focus, a:active, a:hover{
+    outline:0 none !important;
+	text-decoration:none;
+}
+.main {
+bottom: 0;
+left: 0;
+position: absolute;
+right: 0;
+}
+.controle-ol {
+	background: none repeat scroll 0 0 rgba(255, 255, 255, 0.4);
+	border-radius: 4px;
+	right: 8px;
+	padding: 2px;
+	position: absolute;
+	z-index:50;
+	
+}
+.controle-ol a {
+	background: none repeat scroll 0 0 rgba(0, 60, 136, 0.5);
+	color: #fff;
+	display: block;
+	height: 22px;
+	line-height: 23px;
+	margin: 1px;
+	padding: 0;
+	text-align: center;
+	width: 22px;
+	border-radius: 2px;
+}
+
+.ol-touch .controle-ol a {
+	font-size: 20px;
+	height: 30px;
+	line-height: 34px;
+	width: 30px;
+}
+
+.controle-ol a:hover {
+	background: none repeat scroll 0 0 rgba(0, 60, 136, 0.7);
+	color: #fff;
+	text-decoration: none;
+}
+.map {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  position:relative;
+}
+.ol-zoom {
+	right:8px;
+	left:auto;
+	top:10px;
+}
+.ol-rotate {
+	right:auto;
+	left:8px;
+	top:10px;
+}
+
+.refresh {
+	top: 60px;
+}
+.layer-switcher {
+	top:90px;
+}
+.layerSwitcher div{
+	color: #fff;
+	cursor:pointer;
+}
+.layerSwitcher {
+	display:none;
+	position:absolute;
+	top: 92px;
+	right:10px;
+	z-index:50;
+	background: none repeat scroll 0 0 rgba(0, 60, 136, 0.5);
+	color: #fff;
+	line-height: 23px;
+	margin: 1px;
+	padding: 0 8px;
+	text-align: center;
+	border-radius: 2px;
+}
+.layerSwitcher label {
+	font-weight:normal;
+	margin-bottom:0px;
+}
+.ol-touch .refresh {
+	top: 76px;
+	line-height: 28px;
+}
+.ol-touch .layer-switcher {
+	top: 114px;
+	line-height: 28px;
+}
+.ol-touch .layerSwitcher {
+	top: 116px;
+}
+.bases{
+	clear:both;
+}
+
+.main > .row {
+	height:100%;
+	position:relative;
+}
+.ol-has-tooltip:focus [role="tooltip"], .ol-has-tooltip:hover [role="tooltip"] {
+	right:2.2em;
+	left:auto;
+}
+svg.logo {
+    height: 30px;
+	width:30px;
+}
+svg.logoRect {
+    height: 30px;
+	width:60px;
+}
+svg.logoSmall {
+	cursor:default;
+    height: 24px;
+	width:24px;
+}
+svg.logoRectSmall {
+    height: 24px;
+	width:48px;
+}
+.svgLigne  {
+    line-height: 10px;
+	padding: 0 0 0 3px;
+}
+
+#liste .svgLigne:hover, #liste .svgLigne:active, #liste .svgLigne:focus {
+	text-decoration:none;
+}
+.ellipsis {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+/*
+#panel{
+	height:100%;
+	position:absolute;
+	top:0px;
+	bottom:0px;
+	background-color:rgba(30,30,30,0.9);
+	z-index:50;
+	color: #fff;
+	overflow-y:hidden;
+	padding: 0;
+}
+
+#panel > div {
+	position:relative;
+	height:100%;
+}
+#panel .row {
+	padding:10px 15px; 
+}
+*/
+
+
+#menuListe {
+	margin-right:5px;
+	cursor:pointer;
+}
+#menu{
+	float:left;
+	background-color:rgba(30,30,30,0.9);
+	width:30px;
+	height:30px;
+	line-height:30px;
+	position:absolute;
+	top:0px;/*calc(50% - 10px);*/
+	left:0px;
+	color:#fff;
+	z-index:50;
+
+	padding-left: 9px;
+	cursor:pointer;
+}
+#menu.listeAffichee {
+	left:380px;
+	background-color:rgba(30,30,30,0);
+	top:0px;
+	display:none!important;
+}
+/*#panel h4 {
+	background-color: #646464;
+	color:#fff;
+	margin: 10px -15px;
+	padding: 0px 15px;
+	cursor:pointer;
+	line-height:28px;
+	height:36px;
+}
+#panel h4 > div:first-of-type {
+	font-weight:bold;
+	max-width:80%;
+	max-width:calc(100% - 50px);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: inline-block;
+}
+#panel h4[data-layer] .check{
+    border-radius: 14px;
+    box-shadow: -1px 1px 1px 1px rgba(0, 0, 0, 0.42) inset;
+    height: 28px;
+    padding: 2px;
+    width: 46px;
+	margin: 3px 0;
+}
+#panel h4[data-layer] .check .switch {
+    background-color: #c0c0c0;
+    border-radius: 12px;
+    display: block;
+    height: 24px;
+    width: 24px;
+	border: 2px solid #6f6f6f;
+	box-shadow: -1px 3px 1px 0 rgba(0, 0, 0, 0.42);
+}
+#panel h4[data-layer].layerVisible .check {
+	background-color:#50AE2F;
+}
+#panel h4[data-layer].layerVisible .check .switch {
+	margin-left:18px;
+}
+#panel h4[data-layer]:hover {
+	background-color: #505050;
+}*/
+
+.attenteCurseur {
+	cursor:progress!important;
+}
+.dyn {
+	margin-top:5px;
+}
+.adresse {
+	margin-bottom:5px;
+}
+.dynVide .adresseVide {
+	display:none!important;
+}
+
+.PopupDetails-head {
+    color: #000;
+    text-align: center;
+	min-width: 250px;
+}
+
+.PopupDetails-Close {
+	font-size:14px;
+	color: #fff;
+	cursor:pointer;
+    position: absolute;
+    z-index: 50;
+	right:5px;
+	top:1px;
+	cursor:pointer;
+	line-height:30px;
+	width:30px;
+}
+
+ [class*="PopupDetailsEntete"] {
+    background-color: #ff0000;
+    color: #fff;
+	line-height:30px;
+ }
+ .PopupDetailsEnteteCitélib,  .PopupDetailsEnteteOmms{
+	background-color: #009CD3;
+ }
+[class*="PopupDetailsEnteteLayerMV"] {
+    background-color: #b0c92b;
+}
+.PopupDetailsEnteteLayerPAR, .PopupDetailsEnteteLayerPKG {
+    background-color: #428bca;
+}
+ 
+ .PopupDetailsOmms,.PopupDetailsCitélib, .PopupDetailsLayerPAR,.PopupDetailsLayerPKG,.PopupDetailsLayerPMV,.PopupDetailsLayerMVA, .PopupDetailsLayerMVC,.PopupDetailsLayerCAM {
+	text-align:center;
+ }
+ .PopupDetails-dOmmsDetails, .PopupDetails-dOmmsDetails2 {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+	
+}
+.PopupDetails-body-multiple {
+	padding:0 15px;
+}
+
+.PopupDetails-dOmmsDetails li,.PopupDetails-dOmmsDetails2 li {
+    display: inline-block;
+    font-size: 0.8em;
+    text-align: left;
+    width: 50%;
+	line-height:35px;
+}
+.PopupDetails-dOmmsDetails li {
+	font-size: 1.125em;	
+} 
+ .PopupDetails-dOmmsDetails li [class*="picto"] {
+    margin-right: 0px;
+    vertical-align: text-bottom;
+	width: 30px;
+}
+.lienInscriptionOmms {
+			margin-top:5px;
+			margin-bottom:5px;
+		}
+.state-car, .state-park {
+	background-image:url('../img/comms.svg');
+	background-position: 0 0;
+	background-size: 30px 30px;
+	background-repeat:no-repeat;
+	height: 40px;
+ }
+.state-park {
+	background-image:url('../img/placeparking.svg');
+}
+
+.state-iroad-comms {
+	height: 40px;
+	width: 100px;
+ }
+ 
+.state-camera {
+	font-size:20px;
+	cursor:pointer;
+	padding-top: 5px;
+ }
+
+.PopupDetails-detailsCallback {
+    text-align: center;
+}
+
+.PopupDetails-detailsCallback > span {
+    display: block;
+}
+.PopupDetailsEnteteomms, .PopupDetailsEntetecitelib {
+	background-color: #009CD3;
+}
+.PopupDetails-detailsCallback div[data-type="omms"] ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.PopupDetails-detailsCallback div[data-type="omms"] ul li {
+	display: inline-block;
+	font-size: 1.125em;
+	line-height: 35px;
+	text-align: left;
+	width: 49%;
+}
+.bs-picto-comms, .bs-picto-iroad {
+	font-size: 0.8em;
+}
+ .background-iroad-dispo, .background-iroad-pas-dispo, .background-comms-dispo, .background-comms-pas-dispo{
+	background-image:url('../img/iroaddispo.svg');
+	background-size: 35px 35px;
+	background-position: 0 0;
+	background-repeat:no-repeat;
+ }
+
+ .background-iroad-pas-dispo {
+	background-image:url('../img/iroadpasdispo.svg');
+ }
+
+ .background-comms-dispo {
+	background-image:url(../img/commsdispo.svg);
+}
+
+ .background-comms-pas-dispo{
+	background-image:url(../img/commspasdispo.svg);
+}
+
+[class*="bs-picto-"] {
+    background-repeat: no-repeat;
+    display: inline-block;
+	vertical-align: middle;
+	padding-left: 40px;
+}
+
+#popup .lignesProches {
+	margin-top: 5px;
+}

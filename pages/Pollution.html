@@ -1,0 +1,287 @@
+<!doctype html>
+<!--
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html lang="fr">
+	<head>
+		<base href="../" />
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="initial-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+		<title>MétroMobilité - Pollution</title>
+		<meta name="description" content="Métromobilité vous informe sur le niveau de pollution dans Grenoble et son agglomération ainsi que sur les dispositifs en cours." />
+		<link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/actus.css" rel="stylesheet">
+		<link href="css/head.css" rel="stylesheet">
+		<link href="css/index.css" rel="stylesheet">
+		<!-- debut modif image-->
+		<style type='text/css'>
+	@media (min-width: 768px) {
+		body {
+			background-image:url("img/pages/bandeaupollution.jpg");
+			background-attachment: fixed;
+			background-repeat:no-repeat;
+			background-position:top center;
+		}
+	}
+	h2 {
+	font-size:18px!important;
+	margin-bottom:0px!important;
+	margin-top:20px!important;
+	text-transform:uppercase!important;
+	font-weight: 500!important;
+	line-height: 1.1!important;
+	}
+	
+	h4 {
+	font-size:12px!important;
+	}
+
+	#navbarDesc {
+		background-color: #21881c;
+		opacity:0.9;
+	}
+	.container-page h2, .container-page h6, .container-page h5, .container-page h4, .container-page h3, .container-page  > div > .row a, .container-page .glyphicon-plus-sign:before   {
+		color:#21881c;
+	}
+	hr {
+		 background-color: #21881c;
+		 height: 4px;
+	}
+	.container-page .nav > li > a:hover, .nav > li > a:focus{
+		background-color: #1f6314;
+		border-color: #1f6314;
+		opacity:0.9;
+	}
+
+	.centrerTexte{
+		text-align:center;
+	}
+	.photo {
+		display:inline-block;
+		background-size: 100% 100%;	
+	}
+
+	#survPolluants {
+		background-image:url("actus/surv_polluants.png");
+		width:500px;
+		height:200px;	
+	}
+</style>
+		<!--Fin modif -->
+	</head>
+	<body>
+	<div id='head'></div>
+	<div class="container-fluid container-page">
+	<!-- debut modif image-->
+		<div id="rowPage">
+			<div class="row rowHeader bgTransp hidden-xs">
+				<div class="container">
+					<h1>Indices de pollution</h1>
+				</div>
+				<div id="navbarDesc" class="container-fluid" data-spy="affix" data-offset-top="240">
+					<div class="container">
+						<div class="row">
+							<ul class="nav navbar-nav collapse navbar-collapse">
+								<li><a href="#indice">Indices de pollution</a></li>
+								<li><a href="#grenoble">Grenoble</a></li>
+								<li><a href="#surveillance">Surveillance</a></li>
+								<li><a href="#recommandations">Recommandations</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>	
+			</div>
+			<div class="row">
+				<div class="container">
+					<h2 id="indice" class="anchor">Indices pollution de l'air et trafic</h2>
+						<hr>
+						<div class="centrerTexte pull-right" >
+							<img src="img/Pages/pollution_indices.jpg" alt="" width="600" height="450"/>
+						</div>
+							<h3>Qu'est-ce que l'indice ATMO ?</h3>
+								<p>L'indice ATMO est un indicateur de la qualité de l'air. La pollution de l'air, qui résulte de l'activité humaine (industries, circulation automobile, chauffage...) est un phénomène complexe lié à la présence de nombreux polluants dans l'air ambiant.</p>
+								<p>L'indice ATMO, qui varie de 1 (très bon) à 10 (très mauvais), est calculé quotidiennement à partir des concentrations de 4 polluants mesurées par les 5 stations fixes de l'agglomération grenobloise.</p>
+
+								<ul class="classic">
+									<li><b>dioxyde d'azote</b> (NO2)</li>
+									<li><b>particules fines de type PM10</b> (Ps)</li>
+									<li><b>ozone(O3)</b></li>
+									<li><b>dioxyde de soufre</b> (SO2)</li>
+								</ul>
+								<p>A chaque polluant est attribué un indice, allant de 1 à 10, qui dépend de sa concentration dans l'air. L'indice ATMO est le plus haut de ces 4 indices.</p>
+								<p>Quand l'indice ATMO est égal à 8, sauf si le polluant est du dioxyde de soufre, cela signifie que le seuil d'information et de recommandations (du pic de pollution) est atteint.</p>
+								<p>Quand il est de 10, le seuil d'alerte est atteint, celui-ci pouvant l'être même avant (en cas de persistance du seuil d'information).</p>
+								<h3>Qui calcule l'indice ATMO ?</h3>
+										<p>Le droit à l'information sur la qualité de l'air figure au 1er rang des objectifs de la loi sur l'air et l'utilisation rationnelle de l'énergie.<br>
+										Pour notre agglomération, c'est l'association Air Rhône-Alpes qui calcule la valeur de l'indice ATMO.</p>
+										<p>
+										<span class="glyphicon glyphicon-plus-sign"></span><a href="http://www.air-rhonealpes.fr/site/accueil/monaccueil/geolocaliser/Grenoble%2C38000" title="Indice de pollution sur Grenoble - Nouvelle fenêtre" target="_blank"> Indice de pollution sur Grenoble</a><br>
+										<!--
+										</p>	
+										<span class="clearfix"></span>
+										<h3>Les indices Trafic</h3>
+
+										<p>Il y a 2 indices Trafic :</p>
+										<ul class="classic">
+											<li><b>l'indice TC</b>, calculé à partir du niveau de service connu des lignes de transports en commun</li>
+											<li><b>l'indice routier</b>, calculé à partir du niveau de service connu des voies routières</li>
+										</ul>
+								   
+										<p>Ces 2 indices donnent une idée globale du fonctionnement de ces réseaux en fonction du pourcentage des lignes de transport en commun ou des voiries perturbées :</p>
+
+										<ul class="classic">
+											<li>niveau <b>normal</b></li>
+											<li>niveau <b>perturbé</b></li>
+										</ul>
+										-->
+							<h3>Le saviez-vous ?"</h3>
+								<p>Les particules fines, en irritant les bronches, entraînent des décès prématurés.</p>
+								<p>Pour ces raisons de <b>santé publique</b>, l'<b>Europe</b> a fixé des <b>seuils maximum de concentration des particules fines</b>. Ces seuils n'étant toujours pas respectés dans les grandes villes françaises, la Cour Internationale Européenne pourrait demander à la France de payer une amende représentant plusieurs milliers d'€/jour de dépassement.</p>
+								<p>Ces particules fines sont émises principalement par les moteurs diesel d'avant 2006 dont les pots d'échappement ne contiennent pas les filtres des modèles récents. Elles proviennent aussi à 30% du chauffage individuel au bois.</p>
+								<p>
+								<span class="glyphicon glyphicon-plus-sign"></span><a href="http://sante-medecine.commentcamarche.net/faq/5361-les-particules-fines-et-la-pollution" title="Informations sur les particules fines - Nouvelle fenêtre" target="_blank"> Informations sur les particules fines</a><br>
+								</p>
+								<br>
+					<h2 id="grenoble" class="anchor">La "cuvette grenobloise"</h2>
+						<hr>
+						<div class="centrerTexte pull-right" >
+							<img src="img/Pages/pollution_grenoble.jpg" alt="" width="600" height="450"/>
+						</div>	
+						
+						<p>L'agglomération grenobloise est en grande partie constituée d'une plaine très plate située à environ 200 mètres d’altitude, entourée par 3 massifs montagneux.</p>
+						<p>Cette configuration, désignée parfois par le terme de <b>"cuvette grenobloise"</b>, génère une dynamique atmosphérique particulière, avec une forte proportion de vents calmes et la formation fréquente d’<b>inversions de température</b>, <b>obstacles</b> à la <b>dispersion verticale des polluants</b>.</p>
+						<p>L’inversion de température est <b>un phénomène météorologique naturel</b> que l'on rencontre fréquemment dans les vallées alpines, qui se rencontre typiquement en hiver, par beau temps sec et froid.</p>
+						<p>En général, la température décroit avec l'altitude (environ 1° tous les 150 mètres). Dans le cas de l'inversion, c'est le contraire, et les masses d'air inférieures, plus froides que les masses d’air supérieures, ne peuvent s’élever ; le mélange vertical ne se fait plus.</p>
+						<p>L'inversion de la température a un <b>effet aggravant sur la pollution</b> : ne pouvant se disperser en hauteur, les polluants s’accumulent et leur concentration augmente avec les émissions. Combinée à une température basse, et donc au rejet de particules dues au chauffage, elle peut contribuer à la création d'épisodes pollués très intenses.</p>
+
+						<span class="clearfix"></span>
+					<h2 id="surveillance" class="anchor">Surveillance des polluants</h2>
+						<hr>
+						<div class="centrerTexte pull-right" >
+							<img src="img/Pages/pollution_mesure.jpg" alt="" width="600" height="450"/>
+						</div>	
+							<h3>Différents polluants</h3>
+								<p>Les véhicules non électriques émettent différents polluants : dioxyde d’azote, monoxyde de carbone, composés organiques volatiles, particules en suspension (émises principalement par les moteurs diesel), dioxyde de soufre...</p>
+								<p>En se combinant sous l'effet du soleil, ils produisent, et même à plusieurs dizaines de kilomètres des lieux de pollution, de l'ozone.</p>
+								<p>Ces polluants provoquent des irritations des muqueuses respiratoires et oculaires (ozone). Ils augmentent les crises chez les asthmatiques, et ont une incidence sur la mortalité des personnes les plus fragiles. Chez les plus jeunes, ils favorisent des infections microbiennes des bronches ou renforcent des sensibilités allergiques ou des pathologies préexistantes.</p>
+							<h3>La surveillance des polluants et l'alerte</h3>
+								<p>Compte tenu de ces impacts sanitaires, la loi impose aux autorités de réaliser des mesures de polluants -sur notre agglomération c'est l'agence <a href="http://www.air-rhonealpes.fr/site/accueil/monaccueil/all" title="Site AIR Rhône-Alpes - Nouvelle fenêtre" target="_blank">AIR Rhône-Alpes</a> qui en est chargée- et <b>en cas de dépassement de la concentration de certains polluants, d'informer ou d'alerter la population</b>.</p>
+
+								<p>Il y a deux niveaux :</p>
+
+								<ul class="classic">
+									<li>le <b>niveau d’information</b> et de recommandations (conseils sur ses activités et déplacements)</li>
+									<li>le <b>niveau d'alerte</b>, qui entraîne d'autres recommandations et des restrictions, telle l'obligation de réduire sa vitesse sur certains axes, et pour le seuil extrême de circuler un jour sur deux, voire même totalement</li>
+								</ul>
+								
+								<p>Ces seuils Information/Alerte dépendent du polluant. Par exemple, dès que la moyenne de la concentration sur une heure (en µg/m3) dépasse 180/360 pour l'ozone, 200/400 pour le dioxyde d'azote et 50/80 pour les particules. La notion de durée est également prise en compte (moyenne sur 3 heures, durée de plusieurs jours...)</p>
+								<span class="clearfix"></span>
+								<br>
+					<h2 id="recommandations" class="anchor">Recommandations en cas de pic de pollution</h2>
+						<hr>
+						<div class="centrerTexte pull-right" >
+						<img src="img/Pages/pollution_recommandation.jpg" alt="" width="600" height="450"/>
+						</div>	
+							<h3>Seuil de recommandations et d'information</h3>
+								<h4>Déplacements et activités</h4>
+									<p>Il n'est pas nécessaire de modifier les déplacements habituels ni les activités sportives sauf pour les sujets connus comme étant sensibles ou qui présenteraient une gêne à cette occasion, pour lesquels il convient de privilégier les activités calmes, d'éviter les exercices physiques intenses, et de s'abstenir de concourir aux compétitions sportives.</p>
+								<h4>Circulation routière</h4>
+									<p>Il est recommandé de limiter ses émissions de polluant. Pour cela, il est préconisé de pratiquer le covoiturage, d'utiliser les transports en commun, de privilégier la marche ou le vélo pour les petits trajets, et en voiture de réduire sa vitesse de circulation.</p>
+									<br>
+							<h3>Seuil d'alerte</h3>
+								<h4>Déplacements et activités</h4>
+									Il est préconisé  :<br><br> <!--(selon l'arrêté national du 1er juin 2003)-->
+									<ul class="classic">
+										<li>pour les <b>enfants de moins de six ans</b>, de ne pas modifier les déplacements indispensables mais d'éviter les promenades et les activités à l'extérieur.<br><br></li>
+										<li>pour les <b>enfants de six à quinze ans</b>, de ne pas modifier les déplacements habituels mais d'éviter les activités à l'extérieur, de privilégier à l'intérieur des locaux les exercices physiques d'intensité moyenne ou faible et de reporter toute compétition sportive, qu'elle soit prévue à l'extérieur ou à l'intérieur des locaux.<br><br></li>
+										<li>pour les <b>adolescents et les adultes</b>, de ne pas modifier les déplacements prévus mais d'éviter les activités sportives violentes et les exercices d'endurance à l'extérieur ; de déplacer, dans la mesure du possible, les compétitions sportives prévues à l'extérieur ; pour les personnes connues comme étant sensibles ou qui présenteraient une gêne à cette occasion, d'adapter ou de suspendre l'activité physique en fonction de la gêne ressentie.
+										Si la pollution est due à l'ozone, il est recommandé d'organiser les activités sportives en matinée. </li>
+									</ul>
+									<span class="clearfix"></span>
+								<h4>Circulation routière</h4>
+									<ul class="classic">
+									<li>Restrictions de circulation :<br>
+									La vitesse maximale autorisée est réduite de 20km/h sur les axes où la vitesse autorisée est habituellement supérieure ou égale à 90km/h. Sur notre agglomération, la vitesse est même limitée à 70km/h sur les voies rapides et les tronçons d'autoroutes hors péages :
+
+										<ul class="classic2">
+											<li>A48 entre le péage de Voreppe et la bifurcation de l’A480 (St Egrève)</li>
+											<li>RN481 entre la bifurcation de l’A480 (St Egrève) et Grenoble (Porte de France)</li>
+											<li>A480 sur sa totalité (entre le pont des Martyrs et le carrefour de Varces)</li>
+											<li>A51 entre le péage de Vif à Grenoble</li>
+											<li>A41 entre le péage de Crolles et Meylan (carrefour de la Carronnerie)</li>
+											<li>RD1090 entre Meylan (carrefour de la Carronnerie) et Grenoble (Pont de l’Isère), habituellement déjà limitée à 70 km/h</li>
+											<li>RN87 dite « rocade sud » sur sa totalité (entre l'A41 Meylan et l'A80 Echirolles)</li>
+											<li>RN85 du carrefour avec l’A480 jusqu’au giratoire de sortie de Pont de Claix (Champagnier).<br><br></li>
+										</ul>
+									</li>
+									
+									<li>Création d'une zone de circulation réglementée :<br>
+									Suivant les seuils de pollution et sur décision préfectorale, une zone de circulation réglementée peut être créée (plus d'informations dans le lien ci-dessous).</li>
+									</ul>
+								<br>
+								<p>
+								<span class="glyphicon glyphicon-plus-sign"></span><a href="http://www.air-rhonealpes.fr/article/effets-sur-la-sante" title="Effets de la pollution sur la santé - Nouvelle fenêtre" target="_blank"> Effets de la pollution sur la santé</a><br>
+								<span class="glyphicon glyphicon-plus-sign"></span><a href="https://www.service-public.fr/particuliers/vosdroits/N18131" title="Mesures antipollution - Nouvelle fenêtre" target="_blank"> Mesures antipollution</a><br>
+								</p>
+								<br>
+				</div>
+			</div>
+		</div>
+		<!--Fin modif -->
+		<div id="btn_up" title="Haut de page">
+			<a href="#" class="glyphicon glyphicon-arrow-up"></a>
+		</div>
+	</div>
+	<div id='footer'></div>
+	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/moment.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
+	<script type="text/javascript" src="stats/piwik.js"></script>
+	<script type="text/javascript" src="js/outils.js"></script>
+	<script type="text/javascript" src="js/fr.js"></script>
+	<script type="text/javascript">var pageStatique = true;</script>
+	<script type="text/javascript" src="js/index.js"></script>
+	<script type="text/javascript">
+		$('#footer').load('index.html #footer',function(){});
+		$('#head').load('head.html',function(){});
+		addBackToTop();
+		trackPiwik("MetroMobilité : Pollution.html"); //<!--modif -->
+		var anchor = window.location.hash;
+		window.location.hash = anchor;
+		
+		//faire marcher les href="#toto" avec la balise <base>
+		$().ready(function() {
+		  $("a[href^='\#']").each(function(){ 
+			this.href=location.href.split("#")[0]+'#'+this.href.substr(this.href.indexOf('#')+1);
+		  });
+		});
+	</script>
+  </body>
+</html>
+
+
+
+
+
+
+

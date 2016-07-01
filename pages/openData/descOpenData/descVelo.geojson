@@ -1,0 +1,21 @@
+{
+	"description" : "Fichier de tracé des pistes cyclables au format GeoJSON",
+	"type" : "FeatureCollection",
+	"features" : [{
+			"type" : "Feature",
+			"id" : 1,
+			"properties" : {
+				"id_section" : "identifiant de la section",
+				"nom_commune" : "Nom de la commune",
+				"longueur_section_m" : "longueur de la section en m",
+				"type_amenagement" : "Piste cyclable",
+				"date_realisation" : "année de réalisation",
+				"url" : ""
+			},
+			"geometry" : {
+				"type" : "LineString",
+				"coordinates" : "Long-Latitude, exemple '[5.74658, 45.192649]'"
+			}
+		}
+	]
+}

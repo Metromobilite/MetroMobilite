@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="fr">
+	<head>
+			<base href="../../" />
+			<meta charset="utf-8">
+			<meta http-equiv="X-UA-Compatible" content="IE=edge">
+			<meta content="initial-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+			<title>MétroMobilité - OpenData</title>
+			<meta name="description" content="Métromobilité, c'est le service unique qui regroupe toutes vos informations de déplacement sur la métropole grenobloise." />
+			<link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
+			<link href="css/actus.css" rel="stylesheet">
+			<link href="css/head.css" rel="stylesheet">
+			<link href="css/index.css" rel="stylesheet">
+			<style type='text/css'>
+				@media (min-width: 768px) {
+					body {
+						background-image:url("img/pages/bandeauActu.jpg");
+						background-attachment: fixed;
+						background-repeat:no-repeat;
+						background-position:top center;
+					}
+				}
+
+				#navbarDesc {
+					background-color: #dc3c1b;
+					opacity:0.9;
+				}
+				.container-page h6, .container-page h5, .container-page h4, .container-page h3, .container-page  > div > .row a, .container-page .glyphicon-plus-sign:before   {
+					color:#dc3c1b;
+				}
+				hr {
+					 background-color: #dc3c1b;
+					 height: 4px;
+				}
+				.container-page .nav > li > a:hover, .nav > li > a:focus{
+					background-color: #ae2315;
+					border-color: #ae2315;
+					opacity:0.9;
+				}
+
+				.centrerTexte{
+					text-align:center;
+				}
+				.photo {
+					display:inline-block;
+					background-size: 100% 100%;	
+				}
+				li{
+					list-style-type: circle;
+				}
+				
+				table tr td, table tr th {
+					border : solid 1px;
+					padding:5px;
+				}
+				
+				.marge {
+					margin-left: 5em;
+				}
+				.attention {
+					color: red;
+					font-weight: bold;
+				}
+			</style>
+	</head>
+	<body>
+		<div id='head'></div>
+			<div class="container-fluid container-page">
+			<div id="rowPage">
+				<div class="row rowHeader bgTransp hidden-xs">
+					<div class="container">
+						<h1>DONNEES OUVERTES<br>
+						Les fichiers de données</h1>
+						<br>
+					</div>
+					<div id="navbarDesc" class="container-fluid" data-spy="affix" data-offset-top="240">
+						<div class="container">
+							<div class="row">
+								<ul class="nav navbar-nav collapse navbar-collapse">
+									<li><a href="#Desc">Description</a></li>
+									<li><a href="#Liens">Liens</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>	
+				</div>
+<div class="row">
+	<div class="container">
+			<h4 id="Desc" class="anchor">Description</h4>
+			<hr>
+			<p id="descOpenData">La majeure partie des données présentes sur le site metromobilite.fr sont disponibles sous forme de fichiers téléchargeables et régulièrement mis à jour.<br>
+			Ces fichiers sont disponibles mais pour des raisons de performances de vos applications, il est prérable de privilégier les accès aux données via l'API ci-dessus.
+			</p>
+			<br>
+			<h4 id="Liens" class="anchor">Liens</h4>
+			<hr>
+			<p id="exOpenData">
+				
+				
+				Le catalogue des jeux de données téléchargeables actuellement est le suivant : <br><br>
+						<ul class="classic">
+							<h3>Transports en commun</h3>
+							<span class="glyphicon glyphicon-plus-sign"></span><a href="pages/opendata/OpenDataLignesTC.html"> Lignes des bus et tramways du réseau TAG</a><br>
+							<span class="glyphicon glyphicon-plus-sign"></span><a href="pages/opendata/OpenDataPointsArrets.html"> Points d'arrêts du réseau TAG</a><br>
+							<span class="glyphicon glyphicon-plus-sign"></span><a href="pages/opendata/OpenDataAgences.html"> Agences de Mobilité</a><br>
+							<span class="glyphicon glyphicon-plus-sign"></span><a href="pages/opendata/OpenDataPtService.html"> Points Services</a><br>
+							<span class="glyphicon glyphicon-plus-sign"></span><a href="pages/opendata/OpenDataDAT.html"> Distributeurs automatiques de titres TAG</a><br>
+							<span class="glyphicon glyphicon-plus-sign"></span><a href="pages/opendata/OpenDataDepositaires.html"> Relais TAG (dépositaires)</a><br>
+							<span class="glyphicon glyphicon-plus-sign"></span><a href="pages/opendata/OpenDataHorairesTheoriques.html"> Horaires théoriques des bus et tramways TAG</a><br><br>
+							
+							<h3>Parkings</h3>
+							<span class="glyphicon glyphicon-plus-sign"></span><a href="pages/opendata/OpenDataParkings.html"> Informations Parkings</a><br>
+							<span class="glyphicon glyphicon-plus-sign"></span><a href="pages/opendata/OpenDataPRelais.html"> Informations Parkings Relais</a><br><br>
+							
+							<h3>Vélos</h3>
+							<span class="glyphicon glyphicon-plus-sign"></span><a href="pages/opendata/OpenDataPistesCyclables.html"> Pistes cyclables</a><br>
+							<span class="glyphicon glyphicon-plus-sign"></span><a href="pages/opendata/OpenDataAgencesMV.html"> Points de location Métrovélo</a><br>
+							<span class="glyphicon glyphicon-plus-sign"></span><a href="pages/opendata/OpenDataConsignesMV.html"> Consignes Métrovélo</a><br><br>
+							
+							<h3>Cité Lib</h3>
+							<span class="glyphicon glyphicon-plus-sign"></span><a href="pages/opendata/OpenDataCitelib.html"> Localisation des emplacements Cité Lib</a><br>
+							<span class="glyphicon glyphicon-plus-sign"></span><a href="pages/opendata/OpenDataCitelibHamo.html"> Localisation des stations Cité Lib by Ha:mo</a><span class="attention"> -- ATTENTION CETTE FONCTIONNALITE N'EST PLUS MAINTENUE, SE REFERER A L'API --</span><br>
+							<span class="glyphicon glyphicon-plus-sign"></span><a href="pages/opendata/OpenDataCitelibHamoDynVehicule.html"> Disponibilité des véhicules Cité Lib by Ha:mo</a><span class="attention"> -- ATTENTION CETTE FONCTIONNALITE N'EST PLUS MAINTENUE, SE REFERER A L'API --</span><br>
+							<span class="glyphicon glyphicon-plus-sign"></span><a href="pages/opendata/OpenDataCitelibHamoDyniRoad.html"> Disponibilité des véhicules iRoad Cité Lib by Ha:mo</a><span class="attention"> -- ATTENTION CETTE FONCTIONNALITE N'EST PLUS MAINTENUe, SE REFERER A L'API --</span><br>
+							<span class="glyphicon glyphicon-plus-sign"></span><a href="pages/opendata/OpenDataCitelibHamoDynComs.html"> Disponibilité des véhicules Coms Cité Lib by Ha:mo</a><span class="attention"> -- ATTENTION CETTE FONCTIONNALITE N'EST PLUS MAINTENUE, SE REFERER A L'API --</span><br>
+							<span class="glyphicon glyphicon-plus-sign"></span><a href="pages/opendata/OpenDataCitelibHamoDynStation.html"> Disponibilité des stations Cité Lib by Ha:mo</a><span class="attention"> -- ATTENTION CETTE FONCTIONNALITE N'EST PLUS MAINTENUE, SE REFERER A L'API --</span><br>
+						</ul>
+						<br>Dernière mise à jour : 14/12/2015<br><br><br>
+				
+			</p>
+			<br>
+			<h4 id="Contact" class="anchor">Une remarque, une question ? </h4>
+			<hr>
+				<p id="contactOpenData">Vous voulez utiliser les fichiers de données ouvertes Métromobilité, et vous avez des remarques, des interrogations ?<br>
+				Que ce soit sur le fonctionnement, les données, ou simplement pour nous signaler une réutilisation des données, vous pouvez nous contacter par le formulaire en bas de cette page.<br>
+				Nous sommes à votre écoute, pour permettre de faire évoluer le système afin de l'adapter et l'améliorer. N'hésitez pas !
+				</p>
+			<br>
+	</div>
+</div>
+				<div id="btn_up" title="Haut de page" alt="Haut de page">
+					<a href="#" class="glyphicon glyphicon-arrow-up"></a>
+				</div>
+			</div>
+		</div>
+		<div id='footer'></div>
+
+		<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+		<script type="text/javascript" src="js/lib/bs/js/moment.min.js"></script>
+		<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
+		<script type="text/javascript" src="stats/piwik.js"></script>
+		<script type="text/javascript" src="js/outils.js"></script>
+		<script type="text/javascript" src="js/fr.js"></script>
+		<script type="text/javascript">var pageStatique = true;</script>
+		<script type="text/javascript" src="js/index.js"></script>
+		<script type="text/javascript">
+		
+			$('#footer').load('index.html #footer',function(){});
+			$('#head').load('head.html',function(){});
+			addBackToTop();
+			trackPiwik("MetroMobilité : OpendataAPIFiles.html");
+			var anchor = window.location.hash;
+			window.location.hash = anchor;
+			
+			$().ready(function() {
+			  $("a[href^='\#']").each(function(){ 
+				this.href=location.href.split("#")[0]+'#'+this.href.substr(this.href.indexOf('#')+1);
+			  });
+			});
+		</script>
+	</body>
+</html>

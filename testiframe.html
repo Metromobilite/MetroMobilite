@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+
+
+<!-------------------------------------------------------
+ IFRAME DE TEST
+-------------------------------------------------------->
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Test</title>
+	
+	<style type="text/css">
+		body {
+			background-color:yellow;
+		}
+	</style> 
+
+</head>
+<body>
+		<br>
+		<iframe id="iti" width="100%" height="500px" src="http://www.metromobilite.fr:8087/iti.html"> <!--A remplace par http://www.metromobilite.fr/iti.html après mise en prod-->
+		</iframe>
+			<script type="text/javascript">
+	
+	var obj = document.getElementById("iti");
+	obj.src += location.search;
+	
+	
+	</script>
+</body>
+</html>

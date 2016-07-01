@@ -1,0 +1,435 @@
+<!doctype html>
+<!--
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html lang="fr">
+	<head>
+		<base href="../" />
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="initial-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+		<title>MétroMobilité - Quiz Pollution</title>
+		<meta name="description" content="Testez vos connaissances" />
+		<link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/actus.css" rel="stylesheet">
+		<link href="css/head.css" rel="stylesheet">
+		<link href="css/index.css" rel="stylesheet">
+		<!-- debut modif image-->
+		<style type='text/css'>
+	@media (min-width: 768px) {
+		body {
+			background-image:url("img/pages/bandeaupollution.jpg");
+			background-attachment: fixed;
+			background-repeat:no-repeat;
+			background-position:top center;
+		}
+	}
+	h2 {
+	font-size:18px!important;
+	margin-bottom:0px!important;
+	margin-top:20px!important;
+	text-transform:uppercase!important;
+	font-weight: 500!important;
+	line-height: 1.1!important;
+	}
+	
+	h4 {
+	font-size:12px!important;
+	}
+
+	#navbarDesc {
+		background-color: #21881c;
+		opacity:0.9;
+	}
+	.container-page h2, .container-page h6, .container-page h5, .container-page h4, .container-page h3, .container-page  > div > .row a, .container-page .glyphicon-plus-sign:before   {
+		color:#21881c;
+	}
+	hr {
+		 background-color: #21881c;
+		 height: 4px;
+	}
+	.container-page .nav > li > a:hover, .nav > li > a:focus{
+		background-color: #1f6314;
+		border-color: #1f6314;
+		opacity:0.9;
+	}
+
+	.centrerTexte{
+		text-align:center;
+	}
+	.photo {
+		display:inline-block;
+		background-size: 100% 100%;	
+	}
+
+	#survPolluants {
+		background-image:url("actus/surv_polluants.png");
+		width:500px;
+		height:200px;	
+	}
+</style>
+		<!--Fin modif -->
+	</head>
+	<body>
+	<div id='head'></div>
+	<div class="container-fluid container-page">
+	<!-- debut modif image-->
+		<div id="rowPage">
+			<div class="row rowHeader bgTransp hidden-xs">
+				<div class="container">
+					<h1>QUIZ POLLUTION<br>Retrouvez les réponses au Quiz Pollution Métromobilité</h1>
+				</div>
+				<div id="navbarDesc" class="container-fluid" data-spy="affix" data-offset-top="240">
+					<div class="container">
+						<div class="row">
+							<ul class="nav navbar-nav collapse navbar-collapse">
+								<li><a href="#Quiz">Testez vos connaissances</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>	
+			</div>
+			<div class="row">
+				<div class="container">
+					
+					<h2 id="Quiz" class="anchor">Quel est le principal polluant l'hiver sur le bassin grenoblois ?</h2>
+					<hr>
+					<div class="centrerTexte pull-right" >
+						<img class="hidden-xs" src="actus/Poll_Quiz_pm10.jpg" alt="" width="600" height="450"/>
+					</div>
+					<p class="chapo"> Il s'agit des PM10, ces particules de diamètre inférieur à 10 µm de diamètre, 6 fois inférieur au diamètre d'un cheveu. </p><br>
+					 Une concentration de 50 µg/m3, en moyenne journalière, de ces PM10, sur un périmètre d'au moins 25 km² ou respiré par plus de 10 % de la population du bassin d'air, déclenche le seuil information.
+					<span class="clearfix"></span>
+					<br>
+					
+					<h2 id="Prefet" class="anchor">Qui déclenche un dispositif préfectoral d'information ou d'alerte ?</h2>
+					<hr>
+					<div class="centrerTexte pull-right" >
+						<img class="hidden-xs" src="actus/Poll_Quizz_15.jpg" alt="" width="600" height="450"/>
+					</div>
+					<p class="chapo"> C'est le préfet qui active le dispositif !</p><br>
+						<p>Il prend la décision au vu des éléments transmis quotidiennement par <b>Air Rhone-Alpes</b>, et dans le cadre de l'<b>arrêté interpréfectoral de gestion des épisodes pollués</b> adopté le 1er décembre 2014 qui fixe les conditions de déclenchement de l'<b>information</b> et de l'<b>alerte</b>, et les restrictions des émissions. 
+						<br><br>Cet arrêté liste également les restrictions à mettre en œuvre dans les domaines de l'<b>agriculture, des transports, de l'industrie et du secteur résidentiel</b>.</p>
+					<span class="clearfix"></span>
+					<br>
+					<h2 class="anchor">Combien existe-t-il de niveaux d'information et de niveaux d'alertes ?</h2>
+					<hr>
+					<div class="centrerTexte pull-right" >
+						<img class="hidden-xs" src="actus/Poll_Quizz_14.png" alt="" width="600" height="450"/>
+					</div>
+					<p class="chapo"> Il existe 1 niveau d'information et 3 niveaux d'alerte :</p><br>
+						<p>On passe d'un niveau à l'autre soit en raison de l'<b>élévation de la concentration des polluants</b>, soit en raison de la <b>persistance de l'épisode</b> (plusieurs jours consécutifs)</p>
+					<span class="clearfix"></span>
+					<br>
+					
+					<h2 id="Dispositif" class="anchor">Quand active-t-on un dispositif préfectotal relatif à un "épisode de pollution" ?</h2>
+					<hr>
+					<div class="centrerTexte pull-right" >
+						<img class="hidden-xs" src="actus/Actu_Quiz_4.jpg" alt="" width="600" height="450"/>
+					</div>
+					<p class="chapo"> Pour qu'un dispositif préfectoral relatif à un " épisode de pollution " soit activé sur un bassin d'air, il faut que sur ce un bassin d'air :</p><br>
+						<ul class="classic">
+							<li>un seuil d'<b>information</b> ou un seuil d'<b>alerte</b> soit dépassé pour l'un des 4 polluants (dioxyde de soufre, dioxyde d'azote, ozone et particules fines),<br><br> </li>
+							<li>que ce dépassement concerne 25 km² ou <b>10 % des habitants du territoire</b>, <br><br></li>
+							<li>et que ce dépassement soit également prévu pour le <b>lendemain</b><br>	</li>
+						</ul>
+					<br>	
+					Cependant, il n'y a pas de corrélation directe entre la valeur d'un <a href="pages/Pollution.html#indice">indice ATMO</a> et le dépassement d'un seuil d'information ou d'alerte, même s'il est très probable qu'un indice ATMO égal à 8 signifie que le seuil d'information a de forts risques d'être atteint.
+					<span class="clearfix"></span>
+					<br>
+					<h2 class="anchor">Quelle est la caractéristique de notre bassin d'air ?</h2>
+					<hr>
+					<div class="centrerTexte pull-right" >
+						<img class="hidden-xs" src="actus/actu_cuvette_grenobloise.jpg" alt="" width="600" height="450"/>
+					</div>
+					<p class="chapo"> Sa caractéristique est liée à sa configuration géographique de vallée alpine. </p><br>
+						Les polluants se dispersent difficilement lorsque les conditions anticycloniques (masses d'air très stables) sont installées. <br><br>
+						C'est le phénomène de <b>"cuvette grenobloise"</b>. <br><br>
+						De ce fait, notre agglomération connaît des épisodes de pollution pas forcément très intenses, mais parfois longs, pouvant atteindre 14 jours consécutifs.
+					<span class="clearfix"></span>
+					<br>
+					
+					<h2 id="Meteo" class="anchor">La météo et la saison jouent-elles un rôle dans la concentration des polluants ? </h2>
+					<hr>
+						<div class="centrerTexte pull-right" >
+							<img class="hidden-xs" src="actus/actu_pollution_meteo.jpg" alt="" width="600" height="450"/>
+						</div>
+					<p class="chapo"> La météo et la saison jouent un rôle important dans la concentration des polluants.</p><br>
+					La <b>saison</b> affecte principalement le niveau d'émission de certaines sources, <br>par exemple :<br>
+					<ul class="classic">
+						<li><b>l'hiver</b>, il fait froid et le chauffage au bois individuel non performant contribue fortement à la pollution aux particules</li>
+						<li><b>l'été</b> cette contribution est nulle.</li>
+					</ul>	
+					<br><br>
+					La <b>météorologie</b> est un déterminant important des niveaux de polluants atmosphériques :<br>
+					<ul class="classic">
+						<li>le <b>vent</b> permet de disperser plus efficacement les polluants dans l'atmosphère </li>
+						<li>la <b>pluie</b> contribue au lessivage de l'atmosphère en rabattant les polluants <br>au sol</li>
+						<li>un <b>ensoleillement</b> important associé à de fortes chaleurs accroit les réactions photochimiques et donc la fabrication d'ozone.</li>
+					</ul>
+					<br>
+					<p>
+						<span class="glyphicon glyphicon-plus-sign"></span><a href="http://www.air-rhonealpes.fr/article/influence-de-la-meteo" title="Plus d'informations sur l'influence de la Météo - Nouvelle fenêtre"target="_blank"> Plus d'informations sur l'influence de la Météo</a><br>
+					</p>	
+					<span class="clearfix"></span>
+					<br>
+					
+					<h2 id="Bassin" class="anchor">Combien de bassins d'air y-a-t-il sur la région Rhône-Alpes ? </h2>
+					<hr>
+					<div class="centrerTexte pull-right" >
+						<img class="hidden-xs" src="actus/actu_bassin_air.png" alt="" width="600" height="450"/>
+					</div>
+					<p class="chapo"> L'air respiré à Lyon n'est pas le même qu'à Grenoble ou dans la vallée de l'Arve, du fait des émissions, de la météorologie et de la configuration des lieux (dispersion plus ou moins efficace).</p><br>
+					Pour tenir compte de cette disparité, la région Rhône-Alpes est découpée en <br><b>17 zones</b>, appelées <b> « Bassins d'air »</b>, dont le « bassin grenoblois ». <br><br> 
+					Le <b>« bassin grenoblois » </b> s'étend du sud de la Métropole, à Chirens au nord, et à Pontcharra à l'est. <br><br>
+					Lorsqu'un dispositif préfectoral est activé en cas d'épisode de pollution, les mesures sont appliquées dans le bassin d'air concerné par le dépassement des seuils. <br>Par exemple, la vitesse de circulation pourra être réduite sur le bassin d'air grenoblois et pas sur le bassin « lyonnais-nord-Isère » ou inversement.
+				
+					<span class="clearfix"></span>
+				
+					
+					<h2 id="Atmo" class="anchor">Qu'est-ce que l'indice ATMO ? </h2>
+					<hr>
+					<div class="centrerTexte pull-right" >
+						<img class="hidden-xs" src="actus/actu_atmo_girafes.jpg" alt="" width="600" height="450"/>
+					</div>
+					<p class="chapo"> Cet indice caractérise la <b>qualité de l'air</b>. Il varie de <b>1 (très bon)</b> à <br><b>10 (très mauvais)</b>.</p><br>
+ 					Il est calculé <b>quotidiennement</b> de la même façon sur <b>toute la France</b>, par <b>agglomération</b> de plus de 100 0000 habitants.<br> 
+					Il est déterminé par le <b>maximum</b> d'un ensemble de sous-indices, chacun d'entre eux étant représentatif d'un <b>polluant de l'air</b> : 
+					<br><br>
+					<ul class="classic">
+						<li><b>dioxyde de soufre</b> (SO2)</li>
+						<li><b>dioxyde d’azote</b> NO2)</li> 
+						<li><b>ozone</b> (O3) </li>
+						<li><b>particules fines (PM10)</b> </li>
+					</ul>
+					mesurés dans les <b>stations</b> (de mesure) <b>de fond</b>.<br><br>
+					Pour notre bassin d'air, <b>Air Rhône-Alpes</b> le calcule quotidiennement :  <b>six</b> (toutes les stations de fond) sont utilisées pour l'<b>ozone</b>, <b>trois</b> pour le <b>dioxyde d'azote et les particules fines</b>, et <b>une</b> pour le <b>dioxyde de soufre</b>.
+					<br>
+					<br>
+					<p>
+						<span class="glyphicon glyphicon-plus-sign"></span><a href="http://www.air-rhonealpes.fr/monair/commune/38185" title="La carte ATMO de notre région - Nouvelle fenêtre"target="_blank"> La carte ATMO de notre région</a><br>
+					</p>
+					<br>
+					<span class="clearfix"></span>
+					<br>
+
+					<h2 id="Quiz8" class="anchor">Combien y a-t-il de stations de mesure des concentrations de polluants ? </h2>
+					<hr>
+					<div class="centrerTexte pull-right" >
+						<img class="hidden-xs" src="actus/actu_pollution_mesure.jpg" alt="" width="600" height="450"/>
+					</div>
+					<p class="chapo"> Sur le bassin d'air grenoblois, il y a <b>huit stations</b> de mesure des concentrations de polluants : six stations de fond, deux stations de proximité/trafic. </p> <br>
+					Ces différentes « typologies » de sites (ou stations) répondent à des règles européennes et permettent de qualifier la pollution de l'air dans des environnements variés, afin d'appréhender au mieux l'exposition réelle de la population. <br>
+					Il existe également des stations de type "site rural" non présentes sur le bassin d'air grenoblois.
+					<br><br>
+					<p>
+					<span class="glyphicon glyphicon-plus-sign"></span><a href="http://www.air-rhonealpes.fr/article/visitez-une-station-de-mesure" title="Visitez une station de mesure - Nouvelle fenêtre" target="_blank"> Visitez une station de mesure</a><br>
+					</p>
+					<span class="clearfix"></span>
+					<br>
+
+					<h2 id="Quiz7" class="anchor">Quel organisme contrôle la qualité de l'air dans l'agglo ?</h2>
+					<hr>
+					<div class="centrerTexte pull-right" >
+						<img class="hidden-xs" src="actus/Actu_Air_Rhone-Alpes.jpg" alt="" width="600" height="450"/>
+					</div>
+					<p class="chapo"> L'organisme qui contrôle la qualité de l'Air sur l’agglomération grenobloise est <b> AIR RHONE ALPES. </b></p> 
+					<h3>Une évolution des dispositifs en 2012</h3>
+					<p>
+					Suite aux deux <b> Grenelles de l'Environnement </b>, les structures de surveillance de la qualité de l'air se sont régionalisées. Le regroupement d'Air-APS, Ampasel, Ascoparg, Atmo Drôme-Ardèche, Coparly, Sup’Air forment donc depuis 2012 : <br><b>Air Rhone-Alpes </b>. 
+					</p>
+					<h3>Une association pour la qualité de l'air</h3>
+					<p>
+					Comme l’ensemble des structures chargées de la surveillance de la qualité de l’air, Air Rhône-Alpes est une <b> association de type « loi 1901 » </b> agréée par le Ministère de l’Ecologie, du Développement Durable et de l'Energie. Cette association regroupe plus de 100 adhérents, tous concernés par la problématique de la qualité de l’air. Ils sont :
+					</p>
+					<ul class="classic">
+						<li>des représentants de <b> l’état </b> ;</li>
+						<li>des <b> collectivités territoriales </b> et locales ;</li>
+						<li>des professionnels de l’<b>industrie</b> et du <b>transport</b> ;</li>
+						<li>des <b>associations</b> de consommateurs, de protection de l’environnement, ainsi que les <b>personnalités qualifiées</b> (scientifiques, professionnels de santé).</li>
+					</ul>
+					<p>
+					Les trois missions principales d'Air Rhone-Alpes sont de <b>surveiller</b>, d'<b>étudier</b> et d'<b>informer</b> sur les questions de qualité de l'air.
+					</p>
+					<h3>Le réseau national ATMO</h3>
+					<p>
+					A l'échelle de la France, ces structures sont régionalisées et forment le <b>réseau national ATMO</b>. Ce réseau permet des échanges et une meilleure synergie entre les différentes associations régionales.
+					</p>
+					<p>
+					<span class="glyphicon glyphicon-plus-sign"></span><a href="pdf/ATMO_France.pdf" target="_blank"> Informations sur le réseau ATMO (pdf, 3311 ko)</a><br>
+					</p>
+					<i>Sources : www.air-rhonealpes.fr et www.atmo-france.org</i>
+					<br><br>	
+					<span class="clearfix"></span>
+
+					<h2 id="Quiz6" class="anchor">Que font la France et les collectivités locales pour respecter les seuils ? </h2>
+					<hr>
+					<div class="centrerTexte pull-right" >
+						<img class="hidden-xs" src="actus/emission_comparez.jpg" alt="" width="600" height="450"/>
+					</div>
+					<p>
+					<p id="Norme" class="chapo">La France édicte des <b>normes</b> imposant des restrictions d'émission et des <b>aides financières</b> pour la <b>transition énergétique</b>.</p>
+					<br>
+					C'est par exemple le cas pour les véhicules dotés de <b>pots catalytiques</b> et de <b>filtres à particules</b> de plus en plus performants. <br><br>
+					Elle impose également une <b>surveillance de l'air quotidienne</b> et l'<b>information</b> et l'<b>alerte des populations</b> en cas de pic.<br><br>
+					Elle impose aussi aux <b>agglomérations de plus de 250 000 habitants</b> d'élaborer un <b>Plan de Protection de l’Atmosphère</b> (PPA) qui constitue un <b>engagement des différents partenaires</b> sur un certain nombre d'actions permettant de <b>réduire les émissions</b> et de respecter les concentrations limites. <br>
+					<br>
+					Le plan de Protection de Grenoble comporte 22 actions.  
+					<br><br>
+					<p>
+					<span class="glyphicon glyphicon-plus-sign"></span><a href="pdf/PPA_Grenoble.pdf" target="_blank"> Lire le Plan de Protection de l'Atmosphère de Grenoble (pdf, 6830 ko)</a><br>
+					</p>
+					<span class="clearfix"></span>
+					<br>
+					
+					<h2 id="Quiz5" class="anchor">Y a-t-il une réglementation sur des concentrations de polluants à ne pas dépasser ? </h2>
+					<hr>
+					<div class="centrerTexte pull-right" >
+						<img class="hidden-xs" src="actus/actu_pollution_Réglementation.jpg" alt="" width="600" height="450"/>
+					</div>
+					<p class="chapo">L'organisme mondial de la santé (OMS) fixe des recommandations de seuils à ne pas dépasser par type de polluant. </p> 
+					<br>		
+					<p>
+					Des <b>normes européennes</b> fixent des moyennes annuelles de <b>concentration maximum à ne pas dépasser</b> pour certains polluants, ainsi qu'un <b>nombre annuel maximal de jours de dépassement</b> de seuils (plus élevés que la concentration moyenne).<br><br>
+					Par exemple, la  directive européenne CE-2008/50 fixe, pour les particules fines PM10, un <b>maximum annuel de 35 jours par an du seuil</b> de 50 µg/m³ en tout point du territoire. <br>
+					Plusieurs villes en France ne respectent pas ce maximum, dont Grenoble. L'Europe menace la France d'une amende de 100 M€ par an si elle n'agit pas. 
+					</p>
+					<br>
+					<p>
+						<span class="glyphicon glyphicon-plus-sign"></span><a href="http://www.air-rhonealpes.fr/article/normes-europeennes" title="Plus d'informations sur les normes européennes - Nouvelle fenêtre" target="_blank"> Plus d'informations sur les normes européennes</a><br>
+					</p>
+					<br>
+					<span class="clearfix"></span>
+					<br>
+					
+					<h2 id="Quiz4" class="anchor">Quels polluants sont surveillés quotidiennement ? </h2>
+					<hr>
+					<div class="centrerTexte pull-right" >
+						<img class="hidden-xs" src="actus/actu_pollution_ozone.jpg" alt="" width="600" height="450"/>
+					</div>
+					<p class="chapo">Quatre polluants sont surveillés quotidiennement par Air Rhône-Alpes : </p> 
+					<br>		
+					<br>
+					<ul class="classic">
+							<li>le dioxyde de soufre</li>
+							<li>le dioxyde d'azote</li>
+							<li>l'ozone</li>
+							<li>les particules fines </li>
+					</ul>
+					<br><br>
+					<p>
+					<span class="glyphicon glyphicon-plus-sign"></span><a href="http://www.air-rhonealpes.fr/site/accueil/monaccueil/all/#Article/extraire/13856" title="Plus d'informations sur ces polluants - Nouvelle fenêtre" target="_blank"> Plus d'informations sur ces polluants </a><br>
+					</p>
+					<br>
+					<span class="clearfix"></span>
+					<br>
+					
+					<h2 id="Quiz3" class="anchor">Pourquoi est-il important de surveiller quotidiennement la qualité de l'air ? </h2>
+					<hr>
+					<div class="centrerTexte pull-right" >
+						<img class="hidden-xs" src="actus/Actu_Quiz_4.jpg" alt="" width="600" height="450"/>
+					</div>
+					<p class="chapo">La pollution de l'air étant dangereuse pour notre santé, il est important de connaître au jour le jour les concentrations des principaux polluants.</p> 
+					<br>		
+					<p> Cette connaissance permet :
+					</p>
+					<ul class="classic">
+							<li>d'une part, en cas de pics de pollution, d'<b>alerter</b> les personnes et de <b>restreindre</b> nos émissions<br><br></li>
+							<li>d'autre part, de connaître les <b>concentrations des polluants</b>, afin de définir des <b>politiques nationales ou locales d'abaissement des émissions</b>.</li>
+					</ul>
+					<br>
+					<span class="clearfix"></span>
+					<br>
+
+					<h2 id="Quiz2" class="anchor">Quelles sont les personnes les plus touchées par la pollution de l'air ? </h2>
+					<hr>
+					<div class="centrerTexte pull-right" >
+						<img class="hidden-xs" src="actus/actu_pollution_poussette.jpg" alt="" width="600" height="450"/>
+					</div>
+					<p class="chapo"> La pollution atmophérique peut avoir des effets à court et à long terme sur la santé et certains groupes d'individus sont plus vulnérables.</p> <br>
+					<p>Les populations habitant <b>le long des grands axes de circulation</b> sont les plus exposées. <br><br>
+					Les <b>enfants en bas âges</b> sont plus fortement impactés car leur système respiratoire est moins développé (jusqu'à l'âge de 8 ans).<br><br>
+					Enfin les <b>personnes les plus fragiles</b> (maladies respiratoires ou maladies cardio-vasculaires) sont les plus sensibles aux effets de 
+					la population. En cas de pics de pollution, le nombre d'accidents cardio-vasculaire (AVC) augmente, ce qui peut abréger 
+					la vie d'une personne de plusieurs années. La vie des personnes en grande détresse respiratoire peut être abrégée de quelques jours.. <br>
+					<br>
+					<br>
+					<span class="clearfix"></span>
+					<br>
+					
+					<h2 id="Quiz1" class="anchor">Quel est l'effet de la pollution de l'air sur notre santé ? </h2>
+					<hr>
+					<div class="centrerTexte pull-right" >
+						<img class="hidden-xs" src="actus/Actu_Quiz_3.png" alt="" width="600" height="450"/>
+					</div>
+					<p class="chapo"> Les effets de la pollution sur la santé sont nombreux. Ils peuvent être plus ou moins graves selon le temps d'exposition et selon la fragilité du sujet exposé. </p> <br>
+					<p>La pollution réduit notre <b> espérance de vie </b> (environ 6 mois sur Grenoble). <br>
+					Elle est responsable de nombreuses <b> maladies chroniques</b>, principalement <b>respiratoires</b> et <b>cardio-vasculaires</b>.  <br>
+					La pollution rend également les pollens plus <b>allergisants</b>. <br>
+					<br>
+					Son effet est <b>permanent</b>, et l'impact est plus important lors des fortes concentrations (pics de pollution). </p>
+					<br>
+					<span class="clearfix"></span>
+					<br>
+
+					
+				</div>
+			</div>
+		</div>
+		<!--Fin modif -->
+		<div id="btn_up" title="Haut de page">
+			<a href="#" class="glyphicon glyphicon-arrow-up"></a>
+		</div>
+	</div>
+	<div id='footer'></div>
+	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/moment.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
+	<script type="text/javascript" src="stats/piwik.js"></script>
+	<script type="text/javascript" src="js/outils.js"></script>
+	<script type="text/javascript" src="js/fr.js"></script>
+	<script type="text/javascript">var pageStatique = true;</script>
+	<script type="text/javascript" src="js/index.js"></script>
+	<script type="text/javascript">
+		$('#footer').load('index.html #footer',function(){});
+		$('#head').load('head.html',function(){});
+		addBackToTop();
+		trackPiwik("MetroMobilité : Pollution.html"); //<!--modif -->
+		var anchor = window.location.hash;
+		window.location.hash = anchor;
+		
+		//faire marcher les href="#toto" avec la balise <base>
+		$().ready(function() {
+		  $("a[href^='\#']").each(function(){ 
+			this.href=location.href.split("#")[0]+'#'+this.href.substr(this.href.indexOf('#')+1);
+		  });
+		});
+	</script>
+  </body>
+</html>
+
+
+
+
+
+
+

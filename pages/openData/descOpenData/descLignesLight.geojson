@@ -1,0 +1,20 @@
+{
+	"description" : "Fichier de description de toutes les lignes des bus et tramways du réseau TAG, SNCF et TransIsère",
+	"type" : "FeatureCollection",
+	"features" : [{
+			"type" : "Feature",
+			"properties" : {
+				"NUMERO" : "Numéro de ligne",
+				"PMR" : "1 ou 0" ,
+				"COULEUR" : "couleur R,V,B",
+				"CODE" : "Code ligne",
+				"LIBELLE" : "Nom de la ligne",
+				"ZONES_ARRET" : ["Liste de code d'arrêt"]
+			},
+			"geometry" : {
+				"type" : "MultiLineString",
+				"coordinates" : "Long-Latitude, exemple '[5.74658, 45.192649]'"
+			}
+		}
+	]
+}

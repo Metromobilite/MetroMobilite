@@ -1,0 +1,177 @@
+/*
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+@media(min-width:1200px){
+	#actu_1 {
+		height: 100%;
+		width: 100%;
+		position: relative;
+	}
+	#actu_2, #actu_2 > img {
+		width: 460px;
+		height: 580px;
+	}
+	#actu_3 , #actu_3 > img{
+		width: 237px;
+		height: 390px;
+	}
+	#actu_4 , #actu_4 > img{
+		width: 236px;
+		height: 390px;
+	}
+	#actu_5 , #actu_5 > img{
+		width: 477px;
+		height: 180px;
+	}
+	#actu_1 div {
+		margin:5px 0px 5px 5px;
+		float:left;
+		position: relative;
+	}
+	#actu_4 {
+		margin-left:4px!important;
+	}
+	#actu_2 {
+		margin-right:11px!important;
+	}
+}
+@media (min-width: 992px) and (max-width: 1200px){
+	#actu_1 {
+		height: 100%;
+		width: 100%;
+		position: relative;
+	}
+	#actu_2, #actu_2 > img {
+		width: 466px;
+		height: 596px;
+	}
+	#actu_3 , #actu_3 > img{
+		width: 218px;
+		height: 400px;
+	}
+	#actu_4 , #actu_4 > img{
+		width: 218px;
+		height: 400px;
+	}
+	#actu_5 , #actu_5 > img{
+		width: 438px;
+		height: 194px;
+	}
+	#actu_1 > div {
+		margin:1px 1px 1px 1px;
+		float:left;
+		position: relative;
+	}
+}
+@media (min-width: 768px) and (max-width: 991px){
+	#actu_1 {
+		height: 100%;
+		width: 100%;
+		position: relative;
+	}
+	#actu_2, #actu_2 > img {
+		width: 372px;
+		height: 450px;
+	}
+	#actu_3 , #actu_3 > img{
+		width: 156px;
+		height: 288px;
+	}
+	#actu_4 , #actu_4 > img{
+		width: 156px;
+		height: 288px;
+	}
+	#actu_5 , #actu_5 > img{
+		width: 312px;
+		height: 160px;
+	}
+	#actu_1 > div {
+		margin:1px 1px 1px 1px;
+		float:left;
+		position: relative;
+	}
+	span.text-content { 
+		font-size:12px;
+	}	
+	span.text-content h2 { 
+		font-size:16px!important;
+		padding-top:3px!important;
+		padding-bottom:3px!important;
+	}
+}
+	
+span.text-content {
+  color: #000;
+  cursor: pointer;
+  display: table;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  opacity: 0;
+  -webkit-transition: opacity 500ms;
+  -moz-transition: opacity 500ms;
+  -o-transition: opacity 500ms;
+  transition: opacity 500ms;
+}
+
+/*#actu_2 > span.text-content {*/
+.couleur_voiture {
+  background: rgba(224,15,126,0.9); // #e00f7e voiture
+}
+
+/*#actu_3 > span.text-content {*/
+.couleur_velo {
+  background: rgba(63,180,51,0.9); // #3fb433 vélo
+}
+/*#actu_4 > span.text-content, #actu_5 > span.text-content {*/
+.couleur_tc {
+  background: rgba(220,60,27,0.9); // #e55b2c tc
+}
+
+span.text-content span {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+}
+
+span.text-content  hr {
+  height: 1px;
+  padding: 0;
+  color: #000;
+  background-color: #000;
+  border: 0;
+  margin-bottom:5px;
+  margin-top:5px;
+  width:80%;
+}
+
+spanbutton {
+	padding:5px;
+	border-width:1px;
+	border-style:solid;
+	border-color:#000;
+}
+ 
+div:hover > span.text-content {
+  opacity: 1;
+}

@@ -1,0 +1,9 @@
+{
+	"description" : "Indice routier actuel et son historique",
+	"description" : "Identifiant de l'indice routier",
+	"IR1" : [{
+			"indice" : "'0' pour 'n.c.', '1' pour 'Fluide','2' pour 'Ralenti','3' pour 'Embouteillé','5' pour 'Fermé'",
+			"time" : "Unix TimeStamp en miliseconde, exemple '1450260992542'"
+		}
+	]
+}

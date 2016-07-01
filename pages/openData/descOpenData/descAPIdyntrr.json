@@ -1,0 +1,9 @@
+{
+	"description" : "Disponibilité et niveaux de service de la liste des tronçons routier",
+	"description" : "Identifiant pour chaque tronçon routier",
+	"T134" : [{
+			"nsv_id" : "'0' pour 'n.c.', '1' pour 'Fluide','2' pour 'Ralenti','3' pour 'Embouteillé','5' pour 'Fermé'",
+			"time" : "Unix TimeStamp en miliseconde, exemple '1450261952081'"
+		}
+	]
+}

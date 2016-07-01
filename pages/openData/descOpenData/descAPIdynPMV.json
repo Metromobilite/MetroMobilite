@@ -1,0 +1,9 @@
+{
+	"description" : "Messages sur la liste des panneaux à message variable",
+	"description" : "Identifiant de chaque PMV",
+	"GRE_PMV_1001" : [{
+			"time" : "Unix TimeStamp en miliseconde, exemple '1450261553000'",
+			"messages" : "message en cours, par exemple : 'VOIE SUR BERGE|| OUVERTE'"
+		}
+	]
+}

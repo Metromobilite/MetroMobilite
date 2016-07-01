@@ -1,0 +1,24 @@
+{
+	"description" : "Fichier de description des parkings",
+	"type" : "FeatureCollection",
+	"features" : [{
+			"type" : "Feature",
+			"properties" : {
+				"CODE" : "Code parking, exemple : 'PVP_PKG_DENFERT-ROCHEREAU'",
+				"LIBELLE" : "Nom  du parking, exemple : 'DENFERT-ROCHEREAU'",
+				"ADRESSE" : "Adresse du parking",
+				"TYPE" : "PKG",
+				"TOTAL" : "Nombre de places totales, exemple '578'",
+				"LIGNES" : "Code des lignes TC passant à proximité",
+				"DISPO" : "Nombre de place disponible, si non connu : '-1'",
+				"NSV_ID" : 0,
+				"type" : "PKG",
+				"id" : "Identifiant parking, exemple : 'PVP_PKG_DENFERT-ROCHEREAU'"
+			},
+			"geometry" : {
+				"type" : "Point",
+				"coordinates" : "Long-Latitude, exemple '[5.74658, 45.192649]'"
+			}
+		}
+	]
+}

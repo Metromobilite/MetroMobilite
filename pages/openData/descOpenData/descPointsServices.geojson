@@ -1,0 +1,19 @@
+{
+	"description" : "Fichier de description des emplacements des points services au format GeoJSON",
+	"type" : "FeatureCollection",
+	"features" : [{
+			"type" : "Feature",
+			"properties" : {
+				"NOM" : "Nom de l'agence",
+				"RUE" : "Nom de la rue",
+				"CODEPOSTAL" : "Code postal",
+				"COMMUNE" : "Commune",
+				"TYPE" : "Point Service"
+			},
+			"geometry" : {
+				"type" : "Point",
+				"coordinates" : "Long-Latitude, exemple '[5.74658, 45.192649]'"
+			}
+		}
+	]
+}
