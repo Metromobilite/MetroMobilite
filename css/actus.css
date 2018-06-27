@@ -30,8 +30,18 @@
 		height: 580px;
 	}
 	#actu_3 , #actu_3 > img{
+		/* debut : enlever les commentaire en cas de pic de pollution */
+		/*
+		width: 460px;
+		height: 580px;
+		/*
+		/* fin : enlever les commentaire en cas de pic de pollution */
+		/* debut de mise en commentaire en cas de pic de pollution */
+		
 		width: 237px;
 		height: 390px;
+		
+		/* fin de mise en commentaire en cas de pic de pollution */		
 	}
 	#actu_4 , #actu_4 > img{
 		width: 236px;

@@ -460,7 +460,7 @@ margin-left: 2em;
 	position:relative;
 }
 
-#btn_up a{
+#btn_up a {
 	 color: #fff;
 	 margin-right: 3px;
 	 text-decoration: none;
@@ -532,7 +532,18 @@ h1,h2 {
 	width:50px; /*pour Safari*/
 }
 
+#logoTwtter{
+	display:inline;
+	width: 12px;
+	vertical-align:baseline;
+}
 
+#logoFb{
+	display:inline;
+	width: 12px;  
+	vertical-align:baseline;
+}
+ 
 #image-plan-contact {
 	height:200px;
 	/*opacity: 0.5;*/
@@ -561,6 +572,11 @@ h1,h2 {
 	height:100px;
 }
 
+#successendmessage ,#erreursendmessage{
+	display:none;
+	background-color: yellow;
+	text-align:center;
+}
 /*
 #formulaire-contact {
 	opacity: 0.5;
@@ -596,18 +612,45 @@ h1,h2 {
 	text-decoration:none;
 	color:#fff;
 }
+
 #piedDePage h2, #piedDePage h3 {
 	font-weight:normal;
 	margin:0px;
 	display:inline;
 	font-size:10px!important;
 	text-decoration: none;
+}
 
-}
 #piedDePage h2{
-	font-size:12px;
-	color: #000;
+	font-size:18px; 
 }
+
+#idSeDepl{
+	font-size:12px;
+	color: #029ebc;
+}
+
+#idactu{
+	font-size:12px;
+	color: #f0037f;
+}
+
+#idpol{
+	font-size:12px;
+	color: #21881c;
+}
+
+#idSer{
+	font-size:12px;
+	color:#dc3c1b ;
+}
+
+#PlMob{
+	font-size:12px;
+	color:#8334a7 ;
+}
+ 
+
 .inputWarning {
 	 border-width:1px!important;
 	 border-style:solid!important;
@@ -618,6 +661,7 @@ h1,h2 {
  	margin-bottom:10px;
 	background-color:#d8d8d8;
 }
+
 span.clearfix {
 	display:block;
 }

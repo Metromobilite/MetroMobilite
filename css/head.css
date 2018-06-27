@@ -265,8 +265,13 @@
 	margin-bottom:auto;
 }
 
-#iconetrafic, #iconeTC, #iconeatmo{
+#iconetrafic, #iconeTC{
 	width: 30px;
+	height: 35px;
+}
+
+#iconeatmo{
+	width: 35px;
 	height: 35px;
 }
 
@@ -297,7 +302,7 @@
 	margin-right: 15px;
 }
 
-#divtemperaturemeteo  span {
+#divtemperaturemeteo span {
 	float: left;
 	text-align:center;
 	line-height: 35px;

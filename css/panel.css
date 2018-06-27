@@ -28,7 +28,8 @@
 	padding: 0;
 	position: absolute;
 	top: 0;
-	z-index: 50;
+	/*z-index: 50;*/
+	z-index: 1002;
 }
 #panel > div {
 	height: 100%;
@@ -162,9 +163,6 @@
 }*/
 .typeahead span.LayerMVC:before, .typeahead span.MVC:before {
 	background-image:url(../img/carto/MV_consigne.png);
-}
-.typeahead span.Omms:before, .typeahead span.omms:before {
-	background-image:url(../img/citelibbyhamo.png);
 }
 .typeahead span.Citélib:before, .typeahead span.citelib:before {
 	background-image:url(../img/citelib.png);

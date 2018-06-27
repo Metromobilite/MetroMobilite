@@ -19,19 +19,42 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+#mainView{
+	bottom: 0;
+	position: absolute;
+	top: 0;
+	width:100%;
+	background-color : #f5f5f5;
+} 
+#wait {
+	display:none;
+	position: absolute;
+	top: 60%;
+	left: 60%;
+	z-index: 1002;
+}
 @media (min-width: 1200px) {
-		#mainView {
-			padding-left:410px;
-		}		
+	#mainView {
+		padding-left:410px;
 	}
+	#horaires .tableau .contenu {
+		padding-left:10px;
+	}
+}
 @media (min-width: 992px) and (max-width: 1200px) {
 	#mainView {
 		padding-left:410px;
+	}
+	#horaires .tableau .contenu {
+		padding-left:10px;
 	}
 }
 @media (min-width: 768px) and (max-width: 991px) {
 	#mainView {
 		padding-left:410px;
+	}
+	#horaires .tableau .contenu {
+		padding-left:10px;
 	}
 }
 @media (min-width: 481px) and (max-width: 767px) {
@@ -72,6 +95,7 @@ a, a:visited, a:focus, a:active, a:hover{
 .attenteCurseur {
 	cursor:progress!important;
 }
+
 .navbar {
 	margin-bottom: 0px;
 }
@@ -84,25 +108,24 @@ a, a:visited, a:focus, a:active, a:hover{
 .main > .row {
 	height:100%;
 }
-#menu{
+#menu {
 	float:left;
-	background-color:rgba(30,30,30,0.9);
+	background-color:transparent;
 	width:30px;
-	height:45px; /*pas 30px pour ie*/
-	line-height:30px;
+	height:30px;
+	line-height:40px;
 	position:absolute;
-	top:0px;/*calc(50% - 10px);*/
+	top:0px;
 	left:0px;
-	color:#fff;
 	z-index:50;
-	padding-left: 9px;
+	padding-left: 15px;
 	cursor:pointer;
 }
 #menu span {
-	margin-top:20px; /*pour ie*/
+	margin-top:0px;/* avant 20px*/
 }
 #menu.listeAffichee {
-	left:380px;
+	left:0px;/*avant 380px*/
 	background-color:rgba(30,30,30,0);
 	top:0px;
 	display:none!important;
@@ -111,30 +134,52 @@ a, a:visited, a:focus, a:active, a:hover{
 	margin-right:5px;
 	cursor:pointer;
 }
+#menuListe, #menu { color:#000; }
+#panel {
+	background-color:transparent;
+}
 #listeMain {
 	position:relative;
 	height:100%;
 	width:100%;
 }
 #listeTop {
-	position:absolute;
-	top:0;
-	width:100%;
-	line-height:30px;
-	padding-left: 10px;
-	/*margin-top:10px; /*pour ie*/
+	position: absolute;
+	top: 0;
+	width: 100%;
+	line-height: 40px;
+	height: 40px;
+	padding: 0 15px !important;
 }
 #listeLignes {
-	position:absolute;
+	position: relative;
 	top:40px;
 	bottom:50px;
+	height: 90%;
+	height: calc(100% - 40px);
 	overflow-y:auto;
-	
+	background-color: rgba(30, 30, 30, 0.9);
+}
+@media (min-width: 768px) {
+	#listeTop {
+		background-color:transparent;
+	}
+	#listeLignes {
+		top:0px;
+		height: 100%;
+	}
+	/*#listeLignes.withPub {
+		height:calc(100% - 45px);
+	}*/
 }
 #listeLignes > div{
 	padding-left:5px;
 }
-.ligneSelected .svgFond {
+#centre {
+	position:relative;
+	height:calc(100% - 40px);	
+}
+/*.ligneSelected .svgFond {
 	stroke-width:6px;
 }
 
@@ -144,7 +189,7 @@ a, a:visited, a:focus, a:active, a:hover{
 @keyframes texteLigne {
 	0%   { text-indent: 0%; }
 	100% { text-indent: -99%; }
-}
+}*/
 .svgLigne .logo {
     height: 30px;
 	width:30px;
@@ -157,19 +202,20 @@ a, a:visited, a:focus, a:active, a:hover{
     line-height: 10px;
 	padding: 0 0 0 3px;
 }
-#reseau > li > a > div{
+/*#reseau > li > a > div{
 	margin-left:0px;
 	margin-right:0px;
-}
-#mainView{
-	bottom: 0;
-	position: absolute;
-	top: 0;
-	width:100%;
-}
+}*/
+
 
 #horairesOnglets {
 	height:35px;
+	display: -webkit-box; 
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex; 
+	display:flex;
+	margin-top:5px;
 }
 #horairesOnglets > div {
 	display:inline-block;
@@ -177,25 +223,48 @@ a, a:visited, a:focus, a:active, a:hover{
 	height:35px;
 	border-color: #a0a0a0 #a0a0a0 #fff;
 	border-style: solid;
-	border-width: 1px;
-	border-top-left-radius: 6px;
-	border-top-right-radius: 6px;
-	box-shadow: 3px -3px 3px #7f7f7f;
+	border-width: 0px;
+	box-shadow: 0 3px 0px 0px white,0px 0px 3px #000;
 	margin-right:3px;
 	z-index:4;
 	position:relative;
 	background-color:#fff;
-	padding: 3px 10px 2px 10px;
+	padding: 0px 5px;
 	min-width:60px;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
+	display: inline-flex;
+	justify-content: center;
+	font-family: "Helvetica", "Arial", sans-serif;
+	font-size: 16px;
+	font-stretch: condensed;
+	font-weight:bold;
+	line-height:35px;
+	opacity:0.35;
 }
 #horairesOnglets > div.active {
-	display:inline-block;
-	cursor:pointer;
 	margin-bottom: -1px;
 	z-index:9;
+	opacity:1;
+	justify-content:center;
+	align-items:center;
 }
-
-#horairesOnglets .logo{
+#horairesOnglets > div .numLigne {
+	display:inline-block;
+	font-size:23px;
+	flex: 0 0 auto;
+}
+#horairesOnglets > div .modeLigne {
+	width:30px;
+	height:35px;
+	display:inline-block;
+	flex: 0 0 30px;
+}
+#horairesOnglets > div .bookmark {
+	flex: 0 0 25px;
+	margin:0px;
+}
+/*#horairesOnglets .logo{
 	width:30px;
 	height:30px;
 }
@@ -204,7 +273,7 @@ a, a:visited, a:focus, a:active, a:hover{
 }
 
 .horairesOnglets-Close {
-	/*line-height:30px;*/
+	
 	position: absolute;
 	color: #c8c8c8;
 	font-size:14px;
@@ -223,22 +292,348 @@ a, a:visited, a:focus, a:active, a:hover{
 }
 #dates input,#dates > div {
 	display:inline-block;
-}
+}*/
 #horaires {
 	position: relative;
-	height: 90%;
-	height: calc(100% - 105px);
-	padding-top:10px;
-	border: 1px solid #a0a0a0;
+	height: 80%;
+	height: calc(100% - 76px);
+	padding-top:3px;
+	border: 0px solid #a0a0a0;
 	border-top-color: #fff;
-	border-bottom-left-radius: 6px;
-	box-shadow: 3px -3px 3px #7f7f7f;
+	/*border-bottom-left-radius: 0px;*/
+	box-shadow: 0px 0px 3px #000;
 	z-index:5;
-	padding-left:15px;
-	text-align: center;
+	padding-left:0px;
+	text-align: left;
 	background-color:#fff;
 	word-wrap: break-word;
 }
+
+#horaires > div {
+	display:none;
+}
+#horaires > div:nth-child(1) {
+	display:block;
+}
+
+#horaires > div, #horaires > div > div {
+	position: relative;
+	height:100%;
+	overflow-y:auto;
+}
+#horaires > div.ligne div.direction {
+	display:none;
+}
+#horaires > div.ligne div.direction.active {
+	display:block;
+}
+#horaires .tableau .contenu {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+    /*height: 100%;*/
+    width: 100%;
+	/*overflow-y:auto;*/
+	
+}
+/*#titreHoraires{
+	margin-left: 30px;
+	font-family: "GothamRounded-Medium", "Arial", "Helvetica", sans-serif;
+	visibility: hidden;
+}*/
+#horaires * {
+	font-size:12px;
+}
+
+/*#horaires thead td div {
+	display:flex;
+	flex-direction: row;
+	align-items:center;
+	justify-content: flex-start;
+}*/
+/*#horaires .horairesPrecedents, #horaires .horairesSuivants {
+	float:left;
+}*/
+#horaires .navHoraires {
+	display:flex;
+	flex-direction: row;
+	align-items:flex-start;
+	justify-content: flex-start;
+}/*
+#horaires .boutonDirection {
+	float:left;
+}*/
+#horaires .boutonDirection {
+	display: flex;
+	flex-direction: row;
+	align-items:center;
+	height: 45px;
+}
+#horaires .boutonDirection > span{
+	margin-left:3px;
+}
+
+#horaires .boutonsHoraires {
+	padding: 2px 0px;
+}
+#horaires .btn-horaires{
+	padding:0px;
+	width:36px;
+	height:36px;
+	margin: 2px;
+	border-radius: 18px;
+}
+/*.btn-horaires {
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.15);
+}
+.btn-horaires:hover {
+    color: #fff;
+    background-color: #A5A5A5;
+}*/
+.btn-horaires.active, .btn-horaires:active {
+	background-color: #C0C0C0;
+	box-shadow: none;
+}
+.btn-horaires:focus {
+    background-color: #C0C0C0;
+}
+.btn-horaires svg{
+	fill:#000;
+	width:24px;
+	height:24px;
+	margin-top:5px;
+}
+/*.btn-horaires:focus svg {
+	fill:#808080;
+}
+.btn-horaires.active svg, .btn-horaires:active svg{
+	fill:#808080;
+}*/
+.btn-horaires.ficheHoraireEvenement svg {
+	fill:#c62828;
+	margin-top:2px;
+}
+#horaires  .cellEvenement{
+	max-width:450px;
+	width:100%;
+	box-shadow: 0px 0px 3px #000;
+	margin :15px 0px;
+	padding:5px;
+	width:calc(100% - 10px);
+}
+#dates {
+	z-index:10;
+	padding:0px;
+	padding-top: 2px;
+}
+#dates .input-group-addon, #dates input {
+	border-radius:0px;
+}
+#dates .input-group-addon {
+	color: #fff;
+	background-color: #337ab7;
+	border-color: #2e6da4;	
+}
+}
+.datepicker {
+	z-index: 1052;
+}
+
+  
+#datepicker, #timepicker {
+	display: inline-table!important;
+	width:46vw;
+	max-width:100px;
+	position: relative;
+}
+
+
+#timepicker table , #datepicker table{ 
+	border:solid 1px ; 
+	background-color:#e2e2dc;
+
+}
+
+#timepicker > div > ul > li > table > tbody > tr > td > a > span ,
+  #datepicker > div > ul > li > table > tbody > tr > td > a > span {
+	float:right; 
+	width: 40px !important;
+    height: 25px !important; 
+	margin-top: -16px !important; 
+    
+}
+#timepicker > div > ul > li > table > tbody > tr > td > a > span:hover,#datepicker > div > ul > li > table > tbody > tr > td > a > span:hover{	 
+	background:none;
+}
+ 
+
+#timepicker > div > ul > li > table > tbody > tr > td > a:after  {
+	float:left;
+	content:'Choisir une heure';	
+	margin-top: 12px;
+	margin-left:30px;
+	font-size:15px;
+	font-family: "GothamRounded-Medium", "Arial", "Helvetica", sans-serif;
+	font-weight: bold;
+}
+
+
+#datepicker > div > ul > li > table > tbody > tr > td > a:before {
+	float:left;
+	content:'Choisir une date';	
+	margin-top: 12px;
+	margin-left:30px;
+	font-size:15px;
+	font-family: "GothamRounded-Medium", "Arial", "Helvetica", sans-serif;
+	font-weight: bold;
+}
+
+#timepicker .picker-switch { 
+	/* position: absolute;
+		left: 38%;
+		bottom: 5px;
+	*/ 
+} 
+#horairesText, #horairesTextFlexo {
+	font-family: "GothamRounded-Medium", "Arial", "Helvetica", sans-serif;
+	font-weight: bold;
+	padding-bottom: 20px;
+}
+
+#datepicker > input, #timepicker > input {
+	padding:3px; 
+}
+.form-control.datepicker-readonly {
+	cursor: pointer;
+}
+.logoRssFav {
+	margin-left: 8px;
+	width: 10px;
+}
+.rss {
+	display: inline;
+	white-space: normal;
+	text-align: right;
+}
+#horaires table{
+	-webkit-box-sizing: inherit; 
+	-moz-box-sizing: inherit;    
+	box-sizing: inherit;         
+	border:0px;
+	font-size:12px;
+	box-shadow: 0px 0px 5px #000;
+}
+#horaires table tbody{
+    border-bottom: 1px solid #aaa;
+    border-top: 1px solid #c0c0c0;
+	-webkit-box-sizing: inherit; 
+	-moz-box-sizing: inherit;    
+	box-sizing: inherit;
+}
+#horaires table thead,#horaires table caption {
+ 	width:100%;
+    height:2em;
+    -webkit-box-sizing: inherit; 
+	-moz-box-sizing: inherit;    
+	box-sizing: inherit;
+        
+}
+#horaires table caption {
+    border-left: 1px solid #aaa;
+    border-right: 1px solid #aaa;
+    line-height: 2em;
+    padding-left: 0.5em;
+    text-align: left;
+}
+#horaires table thead td{
+	border-right:0px;
+	width:265px;
+	height:20px;
+}
+#horaires table tr{
+	height:2em;
+	width:100%;
+	border-top: 1px solid #c0c0c0;
+}
+#horaires table tbody td{
+	padding : 0.4em 0.1em 0.1em 0.1em;
+	vertical-align: middle;
+	text-align: center;
+	width: 50px;
+	height: 12px;
+}
+/*#horaires table tr:nth-child(even){
+	background-color:#e0e0e0;
+}
+#horaires table tr:nth-child(odd){
+	background-color:#fff;
+}*/
+#horaires table tbody  tr:hover, .highlightLigne{
+	background-color:#5bc2f7!important;
+	color:#000;
+}
+/*#horaires table tr.tempsreel {
+	font-weight:bold;
+}
+#horaires table tr.tempsreel .libdir {
+	color:#a86200;
+}
+#horaires table tr.tempsreel td:nth-child(2){
+	background-color:#fd952f;
+}
+#horaires table tr.tempsreel td:nth-child(3){
+	background-color:#a0a0a0;
+}
+#horaires table tr.tempsreel td:nth-child(4){
+	background-color:#b0b0b0;
+}
+#horaires table tr.tempsreel td:nth-child(5){
+	background-color:#c0c0c0;
+}
+#horaires table tr.tempsreel td:nth-child(6){
+	background-color:#d0d0d0;
+}
+#horaires table tr.tempsreel td:nth-child(7){
+	background-color:white;
+}
+#horaires table td:nth-child(3){
+	padding-left:5px;
+}*/
+#horaires table tbody td:nth-child(1) {
+	padding-left: 5px;
+	width:auto;
+}
+#horaires table tbody td:nth-child(2) {
+    text-align: left;
+	width:325px;
+	text-overflow:clip;
+}
+/* .rondhoraire{
+	border-right: 2px solid black;
+	text-align: right !important;
+	width : 14px!important;
+} 
+.highlightLigne .rondhoraire  > div{
+	background-color: #f00;
+}*/
+.highlightLigne .glyphicon-screenshot {
+	display:inline-block!important;
+	cursor:pointer;
+}
+
+/*.rondhoraire > div{
+	border :  2px solid black;
+	border-radius : 6px;
+	width : 12px;
+	height : 12px;
+	margin-right: -8px;
+	display: inline-block;
+	background-color: #fff;
+}*/
+
+/***********************
 #horaires select {
 	max-width:85%;
 	margin-bottom:10px;
@@ -278,11 +673,12 @@ a, a:visited, a:focus, a:active, a:hover{
 	height:100%;
 }
 #horaires table{
-	-webkit-box-sizing: inherit; /* Safari/Chrome, other WebKit */
-	-moz-box-sizing: inherit;    /* Firefox, other Gecko */
-	box-sizing: inherit;         /* Opera/IE 8+ */
+	-webkit-box-sizing: inherit; 
+	-moz-box-sizing: inherit;    
+	box-sizing: inherit;         
 	border:0px;
 	font-size:12px;
+	border-collapse:separate;
 }
 #horaires table tbody{
     border-right: 1px solid #aaa;
@@ -290,18 +686,17 @@ a, a:visited, a:focus, a:active, a:hover{
     border-bottom: 1px solid #aaa;
     border-top: 1px solid #c0c0c0;
 	border-radius: 0 0 4px 4px;
-	-webkit-box-sizing: inherit; /* Safari/Chrome, other WebKit */
-	-moz-box-sizing: inherit;    /* Firefox, other Gecko */
-	box-sizing: inherit;         /* Opera/IE 8+ */		    
+	-webkit-box-sizing: inherit; 
+	-moz-box-sizing: inherit;    
+	box-sizing: inherit;         
 	  
 }
 #horaires table thead,#horaires table caption {
  	width:100%;
     height:2em;
-	/*display: inline-table;*/
-    -webkit-box-sizing: inherit; /* Safari/Chrome, other WebKit */
-	-moz-box-sizing: inherit;    /* Firefox, other Gecko */
-	box-sizing: inherit;         /* Opera/IE 8+ */		    
+    -webkit-box-sizing: inherit; 
+	-moz-box-sizing: inherit;    
+	box-sizing: inherit;         
         
 }
 #horaires table caption {
@@ -321,7 +716,7 @@ a, a:visited, a:focus, a:active, a:hover{
 	width:100%;
 }
 #horaires table tbody td{
-	padding : 0.4em 0.1em 0.1em 0.1em;
+	padding : 0.2em 0.1em 0.2em 0.1em;
 	vertical-align: middle;
 	text-align: center;
 	width: 50px;
@@ -337,7 +732,8 @@ a, a:visited, a:focus, a:active, a:hover{
 	background-color:#5bc2f7!important;
 	color:#000;
 }
-#horaires table tr.tempsreel {
+*/
+/*#horaires table tr.tempsreel {
 	font-weight:bold;
 }
 #horaires table tr.tempsreel .libdir {
@@ -360,13 +756,17 @@ a, a:visited, a:focus, a:active, a:hover{
 }
 #horaires table tr.tempsreel td:nth-child(7){
 	background-color:white;
+}*/
+/*
+#horaires table td:nth-child(2){
+	width:20px;
 }
-#horaires table td:nth-child(3){
+#horaires table td:nth-child(4){
 	padding-left:5px;
 }
 #horaires table tbody td:first-child {
     text-align: left;
-	width:325px;
+	width:305px;
 	text-overflow:clip;
 }
 .liens {
@@ -435,14 +835,11 @@ a, a:visited, a:focus, a:active, a:hover{
     min-width: 65px;
 	color: #a86200;
 }
-#wait {
-	display:none;
-	position: absolute;
-	top: 60%;
-	left: 60%;
-	/*width: 10%;*/
-	z-index: 1002;
-}
+
+
+
+
+
 #datepicker, #timepicker {
 	display: inline-table!important;
 	width:102px;
@@ -474,4 +871,70 @@ a, a:visited, a:focus, a:active, a:hover{
 	margin-left: -2px;
 	opacity: 0.7;
 	filter: alpha(opacity=70);
+}*/
+
+/* Provisoire SEM_12b et autres lignes en travaux*/
+/*#horaires > .ligne[data-code="SEM_C3"] > div > div > div > table > tbody > tr[data-parent-station="SEM:GENMARCEAU"],
+#horaires > .ligne[data-code="SEM_C3"] > div > div > div > table > tbody > tr[data-parent-station="SEM:GENFOCHFERI"] {
+	background-color: #555;
+}*/
+
+		/*.favorisLigne {
+			-moz-border-radius:20px 20px;
+			-webkit-border-radius:20px 20px;
+			border-radius:20px 20px;
+			font-weight: bold;
+			font-size:12px;
+			padding: 5px;
+			margin-left: 0px;
+			width:105px;
+			margin-top:15px;
+			margin-bottom:0px;
+			display: inline-block;
+			border: 1px solid;
+			border-color: #009fd6;
+			 
+		}
+		.favorisLigne:hover , .favorisArret:hover {
+			color : #fff; 
+			background-color:#009fd6;
+		}*/
+
+.favorisArret,.favorisLigne {
+	display: block;
+	width: 18px;
+	height: 18px;
+	margin:2px;	
+}
+.favorisLigne{
+	display: inline-block;
+	vertical-align: middle;
+}
+.favorisArret.oui {
+	background-image: url('../img/fav/tag_fav_oui.svg');
+}
+.favorisArret.non {
+	background-image: url('../img/fav/tag_fav_non.svg');
+}
+.favorisArret.oui:hover {
+	background-image: url('../img/fav/tag_fav_supprimer.svg');
+}
+.favorisArret.non:hover {
+	background-image: url('../img/fav/tag_fav_hover.svg');
+}
+.favorisLigne.FAVORIS {
+	width: 116px;
+	height: 32px;
+}
+.favorisLigne.FAVORIS.oui {
+	background-image: url('../img/fav/tag_favoris_oui.svg');
+}
+.favorisLigne.FAVORIS.non {
+	background-image: url('../img/fav/tag_favoris_non.svg');
+}
+.favorisLigne.FAVORIS.non:hover {
+	background-image: url('../img/fav/tag_favoris_hover.svg');
+}
+.favorisLigne.FAVORIS.oui:hover {
+	background-image: url('../img/fav/tag_favoris_supprimer.svg');
 }

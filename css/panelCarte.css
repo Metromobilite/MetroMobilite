@@ -1,0 +1,314 @@
+/*
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#menu {
+	transition: background-color 150ms ease-in-out;
+	background-color:rgba(30,30,30,0);
+	z-index: 1003;
+	float:left;
+	width:40px;
+	height:40px;
+	line-height:40px;
+	position:absolute;
+	top:0px;
+	left:0px;
+	color:#fff;
+	padding: 8px 8px;
+	cursor:pointer;
+}
+#menu:before,
+#menu:after,
+#menu div {
+	background-color: #fff;
+	-o-border-radius: 2px;
+	-moz-border-radius: 2px;
+	-ms-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;
+	content: '';
+	display: block;
+	height: 4px;
+	margin: 4px 0;
+	-moz-transition: all .2s ease-in-out;
+	-webkit-transition: all .2s ease-in-out;
+	transition: all .2s ease-in-out;
+}
+
+/*#panel:not(.closed) + #menu:before {*/
+#menu:not(.closed):before {
+	transform: translateY(8px) rotate(135deg);
+}
+#menu:not(.closed):after {
+	transform: translateY(-8px) rotate(-135deg);
+}
+#menu:not(.closed) div {
+	transform: scale(0);
+}
+
+#panel, #legend {
+	font-family: "Arial";
+	font-weight:bold;
+	background-color: rgba(30, 30, 30, 0.9);
+	bottom: 0;
+	color: #fff;
+	height: 100%;
+	overflow-y: hidden;
+	padding: 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 1002;
+	transition: left 300ms ease-in-out;
+}
+#legend {
+	z-index: 1001;
+	background-color:#646464;
+}
+@media (max-width: 767px) {
+	#legend {
+		z-index: 1004;
+	}
+}
+#legend.closed{
+	transition: left 300ms ease-in-out;
+	left:-1000px;
+}
+#panel.closed{
+	transition: left 300ms ease-in-out;
+	left:-1000px;
+}
+#legend.closed{
+	transition: left 300ms ease-in-out;
+	left:-1000px;
+}
+/*#panel.closed + #menu {*/
+#menu.closed {
+	background-color:rgba(30,30,30,0.9);
+}
+#menuLegende:not(.closed) span:nth-child(1){
+	transition: opacity 300ms ease-in-out;
+	opacity:1;
+}
+#menuLegende:not(.closed) span:nth-child(1){
+	transition: opacity 300ms ease-in-out;
+	opacity:0;
+}
+#menuLegende.closed span:nth-child(2){
+	transition: transform 300ms;
+	transform: rotate(0deg);
+}
+#menuLegende:not(.closed) span:nth-child(2){
+	transition: transform 300ms;
+	transform: rotate(180deg);
+}
+
+#panel > div, #legend > div {
+	height: 100%;
+	position: relative;
+}
+/*
+#panel .row {
+	padding: 10px 15px;
+	line-height:30px;
+}
+*/
+#panelContent, #legendContent {
+	position:relative;
+	overflow-y:auto;
+	height:100%;
+}
+#panelContent > p {
+	margin-top:0px;
+	margin-left: 10px;
+	font-weight:normal;
+}
+#panel .barreBoutons, #legend .barreBoutons {
+	display:block;
+	line-height:40px;
+	height: 40px;
+}
+#menuLegende, #menuListe {
+	cursor: pointer;
+	margin:	 0 15px;
+	margin-top: 5px;
+}
+#panel h1, #panel h2, #panel h3,
+#legend h1, #legend h2, #legend h3 {
+	padding: 5px 15px;
+	line-height: 20px;
+	margin:0px;
+	font-weight:bold;
+	margin-top: 5px;
+}
+#panel h1, #panel h2 {
+	border-top:1px solid #aaa;
+}
+#panel h1, #legend h1 {
+	font-size:18px;
+	font-style: italic;
+	text-align: center;
+}
+#panel h2, #legend h2 {
+	font-size:16px;
+}
+#panel h3, #legend h3 {
+	font-size:14px;
+	padding-left: 30px;
+}
+#legend h1 {
+	line-height: 40px;
+	padding:0 15px;
+}
+#panel .checkbox input[type="checkbox"], #panel .radio input[type="radio"]{
+	margin-left:0px;
+	opacity:0;
+}
+#panel .checkbox label, #panel .radio label{
+	padding-left:30px;
+	position: relative;
+	font-weight:bold;
+}
+
+#panel .checkbox label::before, #panel .radio label::before{
+	position: absolute;
+	top: 0px;
+	left:0px;
+	content: "";
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+	border-radius: 3px;
+	border:solid 2px #fff;
+}
+#panel .radio label::before{
+	border-radius: 10px;
+}
+#panel .checkbox label::after {
+	position: absolute;
+	left: 4px;
+    top: 4px;
+	content: "";
+    display: inline-block;
+    height: 7px;
+    width: 14px;
+    border-left: 2px solid;
+    border-bottom: 2px solid;
+    border-color:#303030;
+    transform: rotate(-45deg);
+}
+#panel .radio label::after {
+	position: absolute;
+	left: 4px;
+    top: 4px;
+	content: "";
+    display: inline-block;
+    height: 12px;
+    width: 12px;
+	border: 2px solid #5bb224;
+	border-radius: 6px;
+	background-color: #5bb224;
+}
+#panel .checkbox input[type="checkbox"]:checked + label::before {
+	background-color: #5bb224;
+	border:solid 2px #5bb224;
+}
+#panel .radio input[type="radio"]:checked + label::before {
+	border:solid 2px #5bb224;
+}
+
+/*cache la coche quand on clique en fonction de l'input caché*/
+#panel .checkbox input[type="checkbox"] + label::after, #panel .radio input[type="radio"] + label::after {
+    content: none;
+}
+
+/*affiche la coche en fonction de l'input caché*/
+#panel .checkbox input[type="checkbox"]:checked + label::after, #panel .radio input[type="radio"]:checked + label::after {
+    content: "";
+}
+/*style pour le focus*/
+/*
+#panel .checkbox input[type="checkbox"]:focus + label::before, #panel .radio input[type="radio"]:focus + label::before {
+    outline: rgb(59, 153, 252) dashed 2px;
+}
+*/
+#panel .checkbox, #panel .radio {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+#panel h3 img{
+	margin-left:5px;
+}
+#panel h3 div[role=tooltip] {
+	position: absolute;
+	background-color: #080808;
+	padding: 5px 10px;
+	z-index: 1004;
+	border-radius: 3px;
+	margin-top: 5px;
+	max-width:100%;
+	visibility:hidden;
+	opacity:0;
+	transition: opacity 150ms;
+}
+#panel h3 div[role=tooltip].affiche {
+	visibility:visible;
+	opacity:1;
+}
+#legend figure{
+	padding: 10px 30px;
+	display:flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+#legend figure > figcaption {
+	margin-left:10px;
+}
+
+#legend #pointsCAM {
+	transform: rotate(90deg);
+}
+#vhTriangle img{
+	margin-left: -8px;
+}
+#vhTriangle figcation{
+	margin-left: 2px;
+}
+.background_vert {
+	background: #66CC33;
+}
+.background_rouge {
+	background: #FF0000;
+}
+.background_orange {
+	background: #FF6600;
+}
+.background_noir {
+	background: black;
+}
+.rectangle{
+	width:40px;
+	height:10px;
+}
+.evtTr.prevu>img{
+	opacity:0.35;
+}
