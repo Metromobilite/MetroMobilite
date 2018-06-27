@@ -1,0 +1,628 @@
+<!doctype html>
+<!--
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html xmlns:og="http://ogp.me/ns#" lang="fr">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="initial-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+		<title>Métromobilité – Plan des travaux de chauffage urbain</title>
+		<meta name="description" content="Modifications du plan de circulation au 18 avril 2017 suite aux travaux de chauffage urbain, boulevard Agutte Sembat à Grenoble" />
+		<!-- Twitter -->
+		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:site" content="@metromobilite" />
+		<meta name="twitter:title" content="Centre-ville de Grenoble : nouveau plan de circulation" />
+		<meta name="twitter:description" content="Grenoble-Alpes Métropole et la Compagnie de chauffage réalisent des travaux d’assainissement et de chauffage urbain sur les boulevards Édouard-Rey, Agutte-Sembat et Maréchal Lyautey." />
+		<meta name="twitter:image" content="https://www.metromobilite.fr/actus/Twitter-1200x630px.jpg" />
+		<!-- Open Graph-->
+		<meta property="og:type" content="article">
+		<meta property="og:url" content="https://www.metromobilite.fr/circulationcentreville.html">
+		<meta property="og:title" content="Test title">
+		<meta property="og:description" content="Test Description">
+		<meta property="og:image" content="https://www.metromobilite.fr/actus/FB-1200x630px.jpg">
+		<link href="js/lib/ol/ol.css" rel="stylesheet">
+		<link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
+		<link href="js/lib/bs/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+		<link rel="Stylesheet" type="text/css" href="css/map.css"/>
+		<link rel="Stylesheet" type="text/css" href="css/panel.css">
+		<style type='text/css'>
+		h1 {
+		font-size:20px!important;
+		font-weight:bold!important
+		}
+		
+		h6,h5,h4,h3{color:#b0c92b}hr{background-color:#b0c92b;height:4px}
+		.svgLigne {
+			position:relative;
+			width:40px;
+			height:40px;
+			font-size:30px;
+		}
+		.nomArret{
+			font-weight:bold;
+		}
+		.ol-control .glyphicon {
+			top:0px;
+		}
+
+		#search .dropdown-menu{
+			max-height:200px;
+			overflow-y:auto;
+		}
+.typeahead { z-index: 1051;}
+
+.typeahead span[data-type="RUE"]::before, .typeahead span[data-type="LIEU"]::before, .typeahead span[data-type="ARRET"]::before, .typeahead span[data-type="AXE"]::before{
+	background-size: 100% 100%;
+	content: "\00a0";
+	height: 16px;
+    width: 16px;
+	margin-right:5px;
+	display:inline-block;
+}
+
+.typeahead span[data-type="RUE"]::before{
+	background: url(img/rue.png) no-repeat;
+}
+
+.typeahead span[data-type="LIEU"]::before{
+	background: url(img/lieu.png) no-repeat;
+}
+
+.typeahead span[data-type="ARRET"]::before{
+	background: url(img/arret.png) no-repeat;
+}
+
+.typeahead span[data-type="AXE"]::before{
+	font-family: "Glyphicons HalfLings", "Arial", "Helvetica", sans-serif;
+	content: "\e024";
+	color:#cd5c1d;
+}
+.typeahead  .categorie {
+    font-weight: bold;
+    margin-left: -21px;
+}
+.typeahead  .bestResult {
+	/*pour mettre en valeur le meilleur resultat*/
+	background-color: #d0d0d0;
+}
+.dropup .dropdown-menu {
+    bottom: 100%;
+    margin-bottom: 1px;
+    top: auto!important;
+}
+.dropdown-menu li a {
+	padding:0px 0px;
+}
+.dropdown-menu li a span {
+	padding:0px 0px;
+	width:100%;
+	padding:3px 20px;
+	display:block;
+}
+.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
+	background-color:#fff;
+	color:#000;
+}
+.dropdown-menu > .active > a span[data-type], .dropdown-menu > .active > a span[data-type]:hover, .dropdown-menu > .active > a span[data-type]:focus {
+    background-color: #428bca;
+    color: #fff;
+}
+
+		</style>
+	</head>
+	<body>
+	<div id='head'></div>
+	<div class="container-fluid main">
+		<div class="row">
+			<div id="menu" class="toggleListe pull-right" title="Affichage du panneau de sélection des éléments cartographiques" alt="Affichage du panneau de sélection des éléments cartographiques"><span class="glyphicon glyphicon-menu-hamburger"></span></div>
+			<div id="map" class="map"></div>
+			<div id="popup"></div>
+			<div class="layerSwitcher">
+				<div class="layersPanel">
+					<div class="close-switcher pull-right"><span class="glyphicon glyphicon-minus"></span></div>
+					<div class="pull-left">Afficher : </div>
+					<div class="bases list-unstyled text-left"></div>
+					<ul class="layers list-unstyled text-left"></ul>
+				</div>
+			</div>
+			<div id="panel" class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+				<div class="container-fluid">
+					<div id="panelContent" class="row">
+						<div id="menuListe"class="toggleListe pull-right" title="Affichage du panneau de sélection des éléments cartographiques" alt="Affichage du panneau de sélection des éléments cartographiques"><span class="glyphicon glyphicon-menu-hamburger"></span></div><br>
+						<h1>VENIR & STATIONNER <br>dans le centre-ville de Grenoble</h1>
+							<p>Nouveau plan de circulation à partir du <b>Mardi 18 avril 2017.</b><br><br>
+								<b>Grenoble-Alpes Métropole</b> et <b>la Compagnie de chauffage</b> réalisent des travaux d’assainissement et de chauffage urbain sur les boulevards Édouard-Rey, Agutte-Sembat et Maréchal Lyautey. Parce qu’elles occupent une emprise importante sur la voirie, ces opérations nécessitent de dévier le trafic automobile. Grenoble-Alpes Métropole met donc en place un plan de circulation adapté afin de maintenir les accès depuis et vers le centre-ville. 
+								<br>
+								<a href="pages/Actu.html#TravauxMetropole.html" title="Impact sur les transports en commun" target="_blank"> <font color=#e3007e ><b> Plus d'infos sur le nouveau plan de circulation et son impact sur les transports en commun</b></font></a><br>									
+								</p><br>
+								<h2 data-layer="travaux"><span>Les accès limités</span></h2>
+									<p>Accès fermés sauf vehicules autorisés</b>.</p>
+								<h2 data-layer="planCirc"><span>Le nouveau plan de circulation</span></h2>
+									<p>- Boulevard Gambetta à double sens<br>
+									- Rue Lesdiguières à double sens<br>
+									- Rues Vicat / Périer à double sens<br>
+									- Avenue Felix Viallet à double sens<br>
+									- Cours Berriat à sens unique depuis le bd Gambetta jusqu'au cours Jean Jaurès
+									</p>
+								<!--<h2 data-layer="itiConseil"><span>Traverser le centre</span></h2>
+									<p>Itinéraires à favoriser pour contourner les travaux.</p>-->
+								<h2 data-layer="PAR" data-layer2="PKG"><span>Me rendre au centre</span></h2>
+									<p>Où se garer pour se rendre en centre-ville.<br>
+									<a href="appsDownload.html" title="Téléchargez l'application Métromobilité" target="_blank"> <b> Téléchargez notre application pour connaitre le nombre de places totales disponibles</b></a><br>
+									</p>
+					</div>
+					<div class="row">
+						<div class="input-group input-group-sm dropup col-xs-12 pull-left">
+							<input type="text" class="form-control" id="panelFilter" placeholder="Rechercher un élément affiché"/>
+							<span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id='footer'></div>
+	
+	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="js/lib/ol/ol-custom.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/moment.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
+	<script type="text/javascript" src="stats/piwik.js"></script>
+	<script type="text/javascript" src="js/outils.js"></script>
+	<script type="text/javascript" src="js/fr.js"></script>
+	<script type="text/javascript" src="js/carte.js"></script>
+	<script type="text/javascript">
+		var highlight;
+		var pointerMoveEvents = [];
+		var currentIsochrone = '';
+		var sourceIsochrones;
+		var currentAccesPkg = '';
+		var sourceAccesPkg;
+		function initPage() {
+			if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+				isMobile =true;
+			}
+			modififieIconMaxres();
+			$( document ).on( "evtLignesChargees", {}, function( event, data ) {
+				initCarte();
+				initPanneau();
+			});
+			if (urlParams.iFrame){
+				$(".main").attr('style','top:0px');
+				$.support.cors = true;
+				chargeLignes();
+			} else {
+				$('#head').load('head.html');
+			}
+			if (isTaille('xs') || isTaille('xxs')) togglePanneau()
+			if (urlParams.toggle)
+				togglePanneau(urlParams.toggle);
+		}
+		function initCarte() {
+			var idcarte = 'map';
+			var map=initMap(idcarte,{zoom:16,lon:5.725,lat:45.19});
+			ajouteControle(idcarte,'layerSwitcher');
+			
+			//////////////
+			sourceIsochrones = new ol.source.Vector({
+				url: '//www.metromobilite.fr/data/Carto/Statique/isochrones.geojson?key='+ Math.random(),
+				projection: "EPSG:3857",
+				format: new ol.format.GeoJSON()
+			});
+			var transp = 0.5;
+			ajouteLayerManuel('isochrones','map',{fctStyle:function(feature,resolution){
+															//var transp = resolution < 35 ? 0.2 : 1;
+															return getStylesGeojson(feature,resolution,{
+																color:'#000000',
+																backcolor:'rgba(188, 213, 47, '+transp+')',
+																transp:transp
+															});
+														},source:sourceIsochrones});
+
+			ajouteLayerSwitcher('map','isochrones','.layerSwitcher',{libelle:'isochrones'});
+			activeLayer('isochrones');
+
+			////////////////////
+			//sourceAccesPkg = new ol.source.GeoJSON({ //migration OL4
+			sourceAccesPkg = new ol.source.Vector({
+				url: '//www.metromobilite.fr/data/Carto/Statique/accesPkg.geojson?key='+ Math.random(),
+				projection: "EPSG:3857",
+				format: new ol.format.GeoJSON()
+			});
+			ajouteLayerManuel('accesPkg','map',{fctStyle:function(feature,resolution){
+																//var transp = resolution < 35 ? 0.2 : 1;
+																return getStylesGeojson(feature,resolution,{
+																	type:'accesPkg',
+																	color:'#FFED00',
+																	backcolor:'rgba(246, 237, 54, '+transp+')',
+																	transp:transp
+																});
+															},source:sourceAccesPkg});
+
+			ajouteLayerSwitcher('map','accesPkg','.layerSwitcher',{libelle:'Accés Parkings'});
+			activeLayer('accesPkg');
+
+			/////////////////////			
+			//var sourceCirc = new ol.source.GeoJSON({ //migration OL4
+			var sourceCirc = new ol.source.Vector({
+				url: '//www.metromobilite.fr/data/Carto/Statique/plan_circulation.geojson?key='+ Math.random(),
+				projection: "EPSG:3857",
+				format: new ol.format.GeoJSON()
+			});
+			ajouteLayerManuel('planCirc','map',{fctStyle:function(feature,resolution){
+																//var transp = resolution < 35 ? 0.2 : 1;
+																return getStylesGeojson(feature,resolution,{
+																	type:'planCirc',
+																	color:'#009ED9',
+																	backcolor:'rgba(255, 255, 255, '+transp+')',
+																	transp:transp
+																});
+															},source:sourceCirc});
+
+			ajouteLayerSwitcher('map','planCirc','.layerSwitcher',{libelle:'Plan de circulation'});
+			activeLayer('planCirc');
+			
+			
+			//////////////////////
+			//var sourceTravaux = new ol.source.GeoJSON({ //migration OL4
+			var sourceTravaux = new ol.source.Vector({
+				url: '//www.metromobilite.fr/data/Carto/Statique/travaux.geojson?key='+ Math.random(),
+				projection: "EPSG:3857",
+				format: new ol.format.GeoJSON()
+			});
+			ajouteLayerManuel('travaux','map',{fctStyle:function(feature,resolution){return getStylesGeojson(feature,resolution,{type:'travaux',color:'#C62626'})},source:sourceTravaux});
+
+			ajouteLayerSwitcher('map','travaux','.layerSwitcher',{libelle:'Travaux'});
+			activeLayer('travaux');
+			
+			/////////////////////////
+/*			var sourceItiConseil = new ol.source.GeoJSON({
+				url: '//www.metromobilite.fr/data/Carto/Statique/iti_conseil.geojson?key='+ Math.random(),
+				projection: "EPSG:3857"
+			});
+			ajouteLayerManuel('itiConseil','map',{fctStyle:function(feature,resolution){return getStylesGeojson(feature,resolution,{type:'itiConseil', color:'#000000'})},source:sourceItiConseil});
+
+			ajouteLayerSwitcher('map','itiConseil','.layerSwitcher',{libelle:'Itineraire conseillé'});
+			//activeLayer('itiConseil');
+*/
+			/////////////////////////
+			stylesTypes.stop={icon: {src: 'img/Carto/stop.png',scale:1,anchor:[0.5,0.5] },iconMaxres:5};
+			stylesTypes.demi_tour={icon:{src: 'img/Carto/retour.png',scale:1,anchor:[0,0.5] },iconMaxres:5};
+			stylesTypes.traversee={icon:{src: 'img/Carto/traversee.png',scale:1,anchor:[0,0.5] },iconMaxres:5};			
+			//var sourcePanneaux = new ol.source.GeoJSON({ //migration OL4
+			var sourcePanneaux = new ol.source.Vector({
+				url: '//www.metromobilite.fr/data/Carto/Statique/points_travaux.geojson?key='+ Math.random(),
+				projection: "EPSG:3857",
+				format: new ol.format.GeoJSON()
+			});
+			ajouteLayerManuel('panneaux','map',{fctStyle:getStylesTypes,source:sourcePanneaux});
+
+			ajouteLayerSwitcher('map','panneaux','.layerSwitcher',{libelle:'Panneaux'});
+			activeLayer('panneaux');
+			
+			///////////////////////////
+			ajouteLayerType('map','PAR','PAR',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Parc-relais'});
+			activeLayer('PAR');
+			ajouteLayerType('map','PKG','PKG',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Parking'});
+			activeLayer('PKG');
+
+			//ajouteLayerManuel('depArr','map',{/*source:sourcePoints,*/fctStyle:getStylesTypes}).set('visible',true);
+			
+			var highlightStyleCache = {};
+		
+			var sourceOverlay = new ol.source.Vector({
+				projection: "EPSG:3857"
+			});
+			//var featureOverlay = new ol.FeatureOverlay({ migration OL4
+			var featuresOverlay = new ol.layer.Vector({
+				map: map,
+				source:sourceOverlay,
+				style: function(feature, resolution) {
+					if (!feature.get('nom')) return [];
+					var text = resolution < 5000 ? feature.get('nom') : '';
+					if (!highlightStyleCache[text]) {
+						highlightStyleCache[text] = [new ol.style.Style({
+							/*stroke: new ol.style.Stroke({
+								color: '#f00',
+								width: 1
+							}),
+							fill: new ol.style.Fill({
+								color: 'rgba(255,0,0,0.1)'
+							}),*/
+							text: new ol.style.Text({
+								font: '16px Calibri,sans-serif',
+								text: text,
+								fill: new ol.style.Fill({
+									color: '#000'
+								}),
+								stroke: new ol.style.Stroke({
+									color: '#fff',
+									width: 3
+								})
+							})
+						})];
+					}
+					return highlightStyleCache[text];
+				}
+			});
+			
+			map.set('featuresOverlay',featuresOverlay);
+			
+			/*$(map.getViewport()).on('mousemove', function(evt) {
+				var pixel = map.getEventPixel(evt.originalEvent);
+				var feature = map.forEachFeatureAtPixel(pixel, function(feature, layer) {
+					return feature;
+				});
+				if (feature !== highlight) {
+					if (highlight) {
+						featureOverlay.removeFeature(highlight);
+					}
+					if (feature && feature.getGeometry().getType() == 'LineString') {
+						featureOverlay.addFeature(feature);
+					}
+					highlight = feature;
+				}
+			});*/
+			//on empile les evenements a traiter
+			map.on('pointermove', function(evt) {
+				pointerMoveEvents.push(evt);
+				setTimeout(function() {handlePointerMove()},100);
+			});
+			// et on traite directement le dernier en ignorant les autres car on veut juste la derniere position de la sourie.
+			function handlePointerMove() {
+				if(pointerMoveEvents.length==0) return;
+				
+				evt = pointerMoveEvents[pointerMoveEvents.length-1];
+				pointerMoveEvents=[];
+				var trouve = false;
+				var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
+					trouve = true;
+					return feature;
+				});
+				var featureOverlay = map.get('featuresOverlay');
+
+				//seulement si c'est une ligne ou multiligne
+				if (!trouve || (feature.getGeometry().getType() != 'LineString' && feature.getGeometry().getType() != 'MultiLineString')) return;
+				
+				// on passe le feature en surbrillance
+				if (highlight) {
+					featureOverlay.getSource().removeFeature(highlight);
+				}
+				featureOverlay.getSource().addFeature(feature);
+				highlight = feature;
+			}
+			/*$( document ).on( "evtPopupOuverte", {}, function( event, map ) {
+
+			});*/
+			$( document ).on( "evtPopupFermee", {}, function( event, map ) {
+				var iso = sourceIsochrones.getFeatureById(currentIsochrone);
+				currentIsochrone = '';
+				if(iso) iso.getGeometry().changed();
+				var acces = sourceAccesPkg.getFeatureById(currentAccesPkg);
+				currentAccesPkg = '';
+				if(acces) acces.getGeometry().changed();
+
+			});
+		}
+		function initPanneau() {
+			$('.toggleListe').click(function(){
+				togglePanneau();
+			});
+			
+			ajouteAutocomplete('#panelFilter',{
+				arrets:false,
+				lieux:true,
+				rues:true,
+				fnSaisieReussie:saisieReussie/*function(item){ return fctSaisieReussie('#panelFilter',item)}*/,
+				fnSaisieRatee:function(item){ 
+					urlParams.lonlatDep='0,0'; 
+					$('#panelFilter').attr('data-lonlat','0,0');
+				}
+			});
+		}
+		function saisieReussie(item) {
+			//activeLayer(item.type);
+			var map =getMap('map');
+			var pos = ol.proj.transform([item.lon,item.lat], "EPSG:4326", "EPSG:3857");
+			map.getView().setCenter(pos);
+			//map.getView().setZoom(18);
+			if(isTaille('xs') || isTaille('xxs')) togglePanneau();
+			
+			var sourcePoints = getLayer('map','depArr').getSource();
+			var f = sourcePoints.getFeatureById('search');
+			var geom = new ol.geom.Point(pos);
+			if (!f) {
+				var fe = new ol.Feature({
+					'geometry': geom,
+					'typeDep':'search',
+					'type':'search'
+				});
+				fe.setId('search');
+				sourcePoints.addFeature(fe);
+			} else {
+				f.setGeometry(geom);
+			}
+			if(item.type=='ARRET') {
+				var f = sourcePoints.getFeatureById('arret_'+item.code);
+				if(f) showPopupDetails(getMap('map'),null,f);
+			}
+		}
+		function togglePanneau() {
+			if(!$('#panel').is(':visible')) {
+				$('.toggleListe').addClass('listeAffichee');
+			} else {
+				$('.toggleListe').removeClass('listeAffichee');
+			}
+			$('#panel').toggle();
+		}
+		function getStylesGeojson(feature,resolution,opt) {
+			var styles =[];
+			var color = opt.color;
+			var backcolor = opt.backcolor;
+			var transp = opt.transp;
+			var type = opt.type;
+			if (feature.getGeometry().getType() == 'MultiLineString' || feature.getGeometry().getType() == 'LineString') {
+				if( type=='accesPkg' && currentAccesPkg != feature.getId() ) return styles;
+				if (!styleCache['styleLigne_'+color+type]) {
+					var strokeOptions = {
+						color: color,
+						width: 3,
+						opacity: 1,
+						zIndex: 200
+					};
+					if(type=='travaux') {
+						strokeOptions.width = 7;
+						strokeOptions.lineDash=[10,15];
+					}
+					styleCache['styleLigne_'+color+type] = new ol.style.Style({
+						stroke: new ol.style.Stroke(strokeOptions),
+						zIndex: 200
+					});
+					
+				}
+				
+				styles = [styleCache['styleLigne_'+color+type]] ;
+				if(type == 'accesPkg' || type == 'planCirc' || type =='itiConseil') {
+					var geometry;
+					if(feature.getGeometry().getType() == 'MultiLineString')
+						geometry = feature.getGeometry().getLineString(0);
+					else 
+						geometry = feature.getGeometry();
+					geometry.forEachSegment(function(start, end) {
+						var dx = end[0] - start[0];
+						var dy = end[1] - start[1];
+						var rotation = Math.atan2(dy, dx);
+						// arrows
+						if (!styleCache['styleFleche_'+rotation+type]) {
+							var optFleche = {
+								src: 'img/Carto/fleche.png',scale:1,anchor:[0.5,0.5],
+								rotateWithView: true,
+								rotation: -rotation + Math.PI / 2
+							};
+							if(type == 'accesPkg') optFleche.src = 'img/Carto/fleche1.png';
+							styleCache['styleFleche_'+rotation+type] = new ol.style.Style({
+								geometry: new ol.geom.Point(end),
+								image: new ol.style.Icon(optFleche)
+							});
+						}
+						styles.push(styleCache['styleFleche_'+rotation+type]);
+					});
+				}			
+			} else if (feature.getGeometry().getType() == 'Point') {
+				if (!styleCache['stylePoint_'+color]) {
+					styleCache['stylePoint_'+color] = new ol.style.Style({
+						zIndex: 13,
+						image: new ol.style.Circle({
+							radius: 6,
+							fill: new ol.style.Fill({color: color}),
+							stroke: new ol.style.Stroke({color: '#000000', width: 1})
+						})
+					});
+				}
+				styles = resolution < 35 ? [styleCache['stylePoint_'+color]] : [];
+			} else if (feature.getGeometry().getType() == 'Polygon' || feature.getGeometry().getType() == 'MultiPolygon') {
+				if( currentIsochrone != feature.getId() ) return styles;
+				if (!styleCache['stylePolygon_'+color+backcolor]) {
+					styleCache['stylePolygon_'+color+backcolor] = new ol.style.Style({
+						zIndex: 13,
+						stroke: new ol.style.Stroke({
+							color: color,
+							width: 1,
+							opacity: 1,
+							zIndex: 200
+						}),
+						fill: new ol.style.Fill({
+							color: backcolor
+						})
+					});
+				} 
+				//styles = resolution < 35 ? [styleCache['stylePolygon_'+color]] : [];
+				styles = [styleCache['stylePolygon_'+color+backcolor]];
+			}
+			return styles ;
+		}
+		function getDetails(feature) {
+			var divLignes='';
+			var text = '';
+			if(feature.getGeometry().getType() == 'Point') {
+				currentIsochrone = feature.get('CODE');
+				var iso = sourceIsochrones.getFeatureById(currentIsochrone);
+				if(iso) iso.getGeometry().changed();
+				currentAccesPkg = feature.get('CODE');
+				var acces = sourceAccesPkg.getFeatureById(currentAccesPkg);
+				if(acces) acces.getGeometry().changed();
+				
+				text  = feature.get('LIBELLE');
+				var d = dataPkg[feature.get('CODE')];
+				if(d) text += '<br>'+d.texte;
+				/*var coord= ol.proj.transform(feature.getGeometry().getCoordinates(), "EPSG:3857", "EPSG:4326");
+				var lonlat = coord[1]+','+coord[0];
+				divLignes = getLignesProches(lonlat,afficheListeLgn,null,null,'map');
+				var div = '';
+				var rue = feature.get('RUE');
+				if (rue) div += '<span>'+rue+'</span>';
+				var commune = feature.get('COMMUNE');
+				if (commune) div += '<span>'+commune+'</span>';
+				var divPrefixe = '';
+				if (feature.get('type')=='dat') divPrefixe = lang.popup.arret+' ';
+				return '<span>'+divPrefixe+'<span class="nomArret">'+feature.get(stylesTypes[feature.get('type')].text)+'</span>'+'</span>'+ div + divLignes;
+				*/
+			} else {
+				//return feature.get('NUMERO')+' - '+feature.get('LIBELLE');
+			}
+			return text;
+		}
+		/*function saisieReussie(item) {
+			activeLayer(item.properties.type);
+			getMap('map').getView().setCenter(ol.proj.transform(item.geometry.coordinates, "EPSG:4326", "EPSG:3857"));
+			getMap('map').getView().setZoom(18);
+			if(isTaille('xs')) togglePanneau();
+		}*/
+		var dataPkg = {
+			/*PHILIPPEVILLE*/PVP_PKG_38001800: {texte:'519 places totales <br> <b> A MOINS DE 10 MIN :<b> <br> Place Notre Dame, place Victor Hugo, téléphérique,^place Grenette...'},
+			/*MUSÉE*/PVP_PKG_38001900: {texte:'770 places totales <br> <b> A MOINS DE 10 MIN :<b> <br> Place Notre-Dame, téléphérique, place Grenette...'},
+			/*HOTEL DE VILLE*/PVP_PKG_38002200: {texte:'200 places totales <br> <b> A MOINS DE 10 MIN :<b> <br> Place de Verdun, chavant...'},
+			/*CHAVANT*/QPA_PKG_CHAVANT: {texte:'394 places totales <br> <b> A MOINS DE 10 MIN :<b> <br> Place Grenette, place de Verdun, place Victor Hugo, Caserne de Bonne/Championnet...'},
+			/*VERDUN*/PVP_PKG_38002100: {texte:'110 places totales <br> <b> A MOINS DE 10 MIN :<b> <br> Place Grenette, place de Verdun, place Victor Hugo, téléphérique, chavant...'},
+			/*HOCHE*/PVP_PKG_38002000: {texte:'677 places totales <br> <b> A MOINS DE 10 MIN :<b> <br> Place Victor Hugo, place Championnet, chavant, Place Verdun...'},
+			/*LAFAYETTE*/EFF_PKG_LAFAYETTE: {texte:'311 places totales <br> <b> A MOINS DE 10 MIN :<b> <br> Place Grenette, place de Verdun, place Notre-Dame, place Victor Hugo, téléphérique...'},
+			/*VAUCANSON*/PVP_PKG_ENCLOS_VAUCANSON: {texte:'X places totales <br> '},
+			/*BERRIAT*/EFF_PKG_BERRIAT: {texte:'578 places totales <br> <b> A MOINS DE 10 MIN :<b> <br> Place Victor Hugo, gare, marché de l\'Estacade, marché Saint-Bruno...'},
+			/*P+R KARBEN*/SPR_PAR_KARBEN: {texte:'100 places totales <br> A 21 MIN DU CENTRE VILLE :<br> Avec le tram E <i>direction Louise-Michel</i>'},
+			/*P+R SAN MARINO*/"C38_PAR_SAN-MARINO-BARRAGE": {texte:'70 places totales <br> A 27 MIN DU CENTRE VILLE :<br> Avec les car Express 1 et 2 '},
+			/*P+R LA TRONCHE - GRAND SABLON*/SPR_PAR_2: {texte:'220 places totales <br> A 12 MIN DU CENTRE VILLE :<br> Avec le tram B <i>direction Presqu\'Ile</i>'},
+			/*P+R MEYLAN LA REVIREE*/MEY_PAR_LA_REVIREE: {texte:'40 places totales <br> A 19 MIN DU CENTRE VILLE :<br> Avec le bus C1 <i>direction Jean Macé</i>'},
+			/*P+R GIERES - PLAINE DES SPORTS*/SPR_PAR_3: {texte:'160 places totales <br> A 19 MIN DU CENTRE VILLE :<br> Avec le tram B <i>direction Presqu\'Ile</i>'},
+			/*P+R CATANE*/SPR_PAR_CATANE: {texte:'490 places totales <br> A 15 MIN DU CENTRE VILLE :<br> Avec le tram C <i>direction Condillac-Universités'},
+			/*P+R LE PRISME*/SPR_PAR_5: {texte:'120 places totales <br> A 18 MIN DU CENTRE VILLE :<br> Avec le tram C <i>direction Condillac-Universités'},
+			/*P+R LE VERDERET*/SPR_PAR_9: {texte:'120 places totales <br> A 25 MIN DU CENTRE VILLE :<br> Avec le bus C4 <i>direction Victor Hugo'},
+			/*P+R LA VALONNE*/SPR_PAR_RESISTANCE: {texte:'71 places totales <br> A 47 MIN DU CENTRE VILLE :<br> Avec le bus 17 <i>direction Colonel Dumont'},
+			/*P+R CHANTEFEUILLE*/SPR_PAR_CHANTEFEUILLE: {texte:'70 places totales <br> A 45 MIN DU CENTRE VILLE :<br> Avec le car EXPRESS 3 <i>direction Grenoble Gare'},
+			/*P+R SEYSSINET PARISET - HÔTEL DE VILLE*/SPR_PAR_4: {texte:'78 places totales <br> A 10 minutes de Chavant avec la ligne de Tram C'},
+			/*P+R GRENOBLE - ESPLANADE*/SPR_PAR_8: {texte:'200 places totales <br> A 10 minutes de la place Victor Hugo avec les lignes de Tram E et A/B'}
+		};
+		initPage();
+		trackPiwik("MetroMobilité : planTravauxChauffage.html");
+	</script>
+  </body>
+</html>

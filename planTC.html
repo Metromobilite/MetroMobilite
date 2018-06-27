@@ -39,6 +39,7 @@
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 	 <style type='text/css'>
+
 		#search .dropdown-menu{
 			max-height:200px;
 			overflow-y:auto;
@@ -217,7 +218,14 @@
 		.ligneSelected .svgFond {
 			stroke-width:6px;
 		}
-		#listeLignes.withPub {
+		#unselect {
+			color:#fff;
+		}
+		.localize.ol-control.controle-ol.ol-unselectable {
+			top: 145px;
+			z-index: 49;
+		}
+		/*#listeLignes.withPub {
 			height:calc(100% - 150px);
 		}
 		#pub.row {
@@ -239,15 +247,17 @@
 			margin-left: -2px;
 			opacity: 0.7;
 			filter: alpha(opacity=70);
-		}
-		.localize.ol-control.controle-ol.ol-unselectable {
-			top: 145px;
-			z-index: 49;
-		}
+		}*/
 	 </style>
   </head>
   <body>
 	<div id='head'></div>
+	<div id="headiFrame">
+		<a id="pub" href="//www.metromobilite.fr" target='_blank'>
+			<img src="img/metromobilite.svg" alt="">
+			<div></div>
+		</a>
+	</div>
 	<div class="container-fluid main">
 		<div class="row">
 			<div id="modele" style="display:none;">
@@ -287,7 +297,7 @@
 			<div id="panel" class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
 				<div id="listeMain" class="container-fluid">
 					<div id="listeTop" class="row">
-						<a id="unselect" href='#'><span class="pull-left">Annuler la sélection</span></a>
+						<a id="unselect" href='#'><span class="pull-left"><span class="glyphicon glyphicon-remove"></span>&nbsp;<b>ANNULER LA SELECTION</b></span></a>
 						<div id="menuListe" class="toggleListe pull-right" title="Masquage du panneau de sélection des lignes" role="button" aria-label="Masquage du panneau de sélection des lignes"><span class="glyphicon glyphicon-menu-hamburger"></span></div>
 					</div>
 					
@@ -316,12 +326,6 @@
 						<div id="C38" class="row titreReseau"><h2>Transisère</h2></div>
 						<div class="row C38"></div>
 					</div>
-					<div id="pub" class="row" style="display:none;">
-						<a href="http://www.metromobilite.fr" target='_blank'>
-							<img src="img/metromobilite.svg" alt="">
-							<div></div>
-						</a>
-					</div>
 					<div id="search" class="row">
 						<div class="input-group input-group-sm dropup">
 							<label for="panelFilter" class="sr-only">Recherche</label>
@@ -334,7 +338,7 @@
 		</div>
 	</div>
 	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
-	<script type="text/javascript" src="js/lib/ol/ol.js"></script>
+	<script type="text/javascript" src="js/lib/ol/ol-custom.js"></script>
 	<script type="text/javascript" src="js/lib/bs/js/moment.min.js"></script>
 	<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
@@ -388,7 +392,7 @@
 				var featureType = feature.get('type');
 				if (featureType== 'arret' || featureType== 'pointArret' || featureType== 'arretSel') return getDetailPA2(feature);
 				/*if (featureType== 'arret' || featureType== 'pointArret' || featureType== 'arretSel') return getDetailZA(feature);
-				var coord= ol.proj.transform(feature.getGeometry().getCoordinates(), sm, gg);
+				var coord= ol.proj.transform(feature.getGeometry().getCoordinates(), "EPSG:3857", "EPSG:4326");
 				var lonlat = coord[1]+','+coord[0];
 				divLignes = getLignesProches(lonlat,afficheListeLgn);
 				return feature.get(stylesTypes[feature.get('type')].text)+ divLignes;*/
@@ -407,10 +411,10 @@
 			//gethoraires
 			var searchUrl;
 			if(feature.get('type')=='pointArret') {
-				searchUrl = (url.saisieChoisie=='local'?url.hostnameLocal+url.portWSTest:url.hostnameData);
+				searchUrl = url.ws();
 				searchUrl += '/api/routers/default/index/stops/'+feature.get('CODE').replace('_',':')+'/stoptimes';
 			} else {
-				searchUrl = (url.saisieChoisie=='local'?url.hostnameLocal+url.portWSTest:url.hostnameData);
+				searchUrl = url.ws();
 				searchUrl += '/api/routers/default/index/clusters/'+feature.get('CODE').replace('_',':')+'/stoptimes';
 			}
 			fct_attente_horaires(true);
@@ -524,7 +528,7 @@
 			if (featureDep && depOuArr == 'dep')
 			{
 				var loc = 'iti.html';
-				var coordDep = ol.proj.transform(featureDep.getGeometry().getCoordinates(),sm , gg);
+				var coordDep = ol.proj.transform(featureDep.getGeometry().getCoordinates(),"EPSG:3857" , "EPSG:4326");
 				loc += '?dep=' + libelle;
 				loc += '&lonlatDep=' + coordDep[1] + ',' +coordDep[0];
 
@@ -535,7 +539,7 @@
 			} else if (featureArr)
 			{
 				var loc = 'iti.html'
-				var coordArr = ol.proj.transform(featureArr.getGeometry().getCoordinates(),sm , gg);
+				var coordArr = ol.proj.transform(featureArr.getGeometry().getCoordinates(),"EPSG:3857" , "EPSG:4326");
 				loc += '?arr=' + libelle;
 				loc += '&lonlatArr=' + coordArr[1] + ',' +coordArr[0];
 
@@ -598,12 +602,18 @@
 				initPanneau();
 			});
 			if (urlParams.iFrame){
-				$(".main").attr('style','top:0px');
+				$.support.cors = true;
+				chargeLignes();
+				$("body").addClass("withPub");
+				$( "#pub" ).attr({ alt: lang.pub.alt,  title: lang.pub.alt });
+				$( "#pub > div" ).text(lang.pub.text);
+
+				/*$(".main").attr('style','top:0px');
 				$.support.cors = true;
 				chargeLignes();
 				$('#listeLignes').addClass('withPub');
 				$('#pub').show();
-				$( "#pub div" ).text(lang.pub.text);
+				$( "#pub div" ).text(lang.pub.text);*/
 			} else {
 				$('#head').load('head.html');
 			}
@@ -640,10 +650,10 @@
 		function saisieReussie(item) {
 			//activeLayer(item.type);
 			var map =getMap('map');
-			var pos = ol.proj.transform([item.lon,item.lat], gg, sm);
+			var pos = ol.proj.transform([item.lon,item.lat], "EPSG:4326", "EPSG:3857");
 			map.getView().setCenter(pos);
 			//map.getView().setZoom(18);
-			if(isTaille('xs')) togglePanneau();
+			if(isTaille('xs') || isTaille('xxs')) togglePanneau();
 			
 			var sourcePoints = getLayer('map','depArr').getSource();
 			var f = sourcePoints.getFeatureById('search');
@@ -684,7 +694,7 @@
 		function initCarte(){
 			var optMap = {};
 			if (urlParams.lonlatDep!='0,0')  {
-				if(isTaille('xs')) togglePanneau();
+				if(isTaille('xs') || isTaille('xxs')) togglePanneau();
 				var zoom = 16;
 				if(urlParams.codeArr) zoom = 18;
 				optMap = {

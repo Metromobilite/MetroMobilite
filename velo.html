@@ -1,25 +1,4 @@
 <!doctype html>
-<!--
-// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
-// It provides all the information and services for your travels in Grenoble agglomeration.
-
-// Copyright (C) 2013
-// Contributors:
-//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
-
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU Affero General Public License as
-// published by the Free Software Foundation, either version 3 of the
-// License, or (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU Affero General Public License for more details.
-
-// You should have received a copy of the GNU Affero General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->
 <html lang="fr">
 	<head>
 		<meta charset="utf-8">
@@ -31,10 +10,19 @@
 		<link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
 		<link href="js/lib/bs/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 		<link rel="Stylesheet" type="text/css" href="css/map.css"/>
-		<link rel="Stylesheet" type="text/css" href="css/panel.css">
+		<!--<link rel="Stylesheet" type="text/css" href="css/panel.css">-->
+		<link rel="Stylesheet" type="text/css" href="css/panelCarte.css">
 		<style type='text/css'>
-		h6,h5,h4,h3{color:#b0c92b}hr{background-color:#b0c92b;height:4px}
-		h3{font-size:12px;}
+		hr{
+			background-color:#b0c92b;
+			height:4px
+		}
+		h3{
+			font-size:12px;
+		}
+		.subtexte{
+			font-weight:normal!important;
+		}
 		.svgLigne {
 			position:relative;
 			width:40px;
@@ -55,10 +43,17 @@
 	</head>
 	<body>
 	<div id='head'></div>
-	<!--<h1 style="display:none">Vélo MétrovéloBOX consignes Métrovélo carte des pistes cyclables agglomération grenobloise Perturbation en cours Travaux berge de l'Isère</h1>-->
+	<div id="headiFrame">
+		<a id="pub" href="//www.metromobilite.fr" target='_blank'>
+			<img src="img/metromobilite.svg" alt="">
+			<div></div>
+		</a>
+	</div>
+		<!--<h1 style="display:none">Vélo MétrovéloBOX consignes Métrovélo carte des pistes cyclables agglomération grenobloise Perturbation en cours Travaux berge de l'Isère</h1>-->
 	<div class="container-fluid main">
 		<div class="row">
-			<div id="menu" class="toggleListe pull-right" title="Affichage du panneau de sélection des éléments cartographiques" role="button" aria-label="Affichage du panneau de sélection des éléments cartographiques"><span class="glyphicon glyphicon-menu-hamburger"></span></div>
+			<div id="menu" class="toggleListe pull-left" title="Affichage du panneau de sélection des éléments cartographiques" role="button" aria-label="Affichage du panneau de sélection des éléments cartographiques"><div></div></div>
+			<!--<div id="menu" class="toggleListe pull-right listeAffichee" title="Affichage du panneau de sélection des éléments cartographiques" role="button" aria-label="Affichage du panneau de sélection des éléments cartographiques"><span class="glyphicon glyphicon-menu-hamburger"></span></div>-->
 			<div id="map" class="map"></div>
 			<div id="popup"></div>
 			<div class="layerSwitcher">
@@ -72,22 +67,89 @@
 			<div id="panel" class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
 				<div class="container-fluid">
 					<div id="panelContent" class="row">
-						<div id="menuListe" class="toggleListe pull-right" title="Affichage du panneau de sélection des éléments cartographiques" role="button" aria-label="Affichage du panneau de sélection des éléments cartographiques"><span class="glyphicon glyphicon-menu-hamburger"></span></div><br>
+						<span class="barreBoutons">
+								<!--<div id="menuLegende" class="pull-right closed" tabindex="0" title="Affichage de la légende" role="button" aria-label="Affichage de la légende"><span>Légende</span> <span class="glyphicon glyphicon-menu-right"></span></div>-->
+						</span>
+						<!--<div id="menuListe" class="toggleListe pull-right" title="Affichage du panneau de sélection des éléments cartographiques" role="button" aria-label="Affichage du panneau de sélection des éléments cartographiques"><span class="glyphicon glyphicon-menu-hamburger"></span></div><br>-->
 						<h1>Plan des pistes cyclables et lieux de location Métrovélo</h1>
-						<h2 data-layer="Pistes"><span>Les pistes cyclables</span></h2>
-						<p>L’agglomération grenobloise compte 320 km de pistes cyclables, ce qui en fait un des réseaux les plus denses de France. </p>
-						<h2 data-layer="MVA"><span>Les points de location</span></h2>
-						<p>Sur l'agglomération grenobloise, vous pouvez louer un  <a href="pages/Velo.html#Veloagrenoble"><b>Métrovélo</b></a> pour une courte ou longue durée dans les <b>agences Métrovélo</b>.</p>
+						<!--<h2 data-layer="Pistes"><span>Les pistes cyclables</span></h2>-->
+						<h2>
+							<div class="checkbox">
+								<input type="checkbox" id="chkPistes" name="chkLines" value="pistes">
+								<label for="chkPistes">Les pistes cyclables</label>
+								<img src="img/ic_info_outline_24px.svg" alt="info" tabindex="0" aria-describedby="i11">
+							</div>
+						</h2>
+						<!--<p>L’agglomération grenobloise compte 320 km de pistes cyclables, ce qui en fait un des réseaux les plus denses de France.</p>-->						
+						<h3><div role="tooltip" id="i11" aria-hidden="true">
+							L’agglomération grenobloise compte 320 km de pistes cyclables, ce qui en fait un des réseaux les plus denses de France.
+						</div></h3>	
+						
+						<!--<h2 data-layer="MVA"><span>Les points de location</span></h2>-->
+						<h2>
+							<div class="checkbox">
+								<input type="checkbox" id="chkMVA" name="chkPoints" value="MVA">
+								<label for="chkMVA">Les points de location</label>
+								<img src="img/ic_info_outline_24px.svg" alt="info" tabindex="0" aria-describedby="i12">
+							</div>
+						</h2>						
+						<h3><div role="tooltip" id="i12" aria-hidden="true">
+							Sur l'agglomération grenobloise, vous pouvez louer un  <a href="pages/Velo.html#Veloagrenoble"><b>Métrovélo</b></a> pour une courte ou longue durée dans les <b>agences Métrovélo</b>.
+						</div></h3>
+
 						<!--<div class="opendata"><a href="pages/OpenData/OpenDataAgencesMV.html" target="_blank"><img src="img/telechargement.png" alt="telecharger les données"></a></div>-->
-						<h2 data-layer="MVC"><span>Les consignes Métrovélo</span></h2>
-						<p>Métrovélo met également à votre disposition des <b>box individuels de consigne</b> pour 1 mois ou 1 an. </p>
-						<!--<div class="opendata"><a href="pages/OpenData/OpenDataConsignesMV.html" target="_blank"><img src="img/telechargement.png" alt="telecharger les données"></a></div>-->
+						<!--<h2 data-layer="MVC"><span>Les consignes Métrovélo</span></h2>-->
+						<h2>
+							<div class="checkbox">
+								<input type="checkbox" id="chkMVC" name="chkPoints" value="MVC">
+								<label for="chkMVC">Les consignes Métrovélo</label>
+								<img src="img/ic_info_outline_24px.svg" alt="info" tabindex="0" aria-describedby="i13">
+							</div>
+						</h2>						
+						<!--<p>Métrovélo met également à votre disposition des <b>box individuels de consigne</b> pour 1 mois ou 1 an.</p>-->
+						<h3><div role="tooltip" id="i13" aria-hidden="true">
+							Métrovélo met également à votre disposition des <b>box individuels de consigne</b> pour 1 mois ou 1 an.
+						</div></h3>
+
+
+
 						<h2 class="panel-rubrique"><span>Perturbations en cours</span></h2>
-						<h3><b>Travaux berge de l'Isère : projet «Isère Amont».</b></h3>
-						<p>Jusqu’en 2016, des travaux d'aménagement des berges de l'Isère ont lieu entre St-Ismier et Grenoble, rive gauche (plaine de Gières - Murianette).<br>
-						<a href="https://www.isere.fr/symbhi/projet-isere-amont/" title="Projet Isère Amont – Nouvelle fenêtre" target="_blank"><b>Informations sur le projet Isère Amont</b></a></p>
-						<h3><b>Travaux pont autoroutier au dessus de la Vence à St-Egrève.</b></h3>
-						<p>Jusqu’au 1er octobre 2016, passage cycles fermé. Pour accéder aux berges, emprunter la piste cyclable au niveau du rond-point du Pont Barrage.<br>
+						<!--<h3 class="subtexte">Travaux digues St-Egrève<img src="img/ic_info_outline_24px.svg" alt="info" tabindex="0" aria-describedby="i1"></h3>
+						<h3><div role="tooltip" id="i1" aria-hidden="true">
+						Travaux élagage/abattage jusqu'à fin février. Depuis Pique-Pierre sur digues de l'Isère et le seuil de l’ILL sur Drac côté amont et jusqu’à la station d’épuration Aquapôle. Déviation mise en place à l'avancement du chantier. Coupures ponctuelles possibles (5/10 min).
+						</div></h3>-->
+						<h3 class="subtexte">Travaux Passerelle St-Laurent à Grenoble<img src="img/ic_info_outline_24px.svg" alt="info" tabindex="0" aria-describedby="i2"></h3>
+						<h3><div role="tooltip" id="i2" aria-hidden="true">
+						La passerelle est fermée à la circulation (piétons et cycles) jusqu'en octobre 2018 : déviation via le pont de la Citadelle (détour de 230 mètres).	
+						</div></h3>
+						<h3 class="subtexte">Travaux Pont Bergonzoli à St-Martin-le-Vinoux<img src="img/ic_info_outline_24px.svg" alt="info" tabindex="0" aria-describedby="i3"></h3>
+						<h3><div role="tooltip" id="i3" aria-hidden="true">
+						Le pont Bergonzoli est fermé à la circulation (piétons et cycles).
+						Une passerelle provisoire, pour les piétons et les cycles, est mise en service, pour la durée des travaux. Attention, la passerelle sera toutefois fermée du jeudi 10 mai 22h au dimanche 13 mai 6h, pendant les opérations de mise en place du nouveau tablier
+						de l'ouvrage.
+						</div></h3>						
+						<h3 class="subtexte">Travaux berge de l'Isère : projet «Isère Amont».<img src="img/ic_info_outline_24px.svg" alt="info" tabindex="0" aria-describedby="i4"></h3>
+						<h3><div role="tooltip"  data-toggle="popover" id="i4" aria-hidden="true">
+						Des travaux d'aménagement ont lieu sur les berges de l'Isère.<br>
+						<a href="https://www.isere.fr/symbhi/projet-isere-amont/"  onclick="window.open('http://www.google.com/');" title="Projet Isère Amont - Nouvelle fenêtre" target="_blank"> Informations sur le projet Isère Amont</a>
+						</div></h3>
+						<!--<h3><b>Foire des Rameaux : piste cyclable femée</b></h3>
+						<p>La piste cyclable traversant le site de l'Espalanade entre la RN481 et le boulevard de l'Esplanade du côté de la place Aristide Briand dans les deux sens, est fermée à la circulation des cyclistes du dimanche 19 mars 18h au vendredi 5 mai 18h.<br>
+						-->
+						<!--
+						<h3><b>Travaux berge de l'Isère : pont d’Oxford</b></h3>
+						<p>Du 30 janvier au 18 février 2017, des travaux d'enrobé de la piste cyclable auront lieu sur les berges de l'Isère, rive droite. Une déviation sera mise en place pour les piétons et cyclistes. 
+						</p>
+						-->
+						<!--
+						<h3><b>Travaux berge de l'Isère : pont d’Oxford</b>
+						<p>A partir du 24 octobre et jusqu'à mi-décembre 2016, des travaux d'élagage dans un premier temps puis de protection de canalisation et de terrassement auront lieu, sur les berges de l'Isère, rive droite, de part et d'autre du pont d'Oxford. Une déviation sera mise en place pour les piétons et cyclistes. 
+						</p>
+						-->						
+						<!--
+						<h3><b>Travaux pont autoroutier au-dessus de la Vence à St-Egrève.</b></h3>
+						<p>Jusqu’à mi-octobre 2016, passage cycles fermé. Pour accéder aux berges, emprunter la piste cyclable au niveau du rond-point du Pont Barrage.<br>
+						-->
 						<!--
 						<h3><b>Esplanade : Porte de France - Grenoble</b></h3>
 						<p>En raison de la Foire des Rameaux, la piste cyclable traversant le site de l'Esplanade entre la RN 481 et le boulevard de 
@@ -104,9 +166,24 @@
 						<!--<h3><b>Foire de Rameaux : piste cyclable fermée</b></h3>
 						<p>En raison de la foire des Rameaux, la piste cyclable traversant le site de l'Esplanade entre la RN481 et le boulevard de l'Esplanade (côté place Aristide Briand)  
 						est fermée à la circulation des cycles du lundi 16 mars à 6h00 au vendredi 24 avril 2015 à 17h.</p>-->
-					<!--<h3><b>Crue de l'Isère</b></h3>
+						<!--<h3><b>Crue de l'Isère</b></h3>
 						<p>En raison de la crue de l'Isère, la voie verte n°2 est fermée entre la Porte de France à Grenoble et Saint-Martin-le-Vinoux pour une durée indéterminée.</p>-->
 					</div>
+
+					<!--<div id="legend" class="col-xs-12 col-sm-5 col-sm-offset-5 col-md-4 col-md-offset-4 col-lg-3 col-lg-offset-3 closed">
+						<div class="container-fluid">
+							<section id="legendContent" class="row">
+								<span class="barreBoutons">
+									<h1>Légende</h1>
+								</span>
+								<figure class="trafic troncon">
+									<div class='rectangle background_vert'></div>
+									<figcaption>Circulation fluide</figcaption>
+								</figure>									
+							</section>
+						</div>
+					</div>-->
+
 					<div class="row">
 						<div class="input-group input-group-sm dropup col-xs-12 pull-left">
 							<label for="panelFilter" class="sr-only">Rechercher un élément affiché</label>
@@ -121,7 +198,7 @@
 	<div id='footer'></div>
 	
 	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
-	<script type="text/javascript" src="js/lib/ol/ol.js"></script>
+	<script type="text/javascript" src="js/lib/ol/ol-custom.js"></script>
 	<script type="text/javascript" src="js/lib/bs/js/moment.min.js"></script>
 	<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
@@ -130,6 +207,9 @@
 	<script type="text/javascript" src="js/fr.js"></script>
 	<script type="text/javascript" src="js/carte.js"></script>
 	<script type="text/javascript">
+
+		var layerPiste;
+		
 		function initPage() {
 			isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
 			modififieIconMaxres();
@@ -141,6 +221,12 @@
 				$(".main").attr('style','top:0px');
 				$.support.cors = true;
 				chargeLignes();
+				/*$("body").addClass("withPub");
+				$( "#pub" ).attr({ alt: lang.pub.alt,  title: lang.pub.alt });
+				$( "#pub > div" ).text(lang.pub.text);*/
+			} else if (urlParams.iFrameMulti){
+				chargeLignes();
+				$("body").addClass("noHead iFrameMulti");
 			} else {
 				$('#head').load('head.html');
 			}
@@ -149,39 +235,61 @@
 			var idcarte = 'map';
 			var map=initMap(idcarte);
 			ajouteControle(idcarte,'layerSwitcher');
-			var sourceVelo = new ol.source.GeoJSON({
+			var sourceVelo = new ol.source.Vector({
 				url: url.json('velo'),
-				projection: sm
+				projection: "EPSG:3857",
+				format: new ol.format.GeoJSON()
 			});
-			ajouteLayerManuel('Pistes','map',{fctStyle:function(feature,resolution){return getStylesGeojson(feature,resolution,'#50AE2F')},source:sourceVelo});
 
-			ajouteLayerSwitcher('map','Pistes','.layerSwitcher',{libelle:'Pistes cyclables'});
-			activeLayer('Pistes');
+			layerPiste = ajouteLayerManuel('pistes','map',{fctStyle:function(feature,resolution){return getStylesGeojson(feature,resolution,'#50AE2F')},source:sourceVelo});
+			
+			ajouteLayerSwitcher('map','pistes','.layerSwitcher',{libelle:'Pistes cyclables'});
+			activeLayer('pistes');
 			
 			ajouteLignes(idcarte,getDetails);
 			
-			var sourcePoints = creeSourceType(idcarte,'MVA,MVC',{fctStyle:getStylesTypes});
-			ajouteLayerType(idcarte,'MVA','MVA',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Agences Métrovélo'}); //,layerSwitcherName:'Points de vente'
-			ajouteLayerType(idcarte,'MVC','MVC',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Consignes Métrovélo'});
-			
-			if (urlParams.MVA) activeLayer("MVA",!urlParams.MVA);
-			if (urlParams.MVC) activeLayer("MVC",!urlParams.MVC);
+			sourcePoints = creeSourceType(idcarte,'MVA,MVC',{fctStyle:getStylesTypes});
+			ajouteLayerType(idcarte,'MVA','MVA',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Agences Métrovélo', cluster:true}); //,layerSwitcherName:'Points de vente'
+			ajouteLayerType(idcarte,'MVC','MVC',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Consignes Métrovélo', cluster:true});
 			
 			if(isMobile() && navigator.geolocation && !isChrome) { //fonction dépressiée pour l'instant uniquement dans chrome mobile
 				ajouteLayerManuel('depArr','map',{source:null,fctStyle:getStylesTypes}).set('visible',true);
 				ajouteControle('map','localize',onLocalize,{mapName:'map',layerName:'depArr'});
-			}
+			}			
 		}
 		function initPanneau() {
 			$('.toggleListe').click(function(){
 				togglePanneau();
 			});
-			
+			$('#panel h2 input[name=chkLines]').change(function(){
+				layerPiste.set('visible',$('#chkPistes').prop('checked'));
+			});
+			$('#panel h2 input[name=chkPoints]').change(function(e,update){
+				/*$('#legend figure.points').hide();*/
+				typesPointsAffiches = $("input[name=chkPoints]:checked").map(function() {
+					/*$('#legend figure.'+this.value).show();*/
+					return this.value;
+				}).get();
+				sourcePoints.changed();
+			});
+
+			$('#panel img[aria-describedby]').focusin(toggleInfobulle);
+			$('#panel img[aria-describedby]').focusout(toggleInfobulle);
+			function toggleInfobulle(e) {
+				var id = $(e.target).attr('aria-describedby');
+				var hidden = ($('#'+id).attr('aria-hidden') == 'true');
+				setTimeout( function(){
+					$('#'+id).toggleClass('affiche',hidden);
+					$('#'+id).attr('aria-hidden',!hidden);
+				},500 );//pour permettre de cliquer sur les liens avant le focus out	
+				e.stopPropagation();
+			}
+
 			var champ = '#panelFilter';
 			if ($(champ) && $(champ).typeahead) {
 				$(champ).typeahead({
 					source:function(query, process) {
-						var searchUrl = (url.saisieChoisie=='local'?url.hostnameLocal+url.portWSTest:url.hostnameData);
+						var searchUrl = url.ws() ;
 							searchUrl += '/api/findType/json?';
 							searchUrl += 'types=agenceM,MVA,MVC&query='+query;
 							
@@ -215,19 +323,27 @@
 					autoSelect:false
 				});
 			}
+
+			$('#chkMVA').prop('checked', urlParams.MVA);
+			//$('#chkMVA').trigger('change');
+			$('#chkMVC').prop('checked', urlParams.MVC);
+			//$('#chkMVC').trigger('change');
+			$('#chkPistes').prop('checked', true);
+			//$('#chkPistes').trigger('change');
 		}
+
 		function togglePanneau() {
-			if(!$('#panel').is(':visible')) {
-				$('.toggleListe').addClass('listeAffichee');
-			} else {
-				$('.toggleListe').removeClass('listeAffichee');
-			}
-			$('#panel').toggle();
+			/*$('#legend').toggleClass('closed',true);*/
+			$('#panel, #menu').toggleClass('closed');
 		}
+		/*function toggleLegende() {
+			$('#legend, #menuLegende').toggleClass('closed');
+		}*/
+
 		function getDetails(feature) {
 			var divLignes='';
 			if(feature.getGeometry().getType() == 'Point') {
-				var coord= ol.proj.transform(feature.getGeometry().getCoordinates(), sm, gg);
+				var coord= ol.proj.transform(feature.getGeometry().getCoordinates(), "EPSG:3857", "EPSG:4326");
 				var lonlat = coord[1]+','+coord[0];
 				divLignes = getLignesProches(lonlat,afficheListeLgn,null,null,'map');
 				var div = '';
@@ -244,9 +360,9 @@
 		}
 		function saisieReussie(item) {
 			activeLayer(item.properties.type);
-			getMap('map').getView().setCenter(ol.proj.transform(item.geometry.coordinates, gg, sm));
+			getMap('map').getView().setCenter(ol.proj.transform(item.geometry.coordinates, "EPSG:4326", "EPSG:3857"));
 			getMap('map').getView().setZoom(18);
-			if(isTaille('xs')) togglePanneau();
+			if(isTaille('xs') || isTaille('xxs')) togglePanneau();
 		}
 		initPage();
 		trackPiwik("MetroMobilité : velo.html");

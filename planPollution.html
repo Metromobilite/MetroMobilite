@@ -1,0 +1,653 @@
+<!--
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!doctype html>
+<html lang="fr">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="initial-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+		<title>Métromobilité – Dispositif pollution de la métropole Grenobloise</title>
+		<meta name="description" content="Plan des parkings relais et transports en communs renforcés en cas de pic de pollution" />
+		<link href="js/lib/ol/ol.css" rel="stylesheet">
+		<link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
+		<link href="js/lib/bs/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+		<link rel="Stylesheet" type="text/css" href="css/map.css"/>
+		<link rel="Stylesheet" type="text/css" href="css/panel.css">
+		<style type='text/css'>
+		h1 {
+			font-size:20px!important;
+			font-weight:bold!important;
+		}
+		h6,h5,h4,h3{
+			color:#77c92b;
+		}
+		hr {
+			background-color:#b0c92b;
+			height:4px;
+		}
+		.svgLigne {
+			position:relative;
+			width:40px;
+			height:40px;
+			font-size:30px;
+		}
+		#resultatsItiTitre a, #layersControlsTitre a {
+			color:#77c92b;
+		}
+		#resultatsItiTitre a, #layersControlsTitre a,#resultatsIti a, .lienHref, .lienHref:hover {
+			font-weight:bold;
+			cursor: pointer;
+		}
+		#resIti, #resItiTC {
+			padding-top: 10px;
+		}
+		
+		.nomArret{
+			font-weight:bold;
+		}
+		.ol-control .glyphicon {
+			top:0px;
+		}
+
+		#search .dropdown-menu{
+			max-height:200px;
+			overflow-y:auto;
+		}
+	.typeahead { z-index: 1051;}
+
+	.typeahead span[data-type="RUE"]::before, .typeahead span[data-type="LIEU"]::before, .typeahead span[data-type="ARRET"]::before, .typeahead span[data-type="AXE"]::before{
+		background-size: 100% 100%;
+		content: "\00a0";
+		height: 16px;
+		width: 16px;
+		margin-right:5px;
+		display:inline-block;
+	}
+
+	.typeahead span[data-type="RUE"]::before{
+		background: url(img/rue.png) no-repeat;
+	}
+
+	.typeahead span[data-type="LIEU"]::before{
+		background: url(img/lieu.png) no-repeat;
+	}
+
+	.typeahead span[data-type="ARRET"]::before{
+		background: url(img/arret.png) no-repeat;
+	}
+
+	.typeahead span[data-type="AXE"]::before{
+		font-family: "Glyphicons HalfLings", "Arial", "Helvetica", sans-serif;
+		content: "\e024";
+		color:#cd5c1d;
+	}
+	.typeahead  .categorie {
+		font-weight: bold;
+		margin-left: -21px;
+	}
+	.typeahead  .bestResult {
+		/*pour mettre en valeur le meilleur resultat*/
+		background-color: #d0d0d0;
+	}
+	.dropup .dropdown-menu {
+		bottom: 100%;
+		margin-bottom: 1px;
+		top: auto!important;
+	}
+	.dropdown-menu li a {
+		padding:0px 0px;
+	}
+	.dropdown-menu li a span {
+		padding:0px 0px;
+		width:100%;
+		padding:3px 20px;
+		display:block;
+	}
+	.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
+		background-color:#fff;
+		color:#000;
+	}
+	.dropdown-menu > .active > a span[data-type], .dropdown-menu > .active > a span[data-type]:hover, .dropdown-menu > .active > a span[data-type]:focus {
+		background-color: #428bca;
+		color: #fff;
+	}
+	.dynVide  {
+		display:none!important;
+	}
+</style>
+	</head>
+	<body>
+	<div id='head'></div>
+	<div class="container-fluid main">
+		<div class="row">
+			<div id="menu" class="toggleListe pull-right" title="Affichage du panneau de sélection des éléments cartographiques" alt="Affichage du panneau de sélection des éléments cartographiques"><span class="glyphicon glyphicon-menu-hamburger"></span></div>
+			<div id="map" class="map"></div>
+			<div id="popup"></div>
+			<div class="layerSwitcher">
+				<div class="layersPanel">
+					<div class="close-switcher pull-right"><span class="glyphicon glyphicon-minus"></span></div>
+					<div class="pull-left">Afficher : </div>
+					<div class="bases list-unstyled text-left"></div>
+					<ul class="layers list-unstyled text-left"></ul>
+				</div>
+			</div>
+			<div id="panel" class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+				<div class="container-fluid">
+					<div class="row">
+					</div>
+					<div id="panelContent" class="row">
+						<div id="menuListe"class="toggleListe pull-right" title="Affichage du panneau de sélection des éléments cartographiques" alt="Affichage du panneau de sélection des éléments cartographiques"><b>Voir la carte</b>&nbsp;<span class="glyphicon glyphicon-menu-hamburger"></span></div><br>
+						<h1>Dispositif Pic de Pollution</h1>
+							<p>En cas de pic de pollution, <a class="lienHref" href="pages/pollutionPlan.html" title="En savoir plus" alt="En savoir plus">des restrictions de circulation sont mises en oeuvre.</a> <br>Cet outil vous permet de préparer vos déplacements en privilégiant l'utilisation des transports en commun.<br>
+							Indiquez votre lieu de départ et votre destination.
+							</p>
+							<div class="input-group input-group-sm dropdown">
+								<input type="text" class="form-control" id="dep" placeholder="Votre lieu de départ"/>
+								<span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+							</div>
+							<div class="input-group input-group-sm dropdown">
+								<input type="text" class="form-control" id="arr" placeholder="Votre destination"/>
+								<span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+							</div>
+						<div id="accordion">
+						<div>
+							<h2 id="resultatsItiTitre"  style="display:none"><a href="#resultatsIti" data-toggle="collapse">Mon trajet en transport en commun</a></h2>
+							<div id="resultatsIti" class="collapse in">
+								<p class="iti hidden">
+									<span>Durée : <span class="duration">0 min</span></span>
+									<span class="transit">
+										Prendre la ligne <span class="line"></span><br>
+										à <span class="departure"></span><br>
+										vers <span class="direction"></span><br>
+										jusqu'à <span class="arrival"></span><br>										
+									</span>									
+								</p>
+							</div>
+							
+							<h2 id="layersControlsTitre" style="display:none"><a href="#layersControls" data-toggle="collapse"> Mon trajet en voiture puis en transport en commun</a></h2>
+							
+							<div id="layersControls" class="collapse">
+								<div>Veuillez sélectionner le parking le plus proche de votre départ sur la carte</div>
+								<h2 data-layer="PAR" data-layer2="PAR_TMP"><span>P+R et P+R provisoires</span></h2>
+									<p>Il peut être toléré l'usage de son véhicule jusqu'au parc relais et parc relais provisoire le plus proche de son domicile. Pour calculer votre itinéraire à partir de ce parc relais,  merci de le sélectionner sur la carte.</p>									
+								<h2 data-layer="PAR_COV"><span>Les Parkings Covoiturage</span></h2>
+									<p>Il peut être toléré l'usage de son véhicule jusqu'au parking de covoiturage le plus proche de son domicile. Pour calculer votre itinéraire en passant par ce parking,  merci de le sélectionner sur la carte.</p>
+								<h2 data-layer="perimetre"><span>Périmètre </span></h2>
+									<p>Représente le périmètre de la Métropole dans lequel les restrictions de circulation s'appliquent.</p>
+							</div>
+						</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id='footer'></div>
+	
+	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="js/lib/ol/ol-custom.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/moment.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
+	<script type="text/javascript" src="stats/piwik.js"></script>
+	<script type="text/javascript" src="js/outils.js"></script>
+	<script type="text/javascript" src="js/fr.js"></script>
+	<script type="text/javascript" src="js/carte.js"></script>
+	<script type="text/javascript">
+		var sourceIti;
+		var resultatsIti;
+		function initPage() {
+			urlParams.epci='All';
+			
+			$('input#dep.form-control').val(""); //en attendant de mettre en place une sauvegarde des parametres lors des allers-retours
+			$('input#arr.form-control').val("");
+			
+			$( document ).on( "evtLignesChargees", {}, function( event, data ) {
+				initCarte();
+				initPanneau();
+			});
+			
+			if (urlParams.iFrame){
+				$(".main").attr('style','top:0px');
+				$.support.cors = true;
+				chargeLignes();
+			} else {
+				$('#head').load('head.html');
+			}
+			if (!urlParams.perimetre) 
+				urlParams.perimetre=2;
+				
+			if (urlParams.toggle)
+				if(isTaille('xs') || isTaille('xxs')) togglePanneau();
+				
+			$('#layersControls').on('show.bs.collapse', function () {
+				activeLayer('PAR',false);
+				activeLayer('PAR_TMP',false);
+				activeLayer('PAR_COV',false);				
+			});
+			$('#layersControls').on('hide.bs.collapse', function () {
+				activeLayer('PAR',true);
+				activeLayer('PAR_TMP',true);
+				activeLayer('PAR_COV',true);
+			});
+		}
+		function initCarte() {
+			for (var e in stylesTypes) {
+				if (stylesTypes[e].iconMaxres < 100)stylesTypes[e].iconMaxres = 100;
+			};
+
+			var iconePAR_TMP = {src: 'img/Carto/p_PR_T.png',anchor:[0.5,1]};
+			var iconePAR_COV = {src: 'img/Carto/p_covoiturage.png',anchor:[0.5,1]};
+
+			stylesTypes.PAR_TMP={icon:iconePAR_TMP,iconMaxres:100,text:'LIBELLE',textMaxRes:1,titre:'P+R provisoires'};
+			stylesTypes.PAR_COV={icon:iconePAR_COV,iconMaxres:100,text:'LIBELLE',textMaxRes:1,titre:'Parking covoiturage'};
+			
+			var idcarte = 'map';
+			var map=initMap(idcarte,{zoom:11.5,minzoom:11,lon:5.731641,lat:45.16});
+			ajouteControle(idcarte,'layerSwitcher');
+			ajouteControle(idcarte,'refresh',maj);
+		
+			//var sourcePerimetre = new ol.source.GeoJSON({ //migration OL4
+			var sourcePerimetre = new ol.source.Vector({
+				url: url.stat+'Perimetre.geojson',
+				projection: "EPSG:3857",
+				format: new ol.format.GeoJSON()
+			});
+			ajouteLayerManuel('perimetre','map',{fctStyle:function(feature,resolution){
+				if(urlParams.perimetre != feature.get('id')) return [];
+				var transp = resolution < 35 ? 0 : 0;
+				return getStylesGeojson(feature,resolution,'#000000','rgba(188, 213, 47, '+transp+')',transp);
+			},source:sourcePerimetre});
+			ajouteLayerSwitcher('map','perimetre','.layerSwitcher',{libelle:'Perimètre'});
+			activeLayer('perimetre');
+			
+			ajouteLignes(idcarte,getDetails);
+	
+			//sourceIti = new ol.source.GeoJSON({ //migration OL4
+			sourceIti = new ol.source.Vector({
+				projection: "EPSG:3857",
+				format: new ol.format.GeoJSON()
+			});
+			ajouteLayerManuel('iti','map',{fctStyle:getStylesIti,source:sourceIti}).set('visible',true);
+			
+			//sourcePoints = new ol.source.GeoJSON({ //migration OL4
+			sourcePoints=new ol.source.Vector({
+				url: url.stat+'PR_pollution.geojson',
+				projection: "EPSG:3857",
+				format: new ol.format.GeoJSON()
+			});
+			var idEvt = sourcePoints.on('change', function() {
+				switch (sourcePoints.getState()) {
+				case 'ready':
+					//sourcePoints.unByKey(idEvt); Migration OL4
+					ol.Observable.unByKey(idEvt);
+					$( document ).trigger( 'evtSourceChargee', 'PAR' );
+					break;
+				case 'error':
+					//sourcePoints.unByKey(idEvt); Migration OL4
+					ol.Observable.unByKey(idEvt);
+					console.log('source loaded error');
+					break;
+				}
+			});
+
+			ajouteLayerManuel('depArr','map',{fctStyle:getStylesTypes}).set('visible',true);
+			ajouteLayerType(idcarte,'PAR_TMP','PAR_TMP',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Parc-relais temporaires'});
+			ajouteLayerType(idcarte,'PAR_COV','PAR_COV',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Parc-relais covoiturage'});
+			ajouteLayerType(idcarte,'PAR','PAR',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Parc-relais'});
+			
+			$( document ).on( "evtSourceChargee", {}, function( event, type ) {
+				if (type=='PAR' || type=='PAR_TMP' || type=='PAR_COV') {
+					var aLignes=[];
+					sourcePoints.getFeatures().forEach(function(f){
+						var type = f.get('type');
+						var id = type+'_'+f.get('CODE');
+						f.set('id',id);
+						f.set('detailsCallback',getDetails);
+						f.set('detailsSeul',true);
+						f.set('description',(stylesTypes[type].titre?stylesTypes[type].titre:f.properties[stylesTypes[type].text]));
+						f.setId(id);
+						aLignes.push(f.get('LIGNES'));
+					});
+					
+					filtreLgn = aLignes.join(',');
+					sourceLgn.changed();
+					updateDyn('PAR','map','PAR',sourcePoints);
+				}
+			});
+			
+			if (!isMobile()) {
+				window.setInterval(function() {maj();}, 60000);
+			}
+
+
+		}
+		function maj() {
+			urlParams.heure = new Date;
+			updateDyn('PAR','map','PAR',sourcePoints);
+		}
+		function initPanneau() {
+			$('.toggleListe').click(function(){
+				togglePanneau();
+			});
+			
+			ajouteAutocomplete('#dep',{
+				arrets:false,
+				lieux:true,
+				rues:true,
+				fnSaisieReussie:saisieReussie,
+				fnSaisieRatee:function(item){ 
+					urlParams.lonlatDep='0,0'; 
+					$('#dep').attr('data-lonlat','0,0');
+				}
+			});
+			ajouteAutocomplete('#arr',{
+				arrets:false,
+				lieux:true,
+				rues:true,
+				fnSaisieReussie:saisieReussie,
+				fnSaisieRatee:function(item){ 
+					urlParams.lonlatDep='0,0'; 
+					$('#arr').attr('data-lonlat','0,0');
+				}
+			});
+		}
+		function saisieReussie(item,champ) {
+			//activeLayer(item.type);
+			var idChamp = champ.substr(1);
+			var map =getMap('map');
+			var pos = ol.proj.transform([item.lon,item.lat], "EPSG:4326", "EPSG:3857");
+			map.getView().setCenter(pos);
+			//map.getView().setZoom(18);
+			//if(isTaille('xs') || isTaille('xxs')) togglePanneau();
+			
+			var sourceDep = getLayer('map','depArr').getSource();
+			var f = sourceDep.getFeatureById(idChamp);
+			var geom = new ol.geom.Point(pos);
+			if (!f) {
+				var fe = new ol.Feature({
+					'geometry': geom,
+					'typeDep':idChamp,
+					'type':idChamp,
+					'id':idChamp
+				});
+				fe.setId(idChamp);
+				sourceDep.addFeature(fe);
+			} else {
+				f.setGeometry(geom);
+			}
+	
+		var fDep = sourceDep.getFeatureById('dep');
+			var fArr = sourceDep.getFeatureById('arr');
+			if (fDep && fArr) lanceCalculIti(ol.proj.transform(fDep.getGeometry().getCoordinates(), "EPSG:3857", "EPSG:4326"),ol.proj.transform(fArr.getGeometry().getCoordinates(), "EPSG:3857", "EPSG:4326"),'#resultatsIti',"");
+		}
+		function togglePanneau() {
+			if(!$('#panel').is(':visible')) {
+				$('.toggleListe').addClass('listeAffichee');
+			} else {
+				$('.toggleListe').removeClass('listeAffichee');
+			}
+			$('#panel').toggle();
+		}
+		
+		function getStylesGeojson(feature,resolution,color,backcolor,transp) {
+			var styles =[];
+
+			if (feature.getGeometry().getType() == 'Polygon') {
+				if (!styleCache['stylePolygon_'+color+backcolor]) {
+					styleCache['stylePolygon_'+color+backcolor] = new ol.style.Style({
+						zIndex: 13,
+						stroke: new ol.style.Stroke({
+							color: color,
+							width: 2,
+							opacity: 1,
+							zIndex: 200
+						}),
+						fill: new ol.style.Fill({
+							color: backcolor
+						})
+					});
+				} 
+				styles = [styleCache['stylePolygon_'+color+backcolor]];
+			}
+			return styles ;
+		}
+		
+		function getDetails(feature) {
+			var nomPopup = '';
+			if (stylesTypes[feature.get('type')]) {
+				nomPopup = feature.get(stylesTypes[feature.get('type')].text);
+			}
+			if(feature.getGeometry().getType() == 'Point') {
+				var coord= ol.proj.transform(feature.getGeometry().getCoordinates(), "EPSG:3857", "EPSG:4326");
+				var lonlat = coord[1]+','+coord[0];
+				var divPrefixe = '';
+				var div = '';
+				if (feature.get('type')=='PKG' || feature.get('type')=='PAR' || feature.get('type')=='PAR_TMP' || feature.get('type')=='PAR_COV') {
+					div += '<span>'+feature.get('TOTAL')+' '+lang.carteMobile.places+'</span>';
+					if (feature.get('COMMENTAIRE')) div += '<span>'+feature.get('COMMENTAIRE')+'</span>';
+					div += '<span class="dyn dynVide" data-type="'+feature.get('type')+'">';
+					div += '<span class="dispo">?</span> '+lang.carteMobile.placesdisponibles;
+					div += '</span>';
+					var aLignes = (feature.get('LIGNES')?feature.get('LIGNES').split(','):[]);
+					var oLignes = {};
+					aLignes.forEach(function(e){
+						oLignes[e]=e;
+					});
+					div += afficheListeLgn(oLignes,null,null,'map');
+					div += '<div><span>En voiture jusqu\'a : <br>';
+					div += feature.get('LIBELLE');
+					div += '</span></div>'
+					div += '<div id="resIti"><p class="iti hidden"><span>Durée : <span class="duration"></span></span></p></div>';
+					var sourceDep = getLayer('map','depArr').getSource();
+					var dep = sourceDep.getFeatureById('dep');
+					var arr = sourceDep.getFeatureById('arr');
+					if (arr) {
+						if 	(feature.get('type')=='PAR_COV')
+							lanceCalculIti(ol.proj.transform(dep.getGeometry().getCoordinates(), "EPSG:3857", "EPSG:4326"),ol.proj.transform(arr.getGeometry().getCoordinates(), "EPSG:3857", "EPSG:4326"),'#resIti',feature.get('type'),coord); //depuis le depart jusqu'a arrivée en passant par le parking
+						else {
+							div += '<div>En transport en commun : </div>';
+							div += '<div id="resItiTC"><p class="iti hidden"><span>Durée : <span class="duration"></span></span></p></div>'
+							lanceCalculIti(ol.proj.transform(dep.getGeometry().getCoordinates(), "EPSG:3857", "EPSG:4326"),coord,'#resIti','PAR_CAR'); //depuis le départ jusqu'au parking en voiture
+							setTimeout(function () {lanceCalculIti(coord,ol.proj.transform(arr.getGeometry().getCoordinates(), "EPSG:3857", "EPSG:4326"),'#resItiTC','PAR_TC');}, 100); //depuis le parking jusqu'a arrivée en TC
+							}
+					}
+				}
+				return '<span>'+divPrefixe+'<span class="nomPopup">'+nomPopup+'</span>'+'</span>'+ div;
+			} else {
+				return feature.get('NUMERO')+' - '+feature.get('LIBELLE');
+			}
+		}
+		function lanceCalculIti(coordDep,coordArr,resSelector,type,coordIntermediate) {
+			var coordDepCopy = coordDep.concat([]); //resoud les prb de pointeur
+			var coordArrCopy = coordArr.concat([]);
+			var coordIntermediateCopy = (coordIntermediate?coordIntermediate.concat([]):[]);
+			var resSelector = resSelector;
+			var type = type;
+			urlParams.routerOtp2='default'; //TODO voir si on fait un jeux de données custom
+			
+			var searchUrl = url.otp2()+'/plan?fromPlace='+coordDepCopy.reverse().join(',');
+			searchUrl += '&toPlace='+coordArrCopy.reverse().join(',');
+			 if (type == 'PAR_CAR') {
+				searchUrl += '&mode=CAR&carParkCost=900&carDropoffTime=120';
+			 } else if (type == 'PAR_COV') {
+				searchUrl += '&mode=CAR&carParkCost=900&carDropoffTime=120';
+				searchUrl += '&intermediatePlaces=' + coordIntermediateCopy.reverse().join(',');
+			} else {
+				searchUrl += '&mode=WALK,TRANSIT&minTransferTime=60&boardSlack=30&alightSlack=30&numItineraries=1&walkBoardCost=300&maxWalkDistance=1000';				
+			}
+			searchUrl += '&showIntermediateStops=true&arriveBy=false&walkReluctance=5&locale=fr_FR&walkSpeed=1.1112&numItineraries=1';
+			searchUrl += '&date='+new Date().toISOString().substr(0,10)+'&time=07:30';
+			
+			fct_attente_horaires(true);
+			$.ajax({
+				type: "GET",
+				url: searchUrl,
+				error:error,
+				dataType: 'json'
+			}).then(function(res) {
+				fct_attente_horaires(false);
+
+				filtreLgn='_';
+				sourceLgn.changed();
+				$('#panelContent > p').hide();
+				if (res.error && res.error.noPath==true) {
+								
+					/*var divResIti = $(resSelector);
+					var divhref = $("<span>Désolé, nous n'avons pas pu trouvé d'itinéraire satisfaisant à vous proposer.<br></span>");
+					divResIti.append(divhref);
+					$('#resultatsItiTitre').css("display","block");
+					*/
+				
+					showLayersControlsTitre();
+					
+					return;
+				}
+				if(type != 'PAR_TC') {
+					sourceIti.clear();
+				}
+				resultatsIti=res.plan;
+				var text = '';
+				
+				resultatsIti.itineraries.forEach(function(iti,idxIti){
+					iti.legs.forEach(function(leg,idxLeg){
+						var geomPoly = leg.legGeometry.points;
+						var f = (new ol.format.Polyline()).readFeature(geomPoly,{dataProjection:"EPSG:4326",featureProjection:"EPSG:3857"});
+						f.set('id','leg_'+idxIti+'_'+idxLeg);
+						f.set('iti',idxIti);
+						f.set('leg',idxLeg);
+						f.set('legData',leg);
+						if (leg.transitLeg) {
+							f.set('detailsCallback',getDetails);
+							f.set('detailsSeul',true);
+							f.set('description','Ligne');
+							f.set('NUMERO',leg.routeShortName);
+							f.set('LIBELLE',lang.directions.to+' '+leg.headsign);
+						}
+
+						sourceIti.addFeature(f);
+						
+						var geom = new ol.geom.Point(f.getGeometry().getCoordinates()[0]);
+						var f = new ol.Feature({
+							'geometry': geom,
+							'iti':idxIti,
+							'leg':idxLeg,
+							'legData':leg,
+							'type':'startLeg'
+						});
+						sourceIti.addFeature(f);
+
+						leg.intermediateStops.forEach(function(stop,idxStop){
+							var geom = new ol.geom.Point(ol.proj.transform([stop.lon,stop.lat], "EPSG:4326", "EPSG:3857"));
+							var f = new ol.Feature({
+								'geometry': geom,
+								'iti':idxIti,
+								'leg':idxLeg,
+								'legData':leg,
+								'stop':idxStop,
+								'type':'intermediate'
+							});
+							sourceIti.addFeature(f);
+						});
+					});
+					showTextIti(iti,resSelector,searchUrl,type,res.requestParameters);
+				});
+			});
+		}
+		function isLegAffiche(i,j) {return true;}
+		//function getLeg(i,j) {return resultatsIti.itineraries[i].legs[j];}
+		function getLeg(i,j) {return leg;}
+		function showLayersControlsTitre(bNePasAfficherContenu){
+			$('#layersControlsTitre').css("display","block");
+			$('#hrefAlternatives').css("display","none");
+			if(!bNePasAfficherContenu) {
+				$('#layersControls').addClass('in');
+				activeLayer('PAR');
+				activeLayer('PAR_TMP');
+				activeLayer('PAR_COV');
+			}
+			if(isTaille('xs') || isTaille('xxs')) togglePanneau();
+		}
+		var modeleIti = $('#resultatsIti .iti');
+		var modeleTransit = $('#resultatsIti .transit');
+		function showTextIti(iti,resSelector,searchUrl,type,itiReq){
+			var divResIti = $(resSelector);
+			divResIti.empty();
+			divResIti.append(modeleIti.clone());
+			divResIti.find('.iti').removeClass('hidden');
+			divResIti.find('.duration').text(formatSecondes(iti.duration));
+			divResIti.find('.transit').remove();
+			iti.legs.forEach(function(leg,idxLeg){
+				if(leg.transitLeg) {
+					var divLeg = modeleTransit.clone();
+					divLeg.find('.departure').text(leg.from.name.split(',')[1]);
+					divLeg.find('.arrival').text(leg.to.name.split(',')[1]);
+					divLeg.find('.direction').text(leg.headsign);
+					divLeg.find('.line').html(getLogoLgn(leg.agencyId+'_'+leg.routeShortName,leg.route,'#'+leg.routeColor,false,'logoSmall','logoRectSmall'));
+				}
+				divResIti.append(divLeg);
+			});
+			
+			if (resSelector == '#resultatsIti') {
+				var divhref = $('<a href="iti.html?forceOtp2=true&dep=' + $('input#dep.form-control').val() + '&arr=' + $('input#arr.form-control').val() + '&lonlatDep=' + iti.legs[0].from.lat + ',' + iti.legs[0].from.lon + '&lonlatArr=' + iti.legs[iti.legs.length-1].to.lat + ',' + iti.legs[iti.legs.length-1].to.lon + '&site=tag"  target="_blank" class="ref" alt="Détails et autres itinéraires en transport en commun" title="Détails et autres itinéraires en transport en commun">Détails et autres itinéraires en transport en commun</a>');
+				divResIti.append(divhref);
+				
+				/*divhref = $('<br><br><a id="hrefAlternatives" href="javascript:showLayersControlsTitre();" alt="Autres alternatives en utilisant mon véhicule" title="Autres alternatives en utilisant mon véhicule">Autres alternatives en utilisant mon véhicule</a>');
+				divResIti.append(divhref);
+				*/
+				$('#resultatsItiTitre').css("display","block");
+				showLayersControlsTitre(true);
+			}
+			else
+			{
+				var localParams = extractParams(searchUrl.split('?')[1],'&');
+				var divhref;
+				
+				if (localParams.intermediatePlaces) //Cas des covoiturages
+					divhref = $('<a href="iti.html?forceOtp2=true&dep=' + $('input#dep.form-control').val() + '&arr=' + "Parking de Covoiturage" + '&lonlatDep=' + localParams.fromPlace + '&lonlatArr=' + localParams.intermediatePlaces + '&voiture=true"  target="_blank" class="ref" alt="Détails l\'itinéraire routier" title="Détails  l\'itinéraire">Détails de l\'itinéraire routier</a>');
+				else if(type == 'PAR_CAR') {
+					divhref = $('<a href="iti.html?forceOtp2=true&dep=' + $('input#dep.form-control').val() + '&arr=' + "Parking de Relais" + '&lonlatDep=' + itiReq.fromPlace + '&lonlatArr=' + itiReq.toPlace + '&voiture=true"  target="_blank" class="ref" alt="Détails l\'itinéraire routier" title="Détails  l\'itinéraire">Détails de l\'itinéraire routier</a>');
+				} else
+					divhref = $('<a href="iti.html?forceOtp2=true&dep=' + $('input#dep.form-control').val() + '&arr=' + $('input#arr.form-control').val() + '&lonlatDep=' + localParams.fromPlace + '&lonlatArr=' +  localParams.toPlace +  '"  target="_blank" class="ref" alt="Détails l\'itinéraire" title="Détails  l\'itinéraire">Détails de l\'itinéraire</a>');
+								
+				divResIti.append(divhref);
+			}
+		}
+		function extractParams(data,separator){
+			var t = data.substring(0).replace(/&amp;/g,"&").split(separator);
+			var f = [];
+			for (var i=0; i<t.length; i++){
+				var x = t[ i ].split('=');
+				if (typeof(x[1])!='undefined')
+					f[x[0]]=x[1].replace(/%20/g," ").replace(/%27/g,"'").replace(/%C8/g,"È");
+				else
+					f[x[0]]="";
+			}
+		return f;
+		}
+		
+		initPage();
+		trackPiwik("MetroMobilité : planPollution.html");
+	</script>
+  </body>
+</html>

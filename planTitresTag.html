@@ -30,8 +30,31 @@
 	<link rel="stylesheet" href="js/lib/ol/ol.css" type="text/css" />
     <link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
 	<link rel="Stylesheet" type="text/css" href="css/map.css"/>
-	<link rel="Stylesheet" type="text/css" href="css/panel.css">
-    <style type='text/css'>
+	<!--<link rel="Stylesheet" type="text/css" href="css/panel.css">-->
+	<link rel="Stylesheet" type="text/css" href="css/panelCarte.css">
+	<style type='text/css'>
+		body #headiFrame {
+			display:none;
+			height:44px;
+			padding:2px;
+		}
+		body.withPub #headiFrame {
+			display:block;
+			background-color:#646464;
+		}
+		body.withPub .main {
+			top:44px;
+		}
+		#pub img{
+			width: 40px;
+		}
+		#pub div {
+			font-family: "GothamRounded-Medium",Arial,Verdana,Geneva,Lucida,Helvetica,sans-serif;
+			display: inline;
+			color: #fff;
+			font-size: 16px;
+			padding: 0px 10px 0px 10px;
+		}
 		.svgLigne {
 			position:relative;
 			width:40px;
@@ -58,9 +81,16 @@
   </head>
   <body>
 	<div id='head'></div>
+	<div id="headiFrame">
+		<a id="pub" href="//www.metromobilite.fr" target='_blank'>
+			<img src="img/metromobilite.svg" alt="">
+			<div></div>
+		</a>
+	</div>
 	<div class="container-fluid main">
 		<div class="row">
-			<div id="menu" class="toggleListe listeAffichee pull-right" title="Affichage du panneau de sélection des éléments cartographiques" role="button" aria-label="Affichage du panneau de sélection des éléments cartographiques"><span class="glyphicon glyphicon-menu-hamburger"></span></div>
+			<div id="menu" class="toggleListe pull-left" title="Affichage du panneau de sélection des éléments cartographiques" role="button" aria-label="Affichage du panneau de sélection des éléments cartographiques"><div></div></div>
+			<!--<div id="menu" class="toggleListe listeAffichee pull-right" title="Affichage du panneau de sélection des éléments cartographiques" role="button" aria-label="Affichage du panneau de sélection des éléments cartographiques"><span class="glyphicon glyphicon-menu-hamburger"></span></div>-->
 			<div id="map" class="map"></div>
 			<div id="popup"></div>
 			<div class="layerSwitcher">
@@ -74,16 +104,65 @@
 			<div id="panel" class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
 				<div class="container-fluid">
 					<div id="panelContent" class="row">
-						<div id="menuListe" class="toggleListe pull-right" title="Affichage du panneau de sélection des éléments cartographiques" role="button" aria-label="Affichage du panneau de sélection des éléments cartographiques"><span class="glyphicon glyphicon-menu-hamburger"></span></div>
+						<span class="barreBoutons">
+							<!--<div id="menuLegende" class="pull-right closed" tabindex="0" title="Affichage de la légende" role="button" aria-label="Affichage de la légende"><span>Légende</span> <span class="glyphicon glyphicon-menu-right"></span></div>-->
+						</span>
+						<!--<div id="menuListe" class="toggleListe pull-right" title="Affichage du panneau de sélection des éléments cartographiques" role="button" aria-label="Affichage du panneau de sélection des éléments cartographiques"><span class="glyphicon glyphicon-menu-hamburger"></span></div>-->
 						<h1>Plans des agences de Mobilité, des points service, des distributeurs et des Relais TAG</h1>
-						<h2 data-layer="agenceM"><span>Les agences de Mobilité</span></h2>
-						<p>Les agences de Mobilité vous informent sur l'offre de transport, vous conseillent dans vos déplacements, vendent des titres de transports tous réseaux, et vous permettent de souscrire un abonnement au service d'autopartage CitéLib.</p>
-						<h2 data-layer="pointService"><span>Les points service</span></h2>
-						<p>Les points services vous renseignent et vendent les tickets et abonnements TAG et TransIsère.</p>
-						<h2 data-layer="dat"><span>Les distributeurs</span></h2>
-						<p>Les distributeurs automatiques de titres sont à votre disposition dans toutes les stations de tramway. Ils vous permettent d'acheter les titres TAG (sauf les titres combinés et P+R et les tickets 10 voyages tarif groupe).</p>
-						<h2 data-layer="depositaire"><span>Les Relais TAG</span></h2>
-						<p>Les Relais TAG vendent des titres TAG (tickets, abonnements annuels et mensuels) dans toute l'agglomération grenobloise.</p>
+						<!--<h2 data-layer="agenceM"><span>Les agences de Mobilité</span></h2>-->
+						<h2>
+							<div class="checkbox">
+								<input type="checkbox" id="chkAgenceM" name="chkPoints" value="agenceM">
+								<label for="chkAgenceM">Les agences de Mobilité</label>
+								<img src="img/ic_info_outline_24px.svg" alt="info" tabindex="0" aria-describedby="i1">
+							</div>
+						</h2>
+						<!--<p>Les agences de Mobilité vous informent sur l'offre de transport, vous conseillent dans vos déplacements, vendent des titres de transports tous réseaux, et vous permettent de souscrire un abonnement au service d'autopartage CitéLib.</p>-->
+						<h3><div role="tooltip" id="i1" aria-hidden="true">
+							Les agences de Mobilité vous informent sur l'offre de transport, vous conseillent dans vos déplacements, vendent des titres de transports tous réseaux, et vous permettent de souscrire un abonnement au service d'autopartage CitéLib.
+						</div></h3>
+						
+						
+						<!--<h2 data-layer="pointService"><span>Les points service</span></h2>-->
+						<h2>
+							<div class="checkbox">
+								<input type="checkbox" id="chkPointService" name="chkPoints" value="pointService">
+								<label for="chkPointService">Les points service</label>
+								<img src="img/ic_info_outline_24px.svg" alt="info" tabindex="0" aria-describedby="i2">
+							</div>
+						</h2>
+						<!--<p>Les points services vous renseignent et vendent les tickets et abonnements TAG et TransIsère.</p>-->
+						<h3><div role="tooltip" id="i2" aria-hidden="true">
+							Les points services vous renseignent et vendent les tickets et abonnements TAG et TransIsère.
+						</div></h3>
+						
+						
+						<!--<h2 data-layer="dat"><span>Les distributeurs</span></h2>-->
+						<h2>
+							<div class="checkbox">
+								<input type="checkbox" id="chkDat" name="chkPoints" value="dat">
+								<label for="chkDat">Les distributeurs</label>
+								<img src="img/ic_info_outline_24px.svg" alt="info" tabindex="0" aria-describedby="i3">
+							</div>
+						</h2>
+						<!--<p>Les distributeurs automatiques de titres sont à votre disposition dans toutes les stations de tramway. Ils vous permettent d'acheter les titres TAG (sauf les titres combinés et P+R et les tickets 10 voyages tarif groupe).</p>-->
+						<h3><div role="tooltip" id="i3" aria-hidden="true">
+							Les distributeurs automatiques de titres sont à votre disposition dans toutes les stations de tramway. Ils vous permettent d'acheter les titres TAG (sauf les titres combinés et P+R et les tickets 10 voyages tarif groupe).
+						</div></h3>
+						
+						<!--<h2 data-layer="depositaire"><span>Les Relais TAG</span></h2>-->
+						<h2>
+							<div class="checkbox">
+								<input type="checkbox" id="chkDepositaire" name="chkPoints" value="depositaire">
+								<label for="chkDepositaire">Les Relais TAG</label>
+								<img src="img/ic_info_outline_24px.svg" alt="info" tabindex="0" aria-describedby="i4">
+							</div>
+						</h2>
+						<!--<p>Les Relais TAG vendent des titres TAG (tickets, abonnements annuels et mensuels) dans toute l'agglomération grenobloise.</p>-->
+						<h3><div role="tooltip" id="i4" aria-hidden="true">
+							Les Relais TAG vendent des titres TAG (tickets, abonnements annuels et mensuels) dans toute l'agglomération grenobloise.
+						</div></h3>
+						
 					</div>
 					<div class="row">
 						<div class="input-group input-group-sm dropup col-xs-12 pull-left">
@@ -97,7 +176,7 @@
 		</div>
 	</div>
 	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
- 	<script type="text/javascript" src="js/lib/ol/ol.js"></script>
+ 	<script type="text/javascript" src="js/lib/ol/ol-custom.js"></script>
 	<script type="text/javascript" src="js/lib/bs/js/moment.min.js"></script>
 	<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>	
@@ -105,20 +184,21 @@
 	<script type="text/javascript" src="js/outils.js"></script>
 	<script type="text/javascript" src="js/fr.js"></script>
 	<script type="text/javascript" src="js/carte.js"></script>
-
     <script type="text/javascript">
 		//var sourceSel;
 		function initPage() {
 			isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
 			modififieIconMaxres();
 			$( document ).on( "evtLignesChargees", {}, function( event, data ) {
-				initCarte();
-				initPanneau();
+				var map = initCarte();
+				initPanneau(map);
 			});
 			if (urlParams.iFrame){
-				$(".main").attr('style','top:0px');
 				$.support.cors = true;
 				chargeLignes();
+				$("body").addClass("withPub");
+				$( "#pub" ).attr({ alt: lang.pub.alt,  title: lang.pub.alt });
+				$( "#pub > div" ).text(lang.pub.text);
 			} else {
 				$('#head').load('head.html');
 			}
@@ -132,34 +212,51 @@
 			activeLayer('lignes_TRAM');
 			activeLayer('lignes_CHRONO');
 			
-			var sourcePoints = creeSourceType(idcarte,'agenceM,pointService,dat,depositaire',{fctStyle:getStylesTypes});
-			ajouteLayerType(idcarte,'agenceM','agenceM',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Agences-Métro-Mobilité'}); //,layerSwitcherName:'Points de vente'
-			ajouteLayerType(idcarte,'pointService','pointService',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Points-Services'});
-			ajouteLayerType(idcarte,'dat','dat',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Distributeurs'});
-			ajouteLayerType(idcarte,'depositaire','depositaire',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Depositaires'});
+			sourcePoints = creeSourceType(idcarte,'agenceM,pointService,dat,depositaire',{fctStyle:getStylesTypes});
+			ajouteLayerType(idcarte,'agenceM','agenceM',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Agences-Métro-Mobilité', cluster:true}); //,layerSwitcherName:'Points de vente'
+			ajouteLayerType(idcarte,'pointService','pointService',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Points-Services', cluster:true});
+			ajouteLayerType(idcarte,'dat','dat',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Distributeurs', cluster:true});
+			ajouteLayerType(idcarte,'depositaire','depositaire',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Depositaires', cluster:true});
 			
-			if (urlParams.agenceM) activeLayer("agenceM",!urlParams.agenceM);
-			if (urlParams.pointService) activeLayer("pointService",!urlParams.pointService);
-			if (urlParams.dat) activeLayer("dat",!urlParams.dat);
-			if (urlParams.depositaires) activeLayer("depositaire",!urlParams.depositaires);
-			
+				
 			if(isMobile() && navigator.geolocation && !isChrome) { //fonction dépressiée pour l'instant uniquement dans chrome mobile
 				ajouteLayerManuel('depArr','map',{source:null,fctStyle:getStylesTypes}).set('visible',true);
 				ajouteControle('map','localize',onLocalize,{mapName:'map',layerName:'depArr'});
 			}
 
-			
-		}
-		function initPanneau() {
+			$('#panel img[aria-describedby]').focusin(toggleInfobulle);
+			$('#panel img[aria-describedby]').focusout(toggleInfobulle);
+			function toggleInfobulle(e) {
+				var id = $(e.target).attr('aria-describedby');
+				var hidden = ($('#'+id).attr('aria-hidden') == 'true');
+				setTimeout( function(){
+					$('#'+id).toggleClass('affiche',hidden);
+					$('#'+id).attr('aria-hidden',!hidden);
+				},500 );//pour permettre de cliquer sur les liens avant le focus out
+				e.stopPropagation();
+			}
+
+			return map;
+		}	
+		function initPanneau(map) {
 			$('.toggleListe').click(function(){
 				togglePanneau();
-			});
+			});			
+
+			$('#panel h2 input[name=chkPoints]').change(function(e,update){
+				/*$('#legend figure.points').hide();*/
+				typesPointsAffiches = $("input[name=chkPoints]:checked").map(function() {
+					/*$('#legend figure.'+this.value).show();*/
+					return this.value;
+				}).get();
+				sourcePoints.changed();				
+			});		
 			
 			var champ = '#panelFilter';
 			if ($(champ) && $(champ).typeahead) {
 				$(champ).typeahead({
 					source:function(query, process) {
-						var searchUrl = (url.saisieChoisie=='local'?url.hostnameLocal+url.portWSTest:url.hostnameData);
+						var searchUrl = url.ws();
 							searchUrl += '/api/findType/json?';
 							searchUrl += 'types=agenceM,pointService,dat&query='+query;
 							
@@ -193,19 +290,54 @@
 					autoSelect:false
 				});
 			}
+
+			$('#chkAgenceM').prop('checked', urlParams.agenceM);
+			$('#chkAgenceM').trigger('change');
+			//if (urlParams.agenceM) activeLayer("agenceM",!urlParams.agenceM);
+			$('#chkPointService').prop('checked', urlParams.pointService);
+			$('#chkPointService').trigger('change');
+			//if (urlParams.pointService) activeLayer("pointService",!urlParams.pointService);
+			$('#chkDat').prop('checked', urlParams.dat);
+			$('#chkDat').trigger('change');
+			//if (urlParams.dat) activeLayer("dat",!urlParams.dat);
+			$('#chkDepositaire').prop('checked', urlParams.depositaires);
+			$('#chkDepositaire').trigger('change');
+			//if (urlParams.depositaires) activeLayer("depositaire",!urlParams.depositaires);
+
+			setTimeout(function() {handlePointerMove()},100);
+
+			if ((urlParams.lon && urlParams.lat))	{
+				var idEvt = map.once('postrender',function(e){
+					ol.Observable.unByKey(idEvt);
+					// show details popup
+					setTimeout(function() {
+						var coordinate = ol.proj.transform([ parseFloat(urlParams.lon), parseFloat(urlParams.lat)], "EPSG:4326", "EPSG:3857") ; 
+						var pixel = map.getPixelFromCoordinate(coordinate); 
+						var evt = {coordinate,pixel};
+						//zoom sur la carte 	 
+						map.getView().setCenter(coordinate);
+						map.getView().setZoom(18);
+						if (urlParams.id) {//Si ID on choisi ce mode de sélection
+							var f = sourcePoints.getFeatureById(urlParams.id);
+							if(f) showPopupDetails(getMap('map'),null,f);
+						} else //Sinon on se base sur la lati/longi
+							showPopupDetails(map,evt); 
+
+						},2000);
+					});						
+			}
 		}
 		function togglePanneau() {
-			if(!$('#panel').is(':visible')) {
-				$('.toggleListe').addClass('listeAffichee');
-			} else {
-				$('.toggleListe').removeClass('listeAffichee');
-			}
-			$('#panel').toggle();
+			/*$('#legend').toggleClass('closed',true);*/
+			$('#panel, #menu').toggleClass('closed');
 		}
+		/*function toggleLegende() {
+			$('#legend, #menuLegende').toggleClass('closed');
+		}*/
 		function getDetails(feature) {
 			var divLignes='';
 			if(feature.getGeometry().getType() == 'Point') {
-				var coord= ol.proj.transform(feature.getGeometry().getCoordinates(), sm, gg);
+				var coord= ol.proj.transform(feature.getGeometry().getCoordinates(), "EPSG:3857", "EPSG:4326");
 				var lonlat = coord[1]+','+coord[0];
 				divLignes = getLignesProches(lonlat,afficheListeLgn,null,null,'map');
 				var div = '';
@@ -215,16 +347,25 @@
 				if (commune) div += '<span>'+commune+'</span>';
 				var divPrefixe = '';
 				if (feature.get('type')=='dat') divPrefixe = lang.popup.arret+' ';
-				return '<span>'+divPrefixe+'<span class="nomArret">'+feature.get(stylesTypes[feature.get('type')].text)+'</span>'+'</span>'+ div + divLignes;
+
+
+				//Lien vers le calculateur de l'itinéraire
+				libelle =  urlify((rue?rue + ' ':'') + commune).replace(/ /g,'%20');
+				urlIti = url.hostnameProd + '/iti.html?arr=' + libelle + '&lonlatArr=' + lonlat; 
+				spanUrlIti = '<a href='+ urlIti + " target='_blank'>" + lang.popup.cliqueIci + "</a>";
+
+				return '<span>'+divPrefixe+'<span class="nomArret">'+feature.get(stylesTypes[feature.get('type')].text)+'</span>'+'</span>'+ div + divLignes + spanUrlIti;
+
+				//return '<span>'+divPrefixe+'<span class="nomArret">'+feature.get(stylesTypes[feature.get('type')].text)+'</span>'+'</span>'+ div + divLignes;
 			} else {
 				return feature.get('NUMERO')+' - '+feature.get('LIBELLE');
 			}
 		}
 		function saisieReussie(item) {
 			activeLayer(item.properties.type);
-			getMap('map').getView().setCenter(ol.proj.transform(item.geometry.coordinates, gg, sm));
+			getMap('map').getView().setCenter(ol.proj.transform(item.geometry.coordinates, "EPSG:4326", "EPSG:3857"));
 			getMap('map').getView().setZoom(18);
-			if(isTaille('xs')) togglePanneau();
+			if(isTaille('xs') || isTaille('xxs')) togglePanneau();
 		}
 		initPage();
 		trackPiwik("MetroMobilité : planTitresTag.html");

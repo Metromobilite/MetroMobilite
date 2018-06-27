@@ -1,0 +1,186 @@
+﻿<!doctype html>
+<!--
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta content="initial-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+    <title>Métromobilité -  Toute la mobilité sur la Métropole Grenobloise</title>
+	<meta name="description" content="Toute la mobilité sur la Métropole Grenobloise." />
+	<link rel="stylesheet" href="js/lib/ol/ol.css" type="text/css" />
+	<link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
+
+	<style type='text/css'>
+		@font-face {
+			font-family: "GothamRounded-Medium";
+			src: local("GothamRounded-Medium");
+			src: url('img/GothamRounded-Medium.eot');
+			src: url('img/GothamRounded-Medium.eot?#iefix') format('embedded-opentype'),
+				url('img/GothamRounded-Medium.woff') format('woff'),
+				url('img/GothamRounded-Medium.ttf') format('truetype'),
+				url('img/GothamRounded-Medium.svg#GothamRounded-Medium') format('svg'),
+				url("img/GothamRounded-Medium.otf") format("opentype");
+		}
+		body #headiFrame {
+			/*display:none;*/
+			height:64px;
+			padding:2px;
+		}
+		body.withPub #headiFrame {
+			display:block;
+			background-color:#646464;
+		}
+		body #footiFrame{
+			height:64px;
+			padding:2px;	
+			position: absolute;
+			right: 10%;
+			bottom: 0;
+		}
+		/*body.withPub .main {
+			top:44px;
+		}*/		
+		#pub img{
+			width: 60px;
+		}
+		#pub div {
+			font-family: "GothamRounded-Medium",Arial,Verdana,Geneva,Lucida,Helvetica,sans-serif;
+			display: inline;
+			color: #000;
+			font-size: 20px;
+			padding: 0px 10px 0px 10px;
+		}
+		html,body{
+			height:100%;
+			width:100%;
+			border:0px;
+			position:absolute;
+		}
+		body > div.main {
+			position: relative;
+			height:calc(100% - 0px);
+		}		
+		body > div.main > div.row {
+			height:100%;
+		}
+		iframe {
+			display:block;
+			float:left;
+			height:100%;
+			border:0px;
+		}		
+
+	</style>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->	
+  </head>
+  <body>
+	<!--<div id="headiFrame">
+		<a id="pub" href="//www.metromobilite.fr" target='_blank'>
+			<img src="img/metromobilite.svg" alt="">
+			<div></div>
+		</a>
+	</div>-->
+	<div class="container-fluid main">
+		<div class="row">
+			<iframe id="frame1" src=""></iframe>
+			<iframe id="frame2" src=""></iframe>
+			<iframe id="frame3" src=""></iframe>
+			<img id="frame4" src=""></img>
+		</div>
+	</div>
+	<div id="footiFrame">
+		<a id="pub" href="//www.metromobilite.fr" target='_blank'>
+			<div></div>
+			<img src="img/metromobilite.svg" alt="">			
+		</a>
+	</div>
+	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="stats/piwik.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/outils.js"></script>
+	<script type="text/javascript" src="js/fr.js"></script>
+	<script type="text/javascript">
+
+		$( document ).ready(function() {
+					
+			/*$("<link/>", { //Chargement du CSS custom
+				rel: "stylesheet",
+				type: "text/css",
+				href: "/css/custom/"+urlParams.custom+".css"
+			}).appendTo("head");
+				
+			$.ajax({	//Chargement du JS custom
+				url: "/js/custom/"+urlParams.custom+".js",
+				dataType: "script"
+			});*/
+
+			if (urlParams.custom == 'ikea') {
+
+				$('#frame1').attr('src', "trafic.html?iFrameMulti=true&evt=false&toggle=true&lon=5.740721&lat=45.185738&zoom=13&lonIci=5.775493&latIci=45.181317&customPointor="+urlParams.custom+".png");
+				$('#frame2').attr('src', "prochainsPassagesCustoms.html?iFrameMulti=true&codeLigne=SEM:15&idsArretsTR=SEM:GENPORTGRES&nbHoraires=3");
+				$('#frame3').attr('src', "prochainsPassagesCustoms.html?iFrameMulti=true&codeLigne=SEM:14&idsArretsTR=SEM:GENGALOCHER&nbHoraires=3");
+				$('#frame4').attr('src', "img/Pages/Prepa de commande.jpg");
+				$('#frame1').load(function(){
+					$( "#frame1").css( "width", "60%" );
+					$( "#frame1" ).contents().find( ".ol-zoom" ).css( "display", "none" );
+					$( "#frame1" ).contents().find( ".ol-zoom-in" ).css( "display", "none" );
+					$( "#frame1" ).contents().find( ".toggleListe" ).css( "display", "none" );    
+				})
+
+				$('#frame2').load(function(){
+					$( "#frame2").css( "width", "39%" );
+					$( "#frame2").css( "height", "25%" );
+				})
+				$('#frame3').load(function(){
+					$( "#frame3").css( "width", "39%" );
+					$( "#frame3").css( "height", "25%" );
+				})
+				$('#frame4').load(function(){
+					$( "#frame4").css( "width", "39%" );
+					$( "#frame4").css( "height", "42%" );
+					$( "#frame4").css( "border", "1px #c0c0c0 solid" );
+					$( "#frame4").css( "margin-left", "10px" );
+					$( "#frame4").css( "margin-top", "10px" );
+				})
+				console.log("custom IKEA loaded");
+
+}
+
+
+
+
+
+		});		
+		
+		$("body").addClass("withPub");
+		$("#pub" ).attr({ alt: lang.pub.alt,  title: lang.pub.alt });
+		$("#pub > div" ).text(lang.pub.text);
+
+
+	</script>
+  </body>
+</html>

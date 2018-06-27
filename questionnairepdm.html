@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<!--
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Apps mobile</title>
+	
+	<style type="text/css"></style> 
+	
+</head>
+<body>
+	<h1 style="display:none">Page de redirection des adresse de questionnaire PDM</h1>
+	<script type="text/javascript">
+		
+		var param = location.search.substring(1);
+		var correspondance = [];
+		
+		/*DEBUT METTRE A JOUR LES CORRESPONDANCES ICI*/
+		correspondance['xxxx']='https://metromobilite.evalandgo.com/s/?id=JTk1bSU5NXAlOUElQUQ=&a=JTlDbCU5OW4lOTg=';
+		correspondance['sdh']='https://sdhpdm.urlweb.pro/s/?id=JTk1bSU5OW0lOUUlQUE=&a=JTlDbCU5OW4lOTg=';
+		correspondance['BD']='https://becton.urlweb.pro/s/?id=JTk1bSU5OW0lOUQlQjE=&a=JTlDbCU5OW4lOTg=';
+		correspondance['VilledeGrenoble']='https://villegrenoble.urlweb.pro/s/?id=JTk1bSU5OW0lOUQlQjI=&a=JTlDbCU5OW4lOTg=';
+		correspondance['E2V']='https://e2vmetromobilite.urlweb.pro/s/?id=JTk1bSU5OW0lOUUlQUM=&a=JTlDbCU5OW4lOTg=';
+        correspondance['lametro']='https://lametro.urlweb.pro/s/?id=JTk1bSU5OW0lOUUlQTk=&a=JTlDbCU5OW4lOTg=';
+		correspondance["ddt"]='https://ddtisere.urlweb.pro/s/?id=JTk1byU5MW4lOTclQTk=&a=JTlDbCU5OW4lOTg=';
+		correspondance["eolas"]='https://eolas.urlweb.pro/s/?id=JTk1byU5MWolOUUlQUY=&a=JTlDbCU5OW4lOTg=';
+		correspondance["airliquide"]='https://airliquide.urlweb.pro/s/?id=JTk1biU5N2slOTclQUE=&a=JTlDbCU5OW4lOTg=';
+		correspondance["bonitasoft"]='https://bonitasoft.urlweb.pro/s/?id=JTk1cCU5MW4lOUYlQUE=&a=JTlDbCU5OW4lOTg=';
+		correspondance["CHUG"]='https://chug.urlweb.pro/s/?id=JTk1cCU5OGolOUYlQUM=&a=JTlDbCU5OW4lOTg=';
+		correspondance["atos"]='https://atos.urlweb.pro/s/?id=JTk1cSU5NXElOTklQUY=&a=JTlDbCU5OW4lOTg=';
+		correspondance["alfalavalvicarb"]='https://alfalavalvicarb.urlweb.pro/s/?id=JTk1ciU5N2olOTclQUU=&a=JTlDbCU5OW4lOTg=';
+		correspondance["rollsroyce"]='https://rollsroyce.urlweb.pro/s/?id=JTk1ciU5QWklOUUlQUI=&a=JTlDbCU5OW4lOTg=';
+		correspondance["actis"]='https://actis.urlweb.pro/s/?id=JTk1ciU5OGwlOUIlQUM=&a=JTlDbCU5OW4lOTg=';
+		correspondance["axeo"]='https://axeo.urlweb.pro/s/?id=JTk1ciU5QWolOTYlQUY=&a=JTlDbCU5OW4lOTg=';		
+		correspondance["sintertech"]='https://sintertech.urlweb.pro/s/?id=JTk2aSU5NGslOUUlQUM=&a=JTlDbCU5OW4lOTg=';
+		correspondance["dauphinelibere"]='https://dauphinelibere.urlweb.pro/s/?id=JTk2aSU5NGslOUUlQTk=&a=JTlDbCU5OW4lOTg=';
+		correspondance["ulis"]='https://ulis.urlweb.pro/s/?id=JTk2aSU5NGslOUQlQUY=&a=JTlDbCU5OW4lOTg=';
+		correspondance["semitag"]='https://semitag.urlweb.pro/s/?id=JTk2aSU5NGslOUElQUQ=&a=JTlDbCU5OW4lOTg=';
+		correspondance["sofradir"]='https://sofradir.urlweb.pro/s/?id=JTk2aSU5NGslOTclQUM=&a=JTlDbCU5OW4lOTg=';		
+		correspondance["noreco"]='https://noreco.urlweb.pro/s/?id=JTk2aSU5NXAlOUUlQUI=&a=JTlDbCU5OW4lOTg=';
+		correspondance["viseo"]='https://viseo.urlweb.pro/s/?id=JTk2aSU5NXAlOUUlQUI=&a=JTlDbCU5OW4lOTg=';
+		correspondance["corys"]='https://corys.urlweb.pro/s/?id=JTk2aSU5NWolOTYlQjI=&a=JTlDbCU5OW4lOTg=';
+		correspondance["ghmg"]='https://ghmg.urlweb.pro/s/?id=JTk2aSU5NXAlOUUlQUI=&a=JTlDbCU5OW4lOTg=';
+		correspondance["GEM"]='https://pdiegem.urlweb.pro/s/?id=JTk2aSU5NXElOTYlQjA=&a=JTlDbCU5OW4lOTg=';
+		correspondance["SIEMENS"]='https://siemens.urlweb.pro/s/?id=JTk2aSU5NXElOTYlQUY=&a=JTlDbCU5OW4lOTg=';
+		correspondance["CEA"]='https://cea.urlweb.pro/s/?id=JTk2aiU5OWslOTklQTk=&a=JTlDbCU5OW4lOTg=;';
+		correspondance["orangelabs"]='https://orangelabs.urlweb.pro/s/?id=JTk2aiU5QXElOUUlQUY=&a=JTlDbCU5OW4lOTg=';
+		correspondance["mairiese"]='https://mairiese.urlweb.pro/s/?id=JTk2ayU5MXAlOTglQTk=&a=JTlDbCU5OW4lOTg=';
+		correspondance["eloquant"]='https://eloquant.urlweb.pro/s/?id=JTk2ayU5M2glOUElQjI=&a=JTlDbCU5OW4lOTg=';
+		correspondance["hpfrancegrenoble"]='https://hpfrancegrenoble.urlweb.pro/s/?id=JTk2ayU5M2wlOTclQUY=&a=JTlDbCU5OW4lOTg=';
+		correspondance["rollsroyce"]='https://rollsroyce.urlweb.pro/s/?id=JTk1ciU5N2olOTclQUU=&a=JTlDbCU5OW4lOTg=';
+		correspondance["ersf"]='https://esrf.urlweb.pro/s/?id=JTk2ayU5QWslOTYlQjI=&a=JTlDbCU5OW4lOTg=';
+		correspondance["ersf-en"]='https://englishesrf.urlweb.pro/s/?id=JTk2ayU5QWslOTclQTk=&a=JTlDbCU5OW4lOTg=';
+		correspondance["agnes"]='https://agnes.urlweb.pro/s/?id=JTk2ayU5QW4lOUYlQTk=&a=JTlDbCU5OW4lOTg=';
+		correspondance["artelia"]='https://artelia.urlweb.pro/s/?id=JTk2bCU5MWwlOTklQUU=&a=JTlDbCU5OW4lOTg=';
+		correspondance["araymond"]='https://araymond.urlweb.pro/s/?id=JTk2bCU5MmklOTklQjE=&a=JTlDbCU5OW4lOTg=';
+		correspondance["sdis38"]='https://sdis38.urlweb.pro/s/?id=JTk2ayU5M3AlOUMlQUQ=&a=JTlDbCU5OW4lOTg=';
+		correspondance["groupe-6"]='https://groupe6.urlweb.pro/s/?id=JTk2bCU5M2slOTYlQjE=&a=JTlDbCU5OW4lOTg=';
+		
+		/*FIN METTRE A JOUR LES CORRESPONDANCES ICI*/
+		window.location.replace(correspondance[param]);
+	</script>
+</body>
+</html>

@@ -123,7 +123,7 @@
 <script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
 <script type="text/javascript" src="js/lib/bs/js/bootstrap-datetimepicker.min.js"></script>
-<script type="text/javascript" src="js/lib/ol/ol.js"></script>
+<script type="text/javascript" src="js/lib/ol/ol-custom.js"></script>
 	
 <script type="text/javascript">
 	updateEvtsTR();
@@ -155,7 +155,7 @@
 	function updateEvtsTR() {
 	try {
 
-		var urlSearch = (url.saisieChoisie=='local'?url.hostnameLocal+url.portWSTest:url.hostnameData);
+		var urlSearch = url.ws();
 		urlSearch += '/api/dyn/evtTR/json';
 
 		function successEvtsTR(response) {

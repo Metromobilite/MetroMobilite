@@ -14,32 +14,51 @@
 	<div id='head'></div>
 	<div class="container-fluid main main-fluid">
 		<div class="container main">
-			<!--
 			<style>
-				.bandeauCharlie:hover{
+				.bandeauCharlieXS{
 					background-color: #E1007A!important;
-					opacity:0.9;
-					height:195px;
+					font-weight:bold;
+					font-size:16px;
+					cursor:pointer;
+					color:#fff;
+					padding:12px 0;
 				}
-				.bandeauCharlie:hover img{
-					display:none;
-				}
-				.bandeauCharlie span{
-					display:none;
-				}
-				.bandeauCharlie:hover span{
-					display:inline;
+								
+				.bandeauCharlieXS a{
+					display:inline;					
 					color:#fff;
 					text-decoration:none!important;
-				}
-				.bandeauCharlie a:focus, .bandeauCharlie a:hover {
-					text-decoration: none;
-				}
+				}				
 			</style>
-			<div class="row rowHeadLine text-center hidden-xs bandeauCharlie" style="background-color:#009CD5;color:#fff;padding:10px 0"> 
-				<a href="pages/Actu.html#1an" >
-				<img src="actus/Index_1An.png" alt="1 An" width="700" />
-				<span><br><br><h1>Revivre ma première année !</h1></span>
+			<!--
+			<div class="row rowHeadLine text-center bandeauCharlieXS visible-xs"> 
+				<a href="pages/PollutionPlan.html" >
+				<span><h2>- PIC POLLUTION -<br> Dimanche 6 août 2017 <br>  Fin des restrictions de circulation. <br></h2></span>
+				</a>
+			</div>
+			-->
+			<!--
+			<div class="row rowHeadLine text-center bandeauCharlieXS "> 
+				<a href="trafic.html">
+				<span><h2> A480 Sassenage : FIN  DE LA COUPURE. <br> Réouverture d'une voie de circulation.</h2></span>
+				</a>
+			</div>
+			-->
+			<!--<div class="row rowHeadLine text-center bandeauCharlieXS "> 
+			
+				<span><h2>Prudence ce week-end si vous prenez la route, <br>risque de chutes de neige jusqu'en plaine.  <br>
+				<span class="glyphicon glyphicon-plus-sign"></span><a href="http://www.meteofrance.com/previsions-meteo-france/isere/38" target="_blank"> www.meteofrance.com</a>
+				
+				</h2></span>
+				</a>
+			</div>-->
+		    <!--
+			<div class="row rowHeadLine text-center bandeauCharlieXS "> 
+			
+				<span>Département de l'Isère en vigilance orange neige-verglas.<br> Circulation des PL > 7,5t de nouveau autorisée à partir de 10h.<br>
+				Retrouvez l'état des routes sur notre carte <span class="glyphicon glyphicon-plus-sign"></span><a href="https://www.metromobilite.fr/trafic.html?vh=true" target="_blank"> Viabilité Hivernale</a>.
+				
+				</h2></span>
 				</a>
 			</div>
 			-->
@@ -150,15 +169,11 @@
 					</div>
 					<div id="contact"  class="row">
 						<img id="image-plan-contact" class="col-sm-4" src="img/plan.png" alt="Plan de quartier de Stationmobile">
-						<ul class="list-unstyled col-sm-2">
-							<li><span class="glyphicon glyphicon-road"></span> 15, bd Joseph Vallier 38000 Grenoble</li>
+						<ul class="list-unstyled col-sm-2" >
+							<li><span class="glyphicon glyphicon-road"></span> 15, bd Joseph Vallier 38000 Grenoble</li>						 
 							<li>&nbsp;</li>
-							<li><span class="glyphicon glyphicon-earphone"></span> 04 76 20 36 36</li>
-							<li>&nbsp;</li>
-							<li><span class="glyphicon glyphicon-envelope"></span><a href="mailto:contact@metromobilite.fr"> contact</a></li>
-							<li>&nbsp;</li>
-							<li><span class="glyphicon glyphicon-thumbs-up"></span><a href="https://www.facebook.com/metromobilite?fref=ts" target="_blank"> Facebook</a></li>
-							<li><span class="glyphicon glyphicon-heart"></span><a href="https://twitter.com/metromobilite" target="_blank"> Twitter</a></li>
+							<li> <img id="logoFb" src="img/Facebook.svg" >  <a href="https://www.facebook.com/metromobilite?fref=ts" target="_blank"> Facebook</a> </img> </li>
+							<li> <img id="logoTwtter" src="img/Twitter.svg"> <a href="https://twitter.com/metromobilite" target="_blank"> Twitter</a></li>
 
 						</ul>
 						<form role="form" id="formulaire-contact">
@@ -169,17 +184,20 @@
 								</div>
 								<div class="form-group">
 									<label for="inputMail" class="sr-only">Email</label>
-									<input type="email" class="form-control" id="inputMail" placeholder="Email">
+									<input type="email" class="form-control" id="inputMail" placeholder="Email(*)">
 								</div>
 								<div class="form-group">
 									<label for="inputObjet" class="sr-only">Objet</label>
-									<input type="text" class="form-control" id="inputObjet" placeholder="Objet">
+									<input type="text" class="form-control" id="inputObjet" placeholder="Objet(*)">
 								</div>
+								<div id="asterix">  * : obligatoire  </div>
 							</div>
 							<div class="col-sm-4">
+								<div id="successendmessage"> <p> Votre message à été envoyé avec succès </p>   </div>
+								<div id="erreursendmessage"> <p> Une erreur est survenue , votre message n a pas été envoyé veuillez reesayer </p>   </div>
 								<div class="form-group">
 									<label for="inputMessage" class="sr-only">Votre message</label>
-									<textarea rows="4" cols="50" class="form-control" id="inputMessage" placeholder="Votre message"></textarea>
+									<textarea rows="4" cols="50" class="form-control" id="inputMessage" placeholder="Votre message(*)"></textarea>
 								</div>
 								<button type="button" class="btn btn-default" id="submitBouton">Envoyer votre message</button>
 							</div>
@@ -192,36 +210,50 @@
 			<div class="container" id="piedDePage">
 				<div class="row">
 					<ul class="col-xs-2">
-						<li><h2>Se Déplacer</h2></li>
+						<li><h2 id="idSeDepl"> Se Déplacer</h2></li>
 						<li><a href="pages/TC.html"><h3>En Transport en Commun</h3></a></li>
 						<li><a href="pages/Velo.html"><h3>A Vélo</h3></a></li>
 						<li><a href="pages/Voiture.html"><h3>En Voiture</h3></a></li>
+						<li><a href="pages/VoiturePartagee.html"><h3>En Voiture Partagée</h3></a></li>
 						<li><a href="pages/Pied.html"><h3>A Pied</h3></a></li>
 						<li><a href="pages/PMR.html"><h3>Personnes à Mobilité Réduite</h3></a></li>
 					</ul>
 					<ul class="col-xs-2">
-						<li><h2>Services</h2></li>
+						<li><a href="pages/Actu.html">
+							<h2 id="idactu">Actualités</h2></a>
+						</li>
+					</ul>
+					<ul class="col-xs-2">
+						<li><h2 id="idpol">Pollution</h2></li>
+						<li><a href="pages/PollutionPlan.html"><h3>Dispositif pic de pollution</h3></a></li>
+						<li><a href="siv.html"><h3>Recevez les alertes pic pollution</h3></a></li>
+						<li><a href="pages/PollutionFAQ.html"><h3>FAQ dispositif pic de pollution</h3></a></li>
+						<li><a href="pages/PollutionZCR.html"><h3>Zone à Circulation Restreinte</h3></a></li>
+						<li><a href="pages/Pollution.html"><h3>Pollution, Kézako ?</h3></a></li>
+						<li><a href="pages/EmissionCO2.html"><h3>Calculer mes émisisons de CO2</h3></a></li>
+						<li><a href="pages/critair.html"><h3>Puis-je rouler ?</h3> </a></li>
+						<!--<li><a href="pages/PollutionQuiz.html"><h3>Quiz Pollution</h3></a></li>-->
+					</ul>	
+					<ul class="col-xs-2">
+						<li><h2 id="idSer">Nos Services</h2></li>
 						<li><a href="iti.html"><h3>Calculateur d'itinéraire multimodal</h3></a></li>
 						<li><a href="prochainsPassages.html"><h3>Prochains Passages</h3></a></li>
 						<li><a href="horaires.html"><h3>Horaires</h3></a></li>
-						<li><a href="planTC.html"><h3>Plan des reseaux</h3></a></li>
+						<li><a href="planTC.html"><h3>Plan des réseaux</h3></a></li>
 						<li><a href="velo.html"><h3>Circuler à vélo</h3></a></li>
 						<li><a href="trafic.html"><h3>Circuler en voiture</h3></a></li>
 						<li><a href="planTitresTag.html?agenceM=true"><h3>Conseils & ventes</h3></a></li>
-					</ul>
+						<li><a href="pages/DecouvrirM.html">Les agences de mobilité</h3></a></li>
+						<li><a href="pages/OpenData.html">Les données ouvertes</h3></a></li>
+						<li><a href="pages/AppliMobile.html">L'application mobile</h3></a></li>
+					</ul>					
 					<ul class="col-xs-2">
-						<li><a href="pages/Actu.html"><h2>Actualités</h2></a></li>
-					</ul>
-					<ul class="col-xs-2">
-						<li><h2>Indices de pollution</h2></li>
-						<li><a href="pages/Pollution.html"><h3>Kézako ?</h3></a></li>
-						<li><a href="pages/EmissionCO2.html"><h3>Calculer mes émisisons de CO2</h3></a></li>
-					</ul>	
-					<ul class="col-xs-2">
-						<li><h2>Découvir M</h2></li>
-						<li><a href="pages/DecouvrirM.html"><h3>Les agences de mobilité</h3></a></li>
-						<li><a href="pages/OpenData.html"><h3>Les données ouvertes</h3></a></li>
-						<li><a href="pages/AppliMobile.html"><h3>L'application mobile</h3></a></li>
+						<li><h2 id="PlMob">Plan de Mobilité</h2></li>
+						<li><a href="pages/pdmDecouvrir.html">Découvrir le Plan de Mobilité</h3></a></li>
+						<li><a href="pages/pdmServices.html">Les services</h3></a></li>
+						<li><a href="pages/pdmPartenaires.html">Les partenaires</h3></a></li>
+						<li><a href="pages/pdmEntreprises.html">Les établissements M'PRO</h3></a></li>
+						<li><a href="pages/pdmContact.html">Contact Plan de Mobilité</h3></a></li>
 					</ul>
 					<ul class="col-xs-2">
 						<li><a href="pages/conditions.html"><h3>Mentions légales et Crédits</h3></a></li>

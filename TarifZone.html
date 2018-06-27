@@ -1,0 +1,642 @@
+<!doctype html>
+<!--
+// Metromobilité is the mobile application of Grenoble Alpes Métropole <http://www.metromobilite.fr/>.
+// It provides all the information and services for your travels in Grenoble agglomeration.
+
+// Copyright (C) 2013
+// Contributors:
+//	NB/VT - sully-group - www.sully-group.fr - initialisation and implementation
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html lang="fr">
+	<head>
+		<base href="../" />
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="initial-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+		<title>MétroMobilité - Tarification scolaire - Zone peu dense</title>
+		<meta name="description" content="Métromobilité vous permet de connaitre votre éligibilité à la tarification scolaire 'zone peu dense'" />
+		<link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/actus.css" rel="stylesheet">
+		<link href="css/head.css" rel="stylesheet">
+		<link href="css/index.css" rel="stylesheet">
+		<style type='text/css'>
+			@media (min-width: 768px) {
+				body {
+					background-image:url("img/pages/bandeauEmissionCO2.jpg");
+					background-attachment: fixed;
+					background-repeat:no-repeat;
+					background-position:top center;
+				}
+			}
+			h2 {
+			font-size:18px!important;
+			margin-bottom:0px!important;
+			margin-top:20px!important;
+			text-transform:uppercase!important;
+			font-weight: 500!important;
+			line-height: 1.1!important;
+			}
+			h4 {
+			font-size:11px!important;
+			}
+			#navbarDesc {
+				background-color: #21881c;
+				opacity:0.9;
+			}
+			.container-page h2, .container-page h6, .container-page h5, .container-page h4, .container-page h3, .container-page  > div > .row a, .container-page .glyphicon-plus-sign:before   {
+				color:#21881c;
+			}
+			hr {
+				 background-color: #21881c;
+				 height: 4px;
+			}
+			.container-page .nav > li > a:hover, .nav > li > a:focus{
+				background-color: #1f6314;
+				border-color: #1f6314;
+				opacity:0.9;
+			}
+			#main{
+				padding-bottom: 10px;
+			}
+			.reponse {
+				padding: 10px;
+				display: none;
+			}
+			.label {
+				font-size: 100%;
+			}
+		</style>	
+	</head>
+	<body>
+	<div id='head'></div>
+	<div id='main' class="container-fluid container-page">
+		<div id="rowPage">
+			<div class="row rowHeader bgTransp hidden-xs hidden-print">
+				<div class="container">
+					<h1>Tarification scolaire zone peu dense</h1>
+				</div>
+				<div id="navbarDesc" class="container-fluid hidden-print" data-spy="affix" data-offset-top="240">
+					<div class="container">
+						<div class="row">
+							<ul class="nav navbar-nav collapse navbar-collapse">
+								<li><a href="tarifzone.html#concerne">Qui est concerné ?</a></li>								
+								<li><a href="tarifzone.html#fonctionnement">Fonctionnement</a></li>								
+								<li><a href="tarifzone.html#beneficie">Comment en bénéficier ?</a></li>								
+								<li><a href="tarifzone.html#moteur">Test de votre éligibilité</a></li>								
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+
+				<div class="visible-print-block" style="text-align: center;"><img id="logo-contact" src="img/metromobilite.svg" alt=""> Métromobilité</div>
+				<div class="container">		
+					<div class="visible-print-block">
+		
+						<h1>Tarification scolaire zone peu dense</h1>
+						Vous pouvez désormais vous rendre en agence de Mobilité, muni :
+						<ul>
+						<li>d'une impression de ce document,</li>
+						<li>d'un justificatif de domicile datant de moins de 3 mois (facture téléphone fixe / Internet, électricité, gaz, quittance de loyer),</li>
+						<li>du livret de famille avec les pages des parents et du (ou des) enfant(s) concerné(s) par la demande,</li>
+						<li>du règlement du Pass (150 €),</li>
+						<li>en cas de création de carte OùRA!, de la carte d'identité et d'une photo d'identité (+5 €).</li>
+						</ul>
+					</div>
+					<br>
+					<div class="hidden-print">
+						Si vous habitez une commune ou un secteur peu dense de la Métropole grenobloise, desservi par une ligne TAG ou Transisère dont l'offre de transport est limitée (inférieure ou égale à 10 allers-retours quotidiens), votre enfant (4 à 17 ans) peut bénéficier d’un nouveau Pass annuel dédié à ses déplacements entre le domicile et l’établissement scolaire.(*)
+						<h2 id="concerne" class="anchor">Qui est concerné ?</h2>
+						<hr>
+						<ul>
+							<li>La totalité des communes de : Miribel-Lanchâtre, Mont-Saint-Martin, Montchaboud, Notre-Dame de Commiers, Notre-Dame de Mésage, Proveysieux, Quaix-en-Chartreuse, Saint Barthélémy-de-Séchilienne, Saint Georges de Commiers, Saint Pierre-de-Mésage, Sappey-en-Chartreuse, Sarcenas.</li>
+							<br>
+							<li>Certains secteurs, des communes de : Bresson, Brié-et-Angonnes, Champ-sur-Drac, Champagnier, Claix, Corenc, Gières, Herbeys, Jarrie, La Tronche, Le Gua, Murianette, Noyarey, Saint Egrève, Saint Martin d’Hères, Saint Martin-le-Vinoux, Sassenage, Séchilienne, Seyssinet-Pariset, Seyssins, Saint-Paul-de-Varces, Varces-Allières-et-Risset, Vaulnaveys-le-Bas, Vaulnaveys-le-Haut, Veurey-Voroize, Vif.</li>
+						</ul>
+						<h2 id="fonctionnement" class="anchor hasclear">Fonctionnement</h2>
+						<hr>
+						<p>
+							Il s’agit d’un Pass' annuel, valable du <b>lundi au samedi</b> en périodes scolaires uniquement, pour <b>12 voyages hebdomadaires</b>. Pas de possibilité de circuler le dimanche et pendant les vacances scolaires.
+							<br>
+							Attention :
+							<ul>
+								<li>Il n’est pas possible de reporter les voyages non consommés d’une semaine sur l’autre.</li>
+								<li>Dès que le quota des validations hebdomadaires est atteint, le titre n’est plus valable jusqu’au lundi suivant, où il repart avec un crédit de 12 voyages.</li>
+							</ul>
+							Le Pass est vendu 150 € pour l’année scolaire, correspondant à la période du 04/09/2017 au 07/07/2018. Il est payable uniquement en une seule fois.
+						</p>
+						<br>
+						<h2 id="beneficie" class="anchor">Comment en bénéficier ?</h2>
+						<hr>
+						<p>
+							<span class="glyphicon glyphicon-ok"></span> Assurez-vous de votre éligibilité via le moteur de recherche "Test de votre éligibilité". En cas de doute, vous pouvez contacter le service AlloTAG au 04 38 70 38 70.
+							<br>
+							<span class="glyphicon glyphicon-ok"></span> Rendez-vous en agences de Mobilité muni :
+							<ul>
+								<li>d'un justificatif de domicile datant de moins de 3 mois, (facture de téléphonie fixe, d'internet, d'électricité, de gaz, ou quittance de loyer)</li>
+								<li>du livret de famille,</li>
+								<li>d'une photo d'identité + la carte d'identité (5€ en cas de création de la carte OùRA!).</li>
+							</ul>
+						</p>
+					</div>
+					<h2 id="moteur" class="anchor">Test de votre éligibilité</h2>
+					<hr>
+					<div class="col-sm-6 col-sm-offset-1">
+						<p>
+							<label>Votre commnue</label>
+						</p>
+						<p>
+							<div class="input-group input-group-sm">
+								<label class="control-label sr-only" for="commune">Commune</label>
+								<span class="input-group-addon glyphicon glyphicon-home"></span>
+								<input id="commune" data-postcode="" data-commune=""  type="text" class="form-control hasclear" autocomplete="off" placeholder="Nom de votre commune" onchange="clear();" tabindex="1"/>
+								<span class="saisie_clear glyphicon glyphicon-remove"></span>
+							</div>
+						</p>
+						<div id="saisieVoie" style="display:none;">
+							<p>
+								<label>Votre nom de voie</label>
+							</p>
+							<p>
+								<div class="input-group input-group-sm">
+									<label class="control-label sr-only" for="voie">Voie</label>
+									<span class="input-group-addon glyphicon glyphicon-road"></span>
+									<input id="voie" data-nomVoie="" type="text" class="form-control hasclear" autocomplete="off" placeholder="Nom de votre rue, allée ..." onchange="clear();" tabindex="2"/>
+									<span class="saisie_clear glyphicon glyphicon-remove"></span>
+								</div>						
+							</p>
+						</div>
+						<div id="saisieNumero" style="display:none;">
+							<p>
+								<label>Votre numéro de voie</label>
+							</p>
+							<p>
+								<div class="input-group input-group-sm">
+									<label class="control-label sr-only" for="voie">Voie</label>
+									<span class="input-group-addon glyphicon glyphicon-map-marker"></span>
+									<input id="numero" data-numeroVoie="" type="text" class="form-control hasclear" autocomplete="off" placeholder="Numéro de votre rue, allée... ex: 2 BIS" onchange="onChangeNumeroValue(this);" tabindex="3"/>
+									<span class="saisie_clear glyphicon glyphicon-remove"></span>
+								</div>						
+							</p>							
+							<p class="hidden-print"> 
+								<input type="button" class="btn btn-success" value="Tester mon adresse" onclick="calculer()" tabindex="4"/>
+							</p>
+						</div>
+					</div>
+					<span class="clearfix"></span>
+					<div id="reponseYes" class="reponse label label-success"> 
+						<span>Votre adresse est éligible au Pass scolaire zone peu dense.<br>Vous pouvez vous rendre en agence de Mobilité avec une copie de ce résultat et les pièces justificatives&nbsp;&nbsp;</span>
+						<input type="button" class="btn btn-warning hidden-print" value=">Imprimer" onclick="imprime()"/>
+					</div>
+					<div id="reponseNo" class="reponse label label-danger"> 
+						<span>Votre adresse n'est pas éligible au Pass scolaire zone peu dense. Vous pouvez vous procurer un Pass 4-17 ans en <a href="planTitresTag.html?agenceM=true">agence de Mobilité.</a></span>
+					</div>		
+					<div id="reponseNoTrouvee" class="reponse label label-warning"> 
+						<span>Votre adresse n'est pas référencée.<br>Vous pouvez remplir le formulaire sur <a href="http://www.smtc-grenoble.org/pass-scolaire" target="_blank">http://www.smtc-grenoble.org/pass-scolaire</a> pour vérification de votre éligibilité.<br>Une réponse vous sera envoyée sous quelques jours.</span>
+					</div>
+					<br>
+					<hr>
+					<div class="hidden-print">
+						(*) Votre domicile doit également être situé à plus de 500 m d’un point d’arrêt d’une ligne TAG dont l’offre est supérieure à 10 allers-retours/jour ou d’une ligne Transisère structurante.
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	
+	<div id="btn_up" title="Haut de page">
+		<a href="#" class="glyphicon glyphicon-arrow-up"></a>
+	</div>
+	<div id='footer'></div>
+	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/moment.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
+	<script type="text/javascript" src="stats/piwik.js"></script>
+	<script type="text/javascript" src="js/outils.js"></script>
+	<script type="text/javascript" src="js/fr.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>
+	
+	<script type="text/javascript">
+	
+		var tabCommunesEligible = [
+			'Miribel-Lanchâtre',
+			'Mont-Saint-Martin',
+			'Notre-Dame-de-Mésage',
+			'Montchaboud',
+			'Notre-Dame-de-Commiers',
+			'Proveysieux',
+			'Quaix-en-Chartreuse',
+			'Sarcenas',
+			'Saint-Barthélemy-de-Séchilienne',
+			'Saint-Georges-de-Commiers',
+			'Le Sappey-en-Chartreuse'
+			
+		];
+
+		var finalResult = {};
+		//--------------------------------------//
+		//initPage
+		//--------------------------------------//
+		function initPage() {
+			/*if (urlParams.iFrame){ //Affichage via iFrame devalidé intentionnellement
+				$(".main").attr('style','top:0px');
+				$.support.cors = true;
+
+			} else {*/
+				$('#head').load('head.html');
+			//}
+			
+			ajouteAutocompleteBAN('#commune',{
+				fctSaisieReussieBAN:function(item){ return fctSaisieReussieCityBAN('#commune',item);},
+				fnSaisieRateeBAN:function(item){ },
+				type:'city'
+			});
+	
+			ajouteAutocompleteBAN('#voie',{
+				fctSaisieReussieBAN:function(item){ return fctSaisieReussieStreetBAN('#voie',item);},
+				fnSaisieRateeBAN:function(item){ },
+				type:'street',
+				postcodeData:'#commune'
+			});
+		}
+		
+		//--------------------------------------//
+		//calculer
+		//--------------------------------------//
+		function calculer(){
+		
+			clear();
+			var reponse = '';
+			for (var i = 0; i < finalResult.length-1 ; i++) {
+				var res = finalResult[i];
+				if ((res.postcode == $('#commune').attr('data-postcode')) && (res.name == $('#voie').attr('data-nomVoie'))) { //recherhe l'element selectionné
+					if (res.housenumbers[$('#numero').attr('data-numeroVoie')]) {
+						if (res.housenumbers[$('#numero').attr('data-numeroVoie')].tarifZonePeuDense == 1) {
+							reponse = '#reponseYes';
+						} else {
+							reponse = '#reponseNo';
+						}
+						break;
+					} 
+				} 
+			}
+			if (reponse == '') reponse = '#reponseNoTrouvee';
+			$(reponse).show();
+		}
+		
+
+		//--------------------------------------//
+		//onChangeValue
+		//--------------------------------------//
+		function onChangeNumeroValue(e) {
+			$('#numero').attr('data-numeroVoie',e.value.toUpperCase());
+			clear();
+		}
+		//--------------------------------------//
+		//onChangeValue
+		//--------------------------------------//
+		function clear() {
+			$('#reponseYes').hide();
+			$('#reponseNo').hide();
+			$('#reponseNoTrouvee').hide();
+		}
+		//--------------------------------------//
+		// imprimeFeuilleDeRoute
+		//--------------------------------------//
+		function imprime() {
+			window.print();
+		}
+		//--------------------------------------//
+		// fctSaisieReussieCityBAN(idInput,item)
+		//--------------------------------------//
+		function fctSaisieReussieCityBAN(idInput,item) {
+			$(idInput).attr('data-postcode',item.postcode);
+			$(idInput).attr('data-commune',item.city);
+			$(idInput).val(item.label + ' (' + item.postcode +')');
+			$(idInput).parents('.input-group').toggleClass('has-error',false);
+			/*if(item.numeroNonTrouve) {
+				$(idInput).parent().after('<span class="help-block help-'+idInput.substr(1)+'">'+lang.numeroNonTrouve+'</span>');
+			} else {
+				$('.help-'+idInput.substr(1)).remove();
+			}*/
+			
+			setTimeout(function () {$(idInput).blur();}, 0); //cache le clavier sur mobile
+			//setTimeout(function () {$("#calculer").focus();}, 0); //cache le clavier sur mobile
+			clear();
+			if (communeEligible(item.city)) {
+				$('#reponseYes').show();
+				$('#saisieVoie').hide();
+				$('#saisieNumero').hide();
+				return false;
+				
+			} else {
+				$('#saisieVoie').text();
+				$('#saisieVoie').show();
+				return true;
+			}
+		}
+		
+		//--------------------------------------//
+		// fctSaisieReussieStreetBAN(idInput,item)
+		//--------------------------------------//
+
+		function fctSaisieReussieStreetBAN(idInput,item) {
+			$(idInput).attr('data-nomVoie',item.label);
+			$(idInput).val(item.label);
+			$(idInput).parents('.input-group').toggleClass('has-error',false);
+			/*if(item.numeroNonTrouve) {
+				$(idInput).parent().after('<span class="help-block help-'+idInput.substr(1)+'">'+lang.numeroNonTrouve+'</span>');
+			} else {
+				$('.help-'+idInput.substr(1)).remove();
+			}*/
+			
+			setTimeout(function () {$(idInput).blur();}, 0); //cache le clavier sur mobile
+			//setTimeout(function () {$("#calculer").focus();}, 0); //cache le clavier sur mobile
+			
+			$('#saisieNumero').show();
+			$('#saisieNumero').focus();			
+			return true;
+		}
+		
+		//--------------------------------------//
+		//fnSaisieRateeBAN
+		//--------------------------------------//
+		function fnSaisieRateeBAN(idInput,itemp){ 
+			$(idInput).val("erreur de saisie");					
+		}
+		
+		//--------------------------------------//
+		//requeteChercheCityBAN
+		//--------------------------------------//
+		function requeteChercheCityBAN(query,process,options) {
+			var types = '';
+			var t=[];
+			finalResult = {};
+			
+			var searchUrl = url.ws()+ '/api/find/city/json?query=' + encodeURIComponent(query);
+			$.ajax({
+				async : true,
+				url : searchUrl,
+				dataType : 'json',
+				error : function (xhr, ajaxOptions, thrownError) {
+					console.log(xhr, ajaxOptions, thrownError);
+				},
+				success : function (data) {
+					var resultat=[];
+					var best = {res:{},dist:0,idx:-1};
+					$.each(data, function (i) {
+						//console.log(this);
+						var res;
+						res = {
+								id: this.id,				// "38185_38100"
+								type: this.type,			// "municipality"
+								name: this.name,			//	"Grenoble"
+								postcode: this.postcode,	//	"38100"
+								lon: this.lon,				//	5.725358
+								lat: this.lat,				//	45.18627
+								population: this.population,//	155.6
+								city: this.city,			//	"Grenoble"
+								adm_weight: this.adm_weight,//	4
+								importance: this.importance,//	0.675,								
+								label : this.city + ' ('  + this.postcode + ')'
+								
+								};
+						resultat.push(res);
+						if (parseInt(this.importance)>parseInt(best.dist)) {
+							best.dist = this.importance;
+							best.res = res;
+							best.idx = i;
+						}
+					});
+					var seuil = parseInt(best.dist)*0.5;
+					/*resultat = resultat.filter(function(r){
+						return(parseInt(r.dist)>=seuil);
+					});*/
+					/*if (data.length>0)
+					{
+						resultat.splice(best.idx,1);
+						resultat.splice(0,0,best.res);
+
+					}*/
+					if (resultat.length == 0)
+						resultat.push({
+							label : "Commune introuvable ou hors Métropole...<br/>Merci de bien vouloir saisir une autre commune...",
+							value : '',
+							commune:'',
+							type:''
+						});
+					else {
+						resultat.push({
+							label : lang.modifChoix,
+							value : '',
+							commune:'',
+							type:''
+						});
+					}
+					process(resultat);
+				}
+			});
+		}
+		
+		//--------------------------------------//
+		//requeteChercheStreetBAN
+		//--------------------------------------//
+		function requeteChercheStreetBAN(query,process,options) {
+			var types = '';
+			var t=[];
+			finalResult = {};
+			
+			//http://127.0.0.1:3000/api/find/street/json?saisie=gent&city=38120
+			var searchUrl = url.ws()+ '/api/find/street/json?saisie=' + encodeURIComponent(query) + '&city=' + $(options.postcodeData).attr('data-postcode');//options.postcode;
+			$.ajax({
+				async : true,
+				url : searchUrl,
+				dataType : 'json',
+				error : function (xhr, ajaxOptions, thrownError) {
+					console.log(xhr, ajaxOptions, thrownError);
+				},
+				success : function (data) {
+					var resultat=[];
+					var best = {res:{},dist:0,idx:-1};
+					$.each(data, function (i) {
+						//console.log(this);
+						var res;
+						res = {
+						
+								id: this.id,				// "38185_3870_abf079"
+								type: this.type,			// "street"
+								name: this.name,			// "Rue Jean Perrin"
+								postcode: this.postcode,	// "38100"
+								lon: this.lon,				// 5.715849
+								lat: this.lat,				// 45.170137
+								city: this.city,			// "Grenoble"
+								importance: this.importance,// 0.1687
+								housenumbers: this.housenumbers,// []
+								label : this.name
+								
+								};
+						//console.log(res);
+						if (this.city == $(options.postcodeData).attr('data-commune')) { //cas des code avec plusieur ville ex 38120
+							resultat.push(res);
+							if (parseInt(this.importance)<parseInt(best.dist)) {
+								best.dist = this.importance;
+								best.res = res;
+								best.idx = i;
+							}
+						}
+					});
+					/*var seuil = parseInt(best.dist)*0.5;
+					resultat = resultat.filter(function(r){
+						return(parseInt(r.dist)>=seuil);
+					});
+					//console.log("data.length :" + data.length);
+					if (data.length>0)
+					{
+						resultat.splice(best.idx,1);
+						resultat.splice(0,0,best.res);
+
+					}*/
+					if (resultat.length == 0)
+						resultat.push({
+							label : "Voie introuvable...<br/>Merci de bien vouloir saisir une autre voie...",
+							value : '',
+							commune:'',
+							type:'',
+							postcode:''
+						});
+					else {
+						resultat.push({
+							label : lang.modifChoix,
+							value : '',
+							commune:'',
+							type:'',
+							postcode:''
+						});
+					}
+					finalResult = resultat;
+					process(resultat);
+				}
+			});
+		}
+
+		//--------------------------------------//
+		//ajouteAutocompleteBAN
+		//--------------------------------------//
+		function ajouteAutocompleteBAN(champ,opt) {
+		//options
+		var options = opt;
+		if (!options) {
+			options = {};
+		}
+		
+		(!options.fctSaisieReussieBAN?function(){}:'');
+		(!options.fctSaisieReussieBAN?function(){}:'');
+
+			if ($(champ) && $(champ).typeahead) {
+				$(champ).typeahead({
+					source:function(query, process) {
+						if (timeout) {
+							clearTimeout(timeout);
+						}
+						timeout = setTimeout(function() {
+							var opt = jQuery.extend(true, {}, options);
+							return (options.type=='city'?requeteChercheCityBAN(query,process,opt):requeteChercheStreetBAN(query,process,opt));
+						}, 500);
+
+					},
+					matcher: function (item) {return true;}, //serveur
+					sorter: function(items){
+						var meilleurItem = $.extend( true, {}, items[0] );
+						if (items.length>2) {
+							//items.splice(0, 1);
+							items = items.sort(function(a,b){
+								if (a.label==lang.modifChoix) return 1;
+								if (b.label==lang.modifChoix) return -1;
+								if(a.name>b.name) return 1;
+								if(a.name<b.name) return -1;
+								if(a.name==b.name && a.label > b.label) return 1;
+								if(a.name==b.name && a.label <= b.label) return -1;
+								return ;
+							});
+						}
+						meilleurItem.best=true;
+						meilleurItem.displayCommune=true;
+						if (items.length>2 && items[0].label!=meilleurItem.label) {
+							items.splice(0, 0, meilleurItem);
+						} else if (items.length>2 && items[0].label==meilleurItem.label) {
+							items[0].best=true;
+						}
+						items[0].displayCommune=true;
+						for (var i = 1; i < items.length-1 ; i++) { //i=1 pour ignorer la premiere ligne vide avant modifier votre choix
+							if (items[i] && items[i-1].name!=items[i].name) {
+								items[i].displayCommune=true;
+							}
+						}
+						return items;
+					},
+					highlighter: function (item) {
+						var regex = new RegExp( '(' + this.query + ')', 'gi' );
+						if (item) {
+							var toRet = '<span '+(item.best?'class="bestResult"':'')+'data-postcode="'+item.name+'" data-type="'+item.type+'" >' + item.label.replace( regex, "<strong>$1</strong>" ) + '</span>';
+							return toRet;
+						}
+						else 
+							return('');
+					},
+					updater:function(item){
+						//if (item.lat==0 && item.lon == 0) {
+						/*if (item.bRoadNumber) {
+							chercheAddok(item,function(item){options.fctSaisieReussieBAN(item,champ);});
+							return item.label;
+						} */
+						if (item.value!='') {
+							options.fctSaisieReussieBAN(item,champ);
+							$(champ).blur();
+							return item.label;
+						} else
+							options.fnSaisieRateeBAN(item,champ);
+						return this.query;
+					},
+					items:'all',
+					minLength:3,
+					autoSelect:true
+				});
+			}
+		}
+
+		//--------------------------------------//
+		//communeEligible : affiche direct l'éligibilte ok sur certaines communes
+		//--------------------------------------//
+		function communeEligible(commune) {
+			for(comm in tabCommunesEligible) {
+				if (tabCommunesEligible[comm] == commune) return true;
+			}
+			return false;			
+		}		
+		
+		initPage();
+		//trackPiwik("MetroMobilité : tarifZone.html");
+	</script>
+  </body>
+</html>
+
+
+
+
+
+
+

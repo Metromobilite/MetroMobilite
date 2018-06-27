@@ -30,7 +30,7 @@
 	<link rel="stylesheet" href="js/lib/ol/ol.css" type="text/css" />
     <link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
 	<link rel="Stylesheet" type="text/css" href="css/panel.css">
-	<link rel="Stylesheet" type="text/css" href="css/prochainsPassages.css">
+	<link rel="Stylesheet" type="text/css" href="css/prochainsPassagesCustoms.css">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -48,16 +48,15 @@
 	<div class="container-fluid main">
 		<div class="row">
 			<div id="mainView">
-				<h1 id="titrePPassage">Prochains passages </h1>
 				<div id="centre">
 					<div id="ppOnglets"></div>
 					<div id="pp">
 						<span id="horairesText">Sélectionnez la ligne dans le panneau de gauche</span>
 					</div>
 					
-					<div id="timesyncPP">
+					<!--<div id="timesyncPP">
 						<span class="glyphicon glyphicon-refresh" title="Mise à l'heure courante"></span><span class="sr-only">Rafraichir</span>
-					</div>
+					</div>-->
 				</div>
 				<!--<span>Informations issues de nos partenaires.</span>-->
 			</div>
@@ -70,18 +69,17 @@
 					<div class="tableau"></div>
 				</div>
 				<div data-code="" class="ligne onglet">
-					<span>
-						<span class="modeLigne"></span>
-						<span class="numLigne"></span>
-						<span class="groupeArret hidden">&nbsp;|&nbsp;
+					<span class="spanLigne">
+						<!--<span class="modeLigne"></span>-->
+						<!--<span class="numLigne"></span>-->
+						<span class="groupeArret hidden">
+							<span class="arretDesc">ARRET</span>
 							<span data-code="" class="arret"></span>
-							<span class="caret" ></span>
+							<!--<span class="caret" ></span>-->
 						</span>
 					</span>
 				</div>
 				<div class="horaires contenu">
-					<div class="favori">
-					</div>
 					<div class="direction dir1">
 					</div>
 					<div class="direction dir2">
@@ -94,17 +92,21 @@
 						<!--img class="pictoHorloge" src="img/horloge.svg" alt=""-->
 					</div>
 					<div class="delai">
-						<span class="texte">0 min</span>
-						<img class="logoRss" alt="" src="img/rss.png"/>
+						<span class="texte"></span>
+						<img class="logoRss" alt="" src="img/rss_blanc.png"/>
+					</div>
+					<div class="delai2">
+						<span class="texte"></span>
+						<img class="logoRss" alt="" src="img/rss_blanc.png"/>
 					</div>
 				</div>
 			</div>
-			<div id="menu" class="toggleListe visible-xs listeAffichee" title="Affichage du panneau de sélection des lignes" role="button" aria-label="Affichage du panneau de sélection des lignes"><span class="glyphicon glyphicon-menu-hamburger"></span></div>
+			<!--<div id="menu" class="toggleListe visible-xs listeAffichee" title="Affichage du panneau de sélection des lignes" role="button" aria-label="Affichage du panneau de sélection des lignes"><span class="glyphicon glyphicon-menu-hamburger"></span></div>-->
 			<div id="panel" class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
 				<div id="listeMain" class="container-fluid">
-					<div id="listeTop" class="row">
+					<!--<div id="listeTop" class="row">
 						<div id="menuListe" class="toggleListe visible-xs listeAffichee" title="Masquage du panneau de sélection des lignes" role="button" aria-label="Masquage du panneau de sélection des lignes"><span class="glyphicon glyphicon-menu-hamburger"></span></div>
-					</div>
+					</div>-->
 					<div id="listeLignes" class="row">
 						<div><p id="listeLignesDesc" class="panelDesc">Cliquez sur votre ligne TAG ou Transisère, puis sélectionnez l’arrêt auquel vous allez prendre votre bus ou votre tram. Métromobilité vous fournit, en temps réel, l’attente avant le prochain passage dans les deux sens de circulation.</p></div>
 						<div id="TRAM" class="row titreReseau">
@@ -180,12 +182,20 @@
 				var onglet = modeleDivLigneOnglet.clone();
 				onglet.attr('data-code',_this.id);
 				var lgn = dataLignesTC[_this.id];
-				onglet.css('background-color','#'+lgn.color);
-				onglet.css('color','#'+lgn.textColor);
-				var pictoMode = getPictoMode(lgn.mode.toLowerCase());
-				$(pictoMode).css('fill','#'+lgn.textColor);
-				onglet.find('.modeLigne').append(pictoMode);
-				onglet.find('.numLigne').text(lgn.shortName);
+
+
+				/*onglet.find('.numLigne').css('background-color','#'+lgn.color);
+				onglet.find('.numLigne').css('color','#'+lgn.textColor);
+				onglet.find('.numLigne').css('padding','10px');*/
+
+				var logo = getLogoLgn(ligne.code,lgn.shortName,'#'+lgn.color,0,'logo','logoRect');
+				$(logo).find('title').text(lgn.shortName+' - '+lgn.libelle); //pour vieux Firefox
+				onglet.find('.spanLigne').prepend(logo);
+
+				//var pictoMode = getPictoMode(lgn.mode.toLowerCase());
+				//$(pictoMode).css('fill','#'+lgn.textColor);
+				//onglet.find('.modeLigne').append(pictoMode);
+				//onglet.find('.numLigne').text(lgn.shortName);
 				$('#ppOnglets').append(onglet);
 			}
 			showLigne(_this.id);
@@ -290,21 +300,6 @@
 						$('#'+urlParams.codeLigne).trigger('click');
 					}
 				}
-				if (data.favoris == 1 && data.lignes == 1){
-					for ( var l=0; l<dataFavoris.arret.length;l++){
-						//var code=dataFavoris.ligne[l].replace(":","_");
-						var splitCode = dataFavoris.arret[l].split('@');
-						var codeLigneArret = splitCode[1];
-						var ligesDejaOuvertes=[];
-						ligesDejaOuvertes=codeLigneArret;
-						if (ligesDejaOuvertes.indexOf(codeLigneArret)!=-1){
-						   ajouteLigne(codeLigneArret.replace(":","_"));
-						   }
-					}
-					data.favoris = 2;
-					$( document ).off("evtChargements", {}, evtsChargements);	
-				
-				}
 			}
 			
 			if (urlParams.iFrame){
@@ -351,33 +346,28 @@
 					var contenu = modeleDivContenuHoraires.clone();
 					var bAucunPassage = true;
 					if(passages[codeLgn]) {
-					//ajout icon favori - Elhadj
-						if (isfavorisPresent(codeLgn.substring(0, 3))){// && typeof(arr.parentStation)!='undefined') { 
-							var idFav = divArret.attr('data-code').replace('_',':');
-							var logoFav = getLogoFav(lang.appMobile.FAVORIS,colorsFavoris,idFav ,idFav + " favorisArret",isArretfavori(codeLgn ,divArret.attr('data-code')));
-							contenu.find('.favori').append(logoFav);
-							logoFav.click(function(){
-								//var codeligne=$("#ppOnglets .ligne.active").attr('data-code').replace('_',':');
-								var parentStation= divArret.attr('data-code') ;//$("#ppOnglets .ligne.active .arret"); 
-								//ajout de l'arret sélectionné
-								toogleProchainPassageArretFavori($(this), codeLgn.replace('_',':'), parentStation,colorsFavoris);
-							});
-						}
 					
 						for (var d in passages[codeLgn]) {
 							var bAucunPassageDestination = true;
 							var dir = passages[codeLgn][d];
 							dir.class = d;
 							if(dir && (dir.name.trim().toUpperCase().latinise().split(arretName).length<2)) {
-
+								$('.logoRss').hide();
 								dir.times.forEach(function(e){
 									if(!e.bTropLong) {
-									
-										var divPassage = modeleDivPassage.clone();
-										divPassage.find('.destination .texte').text(e.dest);
-										divPassage.find('.delai .texte').text(formatDelaiPP(moment(e.time)));
-										if(!e.realtime) divPassage.find('.delai .logoRss').hide();
-										contenu.find('.'+dir.class).append(divPassage);
+										var destination = e.dest.replace(/ /g,"").toUpperCase().latinise();
+										var divPassage = contenu.find('.'+dir.class).find('.'+ destination);
+										if (divPassage.length == 0) {
+											divPassage = modeleDivPassage.clone();
+											divPassage.find('.destination .texte').text(e.dest);
+											divPassage.find('.delai .texte').text(formatDelaiPP(moment(e.time)));
+											if(e.realtime) divPassage.find('.delai .logoRss').show();
+											divPassage.addClass(destination);
+											contenu.find('.'+dir.class).append(divPassage);
+										} else {
+											divPassage.find('.delai2 .texte').text(formatDelaiPP(moment(e.time)));
+											if(e.realtime) divPassage.find('.delai2 .logoRss').show();
+										}
 										
 										bAucunPassage=false;
 										bAucunPassageDestination=false;
@@ -388,8 +378,8 @@
 							}
 						}
 						if(!bAucunPassage) {
-							var texte = $('<div aria-hidden="true"><img alt="'+lang.horairesTheoriques+'" src="img/rss.png"/>' + lang.horairesTheoriques+'</div>');
-							contenu.append(texte);
+							/*var texte = $('<div aria-hidden="true"><img alt="'+lang.horairesTheoriques+'" src="img/rss.png"/>' + lang.horairesTheoriques+'</div>');
+							contenu.append(texte);*/
 						
 							var infoComplementaire = '<div class="cellEvenement">';
 							if (dataEvtsTC[codeLgn]) { // Evenement sur la ligne
@@ -443,19 +433,7 @@
 							name = z.name+' - '+z.city;
 						orderedList.push({arr:z.code,name:name});
 					});
-					/*for(arr in zones) {
-						var name;
-						if(ligne.substr(0,3)!='C38')
-							name = getShortStopName(zones[arr]);
-						else
-							name = zones[arr].split(',').reverse().join(' - ');
-						orderedList.push({arr:arr,name:name});
-					}
-					orderedList = orderedList.sort(function (a, b) {
-						if (a.name > b.name) return 1;
-						if (a.name < b.name) return -1;
-						return 0;
-					});*/
+
 					var arretToTrigger = false;
 					// id fav
 					var idFav = 'fav_'+ligne.replace('_','');
@@ -471,12 +449,9 @@
 							urlParams.nomArretsTR=false;
 							urlParams.idsArretsTR=false;
 						}
-						//var logoF = getLogoFav(lang.appMobile.FAVORIS,colorsFavoris,idFav,idFav + " favorisArret", true); //divArret.attr('data-code')));
 						var logoF = getLogoFav('',colorsFavoris,idFav,idFav + " favorisArret", true); //divArret.attr('data-code')));
 						opts+='<li class="arrets" data-code="'+orderedList[j].arr+'"><span>' + orderedList[j].name +  '</span>'+(isArretfavori(ligne ,orderedList[j].arr)?'<div class="logofav right-block"> </div>': ' ')+'</li>';
-						//opts+='<li class="arrets" data-code="'+orderedList[j].arr+'"><span style="width:calc( 100% - 88px )">' + orderedList[j].name +  '</span>'+(isArretfavori(ligne ,orderedList[j].arr)?'<div style="width:88px" class="logofav"> </div>': ' ')+'</li>';
-						//opts+='<table>  <tr>  <td style="width:70%"> <li class="arrets" data-code="'+orderedList[j].arr+'">' + orderedList[j].name +  ' '+
-						//	  ' </td>  <td style="width:18%">'+ (isArretfavori(ligne ,orderedList[j].arr)?'<div class="logofav"> </div>': ' ') + '</td> </tr> </table>';
+						
 					} 
 					var arrets = $('<div class="list-arrets"><ul><li class="arrets" data-code="">' + lang.horaires.choixArret + '</li>'+ opts +'</ul></div>');
 					

@@ -25,8 +25,8 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta content="initial-scale=1.0, user-scalable=no, width=device-width" name="viewport">
-		<title>Métromobilité – Plan de la Métropole apaisée au 1er janvier 2016</title>
-		<meta name="description" content="Vérifiez les communes et les axes de la Métropole Grenobloise qui basculent dans la ville apaisée, les axes à 30 km/h et ceux à 50km/h." />
+		<title>Métromobilité – Coupe Icare : Comment vous y rendre ?</title>
+		<meta name="description" content="Du jeudi 21 au dimanche 24 septembre, c'est la 44ème édition de la Coupe Icare. Afin de vous y rendre sans utiliser votre voiture, plusieurs possibilités s'offrent à vous : Le Vélo, le Bus ou le Train. " />
 		<link href="js/lib/ol/ol.css" rel="stylesheet">
 		<link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
 		<link href="js/lib/bs/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
@@ -132,23 +132,21 @@
 					<ul class="layers list-unstyled text-left"></ul>
 				</div>
 			</div>
-			<div id="panel" class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+			<div id="panel" class="col-xs-12 col-smsm-6 col-md-4 col-lg-3">
 				<div class="container-fluid">
 					<div id="panelContent" class="row">
 						<div id="menuListe"class="toggleListe pull-right" title="Affichage du panneau de sélection des éléments cartographiques" alt="Affichage du panneau de sélection des éléments cartographiques"><span class="glyphicon glyphicon-menu-hamburger"></span></div><br>
-						<h1>La métropole apaisée</h1>
-							<p> La « Métropole apaisée » est une initiative métropolitaine dans laquelle s’engage aujourd’hui la majorité des communes du territoire.
-							<br><b><u>Objectif</u></b> : En complément du passage en zone 30 de la grande majorité des rues et avenues de la Métropole, il s'agit de réaliser progressivement des espaces publics plus <b>agréables à vivre</b> pour les riverains, plus <b>conviviaux pour les visiteurs</b>, mieux adaptés aux usagers les plus vulnérables et plus sûrs pour les <b>piétons et les cyclistes</b>. </p>
-								<h2 data-layer="Axes50"><span>Les axes à 50 km/h</span></h2>
-									<p>Le premier aspect est réglementaire avec la généralisation de la <b>vitesse à 30 km/h</b>. 
-									<br> <b>Le 50 km/h devient l'exception</b>.</p>
-								<h2 data-layer="Axes70Plus"><span>Les axes à 70 km/h et + </span></h2>
-									<p>A titre indicatif, les axes dont la vitesse reste à 70km/h et plus.</p>
-								<h2 data-layer="Communes30"><span>Au 1er juillet 2016...</span></h2>
-									<p> ...35 communes mettent en place le 30 km/h.</p>
-								<h2 data-layer="CommunesVolontaires30"><span>Courant 2016</span></h2>
-									<p>8 autres communes sont volontaires pour la démarche métropole apaisée avec une mise en place progressive courant 2016.</p>
-								<h2 data-layer="CommunesPas30"><span>Autres communes</span></h2>
+						<h1>Coupe Icare : <br> Comment vous y rendre ?</h1>
+							<p> Samedi 23 et dimanche 24 Septembre, c'est la 44ème édition de la Coupe Icare. <br>
+								Afin de vous y rendre sans utiliser votre voiture, plusieurs possibilités s'offrent à vous : Le Vélo, le Bus ou le Train. </p>
+								<h2 data-layer="CommunesVolontaires30" ><span> Atterrissage/Décollage </span></h2>
+									<p> Les zones de décollage et d'atterissage sont les 2 "spots" pour profiter du spectacle ! </p>
+								<h2 data-layer="Axes50" data-layer2="Communes30"><span>Les "Icare Bus"</span></h2>
+									<p> - ICAREEXPRESS : Samedi et Dimanche, depuis Grenoble pour 2€ aller-retour. <br>
+										- ICARENBUS : Samedi et Dimanche, pour accéder aux différents sites gratuitement <br>
+										+ Et tous les TER s'arrêtent en gare de Brignoud</p>
+								<h2 data-layer="Axes70Plus"><span>Icaravélo </span></h2>
+									<p>Des itinéraires vélos seront fléchés à partir de Grenoble et Gières.</p>
 					</div>
 					<div class="row">
 						<div class="input-group input-group-sm dropup col-xs-12 pull-left">
@@ -163,7 +161,7 @@
 	<div id='footer'></div>
 	
 	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
-	<script type="text/javascript" src="js/lib/ol/ol-custom.js"></script>
+	<script type="text/javascript" src="js/lib/ol/ol.js"></script>
 	<script type="text/javascript" src="js/lib/bs/js/moment.min.js"></script>
 	<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
@@ -195,14 +193,43 @@
 		}
 		function initCarte() {
 			var idcarte = 'map';
-			var map=initMap(idcarte,{zoom:11,lon:5.731641,lat:45.14});
+			var map=initMap(idcarte,{zoom:11,lon:5.802849,lat:45.23});
 			ajouteControle(idcarte,'layerSwitcher');
-			//var sourceCommunes30 = new ol.source.GeoJSON({ //migration OL4
-			var sourceCommunes30 = new ol.source.Vector({
-				url: '//www.metromobilite.fr/data/Carto/Statique/communes30.geojson?key=2015-12-17',
-				projection: "EPSG:3857",
-				format: new ol.format.GeoJSON()
+/////////
+			/*var sourceCommunesPas30 = new ol.source.GeoJSON({
+				url: 'http://www.metromobilite.fr/data/Carto/Statique/communesPas30.geojson?key=2015-12-17',
+				projection: "EPSG:3857"
 			});
+			ajouteLayerManuel('CommunesPas30','map',{fctStyle:function(feature,resolution){
+																var transp = resolution < 35 ? 0.2 : 1;
+																return getStylesGeojson(feature,resolution,'#000000','rgba(255, 255, 255, '+transp+')',transp);
+															},source:sourceCommunesPas30});
+
+			ajouteLayerSwitcher('map','CommunesPas30','.layerSwitcher',{libelle:'Autre communes'});
+			activeLayer('CommunesPas30');*/
+/////////
+			var sourceAxes50 = new ol.source.GeoJSON({
+				url: '/data/Carto/Statique/Bus.geojson?key=2015-12-17',
+				projection: "EPSG:3857"
+			});
+			ajouteLayerManuel('Axes50','map',{fctStyle:function(feature,resolution){return getStylesGeojson(feature,resolution,'#0000FF')},source:sourceAxes50});
+
+			ajouteLayerSwitcher('map','Axes50','.layerSwitcher',{libelle:'Axes a 50 km/h'});
+			activeLayer('Axes50');
+/////////			
+			var sourceAxes70Plus = new ol.source.GeoJSON({
+				url: '/data/Carto/Statique/Vélo.geojson?key=2015-12-17',
+				projection: "EPSG:3857"
+			});
+			ajouteLayerManuel('Axes70Plus','map',{fctStyle:function(feature,resolution){return getStylesGeojson(feature,resolution,'#FF0000')},source:sourceAxes70Plus});
+
+			ajouteLayerSwitcher('map','Axes70Plus','.layerSwitcher',{libelle:'Axes à 70 km/h et +'});
+			activeLayer('Axes70Plus');
+////////			
+			var sourceCommunes30 = new ol.source.GeoJSON({
+				url: '/data/Carto/Statique/Points.geojson?key=2015-12-17',
+				projection: "EPSG:3857"
+			});	
 			ajouteLayerManuel('Communes30','map',{fctStyle:function(feature,resolution){
 															var transp = resolution < 35 ? 0.2 : 1;
 															return getStylesGeojson(feature,resolution,'#000000','rgba(188, 213, 47, '+transp+')',transp);
@@ -210,11 +237,10 @@
 
 			ajouteLayerSwitcher('map','Communes30','.layerSwitcher',{libelle:'Communes au 1er janvier 2016'});
 			activeLayer('Communes30');
-			//var sourceCommunesVolontaires30 = new ol.source.GeoJSON({ //migration OL4
-			var sourceCommunesVolontaires30 = new ol.source.Vector({
-				url: '//www.metromobilite.fr/data/Carto/Statique/communesVolontaires30.geojson?key=2015-12-17',
-				projection: "EPSG:3857",
-				format: new ol.format.GeoJSON()
+/////////
+			var sourceCommunesVolontaires30 = new ol.source.GeoJSON({
+				url: '/data/Carto/Statique/Coupe_Icare.geojson?key=2015-12-17',
+				projection: "EPSG:3857"
 			});
 			ajouteLayerManuel('CommunesVolontaires30','map',{fctStyle:function(feature,resolution){
 																var transp = resolution < 35 ? 0.2 : 1;
@@ -223,58 +249,26 @@
 
 			ajouteLayerSwitcher('map','CommunesVolontaires30','.layerSwitcher',{libelle:'Communes volontaires'});
 			activeLayer('CommunesVolontaires30');
-			//var sourceCommunesPas30 = new ol.source.GeoJSON({//migration OL4
-			var sourceCommunesPas30 = new ol.source.Vector({
-				url: '//www.metromobilite.fr/data/Carto/Statique/communesPas30.geojson?key=2015-12-17',
-				projection: "EPSG:3857",
-				format: new ol.format.GeoJSON()
-			});
-			ajouteLayerManuel('CommunesPas30','map',{fctStyle:function(feature,resolution){
-																var transp = resolution < 35 ? 0.2 : 1;
-																return getStylesGeojson(feature,resolution,'#000000','rgba(255, 255, 255, '+transp+')',transp);
-															},source:sourceCommunesPas30});
-
-			ajouteLayerSwitcher('map','CommunesPas30','.layerSwitcher',{libelle:'Autre communes'});
-			activeLayer('CommunesPas30');
-			//var sourceAxes50 = new ol.source.GeoJSON({ //migration OL4
-			var sourceAxes50 = new ol.source.Vector({
-				url: '//www.metromobilite.fr/data/Carto/Statique/axes50.geojson?key=2015-12-17',
-				projection: "EPSG:3857",
-				format: new ol.format.GeoJSON()
-			});
-			ajouteLayerManuel('Axes50','map',{fctStyle:function(feature,resolution){return getStylesGeojson(feature,resolution,'#0000FF')},source:sourceAxes50});
-
-			ajouteLayerSwitcher('map','Axes50','.layerSwitcher',{libelle:'Axes a 50 km/h'});
-			activeLayer('Axes50');
-			
-			//var sourceAxes70Plus = new ol.source.GeoJSON({ //migration OL4
-			var sourceAxes70Plus = new ol.source.Vector({
-				url: '//www.metromobilite.fr/data/Carto/Statique/Voies_70Plus.geojson?key=2015-12-17',
-				projection: "EPSG:3857",
-				format: new ol.format.GeoJSON()
-			});
-			ajouteLayerManuel('Axes70Plus','map',{fctStyle:function(feature,resolution){return getStylesGeojson(feature,resolution,'#FF0000')},source:sourceAxes70Plus});
-
-			ajouteLayerSwitcher('map','Axes70Plus','.layerSwitcher',{libelle:'Axes à 70 km/h et +'});
-			//activeLayer('Axes70Plus');
-
+/////////
 			ajouteLayerManuel('depArr','map',{/*source:sourcePoints,*/fctStyle:getStylesTypes}).set('visible',true);
-			
+/////////			
 			var highlightStyleCache = {};
 
-			var sourceOverlay = new ol.source.Vector({
-				projection: "EPSG:3857"
-			});
-			//var featureOverlay = new ol.FeatureOverlay({ migration OL4
-			var featureOverlay = new ol.layer.Vector({
+			var featureOverlay = new ol.FeatureOverlay({
 				map: map,
-				source:sourceOverlay,
 				style: function(feature, resolution) {
 					if (!feature.get('nom')) return [];
 					var text = resolution < 5000 ? feature.get('nom') : '';
 					if (!highlightStyleCache[text]) {
 						highlightStyleCache[text] = [new ol.style.Style({
-								text: new ol.style.Text({
+							/*stroke: new ol.style.Stroke({
+								color: '#f00',
+								width: 1
+							}),
+							fill: new ol.style.Fill({
+								color: 'rgba(255,0,0,0.1)'
+							}),*/
+							text: new ol.style.Text({
 								font: '16px Calibri,sans-serif',
 								text: text,
 								fill: new ol.style.Fill({
@@ -291,6 +285,21 @@
 				}
 			});
 			
+			/*$(map.getViewport()).on('mousemove', function(evt) {
+				var pixel = map.getEventPixel(evt.originalEvent);
+				var feature = map.forEachFeatureAtPixel(pixel, function(feature, layer) {
+					return feature;
+				});
+				if (feature !== highlight) {
+					if (highlight) {
+						featureOverlay.removeFeature(highlight);
+					}
+					if (feature && feature.getGeometry().getType() == 'LineString') {
+						featureOverlay.addFeature(feature);
+					}
+					highlight = feature;
+				}
+			});*/
 			//on empile les evenements a traiter
 			map.on('pointermove', function(evt) {
 				pointerMoveEvents.push(evt);
@@ -302,19 +311,20 @@
 				
 				evt = pointerMoveEvents[pointerMoveEvents.length-1];
 				pointerMoveEvents=[];
-				var trouve = false;
 				var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
-					trouve = true;
 					return feature;
 				});
-				//seulement si c'est une ligne ou multiligne
-				if (!trouve || (feature.getGeometry().getType() != 'LineString' && feature.getGeometry().getType() != 'MultiLineString')) return;
 				// on passe le feature en surbrillance
-				if (highlight) {
-					featureOverlay.getSource().removeFeature(highlight);
+				if (feature !== highlight) {
+					if (highlight) {
+						featureOverlay.removeFeature(highlight);
+					}
+					//seulement si c'est une ligne ou multiligne
+					if (feature && (feature.getGeometry().getType() == 'LineString' || feature.getGeometry().getType() == 'MultiLineString')) {
+						featureOverlay.addFeature(feature);
+					}
+					highlight = feature;
 				}
-				featureOverlay.getSource().addFeature(feature);
-				highlight = feature;
 			}
 		}
 		function initPanneau() {
@@ -372,6 +382,7 @@ function getStylesGeojson(feature,resolution,color,backcolor,transp) {
 	var styles =[];
 
 	if (feature.getGeometry().getType() == 'MultiLineString' || feature.getGeometry().getType() == 'LineString') {
+		if(!!feature.get('color')) color = feature.get('color');
 		if (!styleCache['styleLigne_'+color]) {
 			styleCache['styleLigne_'+color] = new ol.style.Style({
 				stroke: new ol.style.Stroke({
@@ -385,18 +396,37 @@ function getStylesGeojson(feature,resolution,color,backcolor,transp) {
 		}
 		
 		styles = [styleCache['styleLigne_'+color]] ;
+//////		
 	} else if (feature.getGeometry().getType() == 'Point') {
-		if (!styleCache['stylePoint_'+color]) {
-			styleCache['stylePoint_'+color] = new ol.style.Style({
-				zIndex: 13,
-				image: new ol.style.Circle({
+		var img;
+		if (!!feature.get('img')) {
+			img = new ol.style.Icon({src: feature.get('img'),anchor:[0.5,1], width:'10px', height:'10px' });
+			color = feature.get('img');
+		} else {
+			img = new ol.style.Circle({
 					radius: 6,
 					fill: new ol.style.Fill({color: color}),
 					stroke: new ol.style.Stroke({color: '#000000', width: 1})
-				})
+				});
+		}
+			
+		if (!styleCache['stylePoint_'+color]) {
+			styleCache['stylePoint_'+color] = new ol.style.Style({
+				zIndex: 13,
+				image: img
+				/*image: new ol.style.Circle({
+					radius: 6,
+					fill: new ol.style.Fill({color: color}),
+					stroke: new ol.style.Stroke({color: '#000000', width: 1})
+				})*/
 			});
-		} 
-		styles = resolution < 35 ? [styleCache['stylePoint_'+color]] : [];
+		}
+		var resMin = 35;
+		if (feature.get('type').substr(0,4)=='Aire') {
+			resMin = 100;
+		}
+		styles = resolution < resMin ? [styleCache['stylePoint_'+color]] : [];
+////////		
 	} else if (feature.getGeometry().getType() == 'Polygon') {
 		if (!styleCache['stylePolygon_'+color+backcolor]) {
 			styleCache['stylePolygon_'+color+backcolor] = new ol.style.Style({
@@ -417,10 +447,48 @@ function getStylesGeojson(feature,resolution,color,backcolor,transp) {
 	}
 	return styles ;
 }
-		function getDetails(feature) {
-			/*var divLignes='';
+function showPopupDetails(map,evt,featurePredefini){
+		var element = document.querySelector(map.popupSelector);
+		if(element) {
+			var coord;
+			var bPopupOuverte = false;
+			var contenu = '';
+			var contenuEntete='';
+			if(map.forEachFeatureAtPixel(evt.pixel, function(feature, layer){
+				//ici on modifie le contenu des popup
+				if(feature.getGeometry().getType() == 'Point') {
+					contenuEntete += feature.get('type');
+					contenu += feature.get('nom');
+				}
+			})) {
+				bPopupOuverte = true;
+			}
+			coord = evt.coordinate;
+			
+			if (contenu!='') {
+				var fullDetails = '<div class="PopupDetails"><div class="PopupDetails-head">';
+				fullDetails +='<span class="PopupDetails-Close pull-right"><span class="glyphicon glyphicon-remove"></span></span>';
+				fullDetails +='<div class="row PopupDetailsEntete">' + contenuEntete + '</div></div>';
+				fullDetails +='<div class="PopupDetails-body"><div class="PopupDetails-detailsCallback">' + contenu + '</div></div>';
+				fullDetails +='</div>';
+				if (!isTaille('xxs') && (typeof(appMetromobilite)=='undefined' || !appMetromobilite)) {
+					map.popup.setPosition(coord);
+				}
+				$(element).show();
+				$(element).html(fullDetails);
+				$( document ).trigger( "evtPopupOuverte", map );
+			}
+		}
+		// cas depart arrivee d'itineraire
+		if (map.singleClickCallback && evt.coordinate) {
+			map.singleClickCallback(evt.coordinate);
+		}
+}
+
+		/*function getDetails(feature) {
+			var divLignes='';
 			if(feature.getGeometry().getType() == 'Point') {
-				var coord= ol.proj.transform(feature.getGeometry().getCoordinates(), "EPSG:3857", "EPSG:4326");
+				/*var coord= ol.proj.transform(feature.getGeometry().getCoordinates(), "EPSG:3857", gg);
 				var lonlat = coord[1]+','+coord[0];
 				divLignes = getLignesProches(lonlat,afficheListeLgn,null,null,'map');
 				var div = '';
@@ -431,18 +499,19 @@ function getStylesGeojson(feature,resolution,color,backcolor,transp) {
 				var divPrefixe = '';
 				if (feature.get('type')=='dat') divPrefixe = lang.popup.arret+' ';
 				return '<span>'+divPrefixe+'<span class="nomArret">'+feature.get(stylesTypes[feature.get('type')].text)+'</span>'+'</span>'+ div + divLignes;
+				return '<span>'+'toto'+'</span>';
 			} else {
 				return feature.get('NUMERO')+' - '+feature.get('LIBELLE');
-			}*/
-		}
+			}
+		}*/
 		/*function saisieReussie(item) {
 			activeLayer(item.properties.type);
-			getMap('map').getView().setCenter(ol.proj.transform(item.geometry.coordinates, "EPSG:4326", "EPSG:3857"));
+			getMap('map').getView().setCenter(ol.proj.transform(item.geometry.coordinates, gg, "EPSG:3857"));
 			getMap('map').getView().setZoom(18);
 			if(isTaille('xs')) togglePanneau();
 		}*/
 		initPage();
-		trackPiwik("MetroMobilité : planVille30.html");
+		trackPiwik("MetroMobilité : planCoupeIcare.html");
 	</script>
   </body>
 </html>

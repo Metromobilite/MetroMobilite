@@ -30,25 +30,20 @@
 	<link rel="stylesheet" href="js/lib/ol/ol.css" type="text/css" />
     <link href="js/lib/bs/css/bootstrap.min.css" rel="stylesheet">
 	<link href="js/lib/bs/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
-	<link rel="Stylesheet" type="text/css" href="css/horaires.css">
 	<link rel="Stylesheet" type="text/css" href="css/panel.css">
+	<link rel="Stylesheet" type="text/css" href="css/horaires.css">
 	<style type='text/css'>
-		#listeLignes {
-			height: calc(100% - 40px);
-			overflow-y: auto;
-			position: relative;
-			padding: 0px 15px!important;
+		body #headiFrame {
+			display:none;
+			height:44px;
+			padding:2px;
 		}
-		.ligneSelected .svgFond {
-			stroke-width:6px;
+		body.withPub #headiFrame {
+			display:block;
+			background-color:#646464;
 		}
-		#listeLignes.withPub {
-			height:calc(100% - 85px);
-		}
-		#pub.row {
-			padding: 3px;
-			cursor: pointer;
-			display: inline-block;
+		body.withPub .main {
+			top:44px;
 		}
 		#pub img{
 			width: 40px;
@@ -56,32 +51,108 @@
 		#pub div {
 			font-family: "GothamRounded-Medium",Arial,Verdana,Geneva,Lucida,Helvetica,sans-serif;
 			display: inline;
-			color:#019ebc;
-			font-size: 13px;
-			background-color: #fff;
-			border-radius: 4px;
+			color: #fff;
+			font-size: 16px;
 			padding: 0px 10px 0px 10px;
-			margin-left: -2px;
-			opacity: 0.7;
-			filter: alpha(opacity=70);
 		}
-
+		/*#listeLignes {
+			padding: 0px 15px!important;
+		}*/
+		.ligneSelected .svgFond {
+			stroke-width:6px;
+		}
+		
 		.form-control.datepicker-readonly {
-			cursor:default;
+			cursor:default;			
 		}
-		#mainView {
+		/*#mainView {
 			background-color : #009fd6;
-		}
-		#titre > h1{
-			margin-left: 30px;
+		}*/
+		#titreHoraires{
 			font-family: "GothamRounded-Medium", "Arial", "Helvetica", sans-serif;
 			font-size: 18px;
 			margin-top:10px;
 		}
+		@media (max-width: 767px) {
+			#titreHoraires{
+				text-align: center;
+			}
+		}
 		#horaires {
 			height: 90%;
-			height: calc(100% - 113px);
+			height: calc(100% - 120px);
 		}
+		.cellEnteteEvenement { 
+			background-color: orange;
+			border: 1px solid #aaa;
+		}
+		.cellEvenement { 
+			text-align: left;
+			background-color: white;
+			border: 1px solid #aaa;
+		}
+		#btn_down a {
+			color: #fff;
+			margin-right: 3px;
+			text-decoration: none;
+			outline: none;
+		}
+
+		#btn_down a:hover,#btn_down a:active{
+			color: #101010;
+			margin-right: 3px;
+		}
+
+		#btn_down:hover {
+			background-color: #909090;
+		}
+		#btn_down {
+			display: none;
+			cursor: pointer;
+			height: 40px;
+			width: 40px;
+			background-color: #303030;
+			opacity:0.6;
+			text-align:center;
+			vertical-align:middle;
+			position: fixed;
+			right: 25px;
+			bottom:20px;
+			font-size: 32px;
+			border-radius:4px;
+		}
+		/*
+		.favorisLigne {
+			-moz-border-radius:20px 20px;
+			-webkit-border-radius:20px 20px;
+			border-radius:20px 20px;
+			font-weight: bold;
+			font-size:12px;
+			padding: 5px;
+			margin-left: 0px;
+			width:105px;
+			margin-top:15px;
+			margin-bottom:0px;
+			display: inline-block;
+			border: 1px solid;
+			border-color: #009fd6;
+			 
+		}
+		.favorisLigne:hover , .favorisArret:hover {
+			color : #fff; 
+			background-color:#009fd6;
+		}
+	 
+		.favorisArret {
+			-moz-border-radius:15px 15px;
+			-webkit-border-radius:15px 15px;
+			border-radius:15px 15px;
+			font-weight: bold;
+			font-size:12px;
+			display: block;	
+			border: 1px solid;			
+		}
+		*/
 		@media (min-width: 1200px) {
 			#mainView {
 				padding-left: 25%;
@@ -100,6 +171,7 @@
 				padding-left: calc(50% + 8px);
 			}
 		}
+	
 	</style>
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -109,24 +181,30 @@
   </head>
   <body>
 	<div id='head'></div>
+	<div id="headiFrame">
+		<a id="pub" href="//www.metromobilite.fr" target='_blank'>
+			<img src="img/metromobilite.svg" alt="">
+			<div></div>
+		</a>
+	</div>
 	<div class="container-fluid main">
 		<div class="row">
 			<div id="mainView">
-				<div id="titre"><h1 id="titreHoraires">Horaires </h1></div><br>
+				<h1 id="titreHoraires">Horaires </h1>
 				<form id="dates" role="form">
 					<div id="datepicker">
 							<label for="dateInput" class="sr-only">Date</label>
 							<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-							<input id="dateInput" type='text' class="form-control datepicker-readonly" data-date-format="DD/MM/YYYY" readonly />
+							<input id="dateInput" size="5" type='text' class="form-control datepicker-readonly" data-date-format="DD/MM" readonly />
 					</div>
 					<div id="timepicker">
 							<label for="heureInput" class="sr-only">Heure</label>
 							<span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
-							<input id="heureInput" type='text' class="form-control datepicker-readonly" data-date-format="HH:mm" readonly />
+							<input id="heureInput" size="5" type='text' class="form-control datepicker-readonly" data-date-format="HH:mm" readonly />
 					</div>
-					<div id="timesync">
+					<!--div id="timesync">
 						<button class="btn btn-default btn-xm glyphicon glyphicon-refresh" title="Mise à l'heure courante"><span class="sr-only">Remise à l'heure courante</span></button>
-					</div>
+					</div-->
 				</form>
 				<div id="horairesOnglets"></div>
 				<div id="horaires">
@@ -138,15 +216,76 @@
 					<li><a id='id' class="svgLigne pull-left">
 					</a></li>
 				</ul>
+				<!--Fin modif <div id="btn_up" title="Haut de page" alt="Haut de page"> -->
+				<div id="btn_down" title="Bas de page">
+					<a href="#" class="glyphicon glyphicon-arrow-down"></a>
+				</div>
+
+				<div data-code="" class="ligne contenu">
+					<div class="tableau"></div>
+				</div>
+				<div data-code="" class="ligne onglet">
+					<span class="modeLigne"></span>
+					<span class="numLigne"></span>
+					<!--span class="groupeArret hidden">&nbsp;|&nbsp;
+						<span data-code="" class="arret"></span>
+						<span class="caret" ></span>
+					</span>
+					<div class="bookmark">
+					</div-->								
+				</div>
+				
+				<div class="horaires contenu">
+					<div class="horairesTextLigne" style="display:none;"></div>
+					<div class="direction dir1 active"></div>
+					<div class="direction dir2"></div>
+					<div class="alertTextLigne cellEvenement" style="display:none;">
+						<div id="trianglewarning">
+							<svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" version="1.1" color="#ff0000" viewBox="0 0 61 58">
+								<path fill-rule="nonzero" fill="currentColor" d="M 39.78,13.00 C 39.78,13.00 55.75,43.00 55.75,43.00 57.06,45.60 60.88,52.14 60.19,54.85 59.25,58.53 53.90,57.99 51.00,58.00 51.00,58.00 10.00,58.00 10.00,58.00 7.10,57.99 1.75,58.53 0.81,54.85 0.09,52.04 4.82,43.80 6.26,41.00 6.26,41.00 21.22,13.00 21.22,13.00 23.46,8.75 25.00,3.46 29.20,0.84 35.43,0.39 37.30,8.30 39.78,13.00 Z M 21.74,28.00 C 21.74,28.00 10.00,51.00 10.00,51.00 10.00,51.00 51.00,51.00 51.00,51.00 51.00,51.00 31.00,12.00 31.00,12.00 31.00,12.00 21.74,28.00 21.74,28.00 Z M 32.73,36.85 C 32.26,38.20 31.20,39.87 29.54,38.83 27.28,37.41 26.56,25.69 27.31,23.15 27.88,21.22 27.97,21.91 28.59,21.04 36.53,18.32 34.14,32.78 32.73,36.85 Z M 31.70,48.34 C 28.51,49.61 24.88,45.28 29.28,41.84 35.56,41.36 34.19,47.36 31.70,48.34 Z" />
+							</svg>
+							<span class> </span>
+						</div>
+					</div>
+				</div>
+				<div class="ficheHoraire">
+					<div class="boutonsHoraires" style="display:none;">
+						<a href="#" class="btn btn-horaires ficheHoraireEvenement" style="display:none;"><svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" version="1.1" color="#ff0000" viewBox="0 0 61 58"><title>Evenement</title><path fill-rule="nonzero" fill="currentColor" d="M 39.78,13.00 C 39.78,13.00 55.75,43.00 55.75,43.00 57.06,45.60 60.88,52.14 60.19,54.85 59.25,58.53 53.90,57.99 51.00,58.00 51.00,58.00 10.00,58.00 10.00,58.00 7.10,57.99 1.75,58.53 0.81,54.85 0.09,52.04 4.82,43.80 6.26,41.00 6.26,41.00 21.22,13.00 21.22,13.00 23.46,8.75 25.00,3.46 29.20,0.84 35.43,0.39 37.30,8.30 39.78,13.00 Z M 21.74,28.00 C 21.74,28.00 10.00,51.00 10.00,51.00 10.00,51.00 51.00,51.00 51.00,51.00 51.00,51.00 31.00,12.00 31.00,12.00 31.00,12.00 21.74,28.00 21.74,28.00 Z M 32.73,36.85 C 32.26,38.20 31.20,39.87 29.54,38.83 27.28,37.41 26.56,25.69 27.31,23.15 27.88,21.22 27.97,21.91 28.59,21.04 36.53,18.32 34.14,32.78 32.73,36.85 Z M 31.70,48.34 C 28.51,49.61 24.88,45.28 29.28,41.84 35.56,41.36 34.19,47.36 31.70,48.34 Z" /></svg></a>
+						<a href="#" class="btn btn-horaires ficheHoraireInfos" style="display:none;"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30px" height="30px"><title>Informations</title><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></a>
+						<a href="#" class="btn btn-horaires ficheHorairePdf" target="_blank" style="display:none;"><svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 24 24"><title>Télécharger le pdf</title><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></a>
+					</div>
+					<span class="horairesText"></span>
+					<div class="horairesTextInfos cellEvenement" style="display:none;"></div>
+					<div class="horairesEvtLigne cellEvenement" style="display:none;"></div>
+					<div class="matable">
+						<table>
+							<thead>
+								<tr>
+									<td colspan="6">
+										<div class="navHoraires">
+											<a href="#" class="btn btn-horaires horairesPrecedents"><svg width="30px" height="30px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></a>
+											<a href="#" class="btn btn-horaires horairesSuivants"><svg width="30px" height="30px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></a>
+											<div class="boutonDirection">
+												<a href="#" class="btn btn-horaires ficheHoraireDirection"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30px" height="30px" viewBox="0 0 48 48"><title>Changement de direction</title><path d="M16,13.98V28h4V13.98h6L18,6l-8,7.98H16z M30,42l8-7.98h-6V20h-4v14.02h-6L30,42z"/></svg></a>
+												<span><span class="directionLabel">Direction : </span><span class="directionText"></span></span>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</thead>
+							<tbody></tbody>
+						</table>
+					</div>
+				</div>
 			</div>
 			<div id="menu" class="toggleListe pull-right listeAffichee" title="Affichage du panneau de sélection des lignes" role="button" aria-label="Affichage du panneau de sélection des lignes"><span class="glyphicon glyphicon-menu-hamburger"></span></div>
 			<div id="panel" class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
 				<div id="listeMain" class="container-fluid">
 					<div id="listeTop" class="row">
-						<a id="unselect" href='#'><span class="pull-left">Annuler la sélection</span></a>
-						<div id="menuListe" class="toggleListe pull-right visible-xs listeAffichee" title="Masquage du panneau de sélection des lignes" role="button" aria-label="Masquage du panneau de sélection des lignes"><span class="glyphicon glyphicon-menu-hamburger"></span></div>
+						<div id="menuListe" class="toggleListe visible-xs listeAffichee" title="Masquage du panneau de sélection des lignes" role="button" aria-label="Masquage du panneau de sélection des lignes"><span class="glyphicon glyphicon-menu-hamburger"></span></div>
 					</div>
 					<div id="listeLignes" class="row">
+						<div><p id="listeLignesDescStatique" class="panelDesc">Cliquez sur votre ligne TAG ou Transisère et Métromobilité vous fournit la fiche horaire ainsi que les perturbations en cours. Vous pouvez changer l'heure et la date afin de préparer au mieux votre futur déplacement.</p></div>
 						<div id="TRAM" class="row titreReseau">
 							<h2>Tram</h2>
 							<div id="descReseauTram" class="descReseau">De 4h30 à 1h, fréquence de 4 à 10 min (heures de pointe)</div>
@@ -175,13 +314,8 @@
 						<div id="C38" class="row titreReseau"><h2>Transisère</h2></div>
 						<div class="row C38"></div>
 					</div>
-					<a id="pub" style="display:none;" href="http://www.metromobilite.fr" target='_blank'>
-							<img src="img/metromobilite.svg" alt="">
-							<div></div>
-					</a>
 				</div>
 			</div>
-
 		</div>
 	</div>
 	<img id="wait" src="img/wait.gif" alt="recherche en cours" />
@@ -192,11 +326,19 @@
 	<script type="text/javascript" src="js/lib/bs/js/moment-with-locales.min.js"></script>
 	<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/lib/bs/js/bootstrap-datetimepicker.min.js"></script>
+	
 	<script type="text/javascript" src="js/outils.js"></script>
 	<script type="text/javascript" src="js/fr.js"></script>
 	<script type="text/javascript">
-
+		var modeleListeLigne = $('#modele > ul > li > a');
+		var modeleDivLigne = $('#modele > div.ligne.contenu');
+		var modeleDivLigneOnglet = $('#modele > div.ligne.onglet');
+		var modeleDivContenuHoraires = $('#modele > div.horaires.contenu');
+		//var modeleDivPassage = $('#modele > div.passage');
+		var modeleDivFicheHoraire = $('#modele > div.ficheHoraire');
+		var selectedDir = 'dir1';
 		var selectedDir;
+		var colors={actif:'orange',inactif:'buttonface'};
 		if (urlParams.reseau == 'SNC') {
 			$('#listeLignes').prepend('<div id="SNC" class="row titreReseau"><h2>SNCF</h2></div><div class="row SNC"></div>');
 			$('#listeLignes #TRAM h2').text('TAG');
@@ -234,7 +376,6 @@
 				var route = data[r];
 				var modele = $('#modele > ul > li > a');
 				var li = modele.clone();
-				//li.addClass(nomLayer.replace(' ','_'));
 				var code = route.code;
 				var color = '#'+route.routeColor;
 				var numero = route.routeShortName;
@@ -242,7 +383,6 @@
 
 				li.attr('id',code).attr('title',numero+' - '+libelle).attr('href','#'); //pour Chrome
 				var logo = getLogoLgn(code,numero,color,0,'logo','logoRect');
-				//$(logo).find('title').text(numero+' - '+libelle); //pour vieux Firefox
 				li.append(logo);
 
 				$('#listeLignes').find('.'+route.type).append(li);
@@ -265,33 +405,77 @@
 			$('#horaires > div[data-code='+code+']').show();
 		}
 		function ajouteLigne(code) {
-
-			if (attente) return;
-		
 			var _this = $('#'+code)[0];
-			//var ligne = dataLignesTC[_this.id];
+			if (typeof(_this)=='undefined') {
+				console.log('ajouteLigne $(#'+code+')[0] undefined');
+				return;
+			}
+			$('#horairesText').hide();
+			var ligne = {code:_this.id,libelle:_this.title};
+
 			if($('#horaires div[data-code='+_this.id+']').length ==0) {
-				$('#horaires').append('<div data-code="'+_this.id+'" class="ligne"><div class="tableau"></div></div>');
-				var onglet = $('<div data-code="'+_this.id+'" data-libelle="'+_this.title+'" class="ligne"></div>').append($(_this).find('svg').clone());
-				var close = $('<span class="horairesOnglets-Close pull-right glyphicon glyphicon-remove" data-code="'+_this.id+'"></span>');
+				var divHoraire = modeleDivLigne.clone();
+				divHoraire.attr('data-code',_this.id);
+				$('#horaires').append(divHoraire);				
+				var onglet = modeleDivLigneOnglet.clone();
+				onglet.attr('data-code',_this.id);
+				var lgn = dataLignesTC[_this.id];
+				onglet.css('background-color','#'+lgn.color);
+				onglet.css('color','#'+lgn.textColor);
+				var pictoMode = getPictoMode(lgn.mode.toLowerCase());
+				$(pictoMode).css('fill','#'+lgn.textColor);
+				onglet.find('.modeLigne').append(pictoMode);
+				onglet.find('.numLigne').text(lgn.shortName);		
+				$('#horairesOnglets').append(onglet);
+			}			
+			/*if($('#horaires div[data-code='+code+']').length ==0) {
+				$('#horaires').append('<div data-code="'+code+'" class="ligne"><div class="tableau"></div></div>');
+				var onglet = $('<div data-code="'+code+'" data-libelle="'+_this.title+'" class="ligne"></div>').append($(_this).find('svg').clone());
+				var close = $('<span class="horairesOnglets-Close pull-right glyphicon glyphicon-remove" data-code="'+code+'"></span>');
 				onglet.append(close);
 				$('#horairesOnglets').append(onglet);
-			}
-			showLigne(_this.id);
-			lanceHoraires();
+			}*/
+			showLigne(code);
+			lanceHoraires(code);
 			
 			var nombreOnglet = $('#horairesOnglets .ligne').length;
-			if (isTaille('xxs') && (nombreOnglet>2)) { supprimePremiereLigne(); }
-			else if (isTaille('xs') && (nombreOnglet>5)) { supprimePremiereLigne(); }
-			else if (isTaille('sm') && (nombreOnglet>5)) { supprimePremiereLigne(); }
-			else if (isTaille('md') && (nombreOnglet>9)) { supprimePremiereLigne(); }
-			else if (isTaille('lg') && (nombreOnglet>12)) { supprimePremiereLigne(); }
+			if ((isTaille('xxs') || isTaille('xs') || isTaille('sm')) && (nombreOnglet>3)) { supprimePremiereLigne(); }
+			else if (nombreOnglet>5) { supprimePremiereLigne();}
 			
-			if(isTaille('xs')) togglePanneau(false);
+			if(isTaille('xs') || isTaille('xxs')) togglePanneau(false);
 		}
+		function getPictoMode(mode) {
+			var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 48 48">';
+			switch(mode){
+				case('bus'):
+					svg += '<path d="M8,32c0,1.76,0.78,3.34,2,4.439V40c0,1.1,0.9,2,2,2h2c1.1,0,2-0.9,2-2v-2h16v2c0,1.1,0.9,2,2,2h2c1.1,0,2-0.9,2-2v-3.561c1.221-1.1,2-2.68,2-4.439V12c0-7-7.16-8-16-8S8,5,8,12V32z M15,34c-1.66,0-3-1.34-3-3s1.34-3,3-3s3,1.34,3,3S16.66,34,15,34zM33,34c-1.66,0-3-1.34-3-3s1.34-3,3-3s3,1.34,3,3S34.66,34,33,34z M36,22H12V12h24V22z"/>';
+				break;
+				case('pieton'):
+					svg += '<path d="M27,11c2.2,0,4-1.8,4-4s-1.8-4-4-4s-4,1.8-4,4S24.8,11,27,11z M19.6,17.8L14,46h4.2l3.6-16l4.2,4v12h4V31l-4.2-4l1.2-6c2.6,3,6.6,5,11,5v-4c-3.8,0-7-2-8.6-4.8l-2-3.2c-0.801-1.2-2-2-3.4-2c-0.6,0-1,0.2-1.6,0.2L12,16.6V26h4v-6.8L19.6,17.8"/>';
+				break;
+				case('train'):
+					svg += '<path d="M24,4C16,4,8,5,8,12v19c0,3.859,3.14,7,7,7l-3,3v1h4.46l4-4H28l4,4h4v-1l-3-3c3.859,0,7-3.141,7-7V12C40,5,32.84,4,24,4zM15,34c-1.66,0-3-1.34-3-3s1.34-3,3-3s3,1.34,3,3S16.66,34,15,34z M22,20H12v-8h10V20z M26,20v-8h10v8H26z M33,34c-1.66,0-3-1.34-3-3s1.34-3,3-3s3,1.34,3,3S34.66,34,33,34z"/>';
+				break;
+				case('tram'):
+					svg += '<path d="M38,33.88V17c0-5.58-5.221-6.8-12.02-6.98L27.5,7H34V4H14v3h9.5l-1.52,3.04C15.72,10.22,10,11.46,10,17v16.88c0,2.9,2.38,5.32,5.18,5.94L12,43v1h4.46l4-4H28l4,4h4v-1l-3-3h-0.16C36.221,40,38,37.26,38,33.88z M24,37c-1.66,0-3-1.34-3-3s1.34-3,3-3s3,1.34,3,3S25.66,37,24,37z M34,28H14V18h20V28z"/>';
+				break;
+				case('velo'):
+					svg += '<path d="M31,11c2.2,0,4-1.8,4-4s-1.8-4-4-4s-4,1.8-4,4S28.8,11,31,11z M10,24C4.4,24,0,28.4,0,34s4.4,10,10,10s10-4.4,10-10S15.6,24,10,24z M10,41c-3.8,0-7-3.2-7-7s3.2-7,7-7s7,3.2,7,7S13.8,41,10,41z M21.6,21l4.8-4.8l1.6,1.6c2.6,2.6,6,4.2,10.2,4.2v-4c-3,0-5.4-1.2-7.2-3l-3.8-3.8c-1-0.8-2-1.2-3.2-1.2s-2.2,0.4-2.8,1.2l-5.6,5.6c-0.8,0.8-1.2,1.8-1.2,2.8c0,1.2,0.4,2.2,1.2,2.8L22,28v10h4V25.6L21.6,21z M38,24c-5.6,0-10,4.4-10,10s4.4,10,10,10s10-4.4,10-10S43.6,24,38,24z M38,41c-3.8,0-7-3.2-7-7s3.2-7,7-7s7,3.2,7,7S41.8,41,38,41z"/>';
+				break;
+				case('voiture'):
+					svg += '<path d="M37.84,12.02C37.439,10.84,36.32,10,35,10H13c-1.32,0-2.42,0.84-2.84,2.02L6,24v16c0,1.1,0.9,2,2,2h2c1.1,0,2-0.9,2-2v-2h24v2c0,1.1,0.9,2,2,2h2c1.1,0,2-0.9,2-2V24L37.84,12.02z M13,32c-1.66,0-3-1.34-3-3s1.34-3,3-3s3,1.34,3,3S14.66,32,13,32z M35,32c-1.66,0-3-1.34-3-3s1.34-3,3-3s3,1.34,3,3S36.66,32,35,32z M10,22l3-9h22l3,9H10z"/>';
+				break;
+				default:
+					svg='';
+			}
+			svg+='</svg>'
+			return $(svg);
+		}		
 		function supprimePremiereLigne() {
-			$('#horairesOnglets div.ligne')[0].remove();
-				$('#horaires div.ligne')[0].remove();
+			$('#horairesOnglets > div.ligne:nth-of-type(1)').remove();
+			$('#horaires > div.ligne:nth-of-type(1)').remove();
+			/*$('#horairesOnglets div.ligne')[0].remove();
+			$('#horaires div.ligne')[0].remove();*/
 		}
 		function error(xhr, status, error) {
 			try {
@@ -299,7 +483,7 @@
 				if (typeof(err.Message) != "undefined")
 					console.log(err.Message);
 			} catch(e) {
-				console.log(e.msg+' : '+e.lineNumber);
+				console.log(e);
 			}
 			fct_attente_horaires(false);
 		}
@@ -308,32 +492,44 @@
 			if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
 				isMobile =true;
 			}
-			$( document ).on( "evtHorairesCharges", {}, function( event, ligne, time,res ) {
-				afficheHoraires(ligne, time,res);
-			});
-			$( document ).on( "evtLignesChargees", {}, function( event, data ) {
-				initMain();
-				initPanneau();
-				if (urlParams.codeLigne) {
-					$('#'+urlParams.codeLigne).trigger('click');
+			$( document ).on( "evtHorairesCharges", {}, function( event, ligne, time,res,b2Contenus ) {
+				afficheHoraires(ligne, time,res,b2Contenus);
+			});		
+			$( document ).on("evtChargements", {}, evtsChargements);
+			
+			/*Ecoute chargements Lignes et favoris pour ouvrir toutes les lignes favorites*/
+			function evtsChargements(event, data ) {
+				if (data.lignes==1) {
+					initMain();
+					initPanneau();
+					if (!!urlParams.codeLigne) urlParams.codeLigne = urlParams.codeLigne.replace(':','_');
+					if (urlParams.codeLigne) {
+						$('#'+urlParams.codeLigne).trigger('click');
+					}
+					data.lignes=2;
 				}
-			});
+				if ( data.favoris == 1 && data.lignes >= 1){
+					for ( var l=0; l<dataFavoris.ligne.length;l++){
+						var code=dataFavoris.ligne[l].replace(":","_");
+						ajouteLigne(code);
+					}
+					data.favoris = 2;
+					$( document ).off("evtChargements", {}, evtsChargements);
+				}
+			}
+								
 			if (urlParams.iFrame){
-				$(".main").attr('style','top:0px');
 				$.support.cors = true;
 				chargeLignes();
-				$('#listeLignes').addClass('withPub');
-				$('#pub').show();
+				$("body").addClass("withPub");
 				$( "#pub" ).attr({ alt: lang.pub.alt,  title: lang.pub.alt });
 				$( "#pub > div" ).text(lang.pub.text);
 			} else {
 				$('#head').load('head.html');
-			}
+			}			
 			trackPiwik("MetroMobilité : Horaires" + (urlParams.lang=='fr'?'':' ' + urlParams.lang));
 		}
 		function initPanneau(){
-			/*if (urlParams.debug) 
-				$('#listeLignes').append('<div id="BUL" class="row titreReseau"><h2>Transisère</h2></div><div class="row FUN BUL"></div>');*/
 			getLisLgn(dataLignesTC);
 			
 			$('.toggleListe').click(function(){
@@ -343,7 +539,6 @@
 			$('#listeLignes').on('click','.svgLigne',function(e){
 				var code = this.id;
 				ajouteLigne(code);
-				$('#horaires>span').hide();
 			});
 			$('#unselect').click(function(){
 				$('#horairesOnglets').empty();
@@ -353,10 +548,11 @@
 		}
 		function initMain(){
 			try {
-				$('#horairesOnglets').on('click','div',function(e){
+				$('#horairesOnglets').on('click','div.ligne:not(.active)',function(e){
 					var code = $(this).attr('data-code');
 					showLigne(code);
 				});
+				/*
 				$('#horaires').on('change','select.onglets',function(e){
 					$(this).parent().next().find('.contenuDir').hide();
 					var selectedIndex = $(this)[0].selectedIndex+1;
@@ -370,7 +566,7 @@
 					if ($('#horaires').children().length>1) {
 						showLigne($('#horairesOnglets > .ligne:nth-of-type(1)').attr('data-code'));
 					}
-					else if (isTaille('xs')) {
+					else if (isTaille('xs') || isTaille('xxs')) {
 						$('#horaires>span').show();
 						togglePanneau();
 					}
@@ -378,36 +574,82 @@
 						$('#horaires>span').show();
 					}
 					return false;
+				});*/
+				$('#horaires').on('click','.ficheHoraireDirection',function(e){
+					$(this).closest('.ligne').find('div.direction').toggleClass('active');
 				});
+				$('#horaires').on('click','.boutonsHoraires > .ficheHoraireInfos',function(e){
+					$(this).closest('.ligne').find('div.horairesTextInfos').toggle();
+					$(this).toggleClass('active');
+				});
+				$('#horaires').on('click','.boutonsHoraires > .ficheHoraireEvenement',function(e){
+					$(this).closest('.ligne').find('div.horairesEvtLigne').toggle();
+					$(this).toggleClass('active');
+				});
+				$('#horaires').on('click','.horairesPrecedents, .horairesSuivants',function(e){
+					var time = $(this).attr('data-time');
+					//TODO selectedDir = $(this).closest('.tableau').find('select.onglets').val();
+					selectedDir = ($(this).closest('.tableau').find('div.contenu > .direction.active').hasClass('dir2')?'dir2':'dir1');
+					var code = $(this).closest('.ligne').attr('data-code');
+					var ligne = dataLignesTC[code];
+					getDataHoraires(ligne,time);
+				});
+				 			 
+				
 				$('#datepicker').datetimepicker({
 							locale: 'fr',
-							format: 'DD/MM/YYYY',
+							format: 'DD/MM',
+							dayViewHeaderFormat:'MMMM',
 							allowInputToggle:true,
 							defaultDate:urlParams.date,
-							ignoreReadonly:true
+							ignoreReadonly:true,
+							showClose:true,
+							toolbarPlacement: 'top'	
 						});
-
-				$('#timepicker').datetimepicker({
-							locale: 'fr',
-							format: 'HH:mm',
+						
+				$('#timepicker').datetimepicker({  
+							locale: 'fr',							
+							format: 'HH:mm', 
 							allowInputToggle:true,
 							defaultDate:urlParams.heure,
-							ignoreReadonly:true
+							ignoreReadonly:true,
+							showClose :true	,
+							toolbarPlacement: 'top'						
 						});
-
-				$('#timesync').click(function(e) {
+				
+				$('#datepicker, #timepicker').on('dp.show',function(){
+					// datepicker titles when hover
+					$('#datepicker a[data-action="close"]').prop("title", lang.horaires.fermerBtnClosedatePicker);
+					$('#datepicker th[data-action="previous"] span').prop("title", lang.horaires.btnPreviousdatePicker );
+					$('#datepicker th[data-action="pickerSwitch"]').prop("title", lang.horaires.btnMonthdatePicker );
+					$('#datepicker th[data-action="next"] span').prop("title", lang.horaires.btnNextdatePicker ); 	
+					// timepicker titles when hover
+					$('#timepicker a[data-action="close"]').prop("title", lang.horaires.fermerBtnClosetimepicker);
+					$('#timepicker a[data-action="incrementHours"]').prop("title", lang.horaires.btnIncHrtimepicker );
+					$('#timepicker a[data-action="incrementMinutes"]').prop("title", lang.horaires.btnInCMntimepicker );
+					$('#timepicker span[data-action="showHours"]').prop("title", lang.horaires.showHrtimepicker );
+					$('#timepicker span[data-action="showMinutes"]').prop("title", lang.horaires.showMntimepicker );					
+					$('#timepicker a[data-action="decrementHours"]').prop("title", lang.horaires.btnDecHrtimepicker );
+					$('#timepicker a[data-action="decrementMinutes"]').prop("title", lang.horaires.btnDecMntimepicker );
+  
+				});
+				 
+				//$('#timepicker').data("DateTimePicker").show(); 
+			
+				/*$('#timesync').click(function(e) {
 					e.preventDefault();
 					var newDate = new Date;
 					$('#timepicker').data("DateTimePicker").date(newDate);
 					$('#datepicker').data("DateTimePicker").date(newDate);
 					lanceHorairesAuto();
 					return false; //évite le rechargement de la page.
-				});
+				});*/
 
 				$('#datepicker, #timepicker').on('dp.hide',function(){
 					lanceHorairesAuto();
 				});
-
+			
+			
 			} catch (e) {
 				console.log(e.msg+' : '+e.lineNumber);
 			}
@@ -433,26 +675,26 @@
 		}
 		function getDateHeureSaisie() {
 			// on decale la demande si elle est entre 0h et 3h car sinon pas de resultat
+			var currentYear = moment().year();
 			var d = $('#datepicker input').val();
 			var t = $('#timepicker input').val();
+			if (moment.utc(d+'/'+currentYear,'DD/MM/YYYY').add(6,'months') < moment()) currentYear+=1;
+			var sDate = d+'/'+currentYear;
 			if (parseInt(t.split(':')[0]) < 3) {
-				var date = moment.utc(d+' 23:59:59','DD/MM/YYYY HH:mm:ss').subtract(24,'hours').toDate();
+				var date = moment.utc(sDate+' 23:59:59','DD/MM/YYYY HH:mm:ss').subtract(24,'hours').toDate();
 				// on commence par l'heure car ca redeclenche l'evt et ca donne une boucle infinie si on commence par la date
 				$('#timepicker').data("DateTimePicker").date(date);
 				$('#datepicker').data("DateTimePicker").date(date);
 			}
-			return moment.utc($('#datepicker input').val()+' '+$('#timepicker input').val(), 'DD/MM/YYYY HH:mm').toDate();
+			return moment.utc(sDate+' '+t, 'DD/MM/YYYY HH:mm').toDate();
 		}
-		function lanceHoraires() {
+		function lanceHoraires(code) {
 			var date = getDateHeureSaisie();
-			var codeligne=$("#horairesOnglets .ligne.active").attr('data-code');
-			var ligne = dataLignesTC[$('#horairesOnglets > div.active').attr('data-code')];
+			var ligne = dataLignesTC[code];
 			getDataHoraires(ligne,date.getTime());
 		}
 		function getDataHoraires(ligne,time) {
-			var searchUrl = (url.saisieChoisie=='local'?url.hostnameLocal+url.portWSTest:url.hostnameData);
-			//var searchUrl = url.hostnameLocal+url.portWSTest;
-			//var searchUrl = url.hostnameData;
+			var searchUrl = url.ws();
 			searchUrl += '/api/ficheHoraires/json?route='+ligne.code.replace('_',':')+'&time='+time+(url.otp2Router=='local'?'':'&router='+url.otp2Router);
 			fct_attente_horaires(true);
 			$.ajax({
@@ -463,30 +705,202 @@
 			}).then(function(res) {
 				fct_attente_horaires(false);
 				$( document ).trigger( 'evtHorairesCharges', [ligne, time,res] );
+				if(!!res['0'].pivot2 || !!res['1'].pivot2) {
+					var searchUrl = url.ws();
+					searchUrl += '/api/ficheHoraires/json?route='+ligne.code.replace('_',':')+'&time='+time+(url.otp2Router=='local'?'':'&router='+url.otp2Router);
+					if(!!res['0'].pivot2) {
+						searchUrl += '&pivot_0_stop_id='+res['0'].pivot2.stop_id+'&pivot_0_delai='+res['0'].pivot2.delai;
+					}
+					if(!!res['1'].pivot2) {
+						searchUrl += '&pivot_1_stop_id='+res['1'].pivot2.stop_id+'&pivot_1_delai='+res['1'].pivot2.delai;
+					}
+					fct_attente_horaires(true);
+					$.ajax({
+						type: "GET",
+						url: searchUrl,
+						error:error,
+						dataType: 'json'
+					}).then(function(res) {
+						fct_attente_horaires(false);
+						$( document ).trigger( 'evtHorairesCharges', [ligne, time,res,true] );
+					});
+				}
 			});
 		}
-		function afficheHoraires(ligne, time,res) {
-			//var textSelected = $('#onglets .ongletSelected label').text();
+		//--------------------------------------//
+		// afficheHoraires
+		//--------------------------------------//
+		function afficheHoraires(ligne, time,res,b2Contenus) {
+			
+			var divConteneur = $('#horaires div[data-code='+ligne.code+'] .tableau');
+
+			selectedDir = (divConteneur.find('div.contenu > .direction.active').hasClass('dir2')?'dir2':'dir1');
+			if(!b2Contenus) divConteneur.find('.contenu').remove();
+			var contenu = modeleDivContenuHoraires.clone();
+			divConteneur.append(contenu);
+			
+			//divConteneur.empty();
+			var span = $('<span><label for="arretSelect'+ligne.code+'">' + lang.horaires.Direction + ' </label></span>');
+			var onglets = $('<select id="arretSelect'+ligne.code+'" class="onglets form-control"></select>');
+			//var contenuOnglets = $('<div class="contenuOnglets"></div>');
+			var codeLigne = ligne.code.split('_')[1];
+
+			/*if (ligne.shortName == '66') {
+				divConteneur.append($('<div id="messageErreurHoraires">'  + lang.libelleMessageErreurHoraires + '</div>'));
+				contenuOnglets.attr('style','height: calc(100% - 100px);');
+				if ( ligne.code.indexOf( "SEM_" ) != -1 ) {
+					var liensFicheTag = $('<tfoot><tr><td colspan="8"><span class="pull-left glyphicon glyphicon-plus-sign"></span><a href="http://www.tag.fr/ftp/fiche_horaires/fiche_horaires_2014/HORAIRES_'+ligne.code.replace('SEM_','')+'" target="_blank" class="fichesHorairesTag">' + lang.libelleFicheTag + '</a></td></tr></tfoot>');
+					
+					divConteneur.append(liensFicheTag);
+				}
+				return;
+			}*/
+			
+			var deuxDirectionsVides = true;
+			for (var i=0;i<2;i++) {
+				var contenuDir = contenu.children('.dir'+(i+1));
+				var ficheHoraire = modeleDivFicheHoraire.clone();
+				var tableauVide = true;
+				var dir = res[i].arrets;
+
+				//var table = $('<table></table>');
+				//var tbody = $('<tbody></tbody>');
+				//table.append(tbody);
+				var tbody = ficheHoraire.find('tbody');
+				
+				
+				for (var j=0;j<dir.length;j++) {
+					var arr = dir[j];
+					var row = $('<tr></tr>');
+
+							//icone favori
+							var cell=$('<td> <span></span></td>');
+									
+							if (isfavorisPresent(ligne.id.substring(0, 3)) && typeof(arr.parentStation)!='undefined') { //On rajoute les favoris dans le cas d'un abonnement TAG
+								var favYes = getLogoFav("",colors,arr.stopId.replace(":","") , arr.parentStation.replace(":","") + ' favorisArret',isArretfavori(ligne.id ,arr.parentStation));
+								cell.append(favYes);
+								favYes.click(function(){
+									var codeligne=$("#horairesOnglets .ligne.active").attr('data-code').replace('_',':');
+									var parentStation=  $(this).closest('tr').attr('data-parent-station');
+									toogleArretFavori($(this), codeligne, parentStation,colors);						
+								});							
+							}
+							row.append(cell);
+					
+					var arret = "";
+					var stopName = (ligne.type=='TRAM' || ligne.type=='NAVETTE' || ligne.type=='CHRONO' || ligne.type=='PROXIMO'?getShortStopName(arr.stopName):arr.stopName) ;
+					if (urlParams.tc)
+						var arret = $('<td title="'+arr.stopName.split(',')[0]+'"><span style="display:none;"></span>&nbsp;' + stopName +'</td>');
+					else
+						var arret = $('<td title="'+arr.stopName.split(',')[0]+'"><span class="glyphicon glyphicon-screenshot" style="display:none;"></span>&nbsp;' + stopName +'</td>');
+					row.append(arret);
+					row.attr('data-lonlat',arr.lat+','+arr.lon);
+					row.attr('data-arr-code',arr.stopId);
+					row.attr('data-parent-station', arr.parentStation);
+
+					//icone rond.
+					//var rond = $('<td class="rondhoraire"><div></div></td>');
+					//row.append(rond);
+					
+					for (var k=0;k<arr.trips.length;k++) {
+						var heure = "|";
+						var h = parseInt(arr.trips[k]);
+						if (!isNaN(h)) heure = moment.utc(h*1000).format('HH:mm');
+						var date = moment.utc(new Date(Math.floor(time))).format('DD/MM/YYYY');
+						var tripHoraire = $('<td title="'+date+'" alt="'+date+'">'+ heure +'</td>');
+						row.append(tripHoraire);
+					}
+					tbody.append(row);
+					if (tableauVide) tableauVide=false;
+				}
+				deuxDirectionsVides = tableauVide && deuxDirectionsVides;
+				//var contenuDir = $('<div class="contenuDir"></div>');
+				//contenuOnglets.append(contenuDir);
+				/*if(dir.length>0) {
+					onglets.append('<option>'+dir[dir.length-1].stopName+'</option>');
+					
+				}*/
+				
+				var nbTripsAffiches = 4;
+				var heureSuivant = res[i].nextTime;
+				var heurePrecedent  = res[i].prevTime;
+				
+				if (tableauVide) {
+					var message = $('<span>'+lang.alertHoraire[1]+' : '+moment.utc(new Date(Math.floor(time))).format('HH:mm')+'</span><br/>');
+					ficheHoraire.find('.horairesText').append(message);
+					//ficheHoraire.find('.horairesPrecedents, .horairesSuivants').hide();
+					ficheHoraire.find('div.matable').hide();					
+				} else {
+					ficheHoraire.find('.horairesPrecedents')
+						.attr('data-time',heurePrecedent)
+						.attr('title',lang.libelleAffiche_1 + nbTripsAffiches + lang.libelleHorairePrec_2)
+						.attr('alt',lang.libelleAffiche_1 + nbTripsAffiches + lang.libelleHorairePrec_2);
+					ficheHoraire.find('.horairesSuivants')
+						.attr('data-time',heureSuivant)
+						.attr('title',lang.libelleAffiche_1 + nbTripsAffiches +lang.libelleHoraireSuivant_2)
+						.attr('alt',lang.libelleAffiche_1 + nbTripsAffiches +lang.libelleHoraireSuivant_2);
+					
+					ficheHoraire.find('.directionLabel').text(lang.horaires.Direction);
+					ficheHoraire.find('.directionText').text(dir[dir.length-1].stopName);
+
+					if (isfavorisPresent(ligne.id.substring(0, 3))) {
+						var idFav = 'fav_'+ligne.code.replace('_','');
+						var logoFav = getLogoFav(lang.appMobile.FAVORIS,colors,idFav+"_"+i,idFav + " favorisLigne",isLigneFavorite(ligne.code))
+						ficheHoraire.find('.boutonsHoraires').prepend(logoFav); //On rajoute les favoris dans le cas d'un abonnement TAG
+						logoFav.click(function(){
+							var codeligne=$("#horairesOnglets .ligne.active").attr('data-code').replace('_',':');
+							toogleLigneFavorite($(this),codeligne,colors);
+						});
+					}
+				}
+				//ficheHoraire.find('.matable').append(table);
+				//divConteneur.find('.dir'+(i+1)).append(ficheHoraire);
+				contenu.find('.dir'+(i+1)).append(ficheHoraire);
+
+				tbody.on('click','td',function(e){
+					$( this ).parents('tr').toggleClass( 'highlightLigne',this.clicked );
+				});
+				tbody.on('click','.glyphicon-screenshot',function(e){
+					window.open('planTC.html?lonlatDep='+$(this ).parents('tr').attr('data-lonlat') + '&codeArr='+$(this ).parents('tr').attr('data-arr-code'));
+				});
+			}
+			divConteneur.find('.boutonDirection').toggle(!deuxDirectionsVides);
+			
+			if (ligne.type == 'FLEXO') {
+				
+				contenu.find('.boutonsHoraires > .ficheHoraireInfos').show();
+				divConteneur.find('.horairesTextInfos').text((codeLigne != "62"?lang.libelleMessageFlexo:lang.libelleMessageFlexo62));
+			}
+			if ( ligne.code.indexOf( "SEM_" ) != -1 ) {
+				var lienPdf = contenu.find('.boutonsHoraires > .ficheHorairePdf');
+				lienPdf.attr('href',url.ws() + '/api/ficheHoraires/pdf?route='+ligne.code.replace('_',':'));
+				lienPdf.show();
+			}
+			if (dataEvtsTC[ligne.code]) {
+				var lienEvt = contenu.find('.boutonsHoraires > .ficheHoraireEvenement');
+				lienEvt.show();
+				var evts='';
+				for(var evt in dataEvtsTC[ligne.code]){
+					evts += dataEvtsTC[ligne.code][evt].comment+'<br>';
+				}
+				contenu.find('.horairesEvtLigne').html(evts);
+			}
+			var boutonDirection = contenu.find('.ficheHoraireDirection');
+			boutonDirection.attr('data-codeLigne',ligne.code);
+			contenu.find('.boutonsHoraires').show();
+			if (selectedDir) {
+				divConteneur.find('.direction.active').removeClass('active');
+				divConteneur.find('.'+selectedDir).addClass('active');
+			}
+		}
+/*		function afficheHoraires(ligne, time,res) {
 			selectedDir = $('#horaires div[data-code='+ligne.code+'] select.onglets').val();
-			//console.log(selectedDir);
 			$('#horaires div[data-code='+ligne.code+'] .tableau').empty();
 			var span = $('<span><label for="arretSelect'+ligne.code+'">' + lang.horaires.direction + '</label></span>');
 			var onglets = $('<select id="arretSelect'+ligne.code+'" class="onglets"></select>');
 			var contenuOnglets = $('<div class="contenuOnglets"></div>');
 			var codeLigne = ligne.code.split('_')[1];
-			
-			if (ligne.shortName == '66') {
-				$('#horaires div[data-code='+ligne.code+'] .tableau').append($('<div id="messageErreurHoraires">'  + lang.libelleMessageErreurHoraires + '</div>'));
-				contenuOnglets.attr('style','height: calc(100% - 100px);');
-				if ( ligne.code.indexOf( "SEM_" ) != -1 ) {
-					var liensFicheTag = $('<tfoot><tr><td colspan="8"><span class="pull-left glyphicon glyphicon-plus-sign"></span><a href="http://www.tag.fr/ftp/fiche_horaires/fiche_horaires_2014/HORAIRES_'+ligne.code.replace('SEM_','')+'" target="_blank" class="fichesHorairesTag">' + lang.libelleFicheTag + '</a></td></tr></tfoot>');
-					
-					$('#horaires div[data-code='+ligne.code+'] .tableau').append(liensFicheTag);
-				}
-				return;
-			}
-			
-			//if ($.isNumeric(codeLigne) && codeLigne>=40 && codeLigne<=70) {
+
 			if (ligne.type == 'FLEXO') {
 				$('#horaires div[data-code='+ligne.code+'] .tableau').append($('<div id="horairesTextFlexo">'  + (codeLigne != "62"?lang.libelleMessageFlexo:lang.libelleMessageFlexo62) + '</div>'));
 				contenuOnglets.attr('style','height: calc(100% - 100px);');
@@ -495,18 +909,10 @@
 			for (var i=0;i<2;i++) {
 				var tableauVide = true;
 				var dir = res[i].arrets;
-
 				var table = $('<table></table>');
 				var tbody = $('<tbody></tbody>');
 				table.append(tbody);
-				
-				/*var codeDest;
-				if(urlParams.arretDepart && urlParams.arretArrivee) {
-					codeDest = urlParams.arretArrivee;
-				} else {
-					//codeDest = tableauArrets[headsign].pivot.arret;
-					codeDest = ligne.directions[headsign].pivot.arret;
-				}*/
+
 				for (var j=0;j<dir.length;j++) {
 					var arr = dir[j];
 					var row = $('<tr></tr>');
@@ -519,7 +925,21 @@
 					row.append(arret);
 					row.attr('data-lonlat',arr.lat+','+arr.lon);
 					row.attr('data-arr-code',arr.stopId);
+					row.attr('data-parent-station', arr.parentStation);
 					
+					//icone favori
+					var cell=$('<td> <span></span></td>');
+							
+					if (isfavorisPresent(ligne.id.substring(0, 3)) && typeof(arr.parentStation)!='undefined') { //On rajoute les favoris dans le cas d'un abonnement TAG
+						var favYes = getLogoFav("",colors,arr.stopId.replace(":","") , arr.parentStation.replace(":","") + ' favorisArret',isArretfavori(ligne.id ,arr.parentStation));
+						cell.append(favYes);
+						favYes.click(function(){
+							var codeligne=$("#horairesOnglets .ligne.active").attr('data-code').replace('_',':');
+							var parentStation=  $(this).closest('tr').attr('data-parent-station');
+							toogleArretFavori($(this), codeligne, parentStation,colors);						
+						});							
+					}
+					row.append(cell);					
 					//icone rond.
 					var rond = $('<td class="rondhoraire"><div></div></td>');
 					row.append(rond);
@@ -544,31 +964,45 @@
 				var heureSuivant = res[i].nextTime;
 				var heurePrecedent  = res[i].prevTime;
 
-				var liens = $('<div class="liens"><a href="#" class="horairesPrecedents" title="' + lang.libelleAffiche_1 + nbTripsAffiches + lang.libelleHorairePrec_2 + '" alt="' + lang.libelleAffiche_1 + nbTripsAffiches + lang.libelleHorairePrec_2 + '">' + lang.libelleHorairePrec +'</a><a href="#" class="horairesSuivants" title="' + lang.libelleAffiche_1 + nbTripsAffiches +lang.libelleHoraireSuivant_2 + '">' + lang.libelleHoraireSuiv + '</a></div>');
-
+				var liens = $('<div class="liens"><a href="#" class="horairesPrecedents" data-time="'+heurePrecedent+'" title="' + lang.libelleAffiche_1 + nbTripsAffiches + lang.libelleHorairePrec_2 + '" alt="' + lang.libelleAffiche_1 + nbTripsAffiches + lang.libelleHorairePrec_2 + '">' + lang.libelleHorairePrec +'</a><a href="#" class="horairesSuivants" data-time="'+heureSuivant+'" title="' + lang.libelleAffiche_1 + nbTripsAffiches +lang.libelleHoraireSuivant_2 + '">' + lang.libelleHoraireSuiv + '</a></div>');
+												
 				if (tableauVide) {
-					//var message = $('<label>'+lang.alertHoraire[1]+' : '+moment(new Date(Math.floor(heureCourante))).format('HH:mm')+' - '+moment(new Date(Math.floor(heureCourante+maxArriveeDest))).format('HH:mm')+'</label>');
-					var message = $('<span>'+lang.alertHoraire[1]+' : '+moment.utc(new Date(Math.floor(time))).format('HH:mm')+'</span><br/>');
+					var message = $('<span>'+lang.alertHoraire[1]+'</span><br/>');
 					contenuDir.append(message);
 					contenuDir.append(liens);
+					$('[data-code="'+ ligne.code +'"] .horairesSuivants').hide()
+					$('[data-code="'+ ligne.code +'"] .horairesPrecedents').hide()
 				} else {
 					var div = $('<div class="divDir"></div>');
 					div.append(span);
 					div.append(onglets);
 					$('#horaires div[data-code='+ligne.code+'] .tableau').append(div);
-					var thead= $('<thead><tr><td colspan="8"></td></tr></thead>');
+					var thead= $('<thead><tr><td colspan="4"></td></tr></thead>');
+					
+					if (isfavorisPresent(ligne.id.substring(0, 3))) {
+						var idFav = 'fav_'+ligne.code.replace('_','');
+						var logoFav = getLogoFav(lang.appMobile.FAVORIS,colors,idFav+"_"+i,idFav + " favorisLigne",isLigneFavorite(ligne.code))
+						thead.find('td').append(logoFav); //On rajoute les favoris dans le cas d'un abonnement TAG
+						logoFav.click(function(){
+							var codeligne=$("#horairesOnglets .ligne.active").attr('data-code').replace('_',':');
+							toogleLigneFavorite($(this),codeligne,colors);
+						});
+					}
+					
 					thead.find('td').append(liens);
-					table.append(thead);
+					table.append(thead);				
 				}
 				
 				$('#horaires div[data-code='+ligne.code+'] .tableau').append(contenuOnglets);
 				liens.find('.horairesPrecedents').click(function(){
+					var time = $(this).attr('data-time');
 					selectedDir = $(this).closest('.tableau').find('select.onglets').val();
-					getDataHoraires(ligne,heurePrecedent);
+					getDataHoraires(ligne,time);
 				});
 				liens.find('.horairesSuivants').click(function(){
+					var time = $(this).attr('data-time');
 					selectedDir = $(this).closest('.tableau').find('select.onglets').val();
-					getDataHoraires(ligne,heureSuivant);
+					getDataHoraires(ligne,time);
 				});
 				contenuDir.append(table);
 				tbody.on('click','td',function(e){
@@ -577,12 +1011,32 @@
 				tbody.on('click','.glyphicon-screenshot',function(e){
 					window.open('planTC.html?lonlatDep='+$(this ).parents('tr').attr('data-lonlat') + '&codeArr='+$(this ).parents('tr').attr('data-arr-code'))
 				});
+				var infoComplementaire = '<tfoot>';
 				if ( ligne.code.indexOf( "SEM_" ) != -1 ) {
-					var liensFicheTag = $('<tfoot><tr><td colspan="8"><span class="pull-left glyphicon glyphicon-plus-sign"></span><a href="http://www.tag.fr/ftp/fiche_horaires/fiche_horaires_2014/HORAIRES_'+ligne.code.replace('SEM_','')+'" target="_blank" class="fichesHorairesTag">' + lang.libelleFicheTag + '</a></td></tr></tfoot>');
-					
-					table.append(liensFicheTag);
+					infoComplementaire += '<tr><td colspan="8"><span class="pull-left glyphicon glyphicon-plus-sign"></span><a href="https://www.tag.fr/ftp/fiche_horaires/fiche_horaires_2014/HORAIRES_'+ligne.code.replace('SEM_','')+'.pdf" target="_blank" class="fichesHorairesTag">' + lang.libelleFicheTag + '</a></td></tr>';
+				}
+				var evtsTC = dataEvtsTC[ligne.code];
+				if (evtsTC) { // Evenement sur la ligne
+					var cpt = 0;
+					for(var index in evtsTC) {
+						if (isEvenementEnCours(evtsTC[index].ddeb,evtsTC[index].dfin))
+						{
+							if 	(cpt++ == 0) {
+								infoComplementaire += '<tr><td colspan="8" class="cellEnteteEvenement">' + lang.horaires.perturbation + '</td></tr>';
+							}
+							infoComplementaire += '<tr><td colspan="8" class="cellEvenement">';
+							infoComplementaire += evtsTC[index].comment;
+							infoComplementaire += '</td></tr>';
+						}
+					}
+				}
+			
+				if (infoComplementaire != '<tfoot>') {
+					infoComplementaire += '</tfoot>';
+					table.append($(infoComplementaire));
 				}
 			}
+			
 			if (selectedDir) {
 				var sel = $('#horaires div[data-code='+ligne.code+'] select.onglets');
 				sel.val(selectedDir);
@@ -590,6 +1044,26 @@
 					sel.find('option').eq(0).prop('selected', 'selected');
 				sel.trigger('change');
 			}
+			addTopToBack();
+		}*/
+		
+		function addTopToBack() {
+			//console.log("addTopToBack");
+			$('#btn_down').show(); /* ici !!!!!!! Faire apparaitre  le bouton, et quand il faut/// 
+			/*var appended = false;
+			onscroll = function() {
+			var scrollBack = document.documentElement.scrollBack || document.body.scrollBack;
+			console.log(scrollBack);
+			if (scrollBack > 250) {
+				if (!appended) {
+					$('#btn_down').show();
+					appended = true;
+				}
+			} else if (appended) {
+					$('#btn_down').hide();
+					appended = false;
+				}
+			};*/
 		}
 	</script>
 	

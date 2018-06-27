@@ -32,9 +32,54 @@
 		<link href="js/lib/bs/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 		<link href="css/map.css" rel="stylesheet">
 		<link href="css/iti.css" rel="stylesheet">
+		<style type='text/css'>		
+			body.withPub {
+				padding-top:45px;
+			}
+			body #headiFrame {
+				position: absolute;
+				top: 0px;
+				width: 100%;
+			}
+			
+			.favorisIti {
+				/*-moz-border-radius:20px 20px;
+				-webkit-border-radius:20px 20px;
+				border-radius:20px 20px;
+				font-weight: bold;
+				font-size:10px;*/
+				
+				padding: 5px;
+				right: 10px;
+				position: absolute;
+				bottom: 10px;
+			}
+			.favorisIti{
+				width: 116px;
+				height: 32px;
+			}
+			.favorisIti.oui {
+				background-image: url('../img/fav/tag_favoris_oui.svg');
+			}
+			.favorisIti.non {
+				background-image: url('../img/fav/tag_favoris_non.svg');
+			}
+			.favorisIti.non:hover {
+				background-image: url('../img/fav/tag_favoris_hover.svg');
+			}
+			.favorisIti.oui:hover {
+				background-image: url('../img/fav/tag_favoris_supprimer.svg');
+			}				
+		</style>		
 	</head>
 	<body>
 	<div id='head'></div>
+	<div id="headiFrame">
+		<a id="pub" href="//www.metromobilite.fr" target='_blank' class="hidden-print">
+			<img src="img/metromobilite.svg" alt="" >
+			<div></div>
+		</a>
+	</div>
 	<div class="container-fluid main">
 		<div class="row hidden-print">
 			<div id="map" class="map"></div>
@@ -51,7 +96,7 @@
 	</div>
 	<div class="container-fluid popups">
 		<div class="row hidden-print">
-			<div class="col-xs-12 col-sm-6 col-md-5 col-lg-4">
+			<div id="itiColParams" class="col-xs-12 col-sm-6 col-md-5 col-lg-4">
 				<div id="itiParams" class="panel panel-default">
 					<div class="panel-heading" id="panel-heading-itineraire">
 						<a id="togglePanelsParams" class="pull-left btn btn-link no-h-padding no-v-padding" href="#"><span class="sr-only">Reduire</span><span class="glyphicon glyphicon-resize-small"></span></a>
@@ -91,8 +136,8 @@
 										<div class="input-group col-xs-6 pull-left"  id='apavpicker'>
 											<label for="ap_av" class="sr-only">Avant ou après</label>
 											<select id="ap_av" class="form-control">
-												<option value="D">Après</option>
-												<option value="A">Avant</option>
+												<option value="D">Départ après</option>
+												<option value="A">Arrivée avant</option>
 											</select>
 										</div>
 										<div class='input-group date col-xs-6 pull-left' id='timepickerIti'>
@@ -104,7 +149,7 @@
 							</div>
 							<div id="allModes" class="col-xs-12">
 									<div id="ongletsPietonPmr" class="input-group input-group-sm" data-toggle="checkbox">
-										<div id="ongletPieton" class="active" title="Piéton"/>
+										<div id="ongletPieton" class="active" title="Piéton">
 											<img id="imgPieton" src="img/pieton_blanc.svg" alt="Piéton"/>
 										</div>
 										<div  id="ongletPmr" title="Personne à mobilité réduite">
@@ -135,11 +180,7 @@
 										<ul id="car" title="Voiture">
 											<img src="img/voiture_blanc.svg" alt="Voiture"/>
 											<input id="checkCar" type="checkbox" value="car"><label for="checkCar" class="sr-only">Voiture</label>
-										</ul>
-										<ul id="carSharing" title="Cité Lib by Ha:mo">
-											<img src="img/comms_blanc.svg" alt="Cité Lib Ha:mo"/>
-											<input id="checkCarSharing" type="checkbox" value="carSharing"><label for="checkCarSharing" class="sr-only">Cité Lib Ha:mo</label>
-										</ul>
+										</ul>										
 									</div>
 							</div>
 						</div>
@@ -155,7 +196,7 @@
 				</div>
 			</div>
 		</div>
-			<a id="pub" style="display:none;" href="http://www.metromobilite.fr" target='_blank'>
+			<a id="pub" style="display:none;" href="//www.metromobilite.fr" target='_blank'>
 				<img src="img/metromobilite.svg" alt="Métromobilite">
 				<div></div>
 			</a>
@@ -164,7 +205,7 @@
 				<div id="iti" class="collapse panel panel-default">
 					<div class="panel-heading" id="panel-heading-resultats">
 					<a id="togglePanelsResultats" class="pull-left btn btn-link no-h-padding no-v-padding" href="#"><span class="sr-only">Reduire</span><span class="glyphicon glyphicon-resize-small"></span></a>
-					<h2 id="iti-resultat" class="panel-title text-center">Résultats</h2></div>
+					<h2 id="iti-resultat" class="panel-title text-center">Résultats (tri par pertinence)</h2></div>
 					<div class="panel-heading" id="panel-heading-resultats-precedent" title="Calcul et affiche les itinéraires précédents" alt="Calcul et affiche les itinéraires précédents">
 						<div class="text-center"><div class="glyphicon glyphicon glyphicon-chevron-up"></div></div>
 						<div id="iti-dep-prec" class="text-center">Départ précédent</div>
@@ -194,7 +235,6 @@
 						<li class="btn BUS TRAM RAIL"><figure><img title="Transports en commun" alt="Transports en commun" class="logoMode" src="img/blank.png"/><figcaption class="from"></figcaption></figure></li>
 						<li class="btn CABLE_CAR"><figure><img title="Bulles de Grenoble" alt="Bulles de Grenoble" class="logoMode" src="img/blank.png"/><figcaption class="from"></figcaption></figure></li>
 						<li class="btn CAR"><figure><img title="Voiture"  alt="Voiture" class="logoMode" src="img/blank.png"/><figcaption class="from"></figcaption></figure></li>
-						<li class="btn CUSTOM_MOTOR_VEHICLE"><figure><img title="Cité Lib Ha:mo" alt="Cité Lib Ha:mo" class="logoMode" src="img/blank.png"/><figcaption class="from"></figcaption></figure></li>
 					</ul>
 					<ul class="list-group">
 					</ul>
@@ -244,22 +284,7 @@
 									</div>
 									<div class="row profil"><div class="col-xs-12"><canvas width="200" height="100"></canvas></div></div>
 								</div>
-							</div>
-							<div class="leg CUSTOM_MOTOR_VEHICLE">
-								<div class="text-right text-v-top">
-									<span class="text-v-top text-nowrap">
-										<span class="hdep"></span>
-										<img title="Cité Lib by Ha:mo" alt="Cité Lib by Ha:mo" class="logoMode" src="img/blank.png"/>
-									</span>
-								</div>
-								<div class="border-left text-v-middle">
-									<span class="duree ellipsis">0 min</span>
-								</div>
-								<div>
-									<div class="row steps"></div>
-									<div class="row profil"><div class="col-xs-12"><canvas width="200" height="100"></canvas></div></div>
-								</div>
-							</div>
+							</div>							
 							<div class="leg WALK">
 								<div class="text-right text-v-top">
 									<span class="text-v-top text-nowrap">
@@ -312,7 +337,7 @@
 					<div class="panel-body" id="details-panel-body">
 						<div class="container-fluid">
 							<div class="row headIti">
-									<div class="col-xs-4"><div class="co2 btn-link" title="CO2 émis" alt="CO2 émis"><a href="#"></a></div></div>
+									<div class="col-xs-4"><div class="co2 btn-link" title="CO2 émis" alt="CO2 émis"><a href="#" class='hidden-print'></a></div></div>
 									<div class="traffic btn-link col-xs-4">trafic :<a href="#"></a></div>
 									<span class="duree col-xs-4">0 min</span>
 							</div>
@@ -332,7 +357,7 @@
 		</div>
 	</div>
 	<script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
-	<script type="text/javascript" src="js/lib/ol/ol.js"></script>
+	<script type="text/javascript" src="js/lib/ol/ol-custom.js"></script>
 	<script type="text/javascript" src="js/lib/bs/js/moment-with-locales.min.js"></script>
 	<script type="text/javascript" src="js/lib/bs/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/lib/bs/js/bootstrap3-typeahead.min.js"></script>
@@ -345,6 +370,8 @@
 	<script type="text/javascript" src="js/iti.js"></script>
 	<script type="text/javascript">
 	
+		var colors={actif:'orange',inactif:'White'};
+		
 		if (urlParams.lang != 'us') //si nouvelle langue mettre le fichier correspondant dans js/lib/bs/js/locales 
 			$.getScript("js/lib/bs/js/locales/bootstrap-datetimepicker."+ urlParams.lang + ".js");
 
@@ -360,10 +387,16 @@
 
 		function initItiFrame(){
 			if (urlParams.iFrame){
+				$.support.cors = true;
+				chargeLignes();
+				$("body").addClass("withPub");
+				$( "#pub" ).attr({ alt: lang.pub.alt,  title: lang.pub.alt });
+				$( "#pub > div" ).text(lang.pub.text);
+				/*
 					$("body").attr('style','padding-top:0px;');
 					$(".main").attr('style','top:0px;');
-					$.support.cors = true;
-					initIti();
+				*/
+				initIti();
 			} else {
 					$('#head').load('head.html',initIti);
 				}
@@ -375,7 +408,7 @@
 				nomPopup = feature.get(stylesTypes[feature.get('type')].text)
 			}
 			if(feature.getGeometry().getType() == 'Point') {
-				var coord= ol.proj.transform(feature.getGeometry().getCoordinates(), sm, gg);
+				var coord= ol.proj.transform(feature.getGeometry().getCoordinates(), "EPSG:3857", "EPSG:4326");
 				var lonlat = coord[1]+','+coord[0];
 				var divPrefixe = '';
 				var div = '';
@@ -394,26 +427,10 @@
 					divPrefixe = lang.station+' : ';
 					div += getLignesProches(lonlat,afficheListeLgn,null,null,'map');
 				}
+			
 				if (feature.get('type')=='MVA' || feature.get('type')=='MVC' || feature.get('type')=='agenceM') {
 					div += getLignesProches(lonlat,afficheListeLgn,null,null,'map');
-				}
-				if (feature.get('type')=='omms') {
-					divPrefixe = lang.station+' : ';
-					
-					div = '<div class="dyn dynVide" data-type="'+feature.get('type')+'"><ul class="row">\
-						<li class="state-car" title="'+lang.carteMobile.nbTotVehicule+'" alt="'+lang.carteMobile.nbTotVehicule+'"><span class="bs-picto-car">0</span></li>\
-						<li class="state-park" title="'+lang.carteMobile.nbTotPlace+'" alt="'+lang.carteMobile.nbTotPlace+'"><span class="bs-picto-park">0</span></li>\
-					</ul>\
-					<ul class="row">\
-						<li class="state-iroad-comms background-iroad-pas-dispo" title="'+lang.carteMobile.dispoiRoad+'" alt="'+lang.carteMobile.dispoComms+'"><span class="bs-picto-iroad">'+lang.carteMobile.etatNonDisponible+'</span></li>\
-						<li class="state-iroad-comms background-comms-pas-dispo" title="'+lang.carteMobile.dispoComms+'" alt="'+lang.carteMobile.dispoComms+'"><span class="bs-picto-comms">'+lang.carteMobile.etatNonDisponible+'</span></li>\
-					</ul></div>';
-					div +='<a class="lienInscriptionOmms btn btn-primary btn-xs text-center" href="http://www.citelibbyhamo.fr/inscription/" target="_blank">'+lang.carteMobile.inscriptionOmms+'</a>';
-					div +='<a class="lienInscriptionOmms btn btn-primary btn-xs text-center" href="https://gride.gr-tsc.com/login" target="_blank">' + lang.carteMobile.reservationOmms + '</a>';
-					if (isUrlExists('img/hamo/Hamo_' + feature.get('CODE') +'.jpg'))
-						div += '<span><a href="' + 'img/hamo/Hamo_' + feature.get('CODE') +'.jpg' + '" target="_blank"><div class="glyphicon glyphicon-camera state-camera" title="' + lang.carteMobile.photoStation + '"/></a><span>';
-
-				}
+				}				
 				if (feature.get('type')=='evtTr') {
 					div = '<span class="text-left" data-type="'+feature.get('type')+'">'+feature.get('contenu')+'</span>';
 				}
@@ -427,17 +444,19 @@
 			initForm();
 			var idcarte = 'map';
 			map = initMap(idcarte,{overlayStyle:getStylesTypes});
-			sourceIti=new ol.source.GeoJSON({projection: sm});
+			//sourceIti=new ol.source.GeoJSON({projection: "EPSG:3857"}); //migration OL4
+			sourceIti=new ol.source.Vector({projection: "EPSG:3857",format: new ol.format.GeoJSON()});
 			layerIti = ajouteLayerManuel('itineraires',idcarte,{source:sourceIti,fctStyle:getStylesIti}).set('visible',true);
-			sourceDepArr=new ol.source.GeoJSON({projection: sm});
+			//sourceDepArr=new ol.source.GeoJSON({projection: "EPSG:3857"}); //migration OL4
+			sourceDepArr=new ol.source.Vector({projection: "EPSG:3857",format: new ol.format.GeoJSON()});
 			ajouteControle(idcarte,'layerSwitcher');
 
-			sourcePoints = creeSourceType(idcarte,'citelib,omms,PAR,PKG,MVA,MVC,agenceM',{fctStyle:getStylesTypes});
+			sourcePoints = creeSourceType(idcarte,'citelib,PAR,PKG,MVA,MVC,agenceM,autostop,recharge',{fctStyle:getStylesTypes});
 			
 			$('.layerSwitcher .layers').append('<span class="layerSwitcherTitle">' + lang.iti.Autopartage + '</span>');
 			ajouteLayerType(idcarte,'citelib','citelib',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Citélib'}); //,layerSwitcherName:'Points de vente'
-			ajouteLayerType(idcarte,'Citélib-by-Ha-Mo','omms',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Citélib-by-Ha-Mo'});
-			
+			ajouteLayerType(idcarte,'autostop','autostop',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Auto Stop'}); //,layerSwitcherName:'Points de vente'
+			ajouteLayerType(idcarte,'recharge','recharge',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Bornes recharge'}); //,layerSwitcherName:'Points de vente'
 			$('.layerSwitcher .layers').append('<span class="layerSwitcherTitle">' + lang.iti.Parking + '</span>');
 			ajouteLayerType(idcarte,'PKG','PKG',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Parkings'});
 			ajouteLayerType(idcarte,'PAR','PAR',{fctStyle:getStylesTypes,source:sourcePoints,layerSwitcherName:'Parc-relais'});
@@ -468,30 +487,38 @@
 			
 			$( document ).on( "evtSourceChargee", {}, function( event, type ) {
 				if (type=='trr') updateDynTrr('Troncon','map');
-				if (type=='PAR') updateDyn('PAR','map','PAR',sourcePoints);
-				else if (type=='covoiturage') {//on construit des geojson pour alimenter la saisie semi auto.
-					var geojson  = new ol.format.GeoJSON;
-					var featuresCollection = geojson.writeFeaturesObject(sourceCov.getFeatures(),{featureProjection:sm,dataProjection:gg});
-					localFindFeatures = localFindFeatures.concat(featuresCollection.features);
-				} else if (type == 'omms') {
-					updateDyn('omms','map','omms',sourcePoints);
-				}
+				else if (type=='PAR') updateDyn('PAR','map','PAR',sourcePoints);				
 			});
 			
-
-			if (isMobile) {
-				var modify	= new ol.interaction.Modify({
-				  features: map.featuresOverlay.getFeatures(),
+			if (!isMobile()) {
+				/*var modify	= new ol.interaction.Modify({ migration OL4
+				  features: map.featuresOverlay.getSource().getFeatures(),
 				  style:[],
 				  pixelTolerance:30
 				});
 
-				map.addInteraction(modify);
-
-				map.once('moveend',function(){setParamsForm();});
+				map.addInteraction(modify);*/
+				var translate = new ol.interaction.Translate({
+					layers:[map.featuresOverlay]
+				});
+				map.addInteraction(translate);
 			}
-			
+			//moveend declenche la recup des parametres d'url dans mobile aussi
+			map.once('moveend',function(){setParamsForm();});
 			map.singleClickCallback = onClickCarte;
+			
+			
+			//icone favori
+			var cell=$('<div><span></span></div>');
+			if (isItiFavorisPresent()) { //On rajoute les favoris dans le cas d'un token et d'un id
+				var favYes = getLogoFav(lang.appMobile.FAVORIS,colors,'idFav','idFav '+ " favorisIti", urlParams.favori !='')
+				cell.append(favYes);
+				favYes.click(function(){
+					toogleItiFavori($(this));
+				});							
+			}
+			$('#rowOptions').parent().append(cell);	
+			
 			
 			if (urlParams.iFrame) {
 				$('#pub').show();
