@@ -19,33 +19,38 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // *
-var processing = false;
 var codeList = [ ];
+
+var mapLiveMap = null;
+var sourceLiveMap = null;
+var currentTripId = null;
+var currentPatternId = null;//fake
+var currentDest = null;
+var currentServiceDay = null;
+		
 
 var langLocale = {
 	ppa :
 	{
-		oups : 'Oups...',
+		//oups : 'Oups...', //PROVISOIRE
+		oups : 'Votre prochain passage sera bientôt disponible', //PROVISOIRE
 		horaireReel : " Horaire réel",
 		problemeReseau : "Merci de vérifier votre connection réseau.",
 		pasHoraire : "Désolé, nous n'avons pas d'horaire pour cet arrêt.",
 		pasPassage : "Pas de passage dans les prochaines 60 minutes.",
-		erreurWS : "Suite à un problème technique nous ne sommes pas en mesure d'afficher les horaires.",
+		erreurWS : "", //PROVISOIRE
+		//erreurWS : "Suite à un problème technique nous ne sommes pas en mesure d'afficher les horaires.", //PROVISOIRE
 		nousContacter : "Si le problème persiste, merci de bien vouloir nous contacter en précisant l'arrêt demandé et le code erreur. @metromobilite",
 		emailBody : "Signalement de l'Erreur <%1> avec le code <%2>. Merci de bien vouloir préciser votre arrêt et votre direction : "
 	}
 }
-
-//Deuximee ligne :  Nous signaler cette erreur.       signaler cette erreur... mail to et préciser l'arret....
-
 //Prevent issue from URL param encoding (TAG/SMTC)
 var params = urlParams.codeArret;
 
-if(urlParams.codeArret && urlParams.codeArret.charAt(3)=='_') {
+if (urlParams.codeArret && urlParams.codeArret.charAt(3)=='_') {
 	params = urlParams.codeArret.replace("_",":");
 }
-
-if (isTaille('xs')) {
+if (isTaille('xs') || isTaille('xxs')) {
 
 			var os = getMobileOperatingSystem();
 
@@ -55,7 +60,7 @@ if (isTaille('xs')) {
 					$('#display').css("display","flex");
 					$('#head>a span:first').css("display","none");
 					$('.svgAndroid').css("display","block");
-					$('#appli').attr("href", "http://play.google.com/store/apps/details?id=org.lametro.metromobilite");
+					$('#appli').attr("href", "https://play.google.com/store/apps/details?id=org.lametro.metromobilite");
 				break;
 				case('iOS'):
 					$('#appli').css("display","inline-flex");
@@ -79,7 +84,6 @@ if (isTaille('xs')) {
 chargeLignes(function(){},function(){
 	startHARequest(params);
 });
-
 $(document).on( "evtLignesPasChargees", {}, function( event, data ) {
 	afficheErreur(langLocale.ppa.problemeReseau);
 });
@@ -87,14 +91,14 @@ $(document).on( "evtLignesPasChargees", {}, function( event, data ) {
 function afficheErreur(param,erreur) {
 			$('#information h3').html(langLocale.ppa.oups);
 			$('#information .desc1').html(param);
-			if (erreur) {
+			/*if (erreur) { //PROVISOIRE
 				$('#btnSignal').on('click', function (event) {
 						event.preventDefault();
 						window.location = 'mailto:contact@metromobilite.fr?subject=erreur au prochain passage: '+ erreur + '&body=' + langLocale.ppa.emailBody.replace("%1",erreur).replace("%2",(!params?"EMPTY":params));
 				});
 				$('#information').css("height","40%");
 				$('#btnSignal').show();
-			}
+			}*/
 }
 
 //Begining of the HA request
@@ -115,12 +119,11 @@ function startHARequest(code){
 	//getArret(answer,{});
 	
 }
-
 function getLigneHoraire(object,options){
 
 	var code = object.info.code;
 	
-	var searchUrl = (url.saisieChoisie=='local'?url.hostnameLocal+url.portWSTest:url.hostnameData);
+	var searchUrl = url.ws();
 	//var searchUrl = 'http://127.0.0.1:8082';
 	
 	searchUrl += '/api/routers/default/index/stops/'+code+'/stoptimes';
@@ -156,12 +159,13 @@ function getLigneHoraire(object,options){
 				if (!time.realtimeDeparture && !time.scheduledDeparture) return;
 				var t = (time.realtimeDeparture? time.realtimeDeparture : time.scheduledDeparture);
 				var data={
-					"id": line.pattern.id,
-					"arrival":moment((t*1000)+(time.serviceDay*1000)) ,
-					"realtime": time.realtime,
-					"tripid":time.tripId,
+					id: line.pattern.id,
+					arrival:moment((t*1000)+(time.serviceDay*1000)),
+					realtime: time.realtime,
+					tripid:time.tripId,
+					serviceDay:time.serviceDay,
 					//"terminus": (time.tripId==''?{name:line.pattern.desc}:false)
-					"terminus": line.pattern.desc
+					terminus: line.pattern.desc
 				};
 				//filtrage des horaires au terminus dans le cas ou on a directement la destination dans line.pattern.desc (pas de tripId)
 				var nomArret = responses[0].times[0].stopName.split(',')[1];
@@ -181,7 +185,6 @@ function getLigneHoraire(object,options){
 		displayResult(object);
 	});
 }
-
 function filterResults(object) {
 	//cut the object with following constraint : never more than 60mn, no more than 15 row,
 	//no more than 2 same line row.
@@ -223,12 +226,19 @@ function filterResults(object) {
 	
 	return object;
 }
-
 function displayResult(object){
-	if (object.lines.length == 0) {
-		$('#content').html(("<div class='infoMsg'>"+ langLocale.ppa.pasPassage +"</div>"));
+	$('#content').empty();
+	if(object.message){
+		$('#content').html(("<div class='infoMsg'>"+ object.message +"</div>"));
+		$('#glyphiconRefresh').show();
 		return;
 	}
+	if (object.lines.length == 0) {
+		$('#content').html(("<div class='infoMsg'>"+ langLocale.ppa.pasPassage +"</div>"));
+		$('#glyphiconRefresh').show();
+		return;
+	}
+		
 	object.lines.forEach(function(line){
 		if (line.terminus == "erreur") return;
 		var codeLgn = line.id;
@@ -244,69 +254,241 @@ function displayResult(object){
 			obj.find('.terminus').html(line.terminus);
 		}
 		obj.attr('data-timestamp',line.arrival);
+		obj.attr('data-linecolor',dataLignesTC[codeLgn].color);
 		obj.attr('data-tripid',line.tripid);
+		obj.attr('data-serviceday',line.serviceDay);
 		obj.attr('data-line',line.id.split(":")[0]+"_"+line.id.split(":")[1]);
 		$('#content').append(obj);
 	});
-	
-	obj = $('#model>.line').clone();
-	obj.find('.terminus').html();
-	
-	obj.find('.heure').html(('<div class="rss"><img  class="logoRss" src="img/rss.svg"/>' + langLocale.ppa.horaireReel + '</div>'));
-	obj.addClass('noborder');
-	obj.find('.heure').addClass('nocolor');
+	obj = $('<div class="line noborder"><div class="heure nocolor col-xs-12 text-right"><div class="rss"><img  class="logoRss" src="img/rss.svg"/>' + langLocale.ppa.horaireReel + '</div></div></div>');
 	$('#content').append(obj);
+	
+	$('.line').show();
+	if(!majLiveMapInterval) {
+		setTimeout(function () {if(!majLiveMapInterval) {$('#glyphiconRefresh').show();}}, 10000);
+	}
 }
-
 function displayArret(object){
 	$('#information h3').html(object.info.name.split(", ")[1]);
 	$('#information .desc1').html(object.info.name.split(", ")[0]);
 	$('#information').attr('data-code',object.info.code);
 }
-
-function allowClick(){
-	processing = false;
-}
-
 function refresh(){
-	if(processing) return;
+	$('#content').empty();
 	codeList=[];
-	processing = true;
-	$("#content").empty();
+	$('#glyphiconRefresh').hide();
+	//$('#map').css("visibility", "hidden");
+	$('#map').hide();
+	//$('#content').empty();
 	startHARequest(params);
-	setTimeout(allowClick, 1000);
+	//setTimeout(allowClick, 1000);
 }
-
 function error (param){
 	console.log(param)
 }
-
-$('#information').click(function(){
+$('#glyphiconRefresh').click(function(e){
+	e.preventDefault();
 	refresh();
+	return false;
 });
 
-$(".footer").click(function() {
-	if (isMobile()) {
-		if (navigator.userAgent.indexOf("Android") != -1) {
-			window.location.href="https://play.google.com/store/apps/details?id=org.lametro.metromobilite";
-			return;
+//--------------------------------------//
+// getStylesLiveMap
+//--------------------------------------//
+function getStylesLiveMap(feature) {
+
+	var typeId = feature.getId();
+		
+	if (!styleCache['stylePoint_'+typeId]) {
+	
+		if (typeId == 'ligne') { //Style de la ligne de bus/tram
+				styleCache['style_'+typeId] = new ol.style.Style({
+					stroke: new ol.style.Stroke({
+						color: '#'+color,
+						width: 5,
+						opacity: 1,
+						zIndex: 200
+					}),
+					zIndex: 200
+				});
+			
+		} else if (typeId == 'busPosition') { //Style de la position du bus/tram
+				styleCache['style_'+typeId] = new ol.style.Style({
+					zIndex: 300,
+					image:  new ol.style.Icon({src: 'img/Carto/tc.png',width:'10px', height:'10px' })
+				});
+		
+		} else if (typeId == 'stopsPosition') { //Style de la position de l'arret
+				styleCache['style_'+typeId] = new ol.style.Style({
+					zIndex: 250,
+					image:  new ol.style.Icon({src: 'img/Carto/Vous_etes_ici.png',anchor:[0.5,1]})					
+				});		
+		} else { //Style de la position de l'arret
+				styleCache['style_'+typeId] = new ol.style.Style({
+					zIndex: 210,
+					image:  imageLgnArret					
+				});		
 		}
-		if ((navigator.userAgent.indexOf("iPhone") != -1) || (navigator.userAgent.indexOf("iPad") != -1) || (navigator.userAgent.indexOf("iPod") != -1)) {
-			window.location.href="itmss://itunes.apple.com/us/app/metromobilite/id966169282?l=fr&ls=1&mt=8&ign-mscache=1&affC=QQANAAAACwApnyYHMWwzdjdNagZhcHBzdHYAAAAAEjcPFA%3D%3D&ign-msr=https%3A%2F%2Fitunesconnect.apple.com%2FWebObjects%2FiTunesConnect.woa%2Fra%2Fng%2Fapp%2F966169282";
-			return;
-		}
+	
 	}
-	else
-	{
-		window.location.href="pages/AppliMobile.html";
+	
+	return [styleCache['style_'+typeId]] ;
+}
+
+
+function initLiveMap(_this,event){
+	if(majLiveMapInterval) {
+		refresh();
+		$( document ).trigger( "evtLiveMapFermee" );
+		return;
 	}
+
+	currentTripId = $(_this).parent().attr('data-tripid');
+	currentPatternId = $(_this).parent().attr('data-line').split('_').join(':')+':0';
+	currentServiceDay = $(_this).parent().attr('data-serviceday');
+	currentDest = $(_this).parent().find('.terminus').text();
+	color = $(_this).parent().attr('data-linecolor');
+	var idcarte = 'map';
+	if (!mapLiveMap) {
+		//console.log('Création de la carte et de la source');
+		mapLiveMap = initMap(idcarte,{overlayStyle:getStylesTypes});
+		sourceLiveMap=new ol.source.Vector({projection: "EPSG:3857",format: new ol.format.GeoJSON()});
+		var layerLiveMap = ajouteLayerManuel('liveMap',idcarte,{source:sourceLiveMap,fctStyle:function(f){return getStylesLiveMap(f)},color:color}).set('visible',true);
+		//ajouteLayerSwitcher(idcarte,'liveMap','.layerSwitcher',{libelle:'TODO'});
+	}
+	$( document ).trigger( "evtLiveMapOuverte" );
+	//updateLiveMap(idcarte,sourceLiveMap);
+	
+	event.stopPropagation();
+}
+var majLiveMapInterval;
+$( document ).on( "evtLiveMapOuverte", {}, function( event ) {
+	if (majLiveMapInterval) window.clearInterval(majPopupInterval);
+	updateLiveMap('map',sourceLiveMap);
+	majLiveMapInterval = window.setInterval(function() {updateLiveMap('map',sourceLiveMap,true);}, 3000);
 });
 
-$("#hideFooter").click(function(e) {
-	e.stopImmediatePropagation();
-	$('.footer').hide();
-	$('#content').css('height','75%');
-	$('#main').css('height','90%');
+$( document ).on( "evtLiveMapFermee", {}, function( event ) {
+	window.clearInterval(majLiveMapInterval);
+	majLiveMapInterval = null;
 });
+//--------------------------------------//
+// updateLiveMap
+//--------------------------------------//
+function updateLiveMap(idcarte,source,positionOnly) {
+	
+	try {
+		var searchUrl = url.ws();
+		//https://data.metromobilite.fr/api/routers/default/index/trips/SEM:1131623/position
+		searchUrl += '/api/routers/default/index/trips/SEM:' + currentTripId + '/position';
 
-trackPiwik("MetroMobilité : ppa.html");
+		$.ajax({
+			type: "GET",
+			url: searchUrl,
+			error: error,
+			dataType: 'json'
+		}).then(function(data) {
+			if (data.pos) {
+				
+				//position du bus/tram
+				var id = 'busPosition'
+				var pointBus = ol.proj.transform(data.pos, "EPSG:4326", "EPSG:3857");
+				var geomBus = new ol.geom.Point(pointBus);
+					
+				var featureBus = source.getFeatureById(id);
+				if (!featureBus) {
+					featureBus = new ol.Feature({'geometry': geomBus});
+					featureBus.setId(id);
+					source.addFeature(featureBus);
+				} else if (geomBus.getCoordinates() != featureBus.get('geometry').getCoordinates()) {
+					featureBus.set('geometry',geomBus);
+				}
+
+				var idArretCourrant = urlParams.codeArret.replace("_",":");
+				var time = {};
+				for(var i=0;i<data.times.length;i++){
+					var stop = data.stops[i];
+					if(stop.id.split(':')[0]+':'+stop.code==idArretCourrant) {
+						time=data.times[i];
+						break;
+					}
+				}
+				var dep = (time.realtimeDeparture? time.realtimeDeparture : time.scheduledDeparture);
+				var t = (dep*1000)+(currentServiceDay*1000);
+				var objAffichage={lines:[{
+					id: currentPatternId,
+					arrival:moment(t) ,
+					realtime: time.realtime,
+					tripid:time.tripId,
+					serviceDay:currentServiceDay,
+					terminus: currentDest
+				}]};
+				if(t < new Date().getTime()) {
+					refresh();// le bus est passé
+					$( document ).trigger( "evtLiveMapFermee" );
+				}
+
+				if (!positionOnly) {
+					
+					var features=[];
+					for(var i=0;i<data.stops.length;i++){
+						var stop = data.stops[i];
+						var id = (stop.id.split(':')[0]+':'+stop.code==idArretCourrant?'stopsPosition':stop.id);
+						var point = ol.proj.transform([stop.lon,stop.lat], "EPSG:4326", "EPSG:3857");
+						var geom = new ol.geom.Point(point);
+							
+						var f = source.getFeatureById(id);
+						if (!f) {
+							f = new ol.Feature({'geometry': geom});
+							f.setId(id);
+							features.push(f);
+						} else if (geom.getCoordinates() != f.get('geometry').getCoordinates()) {
+							f.set('geometry',geom);
+						}
+					}
+					source.addFeatures(features);
+									
+					//Trace de la ligne
+					id = 'ligne';
+					var format = new ol.format.Polyline({});
+					var coord = format.readGeometry(data.shape,{dataProjection:"EPSG:4326",featureProjection:"EPSG:3857"}).getCoordinates();
+					var geom = new ol.geom.LineString(coord);
+					
+					var feature = source.getFeatureById(id);
+					if (!feature) {
+						feature = new ol.Feature({'geometry': geom});
+						feature.setId(id);
+						source.addFeature(feature);
+					} else if (geom.getCoordinates() != feature.get('geometry').getCoordinates()) {
+						feature.set('geometry',geom);
+					}
+					
+					mapLiveMap.getView().setZoom(15);
+					
+/*					$('.line').hide();
+					$('#glyphiconRefresh').hide();
+					$('[data-tripid="' + currentTripId + '"]').show();*/
+					//$('#map').css("visibility", "visible");
+					$('#map').show();
+					mapLiveMap.updateSize();
+				}
+				$('#glyphiconRefresh').hide();
+				mapLiveMap.getView().setCenter(pointBus);
+				displayResult(objAffichage);
+				$('#content .line .livemap .glyphicon').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+			} else {
+				console.error(data.message);
+				$( document ).trigger( "evtLiveMapFermee" );//on arrete les refresh
+				$('#map').hide();
+				displayResult({message:data.message});
+			}				
+		});
+	} catch(e) {
+		console.error(e.lineNumber+' : '+e.message);
+		$( document ).trigger( "evtLiveMapFermee" );//on arrete les refresh
+		$('#map').hide();
+		displayResult({message:'Course indéterminée'});
+	}
+}
+
+trackPiwik("MetroMobilité : ppa.html?codeArret=" + urlParams.codeArret);

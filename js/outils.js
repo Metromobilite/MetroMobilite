@@ -41,6 +41,12 @@ var typesLgn = {
 	TPV:[],
 	FUN:[],
 	BUL:[],
+	Urbaines:[],
+	Interurbaines:[],
+	Structurantes:[],
+	Secondaires:[],
+	Citadines:[],
+	TAD:[],
 	SCOL:[]
 }
 
@@ -59,21 +65,43 @@ urlParams.debug = !!urlParams.debug;
 if (!urlParams.iFrame) urlParams.iFrame=false;
 if (!urlParams.toggle) urlParams.toggle=false;
 
-if(!urlParams.forceOtp2) urlParams.forceOtp2=false; //Force l'utilisation d'Otp2 (v0.16 et +) pour le calcul d'itinéraire et non otp (v0.9)
+if(!urlParams.forceOtp2) {
+	if (window.location.hostname == 'preprod.metromobilite.fr') {
+		urlParams.forceOtp2 = true;	
+	} else {
+		urlParams.forceOtp2=false; //Force l'utilisation d'Otp2 (v0.16 et +) pour le calcul d'itinéraire et non otp (v0.9)
+	}
+}
 
 if(!urlParams.otp) urlParams.otp='prod';
-if(!urlParams.otp2) urlParams.otp2='prod';
+if(!urlParams.otp2) {
+	if (window.location.hostname == 'preprod.metromobilite.fr') {
+		urlParams.otp2 = 'test';
+	} else {
+		urlParams.otp2='prod';
+	}
+}
 if(!urlParams.routerId) urlParams.routerId='prod';
 if(!urlParams.routerOtp2) urlParams.routerOtp2='default';
 if(!urlParams.css) urlParams.css='mm';
-if(!urlParams.saisie) urlParams.saisie='prod';
-
+if(!urlParams.saisie) {
+	if (window.location.hostname == 'preprod.metromobilite.fr') {
+		urlParams.saisie = 'test';
+	} else {
+		urlParams.saisie='prod';
+	}
+}
 if (!urlParams.lonlatDep) urlParams.lonlatDep="0,0";
 if (!urlParams.lonlatArr) urlParams.lonlatArr="0,0";
 if (urlParams.arr) urlParams.arr = decodeURI(urlParams.arr);
 if (urlParams.dep) urlParams.dep = decodeURI(urlParams.dep);
 
 if (!urlParams.codeArr) urlParams.codeArr="";
+
+if (!urlParams.centerArr) urlParams.centerArr=false;
+if (!urlParams.centerDep) urlParams.centerDep=false;
+
+if (!urlParams.epci) urlParams.epci="";
 
 if (!urlParams.date) {urlParams.date = new Date();}
 else {
@@ -85,7 +113,7 @@ if (!urlParams.heure) {
 	urlParams.heure = urlParams.date;
 } else {
 	var tabHeure = urlParams.heure.split(':'); //format 'HH:mm'
-	urlParams.date.setHours(tabHeure[0],tabHeure[0]);
+	urlParams.date.setHours(tabHeure[0],tabHeure[1]);
 	urlParams.heure = urlParams.date;
 }
 if (!urlParams.ap_av) {urlParams.ap_av = 'D';}
@@ -96,12 +124,13 @@ if (!urlParams.covoiturage) urlParams.covoiturage=false;
 if (!urlParams.parkings) urlParams.parkings=false;
 if (!urlParams.parcrelais) urlParams.parcrelais=false;
 if (!urlParams.pmv) urlParams.pmv=false;
-if (!urlParams.cam) urlParams.cam=false;
-if (!urlParams.hamo) urlParams.hamo=false;
 if (!urlParams.velo) urlParams.velo=false;
 if (!urlParams.tc) urlParams.tc=false;
 if (!urlParams.voiture) urlParams.voiture=false;
 if (!urlParams.citelib) urlParams.citelib=false;
+
+if (!urlParams.recharge) urlParams.recharge=false;
+ 
 if (!urlParams.agenceM) urlParams.agenceM=false;
 if (!urlParams.MVA) urlParams.MVA=false;
 if (!urlParams.MVC) urlParams.MVC=false;
@@ -113,8 +142,20 @@ if (typeof(urlParams.trafic) === "undefined")
 	urlParams.trafic=true;
 else
 	urlParams.trafic = (urlParams.trafic == 'true');
+if (typeof(urlParams.evt) === "undefined") 
+	urlParams.evt=false;
+else
+	urlParams.evt = (urlParams.evt == 'true');
+if (typeof(urlParams.cam) === "undefined") 
+	urlParams.cam=false;
+else
+	urlParams.cam = (urlParams.cam == 'true');
 
 if (!urlParams.site) urlParams.site="metromobilite";
+
+//Parametres ECN Tag
+if (!urlParams.token) urlParams.token=""; //Id utilisateur
+if (!urlParams.favori) urlParams.favori="";//si !="" indique un n° d'iti favori
 
 //Horaires
 if (!urlParams.horairestempsreel) urlParams.horairestempsreel=false;
@@ -131,13 +172,17 @@ var keyAAfficher = null;
 var attente =false; //par defaut pas de fct d'attente
 var timeout;
 var attente=false;
-var dataLignesTC;
+var dataLignesTC = null;
+var dataParking = null;
+var dataFavoris={"ligne":[],"arret":[]};
 var dataEvtsTC={};
+
 var url = {
 	otpChoisi:urlParams.otp,
 	otp2Choisi:urlParams.otp2,
 	otp2Router:urlParams.routerOtp2,
 	routerChoisi:urlParams.routerId,
+	saisieChoisie:urlParams.saisie,	
 	otp:function(){
 		
 		if (urlParams.forceOtp2) return url.otp2();
@@ -161,28 +206,44 @@ var url = {
 			case 'prod':
 				return url.hostnameData+url.portProd+url.urlOTP2;
 				break;
+			case 'test':
+				return url.ws()+url.urlOTP2;
+				break;
 			case 'local':
-				return url.hostnameLocal+url.portProd+url.urlOTP2;
+				return url.hostnameLocal+url.portWSTest+url.urlOTP2;
 				break;
 			default:
 			return '';
 		}
 	},
-	saisieChoisie:urlParams.saisie,
+	ws:function(){
+		switch(url.saisieChoisie) {
+			case 'prod':
+				return url.hostnameData;				
+				break;				
+			case 'test':
+				return url.hostnameDataTest;
+				break;			
+			case 'local':
+				return url.hostnameLocal+url.portWSTest;
+				break;
+			default:
+			return '';
+		}
+	},
 	portProd:'',
 	portTest: ':8087',
 	portOTPTest:':8080',
-	portWSTest:':8082',
-	hostnameData:'http://data.metromobilite.fr',
-	//hostnameData:'http://www.test.metromobilite.fr',
+	portWSTest:':3000',
+	hostnameData:'https://data.metromobilite.fr',
+	hostnameDataTest:'https://datatest.metromobilite.fr',
 	hostnameOTPTest:'http://83.145.98.140',
-	hostnameProd:'http://www.metromobilite.fr',
+	hostnameProd:'https://www.metromobilite.fr',
 	hostnameLocal:'http://127.0.0.1',
 	urlOTP:'/otp-rest-servlet/ws',
-	urlOTP2:'/api/routers/default',
-	urlPiwik: 'http://www.metromobilite.fr/stats/piwik.php',
-	urlMeteo: 'http://www.prevision-meteo.ch/services/json/grenoble',
-	urlAddok: 'http://api-adresse.data.gouv.fr',
+	urlOTP2:'/api/routers/'+urlParams.routerOtp2,
+	urlPiwik: 'https://www.metromobilite.fr/stats/piwik.php',
+	urlAddok: 'https://api-adresse.data.gouv.fr',
 	stat:"/data/Carto/Statique/",
 	dyn:"/data/Carto/Dynamique/",
 	descOpenData:"pages/openData/descOpenData/",
@@ -192,7 +253,16 @@ var url = {
 		dAlerte:"dynAlerte.json",	//utilisé par les appli mobile
 		dAlerteTest:"dynAlerteTest.json",	//utilisé par les appli mobile
 		horTAG:"SEM-GTFS.zip",	//utilisé par le site
-		polygoneAtmo:"polygoneAtmo.geojson"	//utilisé par les appli mobile
+		polygoneAtmo:"polygoneAtmo.geojson",	//utilisé par les appli mobile
+		//pour pages opendata seulement
+		pkg:"Parkings.geojson",
+		lgn:"LignesLight.geojson",
+		arr:"ArretsLight.geojson",
+		citelib:"citelib.geojson",
+		Depositaires:"Depositaires.geojson",
+		AgencesMobilite:"AgencesMobilite.geojson",
+		PointsServices:"PointsServices.geojson",
+		Dat:"Dat.geojson"
 	},
 	json:function(f) {
 		if(f.substr(0,1)=='d') {
@@ -238,7 +308,91 @@ String.prototype.insert = function (index, string) {
   else
     return string + this;
 };
+//0 : non chargé
+//1 : chargé
+//2 : géré
+var chargementsOk = {
+	lignes:0,
+	favoris:0
+};
+ecouteChargements();
+//chargements des favoris 
+if (urlParams.token!="") chargeFavoris();
 
+function ecouteChargements() {
+	$( document ).on( "evtFavorisCharges", {}, function( event, data ) {
+		if(chargementsOk.favoris==0) chargementsOk.favoris=1;	 
+		$( document ).trigger( "evtChargements",chargementsOk);
+	});
+	
+	$( document ).on("evtLignesChargees", {}, function( event, data ) {
+		chargementsOk.lignes=1;	 
+		$(document ).trigger( "evtChargements",chargementsOk);
+	});
+	
+}
+//--------------------------------------//
+// chargeParkings
+// Charge les parkings
+//--------------------------------------//
+function chargeParkings() {
+	if (dataParking) return;
+	//http://data.metromobilite.fr/api/findType/json?types=PKG,PAR
+	var searchUrl = url.ws() + '/api/findType/json?types=PKG,PAR'
+	$.ajax({
+		type: "GET",
+		url : searchUrl,
+		dataType : 'json',
+		error : function (xhr, ajaxOptions, thrownError) {
+			$( document ).trigger( "evtParkingsCharges");
+			console.log('xhr.status : '+xhr.status + '\nxhr.responseText : '+xhr.responseText + '\najaxOptions : '+ajaxOptions + '\nthrownError : '+thrownError + '\n' + searchUrl);
+		},
+		success : function (json) {
+			dataParking = json;
+			$( document ).trigger( "evtParkingsCharges", dataParking );
+        }		
+    });
+}
+//--------------------------------------//
+// updatePAR
+// Mise jour des p+r
+//--------------------------------------//
+function updatePAR(event) {
+	//http://data.metromobilite.fr/api/dyn/PAR/json
+	var searchUrl = url.ws() + '/api/dyn/PAR/json'
+	$.ajax({
+		type: "GET",
+		url : searchUrl,
+		dataType : 'json',
+		error : function (xhr, ajaxOptions, thrownError) {
+			$( document ).trigger( event);
+			console.log('xhr.status : '+xhr.status + '\nxhr.responseText : '+xhr.responseText + '\najaxOptions : '+ajaxOptions + '\nthrownError : '+thrownError + '\n' + searchUrl);
+		},
+		success : function (json) {
+			$( document ).trigger( event, json );
+		}
+	});
+}
+//--------------------------------------//
+// updatePKG
+// Mise jour des parkings
+//--------------------------------------//
+function updatePKG(event) {
+	//http://data.metromobilite.fr/api/dyn/PKG/json
+	var searchUrl = url.ws() + '/api/dyn/PKG/json'
+	$.ajax({
+		type: "GET",
+		url : searchUrl,
+		dataType : 'json',
+		error : function (xhr, ajaxOptions, thrownError) {
+			$( document ).trigger(event);
+			console.log('xhr.status : '+xhr.status + '\nxhr.responseText : '+xhr.responseText + '\najaxOptions : '+ajaxOptions + '\nthrownError : '+thrownError + '\n' + searchUrl);
+		},
+		success : function (json) {
+			$( document ).trigger( event, json );
+		}
+	});
+}
 //--------------------------------------//
 //requeteChercheIti
 //--------------------------------------//
@@ -252,7 +406,7 @@ function requeteChercheIti(query,process,options) {
 	if(options.axes)  t.push('axes');
 	types+=t.join(',');
 	
-	var searchUrl = (url.saisieChoisie=='local'?url.hostnameLocal+url.portWSTest:url.hostnameData)+ '/api/find/json?query=' + encodeURIComponent(query) + types + (options.grandRectangle?'&rect=2':'');
+	var searchUrl = url.ws()+ '/api/find/json?query=' + encodeURIComponent(query) + types + /*(options.grandRectangle?'&rect=2':'') + */ (urlParams.epci!=""?'&epci='+urlParams.epci:'');
 	
 	//options.ordre
 	
@@ -285,8 +439,9 @@ function requeteChercheIti(query,process,options) {
 						};
 					var premierMot = parseInt(query);
 					if(!isNaN(premierMot) && this.properties.LIBELLE.indexOf(premierMot) == -1) {
-						res.lon=0;
-						res.lat=0;
+						//res.lon=0;
+						//res.lat=0;
+						res.bRoadNumber=true;
 						res.value = premierMot+' '+res.value;
 						res.label = premierMot+' '+res.label;
 					}
@@ -336,15 +491,15 @@ function requeteChercheIti(query,process,options) {
 					};
 				}
 				resultat.push(res);
-				if (parseInt(this.properties.dist)>parseInt(best.dist)) {
+				if (parseFloat(this.properties.dist)>parseFloat(best.dist)) {
 					best.dist = this.properties.dist;
 					best.res = res;
 					best.idx = i;
 				}
 			});
-			var seuil = parseInt(best.dist)*0.5;
+			var seuil = parseFloat(best.dist)*0.5;
 			resultat = resultat.filter(function(r){
-				return(parseInt(r.dist)>=seuil);
+				return(parseFloat(r.dist)>=seuil);
 			});
 			if (data.features.length>0)
 			{
@@ -425,9 +580,9 @@ typeof(options.axes)=='undefined'?options.axes=false:'';
 				}
 				meilleurItem.best=true;
 				meilleurItem.displayCommune=true;
-				if (items.length>2 && items[0].label!=meilleurItem.label) {
+				if (items.length>2 && (items[0].label!=meilleurItem.label || items[0].commune!=meilleurItem.commune)) {
 					items.splice(0, 0, meilleurItem);
-				} else if (items.length>2 && items[0].label==meilleurItem.label) {
+				} else if (items.length>2 && items[0].label==meilleurItem.label && items[0].commune==meilleurItem.commune) {
 					items[0].best=true;
 				} /*else if (items.length==2) {
 					items[0].displayCommune=true;
@@ -448,16 +603,17 @@ typeof(options.axes)=='undefined'?options.axes=false:'';
 					return('');
 			},
 			updater:function(item){
-				if (item.lat==0 && item.lon == 0) {
-					chercheAddok(item,function(item){options.fnSaisieReussie(item);});
+				//if (item.lat==0 && item.lon == 0) {
+				if (item.bRoadNumber) {
+					chercheAddok(item,function(item){options.fnSaisieReussie(item,champ);});
 					return item.label;
 				} 
 				if (item.value!='') {
-					options.fnSaisieReussie(item);
+					options.fnSaisieReussie(item,champ);
 					$(champ).blur();
 					return item.label;
 				} else
-					options.fnSaisieRatee(item);
+					options.fnSaisieRatee(item,champ);
 				return this.query;
 			},
 			items:'all',
@@ -481,7 +637,8 @@ function chercheAddok(item,fct) {
 		
 		//api-adresse.data.gouv.fr/search/?q=15 boulevard joseph vallier grenoble&type=street"
 		
-		searchUrl =  url.urlAddok + '/search/?q=' + formatAddokAdresse(item.value,item.commune) + '&type=housenumber';
+		searchUrl =  url.urlAddok + '/search/?q=' + formatAddokAdresse(item.value,item.commune) + '&type=housenumber';//&lon=5.731641&lat=45.180645';
+		console.log(searchUrl);
 		$.support.cors = true; //pour IE7/8/9
 		$.ajax({
 			async : true,
@@ -497,7 +654,10 @@ function chercheAddok(item,fct) {
 			success : function (data) {
 				if (attente) fct_attente(false,'nominatim'+item.value);
 				for (var i = 0; i < data.features.length ; i++) {
-					if (data.features[i].properties.city && data.features[i].properties.city.latinise().toUpperCase() == item.commune.replace(new RegExp("ST-", 'g'), "SAINT-")) { //Pas toujours bon au premier résultat, exemple 3 rue allié grenoble
+					if (data.features[i].properties.city 
+						&& data.features[i].properties.city.latinise().toUpperCase() == item.commune.replace(new RegExp("ST-", 'g'), "SAINT-")
+						&& estDansRectangle(parseFloat(data.features[i].geometry.coordinates[0]), parseFloat(data.features[i].geometry.coordinates[1]))
+						) { //Pas toujours bon au premier résultat, exemple 3 rue allié grenoble
 						item.lon = parseFloat(data.features[i].geometry.coordinates[0]);
 						item.lat = parseFloat(data.features[i].geometry.coordinates[1]);
 						item.numeroNonTrouve = false;
@@ -552,9 +712,7 @@ function formatAddokAdresse(adresse,nomCommune) {
 //--------------------------------------//
 function extractUrlParams(separator){
 	var t = location.search.substring(1).replace(/&amp;/g,"&").split(separator);
-
 	var f = [];
-	
 	for (var i=0; i<t.length; i++){
 		var x = t[ i ].split('=');
 		if (typeof(x[1])!='undefined')
@@ -575,9 +733,7 @@ function chargeLignes(fctCallbackLigne,fctCallbackFini) {
 	$( document ).on( "evtLignesChargees", {}, function( event, data ) {
 		if (fctCallbackFini) fctCallbackFini(data);
 	});
-	
-	var searchUrl = (url.saisieChoisie=='local'?url.hostnameLocal+url.portWSTest:url.hostnameData)  + '/api/routers/'+url.otp2Router+'/index/routes'
-	//var searchUrl = (url.saisieChoisie=='local'?url.hostnameLocal+url.portOTPTest:url.hostnameData)+'/otp/routers/default/index/routes';
+	var searchUrl = url.ws() + '/api/routers/'+url.otp2Router+'/index/routes';
 	$.ajax({
 		type: "GET",
 		url : searchUrl,
@@ -587,6 +743,7 @@ function chargeLignes(fctCallbackLigne,fctCallbackFini) {
 			console.log('xhr.status : '+xhr.status + '\nxhr.responseText : '+xhr.responseText + '\najaxOptions : '+ajaxOptions + '\nthrownError : '+thrownError + '\n' + searchUrl);
 		},
 		success : function (json) {
+			if (dataLignesTC) return;
 			var newData= {};
 			json.filter(function(route){
 				route.code = route.id.replace(':','_');
@@ -629,7 +786,7 @@ function getLogoLgn(fullcode,num,color,bLargeurConst,classe,classeRect) {
 	
 		var viewBoxSize, cx, x; 
 		var cl =classe;
-	if (bLargeurConst || code.substr(0,3) == 'C38' || code.substr(0,3) == 'GSV'|| code.substr(0,3) == 'TPV')  {
+	if (bLargeurConst || code.substr(0,3) == 'C38' || code.substr(0,3) == 'GSV'|| code.substr(0,3) == 'TPV' || code.substr(4).length > 2)  {
 		viewBoxSize =  "0 0 200 100";
 		cx = "100";
 		x = "55";
@@ -674,6 +831,7 @@ function getLogoLgn(fullcode,num,color,bLargeurConst,classe,classeRect) {
 	var couleurFond = '';
 	var couleur = '';
 	var reseau = '';
+	var title = '';
 	if(code.substr(0,3) == 'SEM') {
 		couleurFond = colorToHex(color);
 		
@@ -682,17 +840,20 @@ function getLogoLgn(fullcode,num,color,bLargeurConst,classe,classeRect) {
 		} else {
 			couleur = 'white';
 		}
-		/*if(code == 'SEM_EBUS' || code == 'SEM_81'|| code == 'SEM_82'|| code == 'SEM_NAVB'|| code == 'SEM_83'|| code == 'SEM_84'|| code == 'SEM_85') {
+		//if(code == 'SEM_EBUS' || code == 'SEM_81'|| code == 'SEM_82'|| code == 'SEM_NAVB'|| code == 'SEM_83'|| code == 'SEM_84'|| code == 'SEM_85') {
+		/*if(code == 'SEM_12b') {
 			logo.find('.svgFond').attr('x' ,'10');
 			logo.find('.svgFond').attr('width' ,'172');
 		}*/
 		reseau = 'TAG';
+		title = 'Ligne '+numero+' - '+reseau;
 	} else if(code.substr(0,3) == 'C38') {
 		logo = logoC38;
 		cadre = cadreC38;
 		couleurFond = colorToHex(color);
 		couleur = getContrastYIQ(colorToHex(color));
 		reseau = 'Transisère';
+		title = 'Ligne '+numero+' - '+reseau;
 	} else if(code.substr(0,3) == 'GSV') {
 		logo = logoC38;
 		cadre = cadreC38;
@@ -702,6 +863,7 @@ function getLogoLgn(fullcode,num,color,bLargeurConst,classe,classeRect) {
 			couleurFond = colorToHex(color);
 		couleur = getContrastYIQ(couleurFond);
 		reseau = 'Grésivaudan';
+		title = 'Ligne '+numero+' - '+reseau;
 	} else if(code.substr(0,3) == 'TPV') {
 		logo = logoC38;
 		cadre = cadreC38;
@@ -711,6 +873,7 @@ function getLogoLgn(fullcode,num,color,bLargeurConst,classe,classeRect) {
 			couleurFond = colorToHex(color);
 		couleur = getContrastYIQ(couleurFond);
 		reseau = 'Voironnais';
+		title = 'Ligne '+numero+' - '+reseau;
 	} else {//SNC et autres
 		couleurFond = colorToHex(color);
 		couleur = getContrastYIQ(colorToHex(color));
@@ -718,21 +881,187 @@ function getLogoLgn(fullcode,num,color,bLargeurConst,classe,classeRect) {
 			numero = "Ter";
 			couleurFond = '#205DC9';
 			couleur = '#fff';
+			reseau = 'SNCF';
+			title = 'Ligne '+numero+' - '+reseau;
+		} else if (code.substr(4).length > 2) {
+			logo = logoC38;
+			cadre = cadreC38;
+			reseau = 'Autre';
+			title = 'Ligne '+(dataLignesTC[code]?dataLignesTC[code].routeLongName:numero);
+		} else {
+			reseau = 'Autre';
 		}
-		reseau = 'SNCF';
+		 
 	}
 	
 	logo.find('text.svgNumLigne').attr('fill',couleur).text(numero);
 	cadre.attr('fill',couleurFond);
 
-	logo.find('title').text('Ligne '+numero+' - '+reseau);
-		
-
-
+	logo.find('title').text(title);
+	
 	return logo;
 	} catch(e) {
 		console.log("getLogoLgn catch : " + e);
 	}
+}
+
+//--------------------------------------//
+// getLogoFav
+// Cree le logo des favoris
+//--------------------------------------//
+function getLogoFav(text,colors,id,classes,onOff) {
+	if(onOff) classes += ' oui';
+	else classes += ' non';
+	var texteAlt = (onOff?'Supprimer le favoris':'Ajouter en favoris');
+	//logo = $('<button type="button" id="' + id + '" class="' + classes + ' left-block"><span class="glyphicon ' + (onOff?'glyphicon-star':'glyphicon-star-empty') + '"></span>' + text + '</button>');
+	if(text ==""){
+		//logo = $('<a href="#" id="' + id + '" class="' + classes + ' left-block"> <span class="glyphicon ' + (onOff?'glyphicon-star':'glyphicon-star-empty') + '"></span></a>');
+		logo = $('<a href="#" id="' + id + '" class="' + classes + ' left-block" title="'+texteAlt+'"> <span class="sr-only">'+texteAlt+'</span></a>');
+	} else { 
+		//logo = $('<a href="#" id="' + id + '" class="' + classes + ' left-block">' + text + '<span class="glyphicon ' + (onOff?'glyphicon-star':'glyphicon-star-empty') + '"></span></a>');
+		logo = $('<a href="#" id="' + id + '" class="' + classes+' '+text + ' left-block" title="'+texteAlt+'"> <span class="sr-only">'+texteAlt+'</span></a>');
+	}
+	//var color = (onOff?colors.actif:colors.inactif);
+	//logo.css('background-color',color);
+	return $(logo);
+}
+
+//--------------------------------------//
+// selectLogoFav
+// met l'etoile de favoris à on
+//--------------------------------------//
+
+function selectLogoFav(obj,color) {
+	obj.removeClass('non');
+	obj.addClass('oui');
+	//obj.css('background-color',color);
+	
+}
+
+//--------------------------------------//
+// unSelectLogoFav
+// met l'etoile de favoris à off
+//--------------------------------------//
+
+function unSelectLogoFav(obj,color) {
+	obj.removeClass('oui');
+	obj.addClass('non');
+}
+
+//--------------------------------------//
+// isLigneFavorite
+// permet de savoir si une ligne est parmis la liste favoris
+//--------------------------------------//
+function isLigneFavorite(id) {
+	id = id.replace('_',':');
+	return  dataFavoris.ligne.indexOf(id)!=-1;
+}
+
+//--------------------------------------//
+// isArretfavorite
+// permet de savoir si un  arret est parmis la liste favoris
+//--------------------------------------//
+function isArretfavori(idLigne , idArret){
+	idLigne = idLigne.replace('_',':');
+	idArret = idArret.replace('_',':');
+	 return dataFavoris.arret.indexOf(idArret+'@'+idLigne)!=-1  ;
+}
+
+//--------------------------------------//
+// isSelectedLogoFav
+// met l'etoile de favoris à on
+//--------------------------------------//
+
+function isSelectedLogoFav(obj) {
+	//return ($('#' + id + " > span").hasClass('glyphicon-star'));
+	return (obj.hasClass('oui'));
+}
+
+//--------------------------------------//
+// toogleLigneFavorite
+// valide ou devalide la ligne
+// Attention, comme il y a 2 sens, on identifier une action par un ID mais on selectionne/délectionne par une class (on a 2 boutons)
+//--------------------------------------//
+
+function toogleLigneFavorite(obj , ligne,colors) {
+	var classline = ligne.replace(':','');
+	var lignes = $('.fav_'+classline+'.favorisLigne');
+	if (isSelectedLogoFav(obj)) {
+		AjoutOuSupprimerligne(ligne, 'delete')
+		unSelectLogoFav(lignes,colors.inactif);
+	} else {
+		AjoutOuSupprimerligne(ligne,'add')
+		selectLogoFav(lignes,colors.actif);
+	}
+}
+//--------------------------------------//
+// toogleArretFavori
+// valide ou devalide l'arret
+//--------------------------------------//
+function toogleArretFavori(obj , ligne, arret,colors) {
+	var poteaux = $('.favorisArret.'+arret.replace(":",""));
+	if (isSelectedLogoFav(obj)) {
+		AjoutOuSupprimerArret(ligne, arret ,'delete')
+		unSelectLogoFav(poteaux,colors.inactif);
+	} else {
+		AjoutOuSupprimerArret(ligne, arret ,'add')
+		selectLogoFav(poteaux,colors.actif);
+	}
+}
+//--------------------------------------//
+// toogleProchainPassageArretFavori
+//
+//--------------------------------------//
+function toogleProchainPassageArretFavori(obj , ligne, arret,colors) {
+	if (isSelectedLogoFav(obj)) {
+		AjoutOuSupprimerArret(ligne, arret ,'delete')
+		unSelectLogoFav(obj,colors.inactif);
+	} else {
+		AjoutOuSupprimerArret(ligne, arret ,'add')
+		selectLogoFav(obj,colors.actif);
+	}
+}
+
+//--------------------------------------//
+// toogleItiFavori
+// //preprod.metromobilite.fr/iti.html?iFrame=true&tc=true&site=tag&token=b049c920a78175696459ec056d7475a462047443&dep=AGENCE%20DE%20MOBILITE%20STATIONMOBILE&arr=All%C3%A9e%20des%20Gentianes&lonlatDep=45.180159,5.713812&lonlatArr=45.25036,5.66291&communeDep=GRENOBLE&communeArr=FONTANIL-CORNILLON
+//--------------------------------------//
+function toogleItiFavori(obj) {
+	
+	if (isSelectedLogoFav(obj)) {
+		AjoutOuSupprimerIti('delete')
+		unSelectLogoFav(obj,colors.inactif);
+	} else if ($('#dep').val() != "" && $('#arr').val() != "" && $('#dep').attr('data-lonlat') != "0,0" && $('#dep').attr('data-lonlat') != "0,0") {
+		AjoutOuSupprimerIti('add')
+		selectLogoFav(obj,colors.actif);
+	}
+}
+//--------------------------------------//
+// unSelectItiLogoFav
+//
+//--------------------------------------//
+function unSelectItiLogoFav() {
+	if (urlParams.favori=="") return;
+	urlParams.favori="";
+	unSelectLogoFav($('#idFav'),colors.inactif);	
+}
+
+//--------------------------------------//
+// isfavorisPresent
+// rajouter ici les criteres de controle sur l'affichage des favoris
+//--------------------------------------//
+function isfavorisPresent(partenaireLigne) {
+	return  (urlParams.token !='' && partenaireLigne == "SEM");
+}
+
+//--------------------------------------//
+// isItiFavorisPresent
+// rajouter ici les criteres de controle sur l'affichage des iti favoris
+// url de test : http://localhost/iti.html?iFrame=true&tc=true&site=tag&dep=AGENCE%20DE%20MOBILITE%20STATIONMOBILE&arr=All%C3%A9e%20des%20Gentianes&lonlatDep=45.180159,5.713812&lonlatArr=45.25036,5.66291&communeDep=GRENOBLE&communeArr=FONTANIL-CORNILLON&token=d162f018eaf12371cb988e2db668c18721cab721&favori=12
+//--------------------------------------//
+function isItiFavorisPresent() {
+		
+	return  (urlParams.token !='');
 }
 
 //--------------------------------------//
@@ -790,6 +1119,8 @@ function tri(conteneur,element,prefixe,critere)	{
 	$(conteneur).find(element).sort(function(a,b){
 		var codeA = $(a).attr(critere).substr(prefixe.length,$(a).attr(critere).length-prefixe.length);
 		var codeB = $(b).attr(critere).substr(prefixe.length,$(b).attr(critere).length-prefixe.length);
+		if(codeA == 'SEM_12b') codeA = 'SEM_12';
+		if(codeB == 'SEM_12b') codeB = 'SEM_12';
 		return compareCodeLigne(codeA,codeB);
 	}).detach().appendTo(conteneur);
 }
@@ -886,11 +1217,7 @@ function textEchangeurs(exitsList) {
 function ajouteSaisieLignes(champ,options){
 	try {
 		if ($(champ) && $(champ).typeahead) {
-			//var searchUrl = url.otp()+'/transit/routes?routerId='+url.routerChoisi;
-			//searchUrl += '&agency=SEMx01'; 
-			//searchUrl += '&extended=true';
-			var searchUrl = (url.saisieChoisie=='local'?url.hostnameLocal+url.portWSTest:url.hostnameData)  + '/api/routers/'+url.otp2Router+'/index/routes'
-			//var searchUrl = (url.saisieChoisie=='local'?url.hostnameLocal+url.portOTPTest:url.hostnameData)+'/otp/routers/default/index/routes';
+			var searchUrl = url.ws() + '/api/routers/'+url.otp2Router+'/index/routes'
 			$.ajax({
 				type: "GET",
 				url : searchUrl,
@@ -993,12 +1320,26 @@ function getTypeLigne(code,numero) {
 	return type;
 }
 function isTaille(taille) {
-	if (taille=='xxs' && ($('#dimension-480').css('display')=='block' && $('#dimension-481-767').css('display')!='block') ) return true;
-	if (taille=='xs' && ($('#dimension-480').css('display')=='block' || $('#dimension-481-767').css('display')=='block') ) return true;
-	if (taille=='sm' && $('#dimension768-991').css('display')=='block' ) return true;
-	if (taille=='md' && $('#dimension-992-1200').css('display')=='block' ) return true;
-	if (taille=='lg' && $('#dimension-1200').css('display')=='block' ) return true;
-	
+	var width = $('body').width();
+	switch(taille) {
+		case 'xxs':
+			return (window.matchMedia && window.matchMedia('(max-width: 480px)').matches) || (!window.matchMedia && width <= 480);
+		break;
+		case 'xs':
+			return (window.matchMedia && window.matchMedia('(min-width: 481px) and (max-width: 767px)').matches) || (!window.matchMedia && width > 480 &&  width < 768);
+		break;
+		case 'sm':
+			return (window.matchMedia && window.matchMedia('(min-width: 768px) and (max-width: 991px)').matches) || (!window.matchMedia && width >= 768 &&  width < 992);
+		break;
+		case 'md':
+			return (window.matchMedia && window.matchMedia('(min-width: 992px) and (max-width: 1199px)').matches) || (!window.matchMedia && width >= 992 &&  width < 1200);
+		break;
+		case 'lg':
+			return (window.matchMedia && window.matchMedia('(min-width: 1200px)').matches) || (!window.matchMedia && width >= 1200);
+		break;
+		default:
+			return false;
+	}
 	return false;
 }
 
@@ -1054,11 +1395,12 @@ function trackPiwik(detail) {
 			return originalTimeout;
 		}
 		piwikTracker.setVisitorCookieTimeout( getOriginalVisitorCookieTimeout() );
+		//piwikTracker.disableCookies(); TODO a tester 
 		piwikTracker.trackPageView(detail);
 		piwikTracker.enableLinkTracking();
 	} catch(err) {
 		console.log('trackPiwik fatal error:' + err.message);
-		}
+	}
 }
 
 //--------------------------------------//
@@ -1238,11 +1580,11 @@ function fct_attente_horaires(b_attendre) {
 //--------------------------------------//
 function isEvenementEnCours(ddeb,dfin) {
 
-	var now  = moment(urlParams.heure).hour(0).minute(01);
+	var now  = moment(urlParams.heure).hour(0).minute(1);
 	var dateOkDebut = now.isAfter(ddeb.hour(0).minute(0)) && now.isBefore(dfin.hour(23).minute(59));
 	var dateOkFin = now.isAfter(ddeb.hour(0).minute(0)) && now.isBefore(dfin.hour(23).minute(59));
 	var dateOkToday = ddeb.hour(0).minute(0).isBefore(urlParams.heure) && dfin.hour(23).minute(59).isAfter(urlParams.heure);
-
+	
 	return (dateOkDebut || dateOkFin || dateOkToday); 
 }
 
@@ -1333,3 +1675,156 @@ function unEscapeHtml(unsafe) {
      .replace(/'/g, "'")
      .replace(/&amp;/g, "&");
 }
+
+//--------------------------------------//
+// formatSecondes
+//--------------------------------------//
+function formatSecondes(s, fo) { // seconds, format
+	var d=h=m=0;
+	  
+	if (s>=86400) {
+		d=Math.floor(s/86400);
+		s-=d*86400;
+	}
+	if (s>=3600) {
+		h=Math.floor(s/3600);
+		s-=h*3600;
+	}
+	if (s>=60) {
+		m=Math.floor(s/60);
+		s-=m*60;
+	}
+	  
+	if (fo != null) {
+		var f = fo.replace('dd', (d<10)?"0"+d:d);
+		f = f.replace('d', d);
+		f = f.replace('hh', (h<10)?"0"+h:h);
+		f = f.replace('h', h);
+		f = f.replace('mm', (m<10)?"0"+m:m);
+		f = f.replace('m', m);
+		f = f.replace('ss', (s<10)?"0"+s:s);
+		f = f.replace('s', s);
+	} else {
+		if ((d==0)&&(h==0)&&(m==0)&&(s==0)) return "0 min";
+		if ((d==0)&&(h==0)&&(m==1)&&(s==0)) return "1 min";
+		if ((d==0)&&(h==0)&&(m>1)&&(s==0)) return (m+" min");
+		if ((d==0)&&(h==1)&&(m==0)&&(s==0)) return "1 h";
+		
+		if ((d==0)&&(h==0)&&(m==0)) 
+			return ((s<10)?'0'+s:s)+' s ';
+		else
+			f = (d!=0?d+' j ':'') + (h!=0?((h<10)?'0'+h:h)+' h ':'') + (m!=0?(((m<10) && (h!=0))?'0'+m:m)+' min':'');
+	}
+	return f; 
+}
+
+//--------------------------------------//
+// chargeFavoris
+// Charge les favoris
+//--------------------------------------//
+function chargeFavoris() {
+	var searchUrl = url.ws() + '/api/ecn/'+urlParams.token+'/favoris'
+	$.ajax({
+		type: "GET",
+		url : searchUrl,
+		dataType : 'json',
+		error : function (xhr, ajaxOptions, thrownError) {
+			$( document ).trigger( "evtFavorisCharges");
+			console.log('xhr.status : '+xhr.status + '\nxhr.responseText : '+xhr.responseText + '\najaxOptions : '+ajaxOptions + '\nthrownError : '+thrownError + '\n' + searchUrl);
+		},
+		success : function (json) {
+			if (json.meta.code !=200) console.log(' favoris non chargés ' + json.meta.message);
+			else {
+				var newData= json.data;
+				dataFavoris = newData;
+				dataFavoris.ligne = newData.ligne;
+				dataFavoris.arret = newData.arret;
+				
+				$( document ).trigger( "evtFavorisCharges", dataFavoris );
+			}
+		}
+	});
+}
+
+//--------------------------------------//
+// AjoutOuSupprimerligne
+// Ajout ou supprimer ligne aux/des favoris
+//--------------------------------------//
+function AjoutOuSupprimerligne(ligne, typeaction) {
+	var searchUrl = url.ws() + '/api/ecn/'+urlParams.token+'/favoris/ligne/'+ligne+'/' +typeaction
+	$.ajax({
+		type: "GET",
+		url : searchUrl,
+		dataType : 'json',
+		error : function (xhr, ajaxOptions, thrownError) {
+			$( document ).trigger( "evtFavoriAjouter");
+			console.log('xhr.status : '+xhr.status + '\nxhr.responseText : '+xhr.responseText + '\najaxOptions : '+ajaxOptions + '\nthrownError : '+thrownError + '\n' + searchUrl);
+		},
+		success : function (json) {
+			if (json.meta.code !=200) console.log(json.meta.message);
+			else {
+				chargeFavoris();
+			}
+		}
+	});
+}
+
+//--------------------------------------//
+// AjoutOuSupprimerArret
+// Ajout ou supprimer  arret aux/des favoris
+//--------------------------------------//
+function AjoutOuSupprimerArret(ligne, arret , typeaction) {
+	var searchUrl = url.ws() + '/api/ecn/'+urlParams.token+'/favoris/ligne/'+ligne+'/arret/'+arret+'/'+typeaction
+	$.ajax({
+		type: "GET",
+		url : searchUrl,
+		dataType : 'json',
+		error : function (xhr, ajaxOptions, thrownError) {
+			$( document ).trigger( "evtFavoriAjouter");
+			console.log('xhr.status : '+xhr.status + '\nxhr.responseText : '+xhr.responseText + '\najaxOptions : '+ajaxOptions + '\nthrownError : '+thrownError + '\n' + searchUrl);
+		},
+		success : function (json) {
+		    if (json.meta.code !=200) console.log(json.meta.message);
+			else {
+				chargeFavoris();
+			}
+		}
+	});
+}
+
+//--------------------------------------//
+// AjoutOuSupprimerIti
+// Ajout ou supprimer iti aux/des favoris
+//--------------------------------------//
+function AjoutOuSupprimerIti(typeaction) {
+	
+	var searchUrl =  url.ws() + '/api/ecn/'+urlParams.token+'/favoris/iti/';
+	
+	if (typeaction == 'add') { //add?label=test&url=%26amp%3Bdep%3DLA%2520POYA%26amp%3Barr%3DHUBERT%2520DUBEDOUT%2520-%2520MAISON%2520DU%2520TOURISME%26amp%3BlonlatDep%3D45.19709%2C5.67222%26amp%3BlonlatArr%3D45.1902%2C5.72822%26amp%3BcommuneDep%3DFONTAINE%26amp%3BcommuneArr%3DGRENOBLE
+		searchUrl += typeaction + '?label=' + encodeURIComponent($('#dep').val() + ' - ' + $('#arr').val());  
+		searchUrl +=  '&url=dep=' + encodeURIComponent($('#dep').val());
+		searchUrl +=  encodeURIComponent('&arr=' + $('#arr').val());
+		searchUrl +=  encodeURIComponent('&lonlatDep=' + $('#dep').attr('data-lonlat'));
+		searchUrl +=  encodeURIComponent('&lonlatArr=' + $('#arr').attr('data-lonlat'));
+		searchUrl +=  encodeURIComponent('&communeDep=' + $('#dep').attr('data-commune'));
+		searchUrl +=  encodeURIComponent('&communeArr=' + $('#arr').attr('data-commune'));
+	} else if (typeaction == 'delete') { //delete?favori=xx
+		searchUrl += typeaction + '?favori=' + urlParams.favori;
+	}
+	console.log(searchUrl);
+	
+	$.ajax({
+		type: "GET",
+		url : searchUrl,
+		dataType : 'json',
+		error : function (xhr, ajaxOptions, thrownError) {
+			$( document ).trigger( "evtFavoriAjouter");
+			console.log('xhr.status : '+xhr.status + '\nxhr.responseText : '+xhr.responseText + '\najaxOptions : '+ajaxOptions + '\nthrownError : '+thrownError + '\n' + searchUrl);
+		},
+		success : function (json) {
+			if (json.meta.code !=200) console.log(json.meta.message);
+			else if (typeof(json.data.favori) != 'undefined') urlParams.favori = json.data.favori;
+		}
+	});
+}
+

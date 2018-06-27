@@ -25,6 +25,7 @@
 // global translation
 //--------------------------------------//
 var lang = {
+	momentLocale:'fr',
 	pointCarte:'Saisie carte',
 	maPosition:'Ma position',
 	rafraichir:'Rafraichir',
@@ -38,12 +39,15 @@ var lang = {
 	perturbations: "Perturbations",
 	aucunePerturbation: "Aucune",
 	aucunePerturbation_full: "Aucune perturbation en cours",
-	aucunFavoris: "Retrouvez ici vos horaires de prochains passages favoris",
+	aucuneLignesFavorites: "Retrouvez ici vos horaires de prochains passages favoris",
+	aucunParkingFavoris: "Retrouvez ici la disponibilité de vos parkings favoris",
 	aucuneNotif: "Aucune notification",
 	libelleAddresseNonTrouvee: "Adresse non trouvée",
 	localisationEvenement: "Localiser sur la carte",
 	station: "Station",
 	affichageDesCartographie: "Données à afficher",
+	affichageDes: "Affichage des ",
+	voirSurCarte: " Voir sur la carte",
 	messagesEmissionCO2 : { // Message affiché pour l'émission de CO2
 		// Pour les trajets à vélo
 		'Velo' : "L'émission de CO2 pour ce trajet est quasiment-nulle.<br/>Félicitations, en utilisant ce moyen de déplacement, vous contribuez à une meilleure qualité de l'air.",
@@ -69,13 +73,44 @@ var lang = {
 		direction : "direction: ",
 		Direction : "Direction: ",
 		choixArret : "Choisissez votre arrêt",
-		arret : "Arrêt: "
+		arret : "Arrêt: ",
+		perturbation : "Attention perturbation sur la ligne" ,
+		
+		fermerBtnClosedatePicker :"fermer",
+		btnPreviousdatePicker :"Mois Precedent",
+		btnMonthdatePicker 	:"Mois Choisit",
+		btnNextdatePicker :"Mois Suivant", 
+		
+		fermerBtnClosetimepicker:"fermer",		
+		btnIncHrtimepicker :"Ajouter Heure",
+		btnInCMntimepicker :"Ajouter Minute",		
+		showHrtimepicker :"Heure",
+		showMntimepicker :"Minute",
+		btnDecHrtimepicker :"Diminuer Heure",
+		btnDecMntimepicker :"Diminuer Minute"
+	
+	
+	
+	
+		
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	},
 	
 	iti : {
 		Autopartage : "Auto partage",
 		Parking : "Parking",
 		Metrovelo : "Métrovélo",
+		AgenceMetrovelo : "Agences Métrovélo",
+		ConsignesMetrovelo : "Consignes Métrovélo",
+		AgenceMetromobilite : "Agences Métromobilité",
 		Autres : "Autres",
 		plusDeDetails: " plus de détails...",
 		moinsDeDetails: " moins de détails...",
@@ -90,18 +125,71 @@ var lang = {
 		lienTag : "Fiche horaire TAG",
 		flexo : "Site TAG",
 		plusDOption : " Plus d'options",
-		moinsDOption : " Moins d'options"
+		moinsDOption : " Moins d'options",
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+	
+//Specifique pour la traduction de js
+		itineraire :  "Itineraire",
+		stopDepart : "Arrêt ou adresse de départ",
+		stopArrivee : "Arrêt ou adresse d'arrivée",
+		retour : "Inverser le depart et l'arrivée",
+		plusOptions : "Plus d'options",
+		apres : 'Après',
+		avant : 'Avant',
+		calculer : 'Calculer',
+		resultatsPrecedent : "Resultats precedent",
+		resultats : "Résultats (tri par pertinence)",
+		departPrecedent : "Depart Precedent",
+		trajetDetail : "Detail de l'itineraire",
+		trafic : "Trafic :",
+		pieton : "Pieton",
+		velo : "Vélo",
+		transportCommun : "Transpots en commun",
+		teleferique : "Teleferique",
+		voiture : "Voiture",
+		pmr : "Acces PMR",
+		rechercheEnCours : "Recherche En Cours",
+		prochainsResultats : "Prochains Resultats",
+		prochainsDeparts : "Prochains Departs",
+		retourResultats : "Retour aux resultats",
+		detail : "Details",
+		voirCarte : "Voir sur la carte",
+		imprimerCarte : "Imprimer la feuille de route",
+		gps : "Trace GPS"	
 	},
 	
 	carteMobile : {
 		nbTotVehicule : "Nombre total de véhicules disponibles",
 		nbTotPlace : "Nombre total de places de parking disponibles",
 		photoStation : "Photo de la station",
-		dispoiRoad : "Disponibilité des iRoad",
-		dispoComms : "Disponibilité des Coms",
 		lignesProches : "Ligne(s) à proximité :",
-		inscriptionOmms : "Inscription à Cité Lib by Ha:mo",
-		reservationOmms : "Réservation d'un véhicule",
 		messageCAM : "Disponible prochainement",
 		messageCAMError : "Votre explorateur ne supporte la lecture des vidéos.",
 		messagePMV : "Pas de données",
@@ -216,9 +304,17 @@ var lang = {
 	resultatsARemplacer : {
 		1 : ""
 	},
-	alert: [ "ATTENTION ! Veuillez préciser vos adresses de départ et d'arrivée !", //0
-				"ATTENTION ! Veuillez saisir une adresse d'arrivée différente de celle de départ !", //4
-				"ATTENTION ! Adresse introuvable...<br/>Merci de bien vouloir saisir une autre adresse..." //11
+	alert:["ATTENTION ! Veuillez préciser vos adresses de départ et d'arrivée !",
+			"ATTENTION ! Veuillez saisir une adresse d'arrivée différente de celle de départ !",
+			"ATTENTION ! Adresse introuvable...<br/>Merci de bien vouloir saisir une autre adresse...",
+			"Attention vous n'avez pas ou plus de connexion internet... cette application peut ne pas fonctionner correctement. Merci de vous reconnecter puis relancer l'application.",
+			"Retour de la connexion internet, cette application pourra fonctionner à nouveau correctement.",
+			"Veuillez autoriser la réception de notification pour cette application, la relancer puis réessayer",
+			"Veuillez renseigner correctement votre identifiant et mot de passe puis réessayer",
+			"Echec de l'authentification, merci de vérifier votre abonnement",
+			"Abonnement non validé, merci de valider votre abonnement",
+			"Le serveur est indisponible, merci recommencer plus tard",
+			"Echec, erreur inconnue. veuillez relancer l'application puis réessayer"
 	],
 	libelleAffiche_1 : "Affiche les ",
 	libelleHorairePrec_2 : " horaires précédents",
@@ -257,7 +353,7 @@ var lang = {
 			"Impossible de charger les données json, merci de rafraichir votre page.",
 			"Aucune destination desservie pour cette ligne jusqu'à la fin de cette journée"],
 	aucunHoraireTR : "Pas de passages dans l'immédiat.",
-	donneesManquantes : "Données inaccessibles. Reportez-vous aux <a href='http://www.metromobilite.fr/horaires.html' target='_blank'>horaires théoriques</a>.",
+	donneesManquantes : "Données inaccessibles. Reportez-vous aux horaires théoriques",
 	horairesTheoriques : " : horaire réel",
 	velo : {
 			nom_commune : "Commune",
@@ -267,8 +363,8 @@ var lang = {
 			depart : "départ",
 			arrivee : "arrivée",
 			arr : "à",
-			departAvant : "départ avant",
-			arriveeApres : "arrivée après",
+			departAvant : "départ après",
+			arriveeApres : "arrivée avant",
 			duree : "durée",
 			trafic : "trafic",
 			emission : "Emission de CO2"},
@@ -283,7 +379,7 @@ var lang = {
 	questionLocaliser : "Activer la localisation ?",
 	alerteHorsRectangle : "Vous parraissez trop éloigné de la région Grenobloise, il n'y a pas de donnée décrite dans cette zone",
 	pub : {
-			text : "Service propulsé par Métromobilité",
+			text : "Un service de Métromobilité",
 			alt : "Cliquez pour vous rendre sur Metrobilite.fr"
 	},
 	opendata: {
@@ -295,7 +391,109 @@ var lang = {
 		}
 	},
 	popup: {
-		arret: "Arrêt"
+		arret: "Arrêt",
+		maintenant: "Maintenant",
+		plusTard: "Plus tard",
+		non: "Non merci",
+		oui: "Oui",
+		renseigner: "Merci de renseigner les éléments ci-dessus",
+		cliqueIci: "Cliquez ici pour le détail de l'itinéraire"
+	},
+	appMobile: {
+		rateMe : "Vous appréciez cette application ? Prenez une minute pour la noter et laisser un commentaire.",
+		autour : "Autour de moi",
+		AUTOUR : "AUTOUR DE MOI",
+		itineraire : "Itineraire",
+		itineraires : "Itineraires",
+		ITINERAIRE : "ITINERAIRE",
+		infoTrafic : "Info trafic",
+		trafic: "Trafic",
+		TRAFIC: "TRAFIC",
+		horaires: "Horaires",
+		HORAIRES: "HORAIRES",
+		favoris: "Favoris",
+		FAVORIS: "FAVORIS",
+		parametres: "Paramètres",
+		PARAMETRES: "PARAMETRES",
+		aPropos: "A propos",
+		APROPOS: "A PROPOS",
+		alerteSignalement : "Signalement Alerte",
+		ATMO: "ATMO",
+		Atmo: "Atmo",
+		monCompte: "Mon compte",
+		MONCOMPTE: "MON COMPTE",
+		indiceAtmo:"Indice Atmo",
+		agrandir: "Cliquez pour agrandir",
+		cartographieAtmo: "Cartographie Atmo",
+		annuler: "Annuler",
+		supp: "Supp.",
+		suppTout: "Supp. tous",
+		affiche: "Afficher",
+		reseauRoutier: "Réseau routier",
+		evenements: "Evènements",
+		cameras: "Caméras",
+		parking: "Parking",
+		parkingRelais: "Parc-relais",
+		venteTitres: "Vente de titres",
+		pointsServices: "Points Services",
+		distributeurs: "Distributeurs",
+		depositaires:  "Depositaires",
+		arrets: "Arrêts",
+		poteaux: "Poteaux",
+		tc: "Transports en commun",
+		bonjour: "Bonjour,",
+		afficher: "Afficher : ",
+		derniereMaj: "Dernière mise à jour : ",
+		rue: "Rue",
+		lieu: "Lieu",
+		pmv: "Panneaux d'information",
+		autostop:"autostop organisé",	
+		recharge :"Bornes de Recharges",
+		camera: "Caméras de circulation",
+		covoiturage : "Aires de Covoiturage",
+		parkings: "Parkings",
+		PR: "P+R",
+		resulatrecherche: "Resultat de recherche",
+		signaler: "Pour signaler un évènement à Métromobilité, veuillez renseigner le formulaire ci-dessous et éventuellement prendre une photo.",
+		accident: "Accident",
+		bouchon: "Bouchon",
+		obstacle: "Obstacle",
+		autre: "Autre",
+		descriptionEvenement: "Description de l'évènement",
+		inclurePosition: " Inclure ma position",
+		inclurePositionDesc: " Afin de pouvoir inclure votre position, activer le service de localisation puis, appuyer ici.",
+		prendrephoto: " Prendre une photo",
+		application : "Une application de Grenoble Alpes Métropole",
+		creditTechnique:  "Crédits techniques: ",
+		mentionsLegales : "Mentions légales",
+		creditDonnees : "Crédits de données: ",
+		siteWeb : "Site web : ",
+		faq : "FAQ : ",
+		contact : "Contact : ",
+		envoyerMail : " Envoyer un email",
+		version : "Version : ",
+		serviceSIV : "Pour utiliser ce service, vous devez, au préalable, créer un compte dans la rubrique Mon compte du site ",
+		identifiant : "Votre identifiant",
+		entrezIdentifiant : "Entrez votre identifiant",
+		motDePasse : "Votre mot de passe",
+		entrezMotDePasse : "Entrez votre mot de passe",
+		valider : "Valider",
+		cliquezValider : "En cliquant sur le bouton Valider vos alertes seront redirigées vers ce téléphone.",
+		modesilencieux : "en mode silencieux",
+		modeSonnerie : "en mode sonnerie",
+		modeVibreur : "en mode vibreur",
+		nbspArret : " arrêts",
+		departItineraire : "départ itinéraire",
+		arriveeeItineraire : "arrivée itinéraire",
+		selectionnezPanneau : "Sélectionnez la ligne dans le panneau de gauche",
+		notifications : "Notifications",
+		mesAlertes : "Mes alertes",
+		placesLibres : "Places Libres: ",
+		triParcours : "Tri selon l'ordre du parcours",
+		triAlphabetique : "Tri par ordre alphabétique",
+		accueil : "Accueil",
+		langage : "Langage",
+		pagedemarrage : "Page de Démarrage"
 	}
 };
-	
+

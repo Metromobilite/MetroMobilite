@@ -22,13 +22,13 @@
 
 function translate() {
 
-	$('#panel-heading-itineraire > h6').text(lang.iti.itineraire);
+	$('#panel-heading-itineraire > h1').text(lang.iti.itineraire);
 	$("#dep").prop({placeholder: lang.iti.stopDepart});
 	$("#arr").prop({placeholder: lang.iti.stopArrivee});
 	$("#iti-params-inverse").prop({title: lang.iti.retour, alt: lang.iti.retour});
-	$('#rowOptions h5').empty().append("<span class='glyphicon glyphicon-chevron-down'></span>" + lang.iti.plusOptions);
-	$('#ap_av option[value="D"]').text(lang.iti.apres);
-	$('#ap_av option[value="A"]').text(lang.iti.avant);
+	$('#rowOptions h2').empty().append("<span class='glyphicon glyphicon-chevron-down'></span>" + lang.iti.plusOptions);
+	$('#ap_av option[value="D"]').text(lang.departAvant.apres);
+	$('#ap_av option[value="A"]').text(lang.departAvant.avant);
 	$('#calculer').empty().append('<span class="glyphicon glyphicon-search"></span>' + lang.iti.calculer);
 	$("#panel-heading-resultats-precedent").prop({title: lang.iti.resultatsPrecedent, alt: lang.iti.resultatsPrecedent});
 	$('#iti-resultat').text(lang.iti.resultats);
@@ -54,12 +54,12 @@ function translate() {
 	$('#pmr > img').prop({title: lang.iti.pmr, alt: lang.iti.pmr});
 	$('#car > img').prop({title: lang.iti.voiture, alt: lang.iti.voiture});
 	$('#logoModeVoiture').prop({title: lang.iti.voiture, alt: lang.iti.voiture});
-	$('#wait').prop({title: lang.iti.recheercheEnCours, alt: lang.iti.recheercheEnCours});
+	$('#wait').prop({title: lang.iti.rechercheEnCours, alt: lang.iti.rechercheEnCours});
 
 	$("#panel-footer-resultats-suivant").prop({title: lang.iti.prochainsResultats, alt: lang.iti.prochainsResultats});
 	$('#iti-dep-suiv').text(lang.iti.prochainsDeparts);
 	$('#itiDetails-ret').text(lang.iti.retourResultats);
-	$('#panel-heading-details > h6').text(lang.iti.detail);
+	$('#panel-heading-details > h2').text(lang.iti.detail);
 	$('#detailFooter > a:nth-child(1)').text(lang.iti.voirCarte);
 	$('#detailFooter > a:nth-child(2)').text(lang.iti.imprimerCarte);
 	$('#detailFooter > a:nth-child(3)').text(lang.iti.gps);

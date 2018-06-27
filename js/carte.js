@@ -24,17 +24,17 @@
 //--------------------------------------//
 // globals
 //--------------------------------------//
-var gg = "EPSG:4326";
-var sm = "EPSG:3857";
+
 var maps = [];
 var sourceLgn;
 var sourcePoints;
 var sourceTrr;
 var sourceEvt;
 var sourceArretLight;
-var sourcePkg;
 var sourceCov;
-//var sourceOmms;
+var sourceVh;
+var layerCluster;
+var typesPointsAffiches = [];
 var evtCache = [];
 var filtreLgn = null;
 var VERT = '#66CC33';
@@ -47,6 +47,8 @@ var majPopupInterval;
 var filtreTypeEvt = 'type';
 var filtreCodeEvt = 'code';
 
+var RECTANGLE_TOTAL = [5.4185,44.8432,6.3798,45.5169];
+
 var iconeaccident = {src: 'img/Carto/images_evt/p_accident.png',anchor:[0.5,1] };
 var iconebouchon = {src: 'img/Carto/images_evt/p_bouchon.png',anchor:[0.5,1] };
 var iconechantier = {src: 'img/Carto/images_evt/p_chantier.png',anchor:[0.5,1] };
@@ -54,8 +56,8 @@ var iconemanifestation = {src: 'img/Carto/images_evt/p_manifestation.png',anchor
 var iconeobstacle = {src: 'img/Carto/images_evt/p_obstacle.png',anchor:[0.5,1] };
 var iconerestriction = {src: 'img/Carto/images_evt/p_restriction.png',anchor:[0.5,1] };
 var iconepanne = {src: 'img/Carto/images_evt/p_panne.png',anchor:[0.5,1] };
-var iconePME = new ol.style.Icon({src: 'img/Carto/images_evt/PME.png' });
-var iconePKG = {src: 'img/Carto/p_Park.png',anchor:[0.5,1]};
+var iconePME = new ol.style.Icon({src: 'img/Carto/images_evt/PME.png',anchor:[0.5,1] });
+var iconePKG = {src: 'img/Carto/p_PKG_0.png',anchor:[0.5,1]};
 var iconePAR = {src: 'img/Carto/p_PR_0.png',anchor:[0.5,1]};
 var iconeMVA = {src: 'img/Carto/p_MV_Agence.png',anchor:[0.5,1]};
 var iconeMVC = {src: 'img/Carto/p_MV_Consigne.png',anchor:[0.5,1]};
@@ -63,11 +65,12 @@ var iconebus = new ol.style.Icon({src: 'img/Carto/tc.png',anchor:[0.5,-0.5], wid
 var iconebulle = new ol.style.Icon({src: 'img/Carto/bulle.png',anchor:[0.5,-0.5], width:'10px', height:'10px' });
 var iconevelo = new ol.style.Icon({src: 'img/Carto/velo.png',anchor:[0.5,-0.5], width:'10px', height:'10px'});
 var iconepieton = new ol.style.Icon({src: 'img/Carto/pieton.png',anchor:[0.5,-0.5], width:'10px', height:'10px'});
-var iconeiroad = new ol.style.Icon({src: 'img/Carto/iroad.png',anchor:[0.5,-0.5], width:'10px', height:'10px'});
 var iconevoiture = new ol.style.Icon({src: 'img/Carto/voiture.png',anchor:[0.5,-0.5], width:'10px', height:'10px'});
 var iconePMV = {src: 'img/Carto/PMV.png',scale:1,anchor:[0.5,1] };
 var iconeCAM = {src: 'img/Carto/CAM_1.png',scale:1,anchor:[0.5,1] };
-var iconecitelibbyhamo = {src: 'img/p_citelibbyhamo.png',scale:1,anchor:[0.5,1]};
+var iconeCovoiturage = {src: 'img/Carto/covoiturage.png',scale:1,anchor:[0.5,1] };
+var iconerecharge = {src: 'img/pictorecharge.png',scale:1,anchor:[0.5,1]};
+var iconeAutostop  = {src: 'img/autostop.png',scale:1,anchor:[0.5,1]};
 var iconecitelib = {src: 'img/p_citelib.png',scale:1,anchor:[0.5,1]};
 var iconeDepositaires = {src: 'img/Carto/p_relaisTAG.png',anchor:[0.5,1] };
 var iconeDat = {src: 'img/Carto/p_Dat.png',anchor:[0.5,1] };
@@ -75,7 +78,7 @@ var iconeAgenceMM = {src: 'img/Carto/p_agenceMM.png',anchor:[0.5,1] };
 var iconePointService = {src: 'img/Carto/p_pointservice.png',anchor:[0.5,1] };
 var iconeArret = {src: 'img/zoneArret.png',anchor:[0.5,1]};
 var iconePArret = {src: 'img/pointArret.png',anchor:[0.5,1]};
-var iconePositionNoir = {src: 'img/Carto/Vous_etes_ici.png',anchor:[0.5,1]};
+var iconePositionNoir = {src: (urlParams.customPointor?'img/Carto/'+urlParams.customPointor:'img/Carto/Vous_etes_ici.png'),anchor:[0.5,1]};
 var iconePositionRouge = new ol.style.Icon({src: 'img/Carto/positionRouge.svg',anchor:[0.5,1]});
 var iconePositionVert = new ol.style.Icon({src: 'img/Carto/positionVert.svg',anchor:[0.5,1]});
 var iconePositionBleu = new ol.style.Icon({src: 'img/Carto/positionBleu.svg',anchor:[0.5,1]});
@@ -94,26 +97,27 @@ var imageLgnArretSelect = new ol.style.Circle({
 });
 
 var stylesTypes = {
-	agenceM:{icon:iconeAgenceMM,iconMaxres:50,text:'NOM',textMaxRes:1,titre:'Agence M'},
-	pointService:{icon:iconePointService,iconMaxres:50,text:'NOM',textMaxRes:1,titre:'Points Service'},
-	dat:{icon:iconeDat,iconMaxres:5,text:'ARRET',textMaxRes:1,titre:'Distributeur automatique de titres'},
-	depositaire:{icon:iconeDepositaires,iconMaxres:5,text:'NOM',textMaxRes:1,titre:'Dépositaires'},
-	rue:{icon:iconeArret,iconMaxres:20,text:'LIBELLE',textMaxRes:1,titre:'Rue'},
-	lieux:{icon:iconeArret,iconMaxres:3,text:'LIBELLE',textMaxRes:1,titre:'Lieu'},
+	agenceM:{icon:iconeAgenceMM,iconMaxres:50,text:'NOM',textMaxRes:1,titre:lang.iti.AgenceMetromobilite},
+	pointService:{icon:iconePointService,iconMaxres:50,text:'NOM',textMaxRes:1,titre:lang.appMobile.pointsServices},
+	dat:{icon:iconeDat,iconMaxres:5,text:'ARRET',textMaxRes:1,titre:lang.appMobile.venteTitres},
+	depositaire:{icon:iconeDepositaires,iconMaxres:5,text:'NOM',textMaxRes:1,titre:lang.appMobile.depositaires},
+	rue:{icon:iconeArret,iconMaxres:20,text:'LIBELLE',textMaxRes:1,titre:lang.appMobile.rue},
+	lieux:{icon:iconeArret,iconMaxres:3,text:'LIBELLE',textMaxRes:1,titre:lang.appMobile.lieu},
 	arret:{icon:iconeArret,iconMaxres:5,iconMinres:0.51,text:'LIBELLE',textMaxRes:2},//pas de titre : text a la place
 	pointArret:{icon:iconePArret,iconMaxres:0.5,text:'LIBELLE',textMaxRes:0.2},
 	citelib:{icon:iconecitelib,iconMaxres:5,text:'Nom de la station',textMaxRes:1,titre:'Cité Lib'},
-	omms:{icon:iconecitelibbyhamo,iconMaxres:5,text:'LIBELLE',textMaxRes:1,titre:'Cité Lib by Ha:mo'},
-	PMV:{icon:iconePMV,iconMaxres:50,text:'LIBELLE',textMaxRes:1,titre:'Panneaux à messages variables'},
-	CAM:{icon:iconeCAM,iconMaxres:50,text:'LIBELLE',textMaxRes:1,titre:'Caméras de circulation'},
-	PKG:{icon:iconePKG,iconMaxres:5,text:'LIBELLE',textMaxRes:1,titre:'Parkings'},
-	PAR:{icon:iconePAR,iconMaxres:5,text:'LIBELLE',textMaxRes:1,titre:'P+R'},
-	covoiturage:{icon:iconeArret,iconMaxres:3,text:'LIBELLE',textMaxRes:1,titre:'Covoiturage'},
-	MVA:{icon:iconeMVA,iconMaxres:50,text:'LIBELLE',textMaxRes:1,titre:'Agence Metro-Velo'},
-	MVC:{icon:iconeMVC,iconMaxres:5,text:'LIBELLE',textMaxRes:1,titre:'Consigne Metro-Velo'},
-	dep:{icon:iconeDepart,iconMaxres:100000,text:'LIBELLE',textMaxRes:0,titre:'Depart'},
-	arr:{icon:iconeArrivee,iconMaxres:100000,text:'LIBELLE',textMaxRes:0,titre:'Arrivée'},
-	search:{icon:iconePositionNoir,iconMaxres:100000,text:'LIBELLE',textMaxRes:0,titre:'Resultat de recherche'}
+	recharge:{icon:iconerecharge,iconMaxres:5,text:'LIBELLE',textMaxRes:1,titre:lang.appMobile.recharge},
+	autostop:{icon:iconeAutostop,iconMaxres:50,text:'Nom du point',textMaxRes:1,titre:lang.appMobile.autostop},		
+	PMV:{icon:iconePMV,iconMaxres:50,text:'LIBELLE',textMaxRes:1,titre:lang.appMobile.pmv},
+	CAM:{icon:iconeCAM,iconMaxres:50,text:'LIBELLE',textMaxRes:1,titre:lang.appMobile.camera},
+	PKG:{icon:iconePKG,iconMaxres:5,text:'LIBELLE',textMaxRes:1,titre:lang.appMobile.parking},
+	PAR:{icon:iconePAR,iconMaxres:5,text:'LIBELLE',textMaxRes:1,titre:lang.appMobile.PR},
+	covoiturage:{icon:iconeCovoiturage,iconMaxres:50,text:'libelle',textMaxRes:1,titre:lang.appMobile.covoiturage},
+	MVA:{icon:iconeMVA,iconMaxres:50,text:'LIBELLE',textMaxRes:1,titre:lang.iti.AgenceMetrovelo},
+	MVC:{icon:iconeMVC,iconMaxres:5,text:'LIBELLE',textMaxRes:1,titre:lang.iti.ConsignesMetrovelo},
+	dep:{icon:iconeDepart,iconMaxres:100000,text:'LIBELLE',textMaxRes:0,titre:lang.instructions.depart},
+	arr:{icon:iconeArrivee,iconMaxres:100000,text:'LIBELLE',textMaxRes:0,titre:lang.instructions.arrive},
+	search:{icon:iconePositionNoir,iconMaxres:100000,text:'LIBELLE',textMaxRes:0,titre:lang.appMobile.resulatrecherche}
 };
 
 //--------------------------------------//
@@ -276,7 +280,7 @@ function ajouteLayerSwitcher(idcarte,nomlayer,layerswitcher,options) {
 	if (layer) {
 		$('#'+nomlayer).prop('checked', layer.get('visible'));
 	}
-	$('#panel h1[data-layer="'+nomlayer+'"], h2[data-layer="'+nomlayer+'"]').append('<div class="pull-right check" title="Affichage des ' +  libelle  + '" alt="Affiche les ' +  libelle  + '"><div class="switch"></div></div>');
+	$('#panel h1[data-layer="'+nomlayer+'"], h2[data-layer="'+nomlayer+'"]').append('<div class="pull-right check" title="' + lang.affichageDes +  libelle  + '" alt="' + lang.affichageDes +  libelle  + '"><div class="switch"></div></div>');
 	$(layerswitcher+' #'+nomlayer).unbind('change').on('change',function(e){
 		var nomlayer=$(e.target).attr('data-layer');
 		var idcarte=$(e.target).attr('data-map');
@@ -291,7 +295,7 @@ function ajouteLayerSwitcher(idcarte,nomlayer,layerswitcher,options) {
 		h1.toggleClass('layerVisible',bVisible);
 	});
 }
-	$('#panel h1, #panel h2').click(function(){
+	$('#panel h1[data-layer], #panel h2[data-layer]').click(function(){
 		var nomLayer = $(this).attr('data-layer');
 		var bVisible = !$('#'+nomLayer).is(':checked');
 		activeLayer(nomLayer,!bVisible);
@@ -302,7 +306,7 @@ function ajouteLayerSwitcher(idcarte,nomlayer,layerswitcher,options) {
 			activeLayer(nomLayer,!bVisible);
 		}
 		
-		if(isTaille('xs') && togglePanneau) {togglePanneau();}
+		if(isTaille('xs') || isTaille('xxs') && togglePanneau) {togglePanneau();}
 		return false;
 	});
 
@@ -442,7 +446,8 @@ function initMap(idcarte,opt) {
 		//renderers:ol.RendererHint.WEBGL,
 		target: idcarte,
 		overlayStyle:getStylesOverlay,
-		selectStyle:getStylesOverlay
+		selectStyle:getStylesOverlay,
+		interactions: ol.interaction.defaults({mouseWheelZoom:(typeof(urlParams.zoomMolette)=='string'?urlParams.zoomMolette=='true':urlParams.zoomMolette)})
 	};
 	if (!opt) {opt={};}
 	if (opt.selectStyle) options.selectStyle=opt.selectStyle;
@@ -464,7 +469,7 @@ function initMap(idcarte,opt) {
 	if(!opt.maxZoom) {opt.maxZoom = 19;}
 	if(!opt.minZoom) {opt.minZoom = 10;}
 	//emprise par defaut
-	var centerPt = ol.proj.transform([opt.lon, opt.lat], gg, sm);
+	var centerPt = ol.proj.transform([opt.lon, opt.lat], "EPSG:4326", "EPSG:3857");
 	var view = new ol.View({
 		center: centerPt,
 		zoom: opt.zoom,
@@ -472,12 +477,20 @@ function initMap(idcarte,opt) {
 		minZoom:opt.minZoom
 	});	
 	map.setView(view);
-
-	var featuresOverlay = new ol.FeatureOverlay({
-		map: map,
-		style: options.overlayStyle
+	var sourceOverlay = new ol.source.Vector({
+		projection: "EPSG:3857"
 	});
-	map.featuresOverlay =featuresOverlay;
+	//var featuresOverlay = new ol.FeatureOverlay({ migration OL4
+	var featuresOverlay = new ol.layer.Vector({
+		id: 'overlay',
+		source:sourceOverlay,
+		style: options.overlayStyle		
+	});
+	map.featuresOverlay = featuresOverlay;
+	map.mapSelector = idcarte;
+	map.addLayer(map.featuresOverlay);
+	
+	map.featuresOverlay.set('visible',true);
 
 	var select = new ol.interaction.Select({
 			layers:function(e){ return layerSelectionnables(e,idcarte);},
@@ -544,7 +557,7 @@ function initMap(idcarte,opt) {
 	
 	if(element) {
 	
-		if (!isTaille('xxs') && (typeof(appMetromobilite)=='undefined' || !appMetromobilite)) {
+		if (!isTaille('xxs') && !isTaille('xs') && (typeof(appMetromobilite)=='undefined' || !appMetromobilite)) {
 			var popup = new ol.Overlay({
 				element: element,
 				//positioning: ol.OverlayPositioning.BOTTOM_CENTER,
@@ -567,7 +580,7 @@ function initMap(idcarte,opt) {
 		showPopupDetails(map,evt);
 		return false;
 		} catch(e){
-			console.log(e.msg+' : '+e.lineNumber);
+			console.log(e);
 		}
 	});
 	
@@ -592,6 +605,8 @@ function showPopupDetails(map,evt,featurePredefini){
 			
 			var h='';
 			var getDetailsFeature = function(feature, layer){
+				if(feature.get('features') && feature.get('features').length ==1)
+				feature = feature.get('features')[0];
 				var d='';
 				if (first) {
 					h+='<span class="PopupDetails-Close pull-right"><span class="glyphicon glyphicon-remove"></span></span>';
@@ -631,9 +646,11 @@ function showPopupDetails(map,evt,featurePredefini){
 				if (featureSeul && featureSeul.get('detailsCallback')) {
 					detailsSeul+='<div class="PopupDetails-detailsCallback" data-id="'+featureSeul.getId()+'">' + featureSeul.get('detailsCallback')(featureSeul) + '</div>';
 				}
-				var fullDetails = '<div class="PopupDetails"><div class="PopupDetails-head">'+h+'</div><div class="PopupDetails-body">' + (detailsSeul!=''?detailsSeul:details) + '</div></div>';
+
 				
-				if (!isTaille('xxs') && (typeof(appMetromobilite)=='undefined' || !appMetromobilite)) {
+				var fullDetails = '<div class="PopupDetails"><div class="PopupDetails-head">'+h+'</div><div class="PopupDetails-body">' + (detailsSeul!=''?detailsSeul:details) + '</div></div>';
+
+				if (!isTaille('xxs') && !isTaille('xs') && (typeof(appMetromobilite)=='undefined' || !appMetromobilite)) {
 					map.popup.setPosition(coord);
 				}
 				$(element).show();
@@ -658,25 +675,21 @@ function ajouteFond(idcarte,fond,sourceForcee,idForcee) {
 	var id = null;
 	var source = null;
 	var attributionsOSM = new ol.Attribution({
-            html: 'Tiles &copy; <a href="http://www.openstreetmap.org/">' +
-                'openstreetmap</a>'
+            html: '&copy; <a href="https://www.openstreetmap.org/copyright">Contributeurs de OpenStreetMap</a>'
+          });
+	var attributionsOCM = new ol.Attribution({
+            html: 'All maps © <a href="https://www.opencyclemap.org/">OpenCycleMap</a>'
           });
 	switch(fond) {
-		case 'mapquest':
-			id = "fond MapQuest";
-			source = new ol.source.MapQuest({layer: 'osm'});
-			break;
-		case 'mapquestSat':
-			id="fond MapQuest Sat";
-			source = new ol.source.MapQuest({layer: 'sat'});
-			break;
-		case 'mapquestHyb':
-			id = "fond MapQuest Hybride";
-			source = new ol.source.MapQuest({layer: 'hyb'});
-			break;
 		case 'OSM':
 			id = "fond OSM";
 			source = new ol.source.OSM();
+			break;
+		case 'OCM':
+			id = "fond OpenCycleMap";
+			source = new ol.source.XYZ({attributions: [attributionsOCM,attributionsOSM],
+				url: 'https://{a-c}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png'
+			});
 			break;
 		case 'bw-mapnik':
 			id = "fond Mapnik en N&B";
@@ -694,29 +707,20 @@ function ajouteFond(idcarte,fond,sourceForcee,idForcee) {
 			id = "fond CartoDB";
 			source = new ol.source.XYZ({
 				url: 'http://{a-d}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
-				attributions: [new ol.Attribution({ html: ['&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'] })]
+				attributions: [new ol.Attribution({ html: ['&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'] })]
 			});
 			break;
 		default:
 			id = "metromobilite";
-			source = new ol.source.XYZ({
-				tileUrlFunction: function(coordinate) {
-					if(coordinate == null){
-						return "";
-					} 
-					var z = coordinate[0];//.z;
-					var x = coordinate[1];//.x;
-					var y = coordinate[2];
-					//var y = (1 << z) - coordinate[2]/*.y*/ - 1;
-					return 'http://data.metromobilite.fr/carte/'+z+'/'+x+'/'+y+'.png';
-				},
+			source = new ol.source.XYZ({attributions: [attributionsOSM],
+				url: url.ws() + '/carte/{z}/{x}/{y}.png',				
 				maxZoom:18
 			});
 	}
 	if (id != null && source != null) {
 		if(sourceForcee) source = sourceForcee;
 		if(idForcee) id = idForcee;
-		layer = new ol.layer.Tile({id:id,source: source,extent:ol.proj.transformExtent([5.4185,44.8432,6.3798,45.5169], gg, sm)});
+		layer = new ol.layer.Tile({id:id,source: source,extent:ol.proj.transformExtent(RECTANGLE_TOTAL, "EPSG:4326", "EPSG:3857")});
 		layer.set('fond',true);
 		map.addLayer(layer);
 	}
@@ -774,11 +778,11 @@ function getLayer(idcarte,nomLayer) {
 		var layer = map.getLayers().getArray().filter(function( obj ) {return obj.get('id') == nomLayer;})[0];
 		
 		return layer;
-		}
-		catch(e) {
-			console.log(e.linNumber+' : '+e.message);
-			return null;
-		}
+	}
+	catch(e) {
+		console.log(e);
+		return null;
+	}
 }
 
 //--------------------------------------//
@@ -819,9 +823,14 @@ function ajouteLayerManuel(nomLayer,idcarte,options) {
 		if (getLayer(idcarte,nomLayer)!=null) return;
 		
 		if (!options.source) {
-			options.source = new ol.source.GeoJSON({
-				projection: sm
+			/*options.source = new ol.source.GeoJSON({
+				projection: "EPSG:3857"
+			}); migration OL4*/
+			options.source = new ol.source.Vector({
+				projection: "EPSG:3857",
+				format: new ol.format.GeoJSON()
 			});
+			
 			options.source.on('addfeature', function(event) {
 				var feature = event.feature;
 				if(feature.get('CODE')) feature.set('id',feature.get('CODE'));
@@ -837,9 +846,11 @@ function ajouteLayerManuel(nomLayer,idcarte,options) {
 		var layer = new ol.layer.Vector({
 			id: nomLayer,
 			visible:false,
-			source: options.source,
+			source:options.source,
 			maxResolution:options.maxResolution,
-			style:function(feature,resolution){return options.fctStyle(feature,resolution,options.color);}
+			style:function(feature,resolution){
+				return options.fctStyle(feature,resolution,options.color);
+				}
 		});
 
 		if (options.indexLayer) 
@@ -896,10 +907,11 @@ function getStylesGeojson(feature,resolution,color) {
 // getLignesProches
 //--------------------------------------//
 function getLignesProches(lonlat,callback,feature,nomZAFiltre,idCarte) {
-	var searchUrl = (url.saisieChoisie=='local'?url.hostnameLocal+url.portWSTest:url.hostnameData);
+	var searchUrl = url.ws();
 		searchUrl += '/api/linesNear/json';
 		searchUrl += '?x='+lonlat.split(',')[1];
 		searchUrl += '&y='+lonlat.split(',')[0];
+		searchUrl += '&dist=500';
 
 	$.ajax({
 		type: "GET",
@@ -935,8 +947,12 @@ function afficheListeLgn(lignes,feature,stops,idCarte) {
 		}
 	}
 	tri(mondiv,'svg','','data-code');
-	if (mondiv.html()!="")
-		$(map.popupSelector + ' .PopupDetails-detailsCallback').append('<span class="lignesProches">' + lang.carteMobile.lignesProches + '</span>' + mondiv.html());
+	if (mondiv.html()!="") {
+		var content = '<span class="lignesProches">' + lang.carteMobile.lignesProches + '</span>' + mondiv.html();
+		$(map.popupSelector + ' .PopupDetails-detailsCallback').append(content);
+		return content;
+	}
+	return '';
 }
 
 //--------------------------------------//
@@ -967,12 +983,14 @@ function layerSelectionnables(e,idcarte) {
 function error(xhr, status, error) {
 	try {
 		fct_attente_horaires(false);
-		var err = eval("(" + (xhr.responseText=="timeout"?"le serveur ne repond pas.":xhr.responseText) + ")");
+		/*var err = eval("(" + (xhr.responseText=="timeout"?"le serveur ne repond pas.":xhr.responseText) + ")");
 		if (typeof(err) != "undefined")
-			console.log(err.Message);
+			console.log(err.Message);*/
+		if(xhr && xhr.responseText)
+			console.log(xhr.responseText);
 		else console.log('carte.js error : ' + status+' : '+error);
 	} catch(e) {
-		console.log(e.lineNumber+' : '+e.message);
+		console.log(e);
 	}
 }
 
@@ -1041,8 +1059,8 @@ function getStylesTypes(feature,resolution,color) {
 			}
 			styleCache['stylePoint_'+type+text+nsv+orientation] = new ol.style.Style(styleOpt);
 		}
-		styles = (resolution < 50 
-				&& resolution < stylesTypes[type].iconMaxres 
+		styles = (/*resolution < 100 
+				&& */resolution < stylesTypes[type].iconMaxres 
 				&& (!stylesTypes[type].iconMinres || resolution > stylesTypes[type].iconMinres)
 				&& (!feature.get('arr_visible') || feature.get('arr_visible') == '1')
 				) ? [styleCache['stylePoint_'+type+text+nsv+orientation]] : [];
@@ -1058,49 +1076,52 @@ function creeSourceType(idcarte,types,options) {
 	if(!options) options = {};
 	if(!options.fctDetails) options.fctDetails=getDetails;
 
-	var vectorSource = new ol.source.ServerVector({
-	  loader: function(extent, resolution, projection) {
-		var epsg4326Extent = ol.proj.transformExtent(extent, projection, 'EPSG:4326');
-		
-		var searchUrl = (url.saisieChoisie=='local'?url.hostnameLocal+url.portWSTest:url.hostnameData);
-			searchUrl += '/api/bbox/json?';
-			searchUrl += 'ymax='+epsg4326Extent[3];
-			searchUrl += '&xmin='+epsg4326Extent[0];
-			searchUrl += '&ymin='+epsg4326Extent[1];
-			searchUrl += '&xmax='+epsg4326Extent[2];
-			searchUrl += '&types='+types;
+	//var vectorSource = new ol.source.ServerVector({ migration OL4
+	var vectorSource = new ol.source.Vector({
+		strategy : ol.loadingstrategy.bbox,
+		loader: function(extent, resolution, projection) {
+			var epsg4326Extent = ol.proj.transformExtent(extent, projection, 'EPSG:4326');
+			
+			var searchUrl = url.ws();
+				searchUrl += '/api/bbox/json?';
+				searchUrl += 'ymax='+(''+epsg4326Extent[3]).replace('Infinity','90');
+				searchUrl += '&xmin='+(''+epsg4326Extent[0]).replace('Infinity','180');
+				searchUrl += '&ymin='+(''+epsg4326Extent[1]).replace('Infinity','180');
+				searchUrl += '&xmax='+(''+epsg4326Extent[2]).replace('Infinity','180');
+				searchUrl += '&types='+types;
 
-		$.ajax({
-			type: "GET",
-			url: searchUrl,
-			error:error,
-			dataType: 'json'
-		}).then(function(response) {
-			response.features.forEach(function (feature){
-				var type = feature.properties.type;
-				var id = type+'_'+feature.properties.id;
-				if(type=='PME') id=feature.properties.id;
-				if (!vectorSource.getFeatureById(id)) {
-					var geom = new ol.geom.Point(ol.proj.transform(feature.geometry.coordinates, gg, sm));
-					var opt = feature.properties;
-					opt.geometry = geom;
-					opt.id = id;
-					opt.detailsCallback = options.fctDetails;
-					opt.detailsSeul = true;
-					opt.description = (stylesTypes[type].titre?stylesTypes[type].titre:feature.properties[stylesTypes[type].text]);
-					var feature = new ol.Feature(opt);
-					feature.setId(id);
-					vectorSource.addFeature(feature);
-				}
+			$.ajax({
+				type: "GET",
+				url: searchUrl,
+				error:error,
+				dataType: 'json'
+			}).then(function(response) {
+				response.features.forEach(function (feature){
+					var type = feature.properties.type;
+					var id = type+'_'+feature.properties.id;
+					if(type=='PME') id=feature.properties.id;
+					if (!vectorSource.getFeatureById(id)) {
+						var geom = new ol.geom.Point(ol.proj.transform(feature.geometry.coordinates, "EPSG:4326", "EPSG:3857"));
+						var opt = feature.properties;
+						opt.geometry = geom;
+						opt.id = id;
+						opt.detailsCallback = options.fctDetails;
+						opt.detailsSeul = true;
+						opt.description = (stylesTypes[type].titre?stylesTypes[type].titre:feature.properties[stylesTypes[type].text]);
+						var feature = new ol.Feature(opt);
+						feature.setId(id);
+						vectorSource.addFeature(feature);
+					}
+				});
+				types.split(',').forEach(function(type){
+					$( document ).trigger( 'evtSourceChargee', type );
+				});
+
 			});
-			types.split(',').forEach(function(type){
-				$( document ).trigger( 'evtSourceChargee', type );
-			});
-		});
-	  },
-	  projection: 'EPSG:3857'
+		},
+		projection: 'EPSG:3857'
 	});
-	
+		
 	return vectorSource;
 }
 
@@ -1114,69 +1135,94 @@ function ajouteLayerType(idcarte,nomlayer,type,options) {
 	if(!options.layerSwitcherName) options.layerSwitcherName=nomlayer;
 	if(!options.source) options.source = creeSourceType(idcarte,type,options);
 	if(!options.noSwitcher) options.noSwitcher = false;
+	if(!options.cluster) options.cluster = false;
 
-	var layer = ajouteLayerManuel(nomlayer,idcarte,{
-		source:options.source,
-		maxResolution:options.maxResolution,
-		fctStyle:function(feature,resolution,color) {
-			if(feature.get('type')!=type) return [];
-			
-			return options.fctStyle(feature,resolution,color);
-		}
-	});
+	if(!options.cluster) {
+		var layer = ajouteLayerManuel(nomlayer,idcarte,{
+			source:options.source,
+			maxResolution:options.maxResolution,
+			fctStyle:function(feature,resolution,color) {
+				if(feature.get('type')!=type) return [];
+				
+				return options.fctStyle(feature,resolution,color);
+			}
+		});
 		
-	getMap(idcarte).addLayer(layer);
-	
-	if (!options.noSwitcher) ajouteLayerSwitcher(idcarte,nomlayer,options.layerSwitcherSelector,{
-		libelle:options.layerSwitcherName
-	});
-	
-			/*********************** DEBUT TEST CLUSTER ***********************/
-			/*var clusterSource = new ol.source.Cluster({
-			  distance: 40,
-			  source: sourcePoints
-			});
-
-			var styleCache = {};
-			var clusters = new ol.layer.Vector({
-			  source: clusterSource,
-			  style: function(feature, resolution) {
-				  
-				//return getStylesTypes(feature, resolution,color);
-				  
-				var size = feature.get('features').length;
-				var style = styleCache[size];
-				if (!style) {
-					style = [new ol.style.Style({
-						image: new ol.style.Circle({
-						  radius: 20,
-						  stroke: new ol.style.Stroke({
-							color: '#fff'
-						  }),
-						  fill: new ol.style.Fill({
-							color: '#3399CC'
-						  })
-						}),
-						text: new ol.style.Text({
-						  text: size.toString(),
-						  fill: new ol.style.Fill({
-							color: '#fff'
-						  })
-						})
-				  })];
-				  styleCache[size] = style;
-				}
-				return style;
-			  }
-			});
-			getMap(idcarte).addLayer(clusters);
-			*/
-			/*********************** FIN TEST CLUSTER ***********************/
-	
-	return layer;
+		//getMap(idcarte).addLayer(layer);
+		
+		if (!options.noSwitcher) ajouteLayerSwitcher(idcarte,nomlayer,options.layerSwitcherSelector,{
+			libelle:options.layerSwitcherName
+		});
+		return layer;
+	} else {
+		if (!layerCluster) ajouteLayerCluster(idcarte);
+		return layerCluster;
+	}	
 }
 
-//--------------------------------------//
+function ajouteLayerCluster(idcarte){
+	var clusterSource = new ol.source.Cluster({
+		distance:20,
+		source: sourcePoints,
+		geometryFunction: function(feature){
+			var type = feature.get('type');
+			//var layer = getLayer(idcarte,type);	
+			//if(layer.get('visible')){
+			if(typesPointsAffiches.indexOf(type)!=-1) {
+				return feature.getGeometry();
+			} else 
+				return null;
+		}
+	});
+
+	var styleCache ={};
+		layerCluster = new ol.layer.Vector({
+		source: clusterSource,
+		style: getStyleCluster
+	});
+	getMap(idcarte).addLayer(layerCluster);
+}
+
+function getStyleCluster(feature, resolution){
+		var features=feature.get('features');
+		var size = features.length;
+
+
+		var image = new Image();
+		image.src = 'img/etroobilite.png';
+
+		if (size == 1 ) return getStylesTypes(features[0],resolution); 
+		var style = styleCache[size];
+		if (!style){
+			style = [new ol.style.Style({
+				/*image: new ol.style.Circle({
+				  radius: 20,
+				  stroke: new ol.style.Stroke({
+					color: '#fff'
+				  }),
+				  fill: new ol.style.Fill({
+					color: '#3399CC'
+				  })
+				}),*/
+				image: new ol.style.Icon({
+					img: image,
+					imgSize: [50,50],
+					opacity : 0.75
+				}),	
+				
+				text: new ol.style.Text({
+				  text: size.toString(),
+				  font:'18px Arial',
+				  fill: new ol.style.Fill({
+					color: '#fff'
+				  })
+				})
+		  })];
+		  styleCache[size] = style;
+		}
+		return style;
+}
+		  //--------------------------------------//
 // getCouleur
 //--------------------------------------//
 function getCouleur(feature) {
@@ -1325,7 +1371,7 @@ function getStylesSelect(feature,resolution){
 function chargeGeomLigne(idcarte,code,reseau,options){
 	var map = getMap(idcarte);
 	
-	var searchUrl = (url.saisieChoisie=='local'?url.hostnameLocal+url.portWSTest:url.hostnameData);
+	var searchUrl = url.ws();
 		searchUrl += '/api/lines/poly?';
 		searchUrl += 'types=ligne';
 		if(code) searchUrl += '&codes='+code;
@@ -1344,11 +1390,11 @@ function chargeGeomLigne(idcarte,code,reseau,options){
 			if(Array.isArray(feature.properties.shape)) {
 				var coord = [];
 				feature.properties.shape.forEach(function (s){
-					coord.push(format.readGeometry(s,{dataProjection:gg,featureProjection:sm}).getCoordinates());
+					coord.push(format.readGeometry(s,{dataProjection:"EPSG:4326",featureProjection:"EPSG:3857"}).getCoordinates());
 				});
 				geom = new ol.geom.MultiLineString(coord);
 			} else {
-				var coord = format.readGeometry(feature.properties.shape,{dataProjection:gg,featureProjection:sm}).getCoordinates();
+				var coord = format.readGeometry(feature.properties.shape,{dataProjection:"EPSG:4326",featureProjection:"EPSG:3857"}).getCoordinates();
 				geom = new ol.geom.LineString(coord);
 			}
 			var id = feature.properties.CODE;
@@ -1374,9 +1420,7 @@ function chargeZALigne(idcarte,codeLigne,listeZA,options){
 	var map = getMap(idcarte);
 	if(!codeLigne) return;
 	codeLigne=codeLigne.replace('_',':');
-	//var searchUrl = url.hostnameData;
-	//	searchUrl += '/otp/routers/default/index/routes/'+codeLigne+'/stops';
-	var searchUrl = (url.saisieChoisie=='local'?url.hostnameLocal+url.portWSTest:url.hostnameData);
+	var searchUrl = url.ws();
 		searchUrl += '/api/points/json?';
 		searchUrl += 'types=arret&codes='+listeZA;
 		
@@ -1392,7 +1436,7 @@ function chargeZALigne(idcarte,codeLigne,listeZA,options){
 				options.source.getFeatureById(id).set('bVisible',true);
 				return;
 			}
-			var geom = new ol.geom.Point(f.geometry.coordinates).transform(gg, sm);
+			var geom = new ol.geom.Point(f.geometry.coordinates).transform("EPSG:4326", "EPSG:3857");
 			var opt = {};
 			opt.geometry = geom;
 			opt.id = id;
@@ -1416,8 +1460,12 @@ function chargeZALigne(idcarte,codeLigne,listeZA,options){
 //--------------------------------------//
 function ajouteLignes(idcarte,getDetails) {
 	var insertAt = getMap(idcarte).getLayers().getLength();
-	sourceLgn = new ol.source.GeoJSON({
-		projection: sm
+	/*sourceLgn = new ol.source.GeoJSON({
+		projection: "EPSG:3857"
+	}); migration OL4 */
+	sourceLgn = new ol.source.Vector({
+		projection: "EPSG:3857",
+		format: new ol.format.GeoJSON()
 	});
 	sourceLgn.on('addfeature', function(event) {
 		var feature = event.feature;
@@ -1425,7 +1473,7 @@ function ajouteLignes(idcarte,getDetails) {
 	});
 
 	ajouteLayerSwitcher(idcarte,'lignes_TRAM','#'+idcarte+' .layerSwitcher',{
-		libelle:'Réseau Tag : Tram',
+		libelle:'Tag : Tram',
 		initFct:function(){
 			var layerLgnTram = ajouteLayerManuel('lignes_TRAM',idcarte,{indexLayer:insertAt,source:sourceLgn,fctStyle:function(f,res){return getStylesLgn(f,res,'TRAM')}});
 			insertAt++;
@@ -1435,7 +1483,7 @@ function ajouteLignes(idcarte,getDetails) {
 	});
 
 	ajouteLayerSwitcher(idcarte,'lignes_CHRONO','#'+idcarte+' .layerSwitcher',{
-		libelle:'Réseau Tag : Chrono',
+		libelle:'Tag : Chrono',
 		initFct:function(){
 			var layerLgnChrono = ajouteLayerManuel('lignes_CHRONO',idcarte,{indexLayer:insertAt,source:sourceLgn,fctStyle:function(f,res){return getStylesLgn(f,res,'CHRONO')}});
 			insertAt++;
@@ -1448,7 +1496,7 @@ function ajouteLignes(idcarte,getDetails) {
 	//chargeGeomLigne(idcarte,codesLgnFond.join(','),null,{fctDetails:getDetails,source:sourceLgn,chargeZA:false});
 	
 	ajouteLayerSwitcher(idcarte,'lignes_PROXIMO','#'+idcarte+' .layerSwitcher',{
-		libelle:'Réseau Tag : Proximo',
+		libelle:'Tag : Proximo',
 		initFct:function(){
 			var layerLgnProximo = ajouteLayerManuel('lignes_PROXIMO',idcarte,{indexLayer:insertAt,source:sourceLgn,fctStyle:function(f,res){return getStylesLgn(f,res,'PROXIMO')}});
 			insertAt++;
@@ -1458,7 +1506,7 @@ function ajouteLignes(idcarte,getDetails) {
 	});
 	
 	ajouteLayerSwitcher(idcarte,'lignes_FLEXO','#'+idcarte+' .layerSwitcher',{
-		libelle:'Réseau Tag : Flexo',
+		libelle:'Tag : Flexo',
 		initFct:function(){
 			var layerLgnProximo = ajouteLayerManuel('lignes_FLEXO',idcarte,{indexLayer:insertAt,source:sourceLgn,fctStyle:function(f,res){return getStylesLgn(f,res,'FLEXO')}});
 			insertAt++;
@@ -1467,7 +1515,7 @@ function ajouteLignes(idcarte,getDetails) {
 		}
 	});
 	ajouteLayerSwitcher(idcarte,'lignes_C38','#'+idcarte+' .layerSwitcher',{
-		libelle:'Réseau Transisère',
+		libelle:'Transisère',
 		initFct:function(){
 			var layerLgnProximo = ajouteLayerManuel('lignes_C38',idcarte,{indexLayer:insertAt,source:sourceLgn,fctStyle:function(f,res){return getStylesLgn(f,res,'C38')}});
 			insertAt++;
@@ -1476,7 +1524,7 @@ function ajouteLignes(idcarte,getDetails) {
 		}
 	});
 	ajouteLayerSwitcher(idcarte,'lignes_SNC','#'+idcarte+' .layerSwitcher',{
-		libelle:'Réseau SNCF',
+		libelle:'SNCF',
 		initFct:function(){
 			var layerLgnProximo = ajouteLayerManuel('lignes_SNC',idcarte,{indexLayer:insertAt,source:sourceLgn,fctStyle:function(f,res){return getStylesLgn(f,res,'SNC')}});
 			insertAt++;
@@ -1502,10 +1550,17 @@ function ajouteLayerCovoiturage(nomLayer,idcarte) {
 
 		if (getLayer(idcarte,nomLayer)!=null) return;
 		if (!sourceCov) {
-			sourceCov = new ol.source.KML({
+			/*sourceCov = new ol.source.KML({  migration OL4
 				url: url.json('cov'),
-				projection: sm
+				projection: "EPSG:3857"
+			});*/
+			
+			sourceCov = new ol.source.Vector({
+				url: url.json('cov'),
+				projection: "EPSG:3857",
+				format: new ol.format.KML()
 			});
+			
 			sourceCov.on('addfeature', function(event) {
 				var feature = event.feature;
 				feature.set('contenu',feature.get('description'));
@@ -1522,11 +1577,13 @@ function ajouteLayerCovoiturage(nomLayer,idcarte) {
 			idEvt = sourceCov.on('change', function() {
 				switch (sourceCov.getState()) {
 				case 'ready':
-					sourceCov.unByKey(idEvt);
+					//sourceCov.unByKey(idEvt); Migration OL4
+					ol.Observable.unByKey(idEvt);
 					$( document ).trigger( 'evtSourceChargee', 'covoiturage' );
 					break;
 				case 'error':
-					sourceCov.unByKey(idEvt);
+					//sourceCov.unByKey(idEvt); Migration OL4
+					ol.Observable.unByKey(idEvt);
 					console.log('source loaded error');
 					break;
 				}
@@ -1592,7 +1649,7 @@ function updateDynPkg(idcarte,source) {
 function updateEvtTR(idcarte,source,options) {
 	var map = maps[idcarte];
 	try {
-		var searchUrl = (url.saisieChoisie=='local'?url.hostnameLocal+url.portWSTest:url.hostnameData);
+		var searchUrl = url.ws();
 		searchUrl += '/api/dyn/evtTR/json';
 
 		$.ajax({
@@ -1614,7 +1671,7 @@ function updateEvtTR(idcarte,source,options) {
 					delete evtCache[code];
 				}
 			}
-			$( document ).trigger( "evtMajDyn", 'evtTr' );
+			$( document ).trigger( "evtMajDyn", ['evtTr',data] );
 		});
 		
 
@@ -1652,7 +1709,7 @@ function parseEvtTr(code,evt,source,options) {
 
 	var bientot = moment(urlParams.heure).add(1, 'days').isAfter(ddeb) && !now.isAfter(ddeb);
 	var periode = {enCours:enCours,dansPeriode:dansPeriode,bientot:bientot};
-	var geom = new ol.geom.Point(ol.proj.transform([parseFloat(evt.longitude),parseFloat(evt.latitude)], gg, sm));
+	var geom = new ol.geom.Point(ol.proj.transform([parseFloat(evt.longitude),parseFloat(evt.latitude)], "EPSG:4326", "EPSG:3857"));
 	var feature = source.getFeatureById(id);
 	if (!feature) {
 		feature = new ol.Feature({
@@ -1746,7 +1803,7 @@ function updateDyn(nomLayer,idcarte,type,source) {
 	var type = type;
 	var source = source;
 	try {
-		var searchUrl = (url.saisieChoisie=='local'?url.hostnameLocal+url.portWSTest:url.hostnameData);
+		var searchUrl = url.ws();
 		searchUrl += '/api/dyn/'+type+'/json';
 
 		$.ajax({
@@ -1756,30 +1813,56 @@ function updateDyn(nomLayer,idcarte,type,source) {
 			dataType: 'json'
 		}).then(function(data) {
 			//map.render();
-			parseDyn(type,source,data,map);
+			if(type=='vh') parseDynVh(source,data,map);
+			else parseDyn(type,source,data,map);
 		});
 	} catch(e) {
 		console.error(e.lineNumber+' : '+e.message);
 	}
 }
+function parseDynVh(source,res,map){
+	var type='vh';
+	var features = source.getFeatures();
+	if(res.data) {
+		for(var i=0;i<res.data.mesures.length;i++){
+			var d = res.data.mesures[i];
+			var code = d.code;
+			var f = source.getFeatureById(code);
+			if (f && d) {
+				var codeFeature = f.get('code');
+				if (codeFeature == code) {
+					f.set('recordTime',new Date(res.time));
+					var latest = f.get('conditions_circulation');
+					if (!latest || latest != d.conditions_circulation) {
+						f.set('conditions_circulation',d.conditions_circulation);
+						f.getGeometry().changed();
+					}
 
+				}
+			}
+		}
+	}
+	$( document ).trigger( "evtMajDyn", [type, res] );
+}
 //--------------------------------------//
 // parseDyn
 //--------------------------------------//
-function parseDyn(type,source,data,map) {
+function parseDyn(type,source,res,map) {
+	var data = res;
+	
 	var features = source.getFeatures();
 	for (var code in data) {
 		var d = data[code][data[code].length-1];
 		var id;
-		if(type == 'omms')
-			id = type + '_' + code.toUpperCase();
-		else if(type != 'trr' && type != 'ligne' && type != 'omms' && type != 'PME')
+		if(type != 'trr' && type != 'ligne' && type != 'PME')
 			id = type.toUpperCase() + '_' + code.toUpperCase();
 		else
 			id = code;
 		var f = source.getFeatureById(id);
 		if (f && d) {
-			if (f.get('CODE') == code) {
+			var codeFeature = f.get('CODE');
+			if(!codeFeature) f.get('code');
+			if (codeFeature == code) {
 				var date = new Date(d.time);
 				f.set('DATE',date);
 				f.set('recordTime',date);
@@ -1788,12 +1871,7 @@ function parseDyn(type,source,data,map) {
 				if (f.get('nsv') != d.nsv_id) {
 					f.set('nsv',parseInt(d.nsv_id));
 					f.getGeometry().changed();
-				}
-				//HaMo
-				if (typeof(d.comsAvailable)!='undefined') f.set('comsAvailable',d.comsAvailable);
-				if (typeof(d.iRoadAvailable)!='undefined') f.set('iRoadAvailable',d.iRoadAvailable);
-				if (typeof(d.parking_space_free)!='undefined') f.set('parking_space_free',d.parking_space_free);
-				if (typeof(d.available_car)!='undefined') f.set('available_car',d.available_car);
+				}				
 			}
 		}
 	}
@@ -1810,8 +1888,8 @@ function parseDyn(type,source,data,map) {
 			}
 		}
 	}
-	$( document ).trigger( "evtMajDyn", type );
-	if(type =='PAR' || type =='PMV' || type =='CAM' || type =='omms') $( document ).trigger( "evtMajDynPopup", {type:type, map:map} );
+	$( document ).trigger( "evtMajDyn", [type, res] );
+	if(type =='PAR' || type =='PKG' || type =='PMV' || type =='CAM') $( document ).trigger( "evtMajDynPopup", {type:type, map:map} );
 }
 
 //--------------------------------------//
@@ -1863,20 +1941,65 @@ function getStylesTrr(feature,resolution) {
 	];	
 }
 
+//--------------------------------------//
+// getStylesVh
+//--------------------------------------//
+function getStylesVh(feature,resolution) {
+	if  (feature.get('type')=='S' && resolution > 20 ) return [];
+	
+	if(!feature.get('conditions_circulation')) return [];
+	var nsv = feature.get('conditions_circulation').substr(1,1);
+	var color;
+	if (nsv==1) color= VERT;
+	else if (nsv==2) color= ORANGE;
+	else if (nsv==3) color= ROUGE;
+	else if (nsv==4) color= '#000000';
+	else {
+		console.log('conditions_circulation incorrect : '+ nsv);
+		return [];
+	}
+
+	if(!styleCache['vhFond_'+nsv]) {
+		styleCache['vhFond_'+nsv] = new ol.style.Style({
+			stroke:new ol.style.Stroke({
+				color: '#000000',
+				width: 5,
+				opacity: 1
+			}),
+			zIndex: 1+nsv
+		});
+	}
+	if(!styleCache['vhCouleur_'+color+'_'+nsv]) {
+		styleCache['vhCouleur_'+color+'_'+nsv] = new ol.style.Style({
+			stroke: new ol.style.Stroke({
+				color: color,
+				width: 3,
+				opacity: 1
+			}),
+			zIndex: 2+nsv
+		});
+	}
+	
+	return styles = [
+		styleCache['vhFond_'+nsv],
+		styleCache['vhCouleur_'+color+'_'+nsv]
+	];	
+}
 
 //--------------------------------------//
 // chargeTrr
 //--------------------------------------//
 function chargeTrr(idcarte,source,niveau) {
 	var map = maps[idcarte];
-	var searchUrl =(url.saisieChoisie=='local'?url.hostnameLocal+url.portWSTest:url.hostnameData);
+	var searchUrl =url.ws();
 		searchUrl += '/api/troncons/poly?';
 		if (niveau == 0 || niveau == 1) {
 			searchUrl += 'niveau='+niveau;
 			if (niveau == 0) {
 				var idEvt = map.getView().on('change:resolution',function(e){
 					if(e.oldValue < 20) {
-						map.getView().unByKey(idEvt);
+						//map.getView().unByKey(idEvt); Migration OL4
+						ol.Observable.unByKey(idEvt);
 						chargeTrr(idcarte,source,1);
 					}
 				});
@@ -1892,7 +2015,7 @@ function chargeTrr(idcarte,source,niveau) {
 		
 		var format = new ol.format.Polyline({});
 		response.features.forEach(function (feature){
-			var coord = format.readGeometry(feature.properties.shape,{dataProjection:gg,featureProjection:sm}).getCoordinates();
+			var coord = format.readGeometry(feature.properties.shape,{dataProjection:"EPSG:4326",featureProjection:"EPSG:3857"}).getCoordinates();
 			var geom = new ol.geom.LineString(coord);
 			var id = feature.properties.CODE;
 			var opt = feature.properties;
@@ -1905,13 +2028,53 @@ function chargeTrr(idcarte,source,niveau) {
 		$( document ).trigger( 'evtSourceChargee', 'trr' );
 	});
 }
+//--------------------------------------//
+// chargeVh
+//--------------------------------------//
+function chargeVh(idcarte,source) {
+	var map = maps[idcarte];
+	var searchUrl =url.ws();
+		searchUrl += '/api/vh/poly';
+
+	$.ajax({
+		type: "GET",
+		url: searchUrl,
+		error:error,
+		dataType: 'json'
+	}).then(function(response) {
+		
+		var format = new ol.format.Polyline({});
+		response.features.forEach(function (feature,index){
+			var coord = [];
+			var geom;
+			if(Array.isArray(feature.properties.shape)) {
+				feature.properties.shape.forEach(function (s){
+					var c = format.readGeometry(s,{dataProjection:"EPSG:4326",featureProjection:"EPSG:3857"}).getCoordinates();
+					coord.push(c);
+				});
+				geom = new ol.geom.MultiLineString(coord);
+			} else {
+				coord = format.readGeometry(feature.properties.shape,{dataProjection:"EPSG:4326",featureProjection:"EPSG:3857"}).getCoordinates();
+				geom = new ol.geom.LineString(coord);
+			}
+			var id = feature.properties.code;
+			var opt = feature.properties;
+			opt.geometry = geom;
+			var f = new ol.Feature(opt);
+			f.setId(id);
+			source.addFeature(f);
+		});
+		
+		$( document ).trigger( 'evtSourceChargee', 'vh' );
+	});
+}
 
 //--------------------------------------//
 // chargeTrrC38
 //--------------------------------------//
 function chargeTrrC38(idcarte,source) {
 	var map = maps[idcarte];
-	var searchUrl =(url.saisieChoisie=='local'?url.hostnameLocal+url.portWSTest:url.hostnameData);
+	var searchUrl =url.ws();
 		searchUrl += '/api/dyn/trrC38/json?';
 
 	$.ajax({
@@ -1925,7 +2088,7 @@ function chargeTrrC38(idcarte,source) {
 			var feature = response[l][0];
 			var coordTab = [];
 			feature.shape.forEach(function (s){
-				var coord = format.readGeometry(s,{dataProjection:gg,featureProjection:sm}).getCoordinates();
+				var coord = format.readGeometry(s,{dataProjection:"EPSG:4326",featureProjection:"EPSG:3857"}).getCoordinates();
 				coordTab.push(coord);
 			});
 			var g = new ol.geom.MultiLineString(coordTab);
@@ -1943,7 +2106,43 @@ function chargeTrrC38(idcarte,source) {
 		$( document ).trigger( 'evtSourceChargee', 'trrC38' );
 	});
 }
+//--------------------------------------//
+// chargeTrrC38
+//--------------------------------------//
+function chargeVhC38(idcarte,source) {
+	var map = maps[idcarte];
+	var searchUrl =url.ws();
+		searchUrl += '/api/dyn/vhC38/json?';
 
+	$.ajax({
+		type: "GET",
+		url: searchUrl,
+		error:error,
+		dataType: 'json'
+	}).then(function(response) {
+		var format = new ol.format.Polyline({});
+		Object.keys(response).forEach(function (l){
+			var feature = response[l][0];
+			var coordTab = [];
+			feature.shape.forEach(function (s){
+				var coord = format.readGeometry(s,{dataProjection:"EPSG:4326",featureProjection:"EPSG:3857"}).getCoordinates();
+				coordTab.push(coord);
+			});
+			var g = new ol.geom.MultiLineString(coordTab);
+			var f = new ol.Feature({geometry:g});
+			var id = feature.CODE;
+			f.set('nsv',feature.nsv_id);
+			f.set('time',feature.time);
+			f.set('CODE',id);
+			f.set('type','troncon');
+			f.set('NIVEAU','-1');
+			f.setId(id);
+			source.addFeature(f);
+		});
+		
+		$( document ).trigger( 'evtSourceChargee', 'vhC38' );
+	});
+}
 //--------------------------------------//
 // getStylesIti
 //--------------------------------------//
@@ -1956,7 +2155,8 @@ function getStylesIti(feature,resolution,c) {
 	if (!isLegAffiche(i,j)) {
 		return false;
 	}
-	var leg=getLeg(i,j);
+	var leg = feature.get('legData');
+	if(!leg) leg = getLeg(i,j);
 	var maxRes = 5;
 	var image;
 	var text='';
@@ -1979,10 +2179,6 @@ function getStylesIti(feature,resolution,c) {
 	} else if (leg.mode=='WALK'){
 		color='#0000FF';
 		image= iconepieton;
-	} else if (leg.mode=='CUSTOM_MOTOR_VEHICLE'){
-		color='#009CD3';
-		image= iconeiroad;
-		maxRes=35;
 	} else if (leg.mode=='CAR'){
 		color='#FF0000';
 		image=iconevoiture;
@@ -2061,42 +2257,13 @@ $( document ).on( "evtMajDynPopup", {}, function( event, data ) {
 	var upToDate = true;
 	
 	var id = $(popupSelector + ' .PopupDetails-detailsCallback').attr('data-id');
-	
-	if(data.type.substr(0,4)=='omms') {
-		//var f = sourceOmms.getFeatureById(id);
-		var f = sourcePoints.getFeatureById(id);
-		if (f && f.get('recordTime')) {
-			upToDate = (Math.abs(urlParams.heure.getTime() - f.get('recordTime').getTime()) <= 1000*60*24) || urlParams.debug;
-			if (upToDate) {
-				$(popupSelector + ' .bs-picto-car').html(f.get('available_car'));
-				$(popupSelector + ' .bs-picto-park').html(f.get('parking_space_free'));
-				var bDispo = f.get('iRoadAvailable')!=2;
-				var dispo = (bDispo?lang.carteMobile.etatDisponible:lang.carteMobile.etatNonDisponible);
-				$(popupSelector + ' .bs-picto-iroad').html(dispo);
-				if(bDispo && $(popupSelector + ' .background-iroad-pas-dispo').length > 0) {
-					$(popupSelector + ' .background-iroad-pas-dispo').addClass('background-iroad-dispo').removeClass('background-iroad-pas-dispo');
-				}
-				if(!bDispo && $(popupSelector + ' .background-iroad-dispo').length > 0) {
-					$(popupSelector + ' .background-iroad-dispo').addClass('background-iroad-pas-dispo').removeClass('background-iroad-dispo');
-				}
-				var bDispo = f.get('comsAvailable')!=2;
-				var dispo = (bDispo?lang.carteMobile.etatDisponible:lang.carteMobile.etatNonDisponible);
-				$(popupSelector + ' .bs-picto-comms').html(dispo);
-				if(bDispo && $(popupSelector + ' .background-comms-pas-dispo').length > 0) {
-					$(popupSelector + ' .background-comms-pas-dispo').addClass('background-comms-dispo').removeClass('background-comms-pas-dispo');
-				}
-				if(!bDispo && $(popupSelector + ' .background-comms-dispo').length > 0) {
-					$(popupSelector + ' .background-comms-dispo').addClass('background-comms-pas-dispo').removeClass('background-comms-dispo');
-				}
-			}
-		}
-	}
+
 	if(data.type == 'PKG' || data.type == 'PAR') {
 		var f = sourcePoints.getFeatureById(id);
 		if (f && f.get('recordTime')) {
 			upToDate = (Math.abs(urlParams.heure.getTime() - f.get('recordTime').getTime()) <= 1000*60*24) || urlParams.debug;
 			upToDate = (upToDate && f.get('dispo') != -1) || urlParams.debug;
-			var dispo = (upToDate?f.get('dispo'):''); 
+			var dispo = (upToDate?f.get('dispo' ) + ' ' + lang.carteMobile.placesdisponibles:''); 
 			$(popupSelector + ' .dyn .dispo').html(dispo);
 		} else {
 			upToDate = false;
@@ -2109,7 +2276,7 @@ $( document ).on( "evtMajDynPopup", {}, function( event, data ) {
 			upToDate = (upToDate && f.get('messages') != lang.carteMobile.messagePMV) || urlParams.debug;
 			var details = '';
 			if (upToDate) {
-				var messages = f.get('messages').replace(/\|/gi,'');
+				var messages = f.get('messages').replace(/\|/gi,'<br>').replace('HEURE',moment(urlParams.heure).format('hh:mm'));
 				messages = messages.split('$');
 				for (var j=0;j<messages.length;j++) {
 					details+='<p>'+messages[j]+'</p>';
@@ -2129,7 +2296,7 @@ $( document ).on( "evtMajDynPopup", {}, function( event, data ) {
 			var details = '';
 			if (upToDate) {
 				
-				searchUrl = (url.saisieChoisie=='local'?url.hostnameLocal+url.portWSTest:url.hostnameData);
+				searchUrl = url.ws();
 				searchUrl += '/api/cam/time?';
 				searchUrl += 'name=' + f.get('CODE') + '.mp4&key='+ Math.random();
 				
@@ -2142,7 +2309,7 @@ $( document ).on( "evtMajDynPopup", {}, function( event, data ) {
 					upToDate = (Math.abs(urlParams.heure.getTime() - response*1000) <= 1000*60*24) || urlParams.debug;
 					
 					if (upToDate) {
-						searchUrl = (url.saisieChoisie=='local'?url.hostnameLocal+url.portWSTest:url.hostnameData);
+						searchUrl = url.ws();
 						searchUrl += '/api/cam/video?name=' + f.get('CODE') + '.mp4&key='+ Math.random();
 						details = '<video width="320" height="240" controls loop><source src="' + searchUrl + '" type="video/mp4">' + lang.carteMobile.messageCAM + '</video>';
 					} else {
@@ -2163,11 +2330,10 @@ $( document ).on( "evtMajDynPopup", {}, function( event, data ) {
 function majPopup(map) {
 	urlParams.heure = new Date;
 	var typePopup = $(map.popupSelector + ' .PopupDetails-detailsCallback .dyn').attr('data-type');
-	if(typePopup == 'PKG') updateDynPkg('map',sourcePoints);
-	if(typePopup == 'PMV') updateDynPmv('map',sourcePoints);
+	if(typePopup == 'PMV') updateDyn('PMV',map.mapSelector,'PMV',sourcePoints);
 	if(typePopup == 'CAM') $( document ).trigger( "evtMajDynPopup", {type:'CAM', map:map} );
 	if(typePopup == 'PAR') $( document ).trigger( "evtMajDynPopup", {type:'PAR', map:map} );
-	if(typePopup == 'omms') $( document ).trigger( "evtMajDynPopup", {type:'omms', map:map} );
+	if(typePopup == 'PKG') $( document ).trigger( "evtMajDynPopup", {type:'PKG', map:map} );
 }
 
 //--------------------------------------//
@@ -2186,7 +2352,7 @@ function placePosition(pos,idcarte,layerName,typeDep) {
 	var layer = getLayer(idcarte,layerName);
 	var source =layer.getSource();
 	var f = source.getFeatureById(typeDep);
-	var geom = new ol.geom.Point(ol.proj.transform([pos.coords.longitude,pos.coords.latitude], gg, sm));
+	var geom = new ol.geom.Point(ol.proj.transform([pos.coords.longitude,pos.coords.latitude], "EPSG:4326", "EPSG:3857"));
 	if (!f) {
 		var fe = new ol.Feature({
 			'geometry': geom,
@@ -2210,7 +2376,7 @@ function posSucces(position,mapName,layerName){
 	if (estDansRectangle(position.coords.longitude, position.coords.latitude)) {
 		var map=getMap(mapName);
 		placePosition(position,mapName,layerName,'search')
-		map.getView().setCenter(ol.proj.transform([position.coords.longitude,position.coords.latitude], gg, sm));
+		map.getView().setCenter(ol.proj.transform([position.coords.longitude,position.coords.latitude], "EPSG:4326", "EPSG:3857"));
 		map.getView().setZoom(15);
 	} else {
 		alert(lang.alerteHorsRectangle);

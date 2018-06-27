@@ -61,32 +61,6 @@ var paramsModesOTP = {
 		triangleTimeFactor:0.33,
 		triangleSafetyFactor:0.34
 	},
-	carSharing:{
-		mode:'WALK,CUSTOM_MOTOR_VEHICLE',
-		carParkCost:60 * 15,
-		showIntermediateStops:true,
-		minTransferTime:60,
-		boardSlack:30,
-		alightSlack:30,
-		numItineraries:3,
-		walkBoardCost:5*60,
-		bikeBoardCost:10*60,
-		useCarRental:true,
-		useCustomMotorVehicleCarRental:true
-	},
-	carSharingTC:{
-		mode:'WALK,TRANSIT,CUSTOM_MOTOR_VEHICLE',
-		carParkCost:60 * 15,
-		showIntermediateStops:true,
-		minTransferTime:60,
-		boardSlack:30,
-		alightSlack:30,
-		numItineraries:1,
-		walkBoardCost:5*60,
-		bikeBoardCost:10*60,
-		useCarRental:true,
-		useCustomMotorVehicleCarRental:true
-	},
 	carPR:{
 		mode:'WALK,CAR,TRANSIT',
 		carParkCost:60 * 15,
@@ -96,15 +70,67 @@ var paramsModesOTP = {
 		alightSlack:30,
 		numItineraries:3,
 		walkBoardCost:5*60,
-		bikeBoardCost:10*60
+		bikeBoardCost:10*60,
 	},
 	car:{
 		mode:'CAR',
-		carParkCost:60 * 15
+		carParkCost:60 * 15,
+		carDropoffTime:120
 	},
 	walkSpeed:1.1112,
-	walkReluctance:2
+	walkReluctance:5
+	//walkReluctance:2
 };
+if (urlParams.forceOtp2) {
+	paramsModesOTP.carPR={
+		mode:'WALK,CAR_PARK,TRANSIT',
+//		carParkCost:60 * 15,
+		showIntermediateStops:true,
+		minTransferTime:60,
+		transferPenalty:1800,
+		boardSlack:30,
+		alightSlack:30,
+		numItineraries:1,
+		walkBoardCost:5*60,
+		bikeBoardCost:10*60,
+		//maxPreTransitTime:60*60,
+		//maxWalkDistance:1000,
+		carDropoffTime:120,
+		maxTransfers:1
+	};
+	paramsModesOTP.bike={
+		mode:'BICYCLE',
+		//bikeSpeed:5.56,//20km/h
+		bikeSpeed:4.44,//16km/h
+		optimize:'TRIANGLE',
+		triangleSlopeFactor:0.33,
+		triangleTimeFactor:0.33,
+		triangleSafetyFactor:0.34,
+		stairsReluctance:4.0
+	};
+	paramsModesOTP.bikeTransit={
+		mode:'BICYCLE,TRANSIT',
+		bikeSwitchCost:5*60,
+		//bikeSpeed:5.56,//20km/h
+		bikeSpeed:4.44,//16km/h
+		optimize:'TRIANGLE',
+		triangleSlopeFactor:0.33,
+		triangleTimeFactor:0.33,
+		triangleSafetyFactor:0.34,
+		stairsReluctance:4.0
+	};
+	paramsModesOTP.transit={
+		mode:'WALK,TRANSIT',
+		showIntermediateStops:true,
+		minTransferTime:60,//transferSlack
+		boardSlack:30,
+		alightSlack:30,
+		transferPenalty:60,
+		numItineraries:3,
+		walkBoardCost:5*60,
+		bikeBoardCost:10*60
+	};
+}
 var paramsPmr ={
 	maxWalkDistance:1000,
 	wheelchair:true
@@ -136,7 +162,7 @@ function onClickCarte(coord) {
 		return;
 	}
 	placeDepArr(type,coord);
-	var coordDeg = ol.proj.transform(coord,sm , gg);
+	var coordDeg = ol.proj.transform(coord,"EPSG:3857" , "EPSG:4326");
 	var lonlat = coordDeg[1]+','+coordDeg[0];
 	getClickCarte(type,lonlat);
 }
@@ -148,9 +174,10 @@ function finDrag(e,feature) {
 	try{
 		dragEnCours=false;
 		var type = feature.get('typeDep');
-		var coordDeg = ol.proj.transform(feature.getGeometry().getCoordinates(),sm , gg);
+		var coordDeg = ol.proj.transform(feature.getGeometry().getCoordinates(),"EPSG:3857" , "EPSG:4326");
 		var lonlat = coordDeg[1]+','+coordDeg[0];
 		getClickCarte(type,lonlat);
+		unSelectItiLogoFav();
 	} catch(ev){
 		console.log(ev.msg+' : '+ev.lineNumber);
 	}
@@ -161,15 +188,28 @@ function finDrag(e,feature) {
 //--------------------------------------//
 function placeDepArr(type,coord) {
 	var geom = new ol.geom.Point(coord);
-	if (sourceDepArr[type])
-		map.featuresOverlay.removeFeature(sourceDepArr[type]);
+	
+	/*if (sourceDepArr[type]) {//migration OL4
+		console.log(sourceDepArr[type]);
+		map.featuresOverlay.getSource().removeFeature(sourceDepArr[type]);
+	}*/
+	
+	var featureOldById = map.featuresOverlay.getSource().getFeatureById(type);
+	
+	if (featureOldById) {
+		map.featuresOverlay.getSource().removeFeature(featureOldById);
+	}
 	
 	var fe = new ol.Feature({
 		'geometry': geom,
 		'typeDep':type,
 		'type':type
 	});
-	map.featuresOverlay.addFeature(fe);
+	
+	fe.setId(type);
+	
+	map.featuresOverlay.getSource().addFeature(fe);
+	
 	sourceDepArr[type] = fe;
 	fe.on('change',function(e){ 
 		try{
@@ -206,6 +246,7 @@ function getClickCarte(depOuArr,lonlat) {
 	$('#'+depOuArr).val('');
 	$('#'+depOuArr).attr('data-commune','');
 	setParamsForm();
+	unSelectItiLogoFav();
 }
 
 //--------------------------------------//
@@ -221,6 +262,7 @@ function SaisieReussie(typeDepArr,item) {
 	$('#'+typeDepArr).parents('.input-group').toggleClass('has-error',false);
 	$('#'+typeDepArr).attr('data-maPosition',false);
 
+	unSelectItiLogoFav();
 	
 	setTimeout(function () {$('#'+typeDepArr).blur();}, 0); //cache le clavier sur mobile
 	
@@ -229,7 +271,7 @@ function SaisieReussie(typeDepArr,item) {
 	} else {
 		$('.help-'+typeDepArr).remove();
 	}
-	placeDepArr(typeDepArr,ol.proj.transform([item.lon,item.lat],gg , sm));
+	placeDepArr(typeDepArr,ol.proj.transform([item.lon,item.lat],"EPSG:4326" , "EPSG:3857"));
 	lanceCalculAuto();
 }
 
@@ -265,8 +307,7 @@ function initForm() {
 		//console.log(moment().format("HH:mm:ss.SSS") + ' initForm 1');
 		
 		$('#datepickerIti').datetimepicker({
-					locale: urlParams.lang,
-
+					locale: lang.momentLocale,
 					format: 'DD/MM/YYYY',
 					allowInputToggle:true,
 					defaultDate:urlParams.date,
@@ -275,7 +316,7 @@ function initForm() {
 					//showTodayButton:true
 				});
 		$('#timepickerIti').datetimepicker({
-					locale: urlParams.lang,
+					locale: lang.momentLocale,
 
 					format: 'HH:mm',
 					allowInputToggle:true,
@@ -293,17 +334,8 @@ function initForm() {
 
 		//console.log(moment().format("HH:mm:ss.SSS") + ' initForm 2');
 		//modes spécifiques (Hamo, Vélo,tc,voiture)
-		if (urlParams.hamo) {
+		if (urlParams.velo) {
 			$('#car > input').prop('checked',false);
-			$('#carSharing > input').prop('checked',true);
-			$('#transit > input').prop('checked',true);
-			$('#transit_pmr > input').prop('checked',false);
-			$('#walk > input').prop('checked',false);
-			$('#bike > input').prop('checked',false);
-			$('#pmr > input').prop('checked',false);
-		} else if (urlParams.velo) {
-			$('#car > input').prop('checked',false);
-			$('#carSharing > input').prop('checked',false);
 			$('#transit > input').prop('checked',false);
 			$('#transit_pmr > input').prop('checked',false);
 			$('#walk > input').prop('checked',false);
@@ -311,7 +343,6 @@ function initForm() {
 			$('#pmr > input').prop('checked',false);
 		} else if (urlParams.tc) {
 			$('#car > input').prop('checked',false);
-			$('#carSharing > input').prop('checked',false);
 			$('#transit > input').prop('checked',true);
 			$('#transit_pmr > input').prop('checked',true);
 			$('#walk > input').prop('checked',false);
@@ -319,29 +350,24 @@ function initForm() {
 			$('#pmr > input').prop('checked',false);
 		} else if (urlParams.voiture) {
 			$('#car > input').prop('checked',true);
-			$('#carSharing > input').prop('checked',false);
 			$('#transit > input').prop('checked',false);
 			$('#transit_pmr > input').prop('checked',false);
 			$('#walk > input').prop('checked',false);
 			$('#bike > input').prop('checked',false);
 			$('#pmr > input').prop('checked',false);
-		}
-		
+		}		
 		//gestion des combinaisons de modes
 		$('#modes input, #modesPieton input').click(function(e){
 			e.stopImmediatePropagation();
 			//$(this).input('toggle');
 			
 			var car=$('#car > input').prop('checked');
-			var carSharing=$('#carSharing > input').prop('checked');
 			var transit=$('#transit > input').prop('checked') || $('#transit_pmr > input').prop('checked');
 			var walk=$('#walk > input').prop('checked');
 			var bike=$('#bike > input').prop('checked');
 			var pmr=$('#pmr > input').prop('checked');
 			
 			switch(e.target.value) {
-				case 'carSharing':
-					break;
 				case 'car':
 					break;
 				case 'transit':
@@ -363,7 +389,7 @@ function initForm() {
 				default:
 			}
 						
-			if (!carSharing && !car && !transit && !walk  && !bike) {
+			if (!car && !transit && !walk  && !bike) {
 				$('#transit > input').prop('checked',true);
 				$('#walk > input').prop('checked',true);
 			}			
@@ -403,7 +429,6 @@ function initForm() {
 				
 		});
 
-		
 		$('#togglePanelsParams').click(toggleParams);
 		$('#togglePanelsResultats').click(toggleResultats);
 		
@@ -525,8 +550,8 @@ function erreurPosition(error) {
 // maPosition
 //--------------------------------------//
 function maPosition(position) {
-	if (app.watchID) navigator.geolocation.clearWatch(app.watchID);
-	var coord = ol.proj.transform([position.coords.longitude,position.coords.latitude],gg , sm);
+	if ((typeof(app) != 'undefined') && app.watchID) navigator.geolocation.clearWatch(app.watchID);
+	var coord = ol.proj.transform([position.coords.longitude,position.coords.latitude],"EPSG:4326" , "EPSG:3857");
 	var type='dep';
 	$('#' + type).attr('data-maPosition',true);
 	placeDepArr(type,coord);
@@ -539,7 +564,6 @@ function maPosition(position) {
 //--------------------------------------//
 function geolocClick() {
 	if (!bAttente) {
-		console.log("geolocClick");
 		$('#dep').val(lang.rechercheEnCours);
 		navigator.geolocation.getCurrentPosition(maPosition, erreurPosition,{maximumAge: 10000, timeout: 10000, enableHighAccuracy:true});
 		fct_attente(true,'geoloc');
@@ -563,13 +587,13 @@ try{
 			$('#dep').attr('data-lonlat',urlParams.lonlatDep);
 			if(urlParams.dep) $('#dep').val(urlParams.dep);
 			if(urlParams.communeDep) $('#dep').attr('data-commune',urlParams.communeDep);
-			placeDepArr("dep",ol.proj.transform([parseFloat(urlParams.lonlatDep.split(',')[1]),parseFloat(urlParams.lonlatDep.split(',')[0])],gg , sm));
+			placeDepArr("dep",ol.proj.transform([parseFloat(urlParams.lonlatDep.split(',')[1]),parseFloat(urlParams.lonlatDep.split(',')[0])],"EPSG:4326" , "EPSG:3857"));
 		}
 		if(urlParams.lonlatArr!="0,0") {
 			$('#arr').attr('data-lonlat',urlParams.lonlatArr);
 			if(urlParams.arr) $('#arr').val(urlParams.arr);
 			if(urlParams.communeArr) $('#arr').attr('data-commune',urlParams.communeArr);
-			placeDepArr("arr",ol.proj.transform([parseFloat(urlParams.lonlatArr.split(',')[1]),parseFloat(urlParams.lonlatArr.split(',')[0])],gg , sm));
+			placeDepArr("arr",ol.proj.transform([parseFloat(urlParams.lonlatArr.split(',')[1]),parseFloat(urlParams.lonlatArr.split(',')[0])],"EPSG:4326" , "EPSG:3857"));
 		}
 		
 		completeDepArr('dep');
@@ -581,10 +605,21 @@ try{
 			$('#transit_pmr').toggleClass('active',true);
 			$('#ongletPmr').trigger('click');
 		}
+		
+		if (urlParams.centerDep && urlParams.lonlatDep!="0,0") {
+			map.getView().setCenter(ol.proj.transform([parseFloat(urlParams.lonlatDep.split(',')[1]), parseFloat(urlParams.lonlatDep.split(',')[0])], "EPSG:4326", "EPSG:3857"));
+			urlParams.centerDep = false;
+		} 
+		else if (urlParams.centerArr && urlParams.lonlatArr!="0,0") {
+			map.getView().setCenter(ol.proj.transform([parseFloat(urlParams.lonlatArr.split(',')[1]), parseFloat(urlParams.lonlatArr.split(',')[0])], "EPSG:4326", "EPSG:3857"));
+			urlParams.centerArr = false;
+		}		
 		lanceCalculAuto();
+		
+		
 
 	} catch(e) {
-		console.log(e.msg+' : '+e.lineNumber);
+		console.log(e);
 		fct_attente(false);
 	}
 }
@@ -618,12 +653,11 @@ function validateParamsForm() {
 function getParamsForm() {
 
 	var car=$('#car > input').prop('checked');
-	var carSharing=$('#carSharing> input').prop('checked');
 	var transit=$('#transit> input').prop('checked');
 	var walk=$('#walk> input').prop('checked');
 	var bike=$('#bike> input').prop('checked') && $('#ongletPieton').hasClass('active');
 	var pmr = $('#pmr> input').prop('checked') && $('#ongletPmr').hasClass('active');
-	var keyModes = carSharing+'|'+car+'|'+transit+'|'+walk+'|'+bike;
+	var keyModes = car+'|'+transit+'|'+walk+'|'+bike;
 	var modes = [];
 	
 	if (walk && !transit) modes.push(paramsModesOTP.walk);
@@ -635,13 +669,7 @@ function getParamsForm() {
 		modes.push(paramsModesOTP.car);
 		modes.push(paramsModesOTP.carPR);
 	}
-	if(carSharing) {
-		modes.push(paramsModesOTP.carSharing);
-	}
-	if(carSharing && transit) {
-		modes.push(paramsModesOTP.carSharingTC);
-	}
-
+	
 	var urlPlan =  url.otp() + '/plan?routerId='+url.routerChoisi;
 
 	var paramsOTP = {
@@ -727,10 +755,8 @@ function lanceCalculAuto() {
 function lanceCalcul() {
 	if (!validateParamsForm()) return;
 	getParamsForm();
-	sourceIti.clear();
-	fct_attente(true,'calcul');	
+	sourceIti.clear();fct_attente(true,'calcul');	
 	lanceRequete();
-
 }
 
 //--------------------------------------//
@@ -886,9 +912,14 @@ function prepareResultats(key) {
 				for (var a=0;a< leg.alerts.length;a++) {
 					if (leg.alerts[a].alertHeaderText.someTranslation != "PME") {
 						if (leg.alerts[a].alertDescriptionText)
-							alerts+=leg.alerts[a].alertDescriptionText.someTranslation+'<br/>';
-						else
-							alerts+=leg.alerts[a].someTranslation+'<br/>';
+							if(leg.alerts[a].alertDescriptionText.someTranslation)
+								alerts+=leg.alerts[a].alertDescriptionText.someTranslation+'<br/>';
+							else
+								alerts+=leg.alerts[a].alertDescriptionText+'<br/>';
+						else if(leg.alerts[a].someTranslation)
+								alerts+=leg.alerts[a].someTranslation+'<br/>';
+						else 
+							alerts+=leg.alerts[a].alertHeaderText;
 					}
 				}
 			}
@@ -906,13 +937,13 @@ function prepareResultats(key) {
 			return false||urlParams.debug;
 		}
 		//filtre les resultat iRoad sans iRoad si dans les autres trajets si on a du TC
-		if(iti.typeTrajet.substr(0,16) != 'Voiture partagée' && iti.typeTrajet.substr(0,16) != 'Voiture partagée' && iti.requestParameters.mode=='WALK,TRANSIT,CUSTOM_MOTOR_VEHICLE') {
+		/*if(iti.typeTrajet.substr(0,16) != 'Voiture partagée' && iti.typeTrajet.substr(0,16) != 'Voiture partagée' && iti.requestParameters.mode=='WALK,TRANSIT,CUSTOM_MOTOR_VEHICLE') {
 			for (var j=0; j<resultats[keyAAfficher].itineraries.length-1; j++) {
 				if (resultats[keyAAfficher].itineraries[j].typeTrajet == "TC" && resultats[keyAAfficher].itineraries[j].requestParameters.mode!='WALK,TRANSIT,CUSTOM_MOTOR_VEHICLE')
 					return false||urlParams.debug;
-			}		
+			}
 			return false||urlParams.debug;
-		}		
+		}*/
 		return true;
 	});
 }
@@ -929,7 +960,7 @@ function initSwipe(element) {
 //--------------------------------------//
 function afficheResultats() {
 	fct_attente(false,'calcul');
-	if(isTaille('xs')) toggleParams(false,true);
+	if(isTaille('xs') || isTaille('xxs')) toggleParams(false,true);
 	$('#iti').toggle(true);
 	$('#itiDetails').toggle(false);
 	//$('#iti > .list-group > li:not(:first-child)').remove();
@@ -1098,19 +1129,10 @@ function afficheDetail(indexResultat) {
 				var numLigne = leg.route;
 				if ($.isNumeric(numLigne) && numLigne>=40 && numLigne<=70 && numLigne!=69) {
 
-					//recherche de la correspondance tag...
-					
-
-					var codeTag = correspondanceNumTag(numLigne);
 					var lienTag ="";
 					var hRefTag ="";
-					
-					if ($.isNumeric(numLigne))
-							lienTag = "http://www.tag.fr/TPL_CODE/TPL_FICHEHORAIRELISTE/ID_FICHESHORAIRES/%1/576-fiches-horaires-nouveau-reseau.htm#fiche_%1";
-					else
-							lienTag = "http://www.tag.fr/TPL_CODE/TPL_FICHEHORAIRELISTE/ID_FICHESHORAIRES/%1/180-fiches-horaires.htm#fiche_%1"
-
-					lienTag = lienTag.replace(/%1/g, codeTag);
+										
+					lienTag =  url.ws() + '/api/ficheHoraires/pdf?route=SEM:'+numLigne;
 					
 					hRefTag = '<a href="' + lienTag + '" target="_blank"> ' + lang.iti.flexo + '</a>';
 
@@ -1196,16 +1218,22 @@ function remplissageDonneesGenerales(elem,iti,container) {
 	elem.find('.hdep .heure').text(hdep.format('HH:mm'));
 	elem.find('.harr .heure').text(harr.format('HH:mm'));
 
-	elem.find('.headIti .hdep').text(hdep.format('HH:mm'));
-	elem.find('.headIti .harr').text(harr.format('HH:mm'));
 
-
-
-	elem.find('.hdep .hPrefixLong').text(lang.itineraire['depart'] +': ');
-	elem.find('.harr .hPrefixLong').text(lang.itineraire['arrivee'] +': ');
-	elem.find('.hdep .hPrefixCourt').text(lang.itineraire['dep'] +': ');
-	elem.find('.harr .hPrefixCourt').text(lang.itineraire['arr'] +': ');
-
+	if (elem.hasClass('hPrefixLong')) {
+			elem.find('.headIti .hdep').text(hdep.format('HH:mm'));
+			elem.find('.headIti .harr').text(harr.format('HH:mm'));
+			elem.find('.hdep .hPrefixLong').text(lang.itineraire['depart'] +': ');
+			elem.find('.harr .hPrefixLong').text(lang.itineraire['arrivee'] +': ');
+	} else if (elem.hasClass('hPrefixCourt')) {
+			elem.find('.headIti .hdep').text(hdep.format('HH:mm'));
+			elem.find('.headIti .harr').text(harr.format('HH:mm'));
+			elem.find('.hdep .hPrefixCourt').text(lang.itineraire['dep'] +': ');
+			elem.find('.harr .hPrefixCourt').text(lang.itineraire['arr'] +': ');
+	} else {
+			elem.find('.headIti .hdep').text(lang.itineraire['depart'] +': ' + hdep.format('HH:mm'));
+			elem.find('.headIti .harr').text(lang.itineraire['arrivee'] +': ' + harr.format('HH:mm'));
+	}
+		
 	
 	elem.find('.duree').text(lang.itineraire['duree'] +': ' + formatSecondes(duree));
 	
@@ -1403,11 +1431,12 @@ function respondCanvas(e){
 	var profil = e.find('.profil');
 	var width = $('#itiParams').width();
 	//if (width > ($('body').width()-150)) width = $('body').width()-200;
-	if (isTaille('xs')) width = $('body').width()-200;
+	if (isTaille('xs') || isTaille('xxs')) width = $('body').width()-200;
 	else if (isTaille('sm')) width = width-150;
 	else if (isTaille('md')) width = width-50;
 	else if (isTaille('lg')) width = width-15;
-	else width = $('body').width()-200;
+	//else width = $('body').width()-200;
+	else width = width-15;
 	profil.find('canvas').attr('width', width ); //max width
 	//profil.find('canvas').attr('height', profil.height() ); //max height
 
@@ -1430,8 +1459,6 @@ function calculCO2(mode, distance) {
 	  return Math.round(distance/1000*144);
 	case 'CAR':
 	  return Math.round(distance/1000*205);
-	case 'CUSTOM_MOTOR_VEHICLE':
-	  return 0;
 	default:
 	  return 0;
 	};
@@ -1445,8 +1472,6 @@ function typeTrajet(typeTrajetGlobal,mode) {
 		switch(mode) {
 			case 'CAR':
 				return 'Voiture';
-			case 'CUSTOM_MOTOR_VEHICLE':
-				return 'Voiture partagée';
 			case 'RAIL':
 			case 'TRAM':
 			case 'BUS':
@@ -1465,8 +1490,6 @@ function typeTrajet(typeTrajetGlobal,mode) {
 				return 'TC';
 			case 'CAR':
 				return 'Voiture';
-			case 'CUSTOM_MOTOR_VEHICLE':
-				return 'Voiture partagée';
 			default : return typeTrajetGlobal;
 		}
 	}
@@ -1474,8 +1497,6 @@ function typeTrajet(typeTrajetGlobal,mode) {
 		switch(mode) {
 			case 'CAR':
 				return 'VoitureTC';
-			case 'CUSTOM_MOTOR_VEHICLE':
-				return 'Voiture partagéeTC';
 			default : return typeTrajetGlobal;
 		}
 	}
@@ -1723,7 +1744,7 @@ function traceLeg(i,j) {
 	  lon = lon + rLon.number * 1e-5;
 	  strIndex = rLon.index;
 
-	  var p = ol.proj.transform([lon,lat], gg, sm);
+	  var p = ol.proj.transform([lon,lat], "EPSG:4326", "EPSG:3857");
 	  points.push(p);
 	}
 	var geom = new ol.geom.LineString(points);
@@ -1759,7 +1780,7 @@ function traceLeg(i,j) {
 	if(leg.intermediateStops) {
 		for (var k=0; k<leg.intermediateStops.length; k++) {
 			var stop = leg.intermediateStops[k];
-			var geom = new ol.geom.Point(ol.proj.transform([stop.lon,stop.lat], gg, sm));
+			var geom = new ol.geom.Point(ol.proj.transform([stop.lon,stop.lat], "EPSG:4326", "EPSG:3857"));
 			var f;
 
 			f = new ol.Feature({
@@ -1877,11 +1898,11 @@ function errorOTP(xhr, status, erreur) {
 $('#rowOptions').click (function() {
 	if( $('#itiOptions').hasClass('in')) {
 			$('#itiOptions').collapse('hide');
-			$('#rowOptions h5').empty().append("<span class='glyphicon glyphicon-chevron-down'></span>" + lang.iti.plusDOption);
+			$('#rowOptions h2').empty().append("<span class='glyphicon glyphicon-chevron-down'></span>" + lang.iti.plusDOption);
 		}
 	else  {
 			$('#itiOptions').collapse('show');
-			$('#rowOptions h5').empty().append("<span class='glyphicon glyphicon-chevron-up'></span> Moins d'options");
+			$('#rowOptions h2').empty().append("<span class='glyphicon glyphicon-chevron-up'></span>" + lang.iti.moinsDOption);
 		}
 	}
 );
@@ -1907,34 +1928,51 @@ function imprimeFeuilleDeRoute() {
 }
 
 //--------------------------------------//
+// downloadFile
+// Function to download data to a file
+//--------------------------------------//
+function downloadFile(data, filename, type) {
+    var a = document.createElement("a"),
+        file = new Blob([data], {type: type});
+    if (window.navigator.msSaveOrOpenBlob) // IE10+
+        window.navigator.msSaveOrOpenBlob(file, filename);
+    else { // Others
+        var url = URL.createObjectURL(file);
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function() {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);  
+        }, 0); 
+    }
+}
+
+//--------------------------------------//
 // exportGPX
 //--------------------------------------//
 function exportGPX(_this) {
 	try {
 		var res = $('#itiDetails .leg[data-resultat]').first().attr('data-resultat');
-		
 		var features = sourceIti.getFeatures().filter(function( f ) {
 			return (f.get('iti') == res);
 		});
-		
 		var format = new ol.format.GPX();
-		var gpx = format.writeFeatures(features,{dataProjection:gg,featureProjection:sm});
+		var gpx = format.writeFeatures(features,{dataProjection:"EPSG:4326",featureProjection:"EPSG:3857"});
 		//On supprime les balises <wpt> afin que le format soit supporté par Garmin (MapSource)
 		var wpt = $(gpx).find('wpt').remove();
 		$(gpx).prepend(wpt);
-		
 		$(gpx).attr('version','1.1');
 		$(gpx).attr('creator','MetroMobilite');
-		
 		gpx = (new XMLSerializer()).serializeToString($.parseXML( gpx ));
-		
 		var gpxData = 'data:application/gpx+xml;charset=utf-8,' + encodeURIComponent( gpx );
-		$(_this).attr( { 'href': gpxData ,'download': 'traceGPX.gpx' } );
-
+		//$(_this).attr( { 'href': gpxData ,'download': 'traceGPX.gpx' } );//Non supporté par IE
+		downloadFile(gpxData, 'traceGPX.gpx', 'text/plain')
 		return "";
 	    	    
 	} catch(e) {
-		//console.log(e.msg+' : '+e.lineNumber);
+		console.log(e.msg+' : '+e.lineNumber);
 		return "";
 	}
 }
@@ -1945,6 +1983,7 @@ function exportGPX(_this) {
 //----------------------------------------//
 function estDansZoneStationnement(ville) {
 	try {
+		if (!ville) return false;
 		var villeU = ville.latinise().toUpperCase();
 		return (villeU.indexOf("GRENOBLE")==0 || 
 			villeU.indexOf("SEYSSINET-PARISET")==0 ||
@@ -1962,97 +2001,6 @@ function estDansZoneStationnement(ville) {
 		}
 }
 
-//----------------------------------------//
-// correspondanceNumTag
-// Retour le code ligne équivalent de la tag.
-//----------------------------------------//
-function correspondanceNumTag(numLigne)
-{
-	var correspondance = {
-		"40" : 78,
-		"41" : 79,	
-		"42" : 80,
-		"43" : 81,
-		"44" : 82,
-		"45" : 83, 
-		"46" : 84,
-		"47" : 85,
-		"48" : 86,
-		"49" : 87,
-		"50" : 88,
-		"51" : 89,
-		"52" : 90,
-		"53" : 91,
-		"54" : 92,
-		"55" : 93,
-		"56" : 94,
-		"57" : 105,
-		"58" : 104,
-		"60" : 95,
-		"61" : 98,	
-		"62" : 99,	
-		"63" : 96,
-		"65" : 97,	
-		"66" : 100,
-		"67" : 101,
-		"68" : 102,
-		"69" : 103,
-		"F0" : 40,
-		"F1" : 44,
-		"F2" : 45,
-		"F55": 52,
-		"F56": 53
-		};
-		
-	var val = correspondance[numLigne];
-	
-	if (val) 
-		return val; 
-	else 
-		return 0;
-		
-}
-
-//--------------------------------------//
-// formatSecondes
-//--------------------------------------//
-function formatSecondes(s, fo) { // seconds, format
-	  var d=h=m=0;
-	  
-	  if (s>=86400) {
-		d=Math.floor(s/86400);
-		s-=d*86400;}
-	  if (s>=3600) {
-		h=Math.floor(s/3600);
-		s-=h*3600;}
-	  if (s>=60) {
-		m=Math.floor(s/60);
-		s-=m*60;}
-	  
-	  if (fo != null) {
-		var f = fo.replace('dd', (d<10)?"0"+d:d);
-		f = f.replace('d', d);
-		f = f.replace('hh', (h<10)?"0"+h:h);
-		f = f.replace('h', h);
-		f = f.replace('mm', (m<10)?"0"+m:m);
-		f = f.replace('m', m);
-		f = f.replace('ss', (s<10)?"0"+s:s);
-		f = f.replace('s', s);
-	  }
-	  else {
-		if ((d==0)&&(h==0)&&(m==0)&&(s==0)) return "0 min";
-		if ((d==0)&&(h==0)&&(m==1)&&(s==0)) return "1 min";
-		if ((d==0)&&(h==0)&&(m>1)&&(s==0)) return (m+" min");
-		if ((d==0)&&(h==1)&&(m==0)&&(s==0)) return "1 h";
-		
-		if ((d==0)&&(h==0)&&(m==0)) 
-			return ((s<10)?'0'+s:s)+' s ';
-		else
-			f = (d!=0?d+' j ':'') + (h!=0?((h<10)?'0'+h:h)+' h ':'') + (m!=0?(((m<10) && (h!=0))?'0'+m:m)+' min':'');
-	  }
-	  return f; 
-	}
-
 //--------------------------------------//
 // estDansZoneDeCovoiturage
 // Indique si un point est dans une zone de covoiturage
@@ -2060,7 +2008,7 @@ function formatSecondes(s, fo) { // seconds, format
 function estDansZoneDeCovoiturage(lonlat) {
 	try {
 		if (!sourceCov) return "";
-		var listeCov = sourceCov.getFeaturesAtCoordinate(ol.proj.transform([parseFloat(lonlat.split(',')[1]),parseFloat(lonlat.split(',')[0])], gg, sm));
+		var listeCov = sourceCov.getFeaturesAtCoordinate(ol.proj.transform([parseFloat(lonlat.split(',')[1]),parseFloat(lonlat.split(',')[0])], "EPSG:4326", "EPSG:3857"));
 		if (listeCov.length > 0) {
 			return listeCov[0].get('commentaires');
 		}

@@ -43,7 +43,7 @@ function updateIndicesDeplacements() {
 function updateIndicesDeplacementsTr() {
 
 	try {
-		var urlIndicesDeplacementsTr = (url.saisieChoisie=='local'?url.hostnameLocal+url.portWSTest:url.hostnameData);
+		var urlIndicesDeplacementsTr = url.ws();
 		urlIndicesDeplacementsTr += '/api/dyn/indiceTr/json';
 
 		function successIndicesDeplacementsTr(response) {
@@ -80,7 +80,7 @@ function updateIndicesDeplacementsTr() {
 function updateIndicesDeplacementsTc() {
 
 	try {
-		var urlIndicesDeplacementsTc = (url.saisieChoisie=='local'?url.hostnameLocal+url.portWSTest:url.hostnameData);
+		var urlIndicesDeplacementsTc = url.ws();
 		urlIndicesDeplacementsTc += '/api/dyn/indiceTc/json';
 
 		function successIndicesDeplacementsTc(response) {
@@ -117,30 +117,40 @@ function updateIndicesDeplacementsTc() {
 function updateIndicesAtmo() {
 
 	try {
-		var urlIndicesAtmo = (url.saisieChoisie=='local'?url.hostnameLocal+url.portWSTest:url.hostnameData);
-		urlIndicesAtmo += '/api/dyn/indiceAtmo/json';
-
+		var urlIndicesAtmo = url.ws();
+		urlIndicesAtmo += '/api/dyn/indiceAtmoFull/json';
+	
 		function successIndicesAtmo(response) {
-			if (!response[1]) return;
-			response = response[1];
-			response = response[response.length-1];
-			var indice = response.indice;
-			if ( 0 < indice < 11) {
-				updateicone('#iconeatmo path',indice,'Atmo');
-				updateicone('#iconeatmo text','-1','Atmo');
-				if (indice == 0)
-					$('#iconeatmo text').text('?');
-				else
-					$('#iconeatmo text').text(indice);
+			var dateDuJour = moment().format("YYYY-MM-DD");
 
-				$('#iconeatmo').attr("title", "Indice atmosphérique : " + lang.indiceAtmo[indice]);
-				$('#iconeatmo').attr("alt", "Indice atmosphérique : " + lang.indiceAtmo[indice]);
- 				$('#iconeatmo title').text("Indice atmosphérique : " + lang.indiceAtmo[indice]);
+			var indice;
+			var color;
+		    var colorPolice;
+		    var qualificatif;
+
+			if (typeof(response.indice_exposition_sensible) == 'undefined') return;
+			$.each(response.indice_exposition_sensible, function(i, val) {
+				if (val.date==dateDuJour){
+					indice = val.valeur;
+			     	color = val.couleur_html;
+					colorPolice = getContrastYIQ(color);
+					qualificatif = val.qualificatif;
+				}
+			});
+
+			if (typeof(indice)!='undefined' && typeof(color)!='undefined') {
+				
+				indice = indice.split(",")[0];
+				updateicone('#iconeatmo',(indice=='0'?'?':indice),'Atmo',color,colorPolice);
+
+				$('#iconeatmo').attr("title", "Indice atmosphérique : " + qualificatif);
+				$('#iconeatmo').attr("alt", "Indice atmosphérique : " + qualificatif);
+ 				$('#iconeatmo title').text("Indice atmosphérique : " + qualificatif);
 				
 				$('#diviconeatmo a').popover('destroy');
 				if (response.commentaire!="") {
 					$('#diviconeatmo a').popover({
-							content:'<div class="detailsAtmo"><p>'+response.commentaire+'</p></div>',
+							content:'<div class="detailsAtmo"><p>'+response.commentaire.replace(/&lt;br\ \/&gt;/g,'<br>')+'</p></div>',
 							title: 'Indice Atmosphérique',
 							trigger: 'focus',
 							html:true,
@@ -180,7 +190,13 @@ function updateMeteo() {
 
 	try {
 	
-		var urlMeteo = url.urlMeteo;
+		var urlMeteo = url.ws();
+		urlMeteo += '/api/dyn/meteo/json';
+		var urlIconMeteo = url.ws();
+		urlIconMeteo += '/api/icon/image?name=';
+		
+	
+		//var urlMeteo = url.urlMeteo;
 
 		function successMeteo(response) {
 			
@@ -190,7 +206,7 @@ function updateMeteo() {
 				$('#divtemperaturemeteo').attr("title", response.fcst_day_0.condition);
 				$('#divtemperaturemeteo').attr("alt", response.fcst_day_0.condition);
 				
-				$('#diviconemeteo a img').attr("src", response.fcst_day_0.icon);
+				$('#diviconemeteo a img').attr("src", urlIconMeteo + response.fcst_day_0.icon);//https://data.metromobilite.fr/api/icon/image?name=faibles-passages-nuageux.png
 				$('#diviconemeteo img').attr("title", "http://www.prevision-meteo.ch");
 				$('#diviconemeteo img').attr("alt", response.fcst_day_0.condition);
 				
@@ -214,7 +230,7 @@ function updateMeteo() {
 			$('#divtemperaturemeteo').hide();
 			$('#diviconemeteo').hide();
 			}
-		
+	
 		$.ajax({
 			url: urlMeteo,
 			success: successMeteo,
@@ -237,7 +253,7 @@ function updateMeteo() {
 // Paramètres     : 
 // Valeur retour  : 
 //--------------------------- -------------------------------------------------
-function updateicone(icone,value,type) {
+function updateicone(icone,value,type,color,colorFont) {
 	if (type=='Trafic') {
 		if (value == 1) { $(icone).css('fill','#5bb224');}//Vert
 		else if (value == 2) { $(icone).css('fill','#ffa500');}//Orange
@@ -252,12 +268,10 @@ function updateicone(icone,value,type) {
 		else if (value == 5) { $(icone).css('fill','#000');}//Noir
 		else {$(icone).css('fill','#a9a9a9');}//Gris
 	} else if (type=='Atmo') {
-		if ((value < -1) || (value > 10)) { $(icone).css('fill','#a9a9a9');}//Gris
-		else if (value == -1) { $(icone).css('fill','#fff');}//Blanc
-		else if (value < 5) { $(icone).css('fill','#5bb224');}//Vert
-		else if (value < 8) { $(icone).css('fill','#ffa500');}//Orange
-		else {$(icone).css('fill','#ff0000');}//Rouge
-	}			
+		$(icone + ' path').css('fill',color);
+		$(icone + ' text').css('fill',colorFont);
+		$(icone + ' text').text(value);		
+	}	
 }
 //----------------------------------------------------------------------------
 // Methode        : updateEvtsTC()
@@ -272,7 +286,7 @@ function updateEvtsTC(data) {
 		}
 		
 		//var urlSearch = url.json('dEvenementsTC');
-		var urlSearch = (url.saisieChoisie=='local'?url.hostnameLocal+url.portWSTest:url.hostnameData);
+		var urlSearch = url.ws();
 		urlSearch += '/api/dyn/evtTC/json';
 
 		function successEvtsTC(response) {
@@ -305,7 +319,7 @@ function updateEvtsTC(data) {
 					l.find('title').text(loc);
 					//l.attr('data-code',code);
 					var logo = $('<div>').append(l).html();
-					var now  = moment(urlParams.heure).hour(0).minute(01);
+					var now  = moment(urlParams.heure).hour(0).minute(1);
 					var dateOkDebut = now.isAfter(ddeb.hour(0).minute(0)) && now.isBefore(dfin.hour(23).minute(59));
 					var dateOkFin = now.isAfter(ddeb.hour(0).minute(0)) && now.isBefore(dfin.hour(23).minute(59));
 					var dateOkToday = ddeb.hour(0).minute(0).isBefore(urlParams.heure) && dfin.hour(23).minute(59).isAfter(urlParams.heure);
@@ -381,9 +395,11 @@ function updateEvtsTC(data) {
 					$('#C38').append(appendText);
 				else
 					$('#C38').append(listevtC38);
-				if (!codeListe['SNC'])
+				if (!codeListe['SNC']) {
+					appendText = 'Toutes les perturbations sur : ';
+					appendText += '<a href="https://www.ter.sncf.com/auvergne-rhone-alpes" target="_blank">www.ter.sncf.com/auvergne-rhone-alpes</a>';
 					$('#SNC').append(appendText);
-				else
+				} else
 					$('#SNC').append(listevtSNC);
 			}
 		}

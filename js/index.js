@@ -40,7 +40,7 @@ if (urlParams.iFrame){
 //----------------------------------------------------------------------------
 function initIndex(){
 	var nomPage = "";
-	if(!urlParams.page && !isTaille('xs')) 
+	if(!urlParams.page && !(isTaille('xs') || isTaille('xxs'))) 
 		$('#panel-actu').load('pages/actus.html');
 
 	if (urlParams.page) {
@@ -298,30 +298,82 @@ $('#contact-resize-small').click(function(){
 // Valeur retour  : 
 //--------------------------- -------------------------------------------------
 $('#footer').on('click','#submitBouton',function(){
-
 	if (($('#inputNom').val()=='') || ($('#inputMail').val()=='') || ($('#inputObjet').val()=='') || ($('#inputMessage').val()==" "))
 	{
 		if ($('#inputNom').val()=='') $('#inputNom').addClass("inputWarning");
 		if ($('#inputMail').val()=='') $('#inputMail').addClass("inputWarning");
 		if ($('#inputObjet').val()=='') $('#inputObjet').addClass("inputWarning");
 		if ($('#inputMessage').val()=='') $('#inputMessage').addClass("inputWarning");
-		
 		alert('Merci de bien vouloir completer les informations.');
 	}
 	else
 	{
 		$('#inputNom').val();
 		$('#inputMail').val();
-		$('#inputMessage').val();
-		
-		var formattedBody = $('#inputMessage').val() + '\n\nNom: ' + $('#inputNom').val() + '\nMail: ' + $('#inputMail').val();
-
+		$('#inputObjet').val();
+		$('#inputMessage').val();		
+		var body ={mail: $('#inputMail').val(), name :$('#inputNom').val() , subject: $('#inputObjet').val(), text: $('#inputMessage').val() };
+		//envoi des mails contact via le serveur /// au lieu de mailto existant
+		/*var formattedBody = $('#inputMessage').val() + '\n\nNom: ' + $('#inputNom').val() + '\nMail: ' + $('#inputMail').val();
 		var mail = "mailto:contact@metromobilite.fr?subject=" + $('#inputObjet').val() + "&body=" + encodeURIComponent(formattedBody);
 		location.href = mail;
-		return false;
-	}
+		//return false;*/
+		
+		var urlContact = url.ws();
+		urlContact += '/api/contact/mail';
+		$.ajax({
+			  type: "POST",
+			  url: urlContact,
+			  data: JSON.stringify(body),
+			  success:  function(response){
+				console.log('response.status succes : => ', response.status);
+				if ( response.status == '200' ) {
+					$('#submitBouton').prop('disabled', true); 		
+					$('#inputNom').val("");	
+					$('#inputMail').val("");
+					$('#inputObjet').val("");					 
+					$('#successendmessage').css("color" ,"green");
+					$('#successendmessage').show();
+				}
+			  },
+			   error: function (request, error) {
+				   console.log('response.status erreur : => ', response.status);
+					if ( response.status == '500' ) {
+						$('#erreursendmessage').css("color" ,"red"); 
+						$('#erreursendmessage').show();
+					}
+				},
+			  dataType:'json',
+			  contentType:'application/json'
+		}); 	 
+	}	
+//$('#submitBouton').prop('disabled', true);
 });
 
+	$('#inputNom').bind("input",function(){
+		$('#submitBouton').attr('disabled', false); 	
+		$('#successendmessage').hide();	  
+		$('#erreursendmessage').hide();
+    });
+
+	$('#inputMail').bind('input', function() {
+		$('#submitBouton').attr('disabled', false); 
+		$('#successendmessage').hide();
+		$('#erreursendmessage').hide();
+	});
+	
+	$('#inputObjet').bind('input', function() {
+      $('#submitBouton').attr('disabled', false); 
+	  $('#successendmessage').hide();	 
+	  $('#erreursendmessage').hide();
+	});
+	
+	$('#inputMessage').bind('input', function() {
+      $('#submitBouton').attr('disabled', false); 
+	  $('#successendmessage').hide();	 
+	  $('#erreursendmessage').hide();
+	});
+	
 //----------------------------------------------------------------------------
 // Methode        : $('#image-plan-contact').click()
 // Description    : 

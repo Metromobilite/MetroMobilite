@@ -58,7 +58,7 @@ function initPlanTC() {
 		
 		if (urlParams.lonlatDep!='0,0')  {
 			if(isTaille('xs')) togglePanneau();
-			getMap('map').getView().setCenter(ol.proj.transform([parseFloat(urlParams.lonlatDep.split(',')[1]), parseFloat(urlParams.lonlatDep.split(',')[0])], gg, sm));
+			getMap('map').getView().setCenter(ol.proj.transform([parseFloat(urlParams.lonlatDep.split(',')[1]), parseFloat(urlParams.lonlatDep.split(',')[0])], "EPSG:4326", "EPSG:3857"));
 			var zoom = 16;
 			if(urlParams.codeArr) zoom = 18;
 			getMap('map').getView().setZoom(zoom);
@@ -88,12 +88,14 @@ function initPlanTC() {
 					if (layerPoteaux.getSource().getFeatures().length!=0) {
 						switch (layerPoteaux.getSource().getState()) {
 							case 'ready':
-								layerPoteaux.getSource().unByKey(idEvt);
+								//layerPoteaux.getSource().unByKey(idEvt); Migration OL4
+								ol.Observable.unByKey(idEvt);
 								var f = layerPoteaux.getSource().getFeatureById(urlParams.codeArr);
 								if(f) showPopupDetails(getMap('map'),null,f);
 								break;
 							case 'error':
-								layerPoteaux.getSource().unByKey(idEvt);
+								//layerPoteaux.getSource().unByKey(idEvt); Migration OL4
+								ol.Observable.unByKey(idEvt);
 								window.console.log('source loaded error');
 								break;
 						}
@@ -132,7 +134,7 @@ function fctSaisieReussie(idInput,item) {
 			unSelectAll('map');
 		}
 			
-	getMap('map').getView().setCenter(ol.proj.transform([item.lon, item.lat], gg, sm));
+	getMap('map').getView().setCenter(ol.proj.transform([item.lon, item.lat], "EPSG:4326", "EPSG:3857"));
 			
 	if (item.type == 'ARRET') {
 		getMap('map').getView().setZoom(15);
@@ -302,7 +304,7 @@ function getDetailZA(feature) {
 	var pop = $('#popupZA').clone();
 	pop.find('.nom').text(feature.get('LIBELLE_ZONE'));
 	var lignes={};
-	var coord= ol.proj.transform(feature.getGeometry().getCoordinates(), sm, gg);
+	var coord= ol.proj.transform(feature.getGeometry().getCoordinates(), "EPSG:3857", "EPSG:4326");
 	var lonlat = coord[1]+','+coord[0];
 	
 	var bSEM = false;
@@ -351,7 +353,7 @@ function afficheListeLgnZA(lignes,feature,stops) {
 		}
 		bExisteSEM = bSEM || bExisteSEM;
 	}
-	var coord = ol.proj.transform(feature.getGeometry().getCoordinates(), sm, gg);
+	var coord = ol.proj.transform(feature.getGeometry().getCoordinates(), "EPSG:3857", "EPSG:4326");
 	if(bExisteSEM) {
 		var ids='';
 		var resultat=false;
@@ -432,7 +434,7 @@ function getDetailPA(feature) {
 		bSEM = (lignes[l].id.substr(0,3)=='SEM') || bSEM;
 	}
 
-	var coord = ol.proj.transform(feature.getGeometry().getCoordinates(), sm, gg);
+	var coord = ol.proj.transform(feature.getGeometry().getCoordinates(), "EPSG:3857", "EPSG:4326");
 	if(bSEM) {
 		
 		var ids='';
@@ -529,7 +531,7 @@ function clickDepArr(depOuArr) {
 	if (featureDep && depOuArr == 'dep')
 	{
 		var loc = 'iti.html'
-		var coordDep = ol.proj.transform(featureDep.getGeometry().getCoordinates(),sm , gg);
+		var coordDep = ol.proj.transform(featureDep.getGeometry().getCoordinates(),"EPSG:3857" , "EPSG:4326");
 		loc += '?dep=' + libelle;
 		loc += '&lonlatDep=' + coordDep[1] + ',' +coordDep[0];
 
@@ -540,7 +542,7 @@ function clickDepArr(depOuArr) {
 	} else if (featureArr)
 	{
 		var loc = 'iti.html'
-		var coordArr = ol.proj.transform(featureArr.getGeometry().getCoordinates(),sm , gg);
+		var coordArr = ol.proj.transform(featureArr.getGeometry().getCoordinates(),"EPSG:3857" , "EPSG:4326");
 		loc += '?arr=' + libelle;
 		loc += '&lonlatArr=' + coordArr[1] + ',' +coordArr[0];
 
@@ -578,7 +580,7 @@ function clickArret() {
 // +----------------------------------------------------------------------------
 function placeSearch(lonlat) {
 	var f = layerDepArr.getSource().getFeatureById('search');
-	var geom = new ol.geom.Point(ol.proj.transform([parseFloat(lonlat.split(',')[1]), parseFloat(lonlat.split(',')[0])],gg , sm));
+	var geom = new ol.geom.Point(ol.proj.transform([parseFloat(lonlat.split(',')[1]), parseFloat(lonlat.split(',')[0])],"EPSG:4326" , "EPSG:3857"));
 	if (!f) {
 		var fe = new ol.Feature({
 			'geometry': geom,

@@ -27,11 +27,12 @@ function translate() {
 	$('#horairesText').text(lang.horaires.selectPanel);
 	$('#unselect').text(lang.horaires.toutDeselctionner);
 	$('#listeLignesDesc').text(lang.horaires.clickOnTag);
+	$('#listeLignesDescStatique').text(lang.horaires.clickOnTagStatique);
 	
 	$('#descReseauTram').text(lang.horaires.fromTram);
 	$('#descReseauChrono').text(lang.horaires.fromChrono);
 	$('#descReseauProximo').text(lang.horaires.fromProximo);
 	$('#descReseauFlexo').text(lang.horaires.fromFlexo);
 	$('#descReseauNav').text(lang.horaires.descReseauNav);
-	$("#timesync button").prop({  alt: lang.horaires.update,  title: lang.horaires.update});
+	/*$("#timesync button").prop({  alt: lang.horaires.update,  title: lang.horaires.update});*/
 }

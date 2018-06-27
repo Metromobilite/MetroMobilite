@@ -86,7 +86,7 @@ function getProchainsPassages(type,codeArret,codeLigne,nbTripsAffiches){
 				for (var i=0;i<r.times.length && i<nbTripsAffiches;i++) {
 					var time = (r.times[i].realtimeDeparture? r.times[i].realtimeDeparture : r.times[i].scheduledDeparture);
 					if (time)
-						dir.times.push({ dest:r.pattern.desc,
+							dir.times.push({ dest:r.pattern.desc,
 									 time:(time*1000)+(r.times[i].serviceDay*1000),
 									 realtime:r.times[i].realtime,
 									 bTropLong:(time*1000)+(r.times[i].serviceDay*1000) > (new Date().getTime())+(65*60*1000)
